@@ -145,8 +145,8 @@ def _fields(node):
     )
 
 
-def _outcome(values):
-    return next((value for value in PRECEDENCE if value in values), Outcome.INSUFFICIENT)
+def _outcome(values, precedence=PRECEDENCE):
+    return next((value for value in precedence if value in values), Outcome.INSUFFICIENT)
 
 
 class RuleBook:
@@ -159,6 +159,10 @@ class RuleBook:
             raise ValueError(
                 "This runtime is a decision-support application; approved clinical use is not implemented"
             )
+        configured_precedence = self.metadata.get("outcome_precedence", PRECEDENCE)
+        self.precedence = [Outcome(value) for value in configured_precedence]
+        if set(self.precedence) != set(Outcome) or len(self.precedence) != len(Outcome):
+            raise ValueError("outcome_precedence must contain every outcome exactly once")
         self.sha256 = digest(data)
         seen = set()
         for rule in self.rules:
@@ -255,7 +259,7 @@ class RuleBook:
         ):
             if value(key) is True:
                 warnings.append(
-                    f"OOccupational FitnessIDE_HYPERTENSION_SCOPE:{key}: separate cardiovascular assessment required"
+                    f"OUTSIDE_HYPERTENSION_SCOPE:{key}: separate cardiovascular assessment required"
                 )
         contradictions = set()
         if value("diabetes.present") is False and value("diabetes.treatment_category") not in (
@@ -289,10 +293,10 @@ class RuleBook:
                 values.append(Outcome.INSUFFICIENT)
             if module in contradictions:
                 values = [Outcome.INSUFFICIENT]
-            outcome = _outcome(values)
+            outcome = _outcome(values, self.precedence)
             module_warnings = []
             if module == "hypertension" and any(
-                w.startswith("OOccupational FitnessIDE_HYPERTENSION_SCOPE") for w in warnings
+                w.startswith("OUTSIDE_HYPERTENSION_SCOPE") for w in warnings
             ):
                 module_warnings.append(
                     "Cardiovascular findings outside hypertension require separate human review."
@@ -320,7 +324,7 @@ class RuleBook:
                     warnings=module_warnings,
                 )
             )
-        outcome = _outcome([m.assessment_outcome for m in modules])
+        outcome = _outcome([m.assessment_outcome for m in modules], self.precedence)
         route = (
             WorkflowRoute.FAST
             if all(m.route == WorkflowRoute.FAST for m in modules)

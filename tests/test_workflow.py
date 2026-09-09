@@ -36,6 +36,12 @@ def test_all_authored_workflow_expectations(workflow, tmp_path):
     assert result["clinical_validation"] is False
 
 
+def test_engine_uses_ruleset_outcome_precedence(workflow):
+    assert [value.value for value in workflow.book.precedence] == workflow.book.metadata[
+        "outcome_precedence"
+    ]
+
+
 @pytest.mark.parametrize(
     "source",
     sorted((ROOT / "data/cases/nurse_notes").glob("*.txt"))
@@ -202,7 +208,7 @@ def test_three_cardiovascular_cases_are_escalated(workflow):
         result = workflow.book.evaluate(case)
         assert result.route == "human_review"
         assert any(
-            x.startswith("OOccupational FitnessIDE_HYPERTENSION_SCOPE")
+            x.startswith("OUTSIDE_HYPERTENSION_SCOPE")
             for x in result.processing_warnings
         )
 

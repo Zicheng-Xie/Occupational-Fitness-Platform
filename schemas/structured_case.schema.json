@@ -1,0 +1,205 @@
+{
+  "$defs": {
+    "Fact": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "present",
+            "unknown",
+            "conflicting",
+            "requires_confirmation"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/TextSpan"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "method": {
+          "default": "not_recorded",
+          "title": "Method",
+          "type": "string"
+        },
+        "derived_from": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Derived From",
+          "type": "array"
+        }
+      },
+      "title": "Fact",
+      "type": "object"
+    },
+    "TextSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "line_start": {
+          "minimum": 1,
+          "title": "Line Start",
+          "type": "integer"
+        },
+        "line_end": {
+          "minimum": 1,
+          "title": "Line End",
+          "type": "integer"
+        },
+        "pdf_page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pdf Page"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "quote",
+        "line_start",
+        "line_end"
+      ],
+      "title": "TextSpan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0",
+      "default": "1.2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "case_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$",
+      "title": "Case Id",
+      "type": "string"
+    },
+    "licence_context": {
+      "const": "commercial",
+      "default": "commercial",
+      "title": "Licence Context",
+      "type": "string"
+    },
+    "modules_requested": {
+      "items": {
+        "enum": [
+          "hypertension",
+          "vision",
+          "hearing",
+          "blackout",
+          "diabetes"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Modules Requested",
+      "type": "array"
+    },
+    "source_document": {
+      "title": "Source Document",
+      "type": "string"
+    },
+    "source_kind": {
+      "default": "text",
+      "enum": [
+        "text",
+        "pdf",
+        "structured"
+      ],
+      "title": "Source Kind",
+      "type": "string"
+    },
+    "source_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Source Sha256",
+      "type": "string"
+    },
+    "text_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Text Sha256",
+      "type": "string"
+    },
+    "source_text": {
+      "title": "Source Text",
+      "type": "string"
+    },
+    "facts": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Fact"
+      },
+      "title": "Facts",
+      "type": "object"
+    },
+    "extraction_method": {
+      "default": "deterministic",
+      "title": "Extraction Method",
+      "type": "string"
+    },
+    "extraction_metadata": {
+      "additionalProperties": true,
+      "title": "Extraction Metadata",
+      "type": "object"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "case_id",
+    "source_document",
+    "source_sha256",
+    "text_sha256",
+    "source_text"
+  ],
+  "title": "ClinicalCase",
+  "type": "object"
+}

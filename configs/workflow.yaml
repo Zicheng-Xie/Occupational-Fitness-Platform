@@ -1,0 +1,27 @@
+schema_version: '1.2.0'
+project_root: '..'
+rules: configs/rules/austroads_commercial_v1.yaml
+anchors: configs/source_anchors.json
+catalogue: data/knowledge/processed/source_catalogue.json
+output_directory: outputs/runs
+retrieval:
+  # exact | hybrid_local (lexical cosine + BM25/RRF) | chroma
+  mode: chroma
+  top_k: 5
+  candidate_k: 20
+  collection_name: aftd_commercial_v1_1
+  persist_directory: data/knowledge/indexes/chroma
+  # Chroma uses Ollama embeddings configured explicitly, not an implicit download.
+  embedding_model: nomic-embed-text
+  ollama_url: http://127.0.0.1:11434
+llm:
+  enabled: true
+  provider: ollama
+  base_url: http://127.0.0.1:11434
+  model: llama3:8b
+  timeout_seconds: 120
+  extraction_enabled: true
+  narrative_enabled: true
+  context_length: 8192
+  max_output_tokens: 2048
+  max_input_chars: 10000

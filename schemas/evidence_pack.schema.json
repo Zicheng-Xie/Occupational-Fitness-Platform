@@ -1,0 +1,344 @@
+{
+  "$defs": {
+    "Citation": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "chunk_id": {
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "document_id": {
+          "const": "AP-G56-22",
+          "default": "AP-G56-22",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "guideline_version": {
+          "const": "AP-G56-22",
+          "default": "AP-G56-22",
+          "title": "Guideline Version",
+          "type": "string"
+        },
+        "document_sha256": {
+          "title": "Document Sha256",
+          "type": "string"
+        },
+        "source_path": {
+          "title": "Source Path",
+          "type": "string"
+        },
+        "section": {
+          "title": "Section",
+          "type": "string"
+        },
+        "printed_page": {
+          "title": "Printed Page",
+          "type": "integer"
+        },
+        "pdf_page": {
+          "minimum": 1,
+          "title": "Pdf Page",
+          "type": "integer"
+        },
+        "bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Bbox",
+          "type": "array"
+        },
+        "table_row": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Table Row"
+        },
+        "licence_context": {
+          "const": "commercial",
+          "default": "commercial",
+          "title": "Licence Context",
+          "type": "string"
+        },
+        "applicability": {
+          "enum": [
+            "commercial_table",
+            "shared_guidance"
+          ],
+          "title": "Applicability",
+          "type": "string"
+        },
+        "evidence_text": {
+          "title": "Evidence Text",
+          "type": "string"
+        },
+        "text_sha256": {
+          "title": "Text Sha256",
+          "type": "string"
+        },
+        "retrieval_score": {
+          "title": "Retrieval Score",
+          "type": "number"
+        },
+        "score_type": {
+          "title": "Score Type",
+          "type": "string"
+        },
+        "verified_against_source": {
+          "const": true,
+          "default": true,
+          "title": "Verified Against Source",
+          "type": "boolean"
+        },
+        "clinical_review_status": {
+          "const": "pending",
+          "default": "pending",
+          "title": "Clinical Review Status",
+          "type": "string"
+        },
+        "condition": {
+          "title": "Condition",
+          "type": "string"
+        },
+        "standard": {
+          "const": "commercial",
+          "default": "commercial",
+          "title": "Standard",
+          "type": "string"
+        },
+        "criterion_type": {
+          "enum": [
+            "unconditional",
+            "conditional",
+            "mixed",
+            "general"
+          ],
+          "title": "Criterion Type",
+          "type": "string"
+        },
+        "source_text": {
+          "title": "Source Text",
+          "type": "string"
+        },
+        "bounding_box": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Bounding Box",
+          "type": "array"
+        },
+        "cross_references": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cross References",
+          "type": "array"
+        }
+      },
+      "required": [
+        "source_id",
+        "chunk_id",
+        "document_sha256",
+        "source_path",
+        "section",
+        "printed_page",
+        "pdf_page",
+        "bbox",
+        "applicability",
+        "evidence_text",
+        "text_sha256",
+        "retrieval_score",
+        "score_type",
+        "condition",
+        "criterion_type",
+        "source_text",
+        "bounding_box"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "RequestEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "partial",
+            "no_evidence"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "requested_source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requested Source Ids",
+          "type": "array"
+        },
+        "citations": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Citations",
+          "type": "array"
+        },
+        "unresolved_source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unresolved Source Ids",
+          "type": "array"
+        },
+        "metadata_filters": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Metadata Filters",
+          "type": "object"
+        },
+        "semantic_query": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Semantic Query"
+        },
+        "ranked_candidates": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Ranked Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "request_id",
+        "rule_id",
+        "status",
+        "requested_source_ids",
+        "citations",
+        "unresolved_source_ids"
+      ],
+      "title": "RequestEvidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0",
+      "default": "1.2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "evidence_pack_id": {
+      "title": "Evidence Pack Id",
+      "type": "string"
+    },
+    "result_id": {
+      "title": "Result Id",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "rule_result_sha256": {
+      "title": "Rule Result Sha256",
+      "type": "string"
+    },
+    "index_sha256": {
+      "title": "Index Sha256",
+      "type": "string"
+    },
+    "retrieval": {
+      "additionalProperties": true,
+      "title": "Retrieval",
+      "type": "object"
+    },
+    "evidence_items": {
+      "items": {
+        "$ref": "#/$defs/RequestEvidence"
+      },
+      "title": "Evidence Items",
+      "type": "array"
+    },
+    "unresolved_requests": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unresolved Requests",
+      "type": "array"
+    },
+    "integrity": {
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "title": "Integrity",
+      "type": "object"
+    }
+  },
+  "required": [
+    "evidence_pack_id",
+    "result_id",
+    "case_id",
+    "rule_result_sha256",
+    "index_sha256",
+    "retrieval",
+    "evidence_items",
+    "unresolved_requests",
+    "integrity"
+  ],
+  "title": "WorkflowEvidencePack",
+  "type": "object"
+}

@@ -1,0 +1,20 @@
+schema_version: '1.2.0'
+project_root: '..'
+rules: configs/rules/austroads_commercial_v1.yaml
+anchors: configs/source_anchors.json
+catalogue: data/knowledge/processed/source_catalogue.json
+output_directory: outputs/runs_chroma
+retrieval:
+  mode: chroma
+  top_k: 5
+  candidate_k: 20
+  collection_name: aftd_commercial_v1_1
+  persist_directory: data/knowledge/indexes/chroma
+  embedding_model: nomic-embed-text:latest
+  ollama_url: http://127.0.0.1:11434
+llm:
+  enabled: false
+  provider: ollama
+  base_url: http://127.0.0.1:11434
+  model: qwen3.6:27b-q4_K_M
+  timeout_seconds: 60

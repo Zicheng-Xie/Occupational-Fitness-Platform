@@ -1,0 +1,1606 @@
+{
+  "schema_version": "1.2.0",
+  "rules": [
+    {
+      "rule_id": "HTN-COM-UNCONDITIONAL-001",
+      "required_facts": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "logic": "(cardiovascular.blood_pressure.persistent_systolic > 170 OR cardiovascular.blood_pressure.persistent_diastolic > 100)",
+      "predicate": {
+        "any": [
+          {
+            "field": "cardiovascular.blood_pressure.persistent_systolic",
+            "operator": ">",
+            "value": 170,
+            "unit": "mmHg"
+          },
+          {
+            "field": "cardiovascular.blood_pressure.persistent_diastolic",
+            "operator": ">",
+            "value": 100,
+            "unit": "mmHg"
+          }
+        ]
+      },
+      "gate": null,
+      "result": "unconditional_standard_not_met",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-HTN-COM-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "condition": "hypertension",
+      "rag_query_key": "hypertension_commercial_unconditional",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "HTN-COM-CONDITIONAL-001",
+      "required_facts": [
+        "cardiovascular.hypertension.antihypertensive_therapy",
+        "cardiovascular.hypertension.controlled_for_4_weeks",
+        "cardiovascular.hypertension.driving_impairing_medication_side_effects",
+        "cardiovascular.hypertension.initial_specialist_information_available",
+        "cardiovascular.hypertension.target_organ_damage_relevant_to_driving"
+      ],
+      "logic": "(cardiovascular.hypertension.antihypertensive_therapy == True AND cardiovascular.hypertension.controlled_for_4_weeks == True AND cardiovascular.hypertension.driving_impairing_medication_side_effects == False AND cardiovascular.hypertension.target_organ_damage_relevant_to_driving == False AND cardiovascular.hypertension.initial_specialist_information_available == True)",
+      "predicate": {
+        "all": [
+          {
+            "field": "cardiovascular.hypertension.antihypertensive_therapy",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "cardiovascular.hypertension.controlled_for_4_weeks",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "cardiovascular.hypertension.driving_impairing_medication_side_effects",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "cardiovascular.hypertension.target_organ_damage_relevant_to_driving",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "cardiovascular.hypertension.initial_specialist_information_available",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "triggered_rule": "HTN-COM-UNCONDITIONAL-001"
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "review_interval": "annual"
+      },
+      "source_id": "AFTD2022-HTN-COM-002",
+      "source_ids": [
+        "AFTD2022-HTN-COM-002"
+      ],
+      "category": "cardiovascular",
+      "condition": "hypertension_conditional",
+      "rag_query_key": "hypertension_commercial_conditional",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "required_facts": [
+        "blackout.mechanism_status",
+        "blackout.occurred"
+      ],
+      "logic": "(blackout.occurred == True AND blackout.mechanism_status in ['not_investigated', 'under_investigation'])",
+      "predicate": {
+        "all": [
+          {
+            "field": "blackout.occurred",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "blackout.mechanism_status",
+            "operator": "in",
+            "value": [
+              "not_investigated",
+              "under_investigation"
+            ]
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "blackout.occurred",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "temporarily_unfit",
+      "workflow_outcome": {
+        "assessment_outcome": "temporarily_unfit",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-BLK-COM-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "condition": "blackout_mechanism_not_yet_ascertained",
+      "rag_query_key": "blackout_diagnostic_workup_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "required_facts": [
+        "blackout.diagnosis",
+        "blackout.occurred",
+        "blackout.provoking_factor_well_defined",
+        "blackout.recurrence_while_driving_unlikely"
+      ],
+      "logic": "(blackout.diagnosis == vasovagal_syncope AND blackout.provoking_factor_well_defined == True AND blackout.recurrence_while_driving_unlikely == True)",
+      "predicate": {
+        "all": [
+          {
+            "field": "blackout.diagnosis",
+            "operator": "==",
+            "value": "vasovagal_syncope"
+          },
+          {
+            "field": "blackout.provoking_factor_well_defined",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "blackout.recurrence_while_driving_unlikely",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "blackout.occurred",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "meets_unconditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "meets_unconditional_standard",
+        "route": "fast_path",
+        "requires_human_review": false
+      },
+      "source_id": "AFTD2022-BLK-COM-002",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "category": "blackout",
+      "condition": "provoked_vasovagal_syncope",
+      "rag_query_key": "provoked_vasovagal_syncope_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "BLK-COM-UNCERTAIN-UNCONDITIONAL-001",
+      "required_facts": [
+        "blackout.mechanism_status",
+        "blackout.occurred"
+      ],
+      "logic": "(blackout.occurred == True AND blackout.mechanism_status == undetermined_after_investigation)",
+      "predicate": {
+        "all": [
+          {
+            "field": "blackout.occurred",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "blackout.mechanism_status",
+            "operator": "==",
+            "value": "undetermined_after_investigation"
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "blackout.occurred",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "unconditional_standard_not_met",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-BLK-COM-003",
+      "source_ids": [
+        "AFTD2022-BLK-COM-003"
+      ],
+      "category": "blackout",
+      "condition": "blackout_uncertain_nature",
+      "rag_query_key": "blackout_uncertain_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "BLK-COM-SINGLE-WAIT-001",
+      "required_facts": [
+        "blackout.episodes_separated_by_24h_count",
+        "blackout.mechanism_status",
+        "blackout.occurred",
+        "blackout.years_since_last_event"
+      ],
+      "logic": "(blackout.episodes_separated_by_24h_count == 1 AND blackout.years_since_last_event < 5)",
+      "predicate": {
+        "all": [
+          {
+            "field": "blackout.episodes_separated_by_24h_count",
+            "operator": "==",
+            "value": 1
+          },
+          {
+            "field": "blackout.years_since_last_event",
+            "operator": "<",
+            "value": 5
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "blackout.occurred",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "blackout.mechanism_status",
+            "operator": "==",
+            "value": "undetermined_after_investigation"
+          }
+        ]
+      },
+      "result": "temporarily_unfit",
+      "workflow_outcome": {
+        "assessment_outcome": "temporarily_unfit",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "minimum_event_free_period_years": 5
+      },
+      "source_id": "AFTD2022-BLK-COM-004",
+      "source_ids": [
+        "AFTD2022-BLK-COM-004"
+      ],
+      "category": "blackout",
+      "condition": "single_or_clustered_uncertain_blackout",
+      "rag_query_key": "blackout_uncertain_single_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "BLK-COM-RECURRENT-WAIT-001",
+      "required_facts": [
+        "blackout.episodes_separated_by_24h_count",
+        "blackout.mechanism_status",
+        "blackout.occurred",
+        "blackout.years_since_last_event"
+      ],
+      "logic": "(blackout.episodes_separated_by_24h_count >= 2 AND blackout.years_since_last_event < 10)",
+      "predicate": {
+        "all": [
+          {
+            "field": "blackout.episodes_separated_by_24h_count",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "blackout.years_since_last_event",
+            "operator": "<",
+            "value": 10
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "blackout.occurred",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "blackout.mechanism_status",
+            "operator": "==",
+            "value": "undetermined_after_investigation"
+          }
+        ]
+      },
+      "result": "temporarily_unfit",
+      "workflow_outcome": {
+        "assessment_outcome": "temporarily_unfit",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "minimum_event_free_period_years": 10
+      },
+      "source_id": "AFTD2022-BLK-COM-005",
+      "source_ids": [
+        "AFTD2022-BLK-COM-005"
+      ],
+      "category": "blackout",
+      "condition": "recurrent_uncertain_blackout",
+      "rag_query_key": "blackout_uncertain_recurrent_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "BLK-COM-CONDITIONAL-ELIGIBILITY-001",
+      "required_facts": [
+        "blackout.appropriate_specialist_information_available",
+        "blackout.episodes_separated_by_24h_count",
+        "blackout.mechanism_status",
+        "blackout.occurred",
+        "blackout.years_since_last_event"
+      ],
+      "logic": "((blackout.episodes_separated_by_24h_count == 1 AND blackout.years_since_last_event >= 5 AND blackout.appropriate_specialist_information_available == True) OR (blackout.episodes_separated_by_24h_count >= 2 AND blackout.years_since_last_event >= 10 AND blackout.appropriate_specialist_information_available == True))",
+      "predicate": {
+        "any": [
+          {
+            "all": [
+              {
+                "field": "blackout.episodes_separated_by_24h_count",
+                "operator": "==",
+                "value": 1
+              },
+              {
+                "field": "blackout.years_since_last_event",
+                "operator": ">=",
+                "value": 5
+              },
+              {
+                "field": "blackout.appropriate_specialist_information_available",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "blackout.episodes_separated_by_24h_count",
+                "operator": ">=",
+                "value": 2
+              },
+              {
+                "field": "blackout.years_since_last_event",
+                "operator": ">=",
+                "value": 10
+              },
+              {
+                "field": "blackout.appropriate_specialist_information_available",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "blackout.occurred",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "blackout.mechanism_status",
+            "operator": "==",
+            "value": "undetermined_after_investigation"
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "review_interval": "at_least_annual"
+      },
+      "source_id": "AFTD2022-BLK-COM-004",
+      "source_ids": [
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005"
+      ],
+      "category": "blackout",
+      "condition": "uncertain_blackout_conditional_eligibility",
+      "rag_query_key": "blackout_uncertain_conditional_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "VIS-COM-ACUITY-UNCONDITIONAL-001",
+      "required_facts": [
+        "vision.uncorrected.better_eye",
+        "vision.uncorrected.left.snellen",
+        "vision.uncorrected.right.snellen"
+      ],
+      "logic": "(vision.uncorrected.better_eye worse_than_snellen 6/9 OR vision.uncorrected.right.snellen worse_than_snellen 6/18 OR vision.uncorrected.left.snellen worse_than_snellen 6/18)",
+      "predicate": {
+        "any": [
+          {
+            "field": "vision.uncorrected.better_eye",
+            "operator": "worse_than_snellen",
+            "value": "6/9"
+          },
+          {
+            "field": "vision.uncorrected.right.snellen",
+            "operator": "worse_than_snellen",
+            "value": "6/18"
+          },
+          {
+            "field": "vision.uncorrected.left.snellen",
+            "operator": "worse_than_snellen",
+            "value": "6/18"
+          }
+        ]
+      },
+      "gate": null,
+      "result": "unconditional_standard_not_met",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-VIS-COM-002",
+      "source_ids": [
+        "AFTD2022-VIS-COM-002"
+      ],
+      "category": "vision",
+      "condition": "visual_acuity",
+      "rag_query_key": "visual_acuity_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "VIS-COM-ACUITY-CONDITIONAL-001",
+      "required_facts": [
+        "vision.corrected.better_eye",
+        "vision.specialist_assessment_available"
+      ],
+      "logic": "(vision.corrected.better_eye at_least_snellen 6/9 AND vision.specialist_assessment_available == True)",
+      "predicate": {
+        "all": [
+          {
+            "field": "vision.corrected.better_eye",
+            "operator": "at_least_snellen",
+            "value": "6/9"
+          },
+          {
+            "field": "vision.specialist_assessment_available",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "triggered_rule": "VIS-COM-ACUITY-UNCONDITIONAL-001"
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "licence_condition": "corrective_lenses_while_driving"
+      },
+      "source_id": "AFTD2022-VIS-COM-003",
+      "source_ids": [
+        "AFTD2022-VIS-COM-003"
+      ],
+      "category": "vision",
+      "condition": "corrected_visual_acuity",
+      "rag_query_key": "corrected_visual_acuity_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "VIS-COM-FIELD-UNCONDITIONAL-001",
+      "required_facts": [
+        "vision.visual_field.confirmed_defect"
+      ],
+      "logic": "vision.visual_field.confirmed_defect == True",
+      "predicate": {
+        "field": "vision.visual_field.confirmed_defect",
+        "operator": "==",
+        "value": true
+      },
+      "gate": null,
+      "result": "unconditional_standard_not_met",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-VIS-COM-004",
+      "source_ids": [
+        "AFTD2022-VIS-COM-004"
+      ],
+      "category": "vision",
+      "condition": "visual_field_defect",
+      "rag_query_key": "visual_field_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "VIS-COM-FIELD-CONDITIONAL-001",
+      "required_facts": [
+        "vision.specialist_assessment_available",
+        "vision.visual_field.binocular_horizontal_extent_degrees",
+        "vision.visual_field.confirmed_defect",
+        "vision.visual_field.measured_within_10_degrees_vertical",
+        "vision.visual_field.significant_loss_likely_to_impede_driving",
+        "vision.visual_field.static_and_unlikely_to_progress_rapidly"
+      ],
+      "logic": "(vision.visual_field.binocular_horizontal_extent_degrees >= 140 AND vision.visual_field.significant_loss_likely_to_impede_driving == False AND vision.visual_field.static_and_unlikely_to_progress_rapidly == True AND vision.specialist_assessment_available == True AND vision.visual_field.measured_within_10_degrees_vertical == True)",
+      "predicate": {
+        "all": [
+          {
+            "field": "vision.visual_field.binocular_horizontal_extent_degrees",
+            "operator": ">=",
+            "value": 140,
+            "unit": "degrees"
+          },
+          {
+            "field": "vision.visual_field.significant_loss_likely_to_impede_driving",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "vision.visual_field.static_and_unlikely_to_progress_rapidly",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "vision.specialist_assessment_available",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "vision.visual_field.measured_within_10_degrees_vertical",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "vision.visual_field.confirmed_defect",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "review_interval": "annual"
+      },
+      "source_id": "AFTD2022-VIS-COM-005",
+      "source_ids": [
+        "AFTD2022-VIS-COM-005"
+      ],
+      "category": "vision",
+      "condition": "visual_field_conditional",
+      "rag_query_key": "visual_field_conditional_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "VIS-COM-MONOCULAR-001",
+      "required_facts": [
+        "vision.monocular"
+      ],
+      "logic": "vision.monocular == True",
+      "predicate": {
+        "field": "vision.monocular",
+        "operator": "==",
+        "value": true
+      },
+      "gate": null,
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-VIS-COM-006",
+      "source_ids": [
+        "AFTD2022-VIS-COM-006"
+      ],
+      "category": "vision",
+      "condition": "monocular_vision",
+      "rag_query_key": "monocular_vision_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "VIS-COM-MONOCULAR-CONDITIONAL-001",
+      "required_facts": [
+        "vision.monocular",
+        "vision.remaining_eye.field_measured_within_10_degrees_vertical",
+        "vision.remaining_eye.horizontal_field_degrees",
+        "vision.remaining_eye.other_significant_field_loss",
+        "vision.remaining_eye.snellen",
+        "vision.specialist_assessment_available"
+      ],
+      "logic": "(vision.remaining_eye.snellen at_least_snellen 6/9 AND vision.remaining_eye.horizontal_field_degrees >= 140 AND vision.remaining_eye.other_significant_field_loss == False AND vision.specialist_assessment_available == True AND vision.remaining_eye.field_measured_within_10_degrees_vertical == True)",
+      "predicate": {
+        "all": [
+          {
+            "field": "vision.remaining_eye.snellen",
+            "operator": "at_least_snellen",
+            "value": "6/9"
+          },
+          {
+            "field": "vision.remaining_eye.horizontal_field_degrees",
+            "operator": ">=",
+            "value": 140,
+            "unit": "degrees"
+          },
+          {
+            "field": "vision.remaining_eye.other_significant_field_loss",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "vision.specialist_assessment_available",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "vision.remaining_eye.field_measured_within_10_degrees_vertical",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "vision.monocular",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "review_interval": "2_yearly"
+      },
+      "source_id": "AFTD2022-VIS-COM-006",
+      "source_ids": [
+        "AFTD2022-VIS-COM-006"
+      ],
+      "category": "vision",
+      "condition": "monocular_vision_conditional",
+      "rag_query_key": "monocular_vision_conditional_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "VIS-COM-DIPLOPIA-001",
+      "required_facts": [
+        "vision.diplopia.physiological",
+        "vision.diplopia.present",
+        "vision.diplopia.within_20_degrees"
+      ],
+      "logic": "(vision.diplopia.present == True AND vision.diplopia.physiological == False AND vision.diplopia.within_20_degrees == True)",
+      "predicate": {
+        "all": [
+          {
+            "field": "vision.diplopia.present",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "vision.diplopia.physiological",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "vision.diplopia.within_20_degrees",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "vision.diplopia.present",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "does_not_meet_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "does_not_meet_standard",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-VIS-COM-007",
+      "source_ids": [
+        "AFTD2022-VIS-COM-007"
+      ],
+      "category": "vision",
+      "condition": "diplopia_central_20_degrees",
+      "rag_query_key": "diplopia_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "HEAR-COM-AUDIOMETRY-MISSING-001",
+      "required_facts": [
+        "hearing.audiometry.available",
+        "hearing.clinical_assessment"
+      ],
+      "logic": "(hearing.clinical_assessment == possible_hearing_loss AND hearing.audiometry.available == False)",
+      "predicate": {
+        "all": [
+          {
+            "field": "hearing.clinical_assessment",
+            "operator": "==",
+            "value": "possible_hearing_loss"
+          },
+          {
+            "field": "hearing.audiometry.available",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "hearing.clinical_assessment",
+            "operator": "==",
+            "value": "possible_hearing_loss"
+          }
+        ]
+      },
+      "result": "insufficient_information",
+      "workflow_outcome": {
+        "assessment_outcome": "insufficient_information",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-HEAR-COM-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001"
+      ],
+      "category": "hearing",
+      "condition": "possible_hearing_loss",
+      "rag_query_key": "hearing_audiometry_required_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "HEAR-COM-UNCONDITIONAL-001",
+      "required_facts": [
+        "hearing.average_frequencies_khz",
+        "hearing.clinical_assessment",
+        "hearing.unaided_better_ear_average_db"
+      ],
+      "logic": "(hearing.average_frequencies_khz set_equals [0.5, 1, 2, 3] AND hearing.unaided_better_ear_average_db >= 40)",
+      "predicate": {
+        "all": [
+          {
+            "field": "hearing.average_frequencies_khz",
+            "operator": "set_equals",
+            "value": [
+              0.5,
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "field": "hearing.unaided_better_ear_average_db",
+            "operator": ">=",
+            "value": 40,
+            "unit": "dB"
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "hearing.clinical_assessment",
+            "operator": "==",
+            "value": "possible_hearing_loss"
+          }
+        ]
+      },
+      "result": "unconditional_standard_not_met",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-HEAR-COM-002",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "condition": "better_ear_hearing_loss",
+      "rag_query_key": "hearing_loss_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "HEAR-COM-CONDITIONAL-AID-001",
+      "required_facts": [
+        "hearing.aided_standard_met",
+        "hearing.ent_or_audiologist_information_available"
+      ],
+      "logic": "(hearing.aided_standard_met == True AND hearing.ent_or_audiologist_information_available == True)",
+      "predicate": {
+        "all": [
+          {
+            "field": "hearing.aided_standard_met",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "hearing.ent_or_audiologist_information_available",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "triggered_rule": "HEAR-COM-UNCONDITIONAL-001"
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "licence_condition": "hearing_aid_while_driving"
+      },
+      "source_id": "AFTD2022-HEAR-COM-003",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-003"
+      ],
+      "category": "hearing",
+      "condition": "hearing_aid_standard_met",
+      "rag_query_key": "hearing_aid_conditional_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "HEAR-COM-INDIVIDUAL-ASSESSMENT-001",
+      "required_facts": [
+        "hearing.aided_standard_met"
+      ],
+      "logic": "hearing.aided_standard_met == False",
+      "predicate": {
+        "field": "hearing.aided_standard_met",
+        "operator": "==",
+        "value": false
+      },
+      "gate": {
+        "all": [
+          {
+            "triggered_rule": "HEAR-COM-UNCONDITIONAL-001"
+          }
+        ]
+      },
+      "result": "insufficient_information",
+      "workflow_outcome": {
+        "assessment_outcome": "insufficient_information",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-HEAR-COM-004",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-004"
+      ],
+      "category": "hearing",
+      "condition": "hearing_aid_standard_not_met",
+      "rag_query_key": "hearing_individual_assessment_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "DM-COM-DIET-001",
+      "required_facts": [
+        "diabetes.driving_relevant_comorbidity_status",
+        "diabetes.present",
+        "diabetes.treatment_category"
+      ],
+      "logic": "(diabetes.present == True AND diabetes.treatment_category == diet_and_exercise_only AND diabetes.driving_relevant_comorbidity_status == assessed_no_disqualifying_effect)",
+      "predicate": {
+        "all": [
+          {
+            "field": "diabetes.present",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diabetes.treatment_category",
+            "operator": "==",
+            "value": "diet_and_exercise_only"
+          },
+          {
+            "field": "diabetes.driving_relevant_comorbidity_status",
+            "operator": "==",
+            "value": "assessed_no_disqualifying_effect"
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "diabetes.present",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "meets_unconditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "meets_unconditional_standard",
+        "route": "fast_path",
+        "requires_human_review": false,
+        "review": "periodic_treating_doctor"
+      },
+      "source_id": "AFTD2022-DM-COM-004",
+      "source_ids": [
+        "AFTD2022-DM-COM-004"
+      ],
+      "category": "diabetes",
+      "condition": "diet_and_exercise_only",
+      "rag_query_key": "diabetes_diet_exercise_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "DM-COM-NONINSULIN-001",
+      "required_facts": [
+        "diabetes.present",
+        "diabetes.treatment_category"
+      ],
+      "logic": "diabetes.treatment_category == glucose_lowering_agent_non_insulin",
+      "predicate": {
+        "field": "diabetes.treatment_category",
+        "operator": "==",
+        "value": "glucose_lowering_agent_non_insulin"
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "diabetes.present",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-DM-COM-005",
+      "source_ids": [
+        "AFTD2022-DM-COM-005"
+      ],
+      "category": "diabetes",
+      "condition": "non_insulin_glucose_lowering_agent",
+      "rag_query_key": "diabetes_non_insulin_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "DM-COM-NONINSULIN-CONDITIONAL-001",
+      "required_facts": [
+        "diabetes.driving_relevant_end_organ_effects",
+        "diabetes.hypoglycaemia_awareness",
+        "diabetes.initial_specialist_information_available",
+        "diabetes.present",
+        "diabetes.recent_severe_hypoglycaemic_event",
+        "diabetes.regimen_minimises_hypoglycaemia"
+      ],
+      "logic": "(diabetes.recent_severe_hypoglycaemic_event == False AND diabetes.hypoglycaemia_awareness == True AND diabetes.regimen_minimises_hypoglycaemia == True AND diabetes.driving_relevant_end_organ_effects == False AND diabetes.initial_specialist_information_available == True)",
+      "predicate": {
+        "all": [
+          {
+            "field": "diabetes.recent_severe_hypoglycaemic_event",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "diabetes.hypoglycaemia_awareness",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diabetes.regimen_minimises_hypoglycaemia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diabetes.driving_relevant_end_organ_effects",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "diabetes.initial_specialist_information_available",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "diabetes.present",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "triggered_rule": "DM-COM-NONINSULIN-001"
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "review_interval": "at_least_annual"
+      },
+      "source_id": "AFTD2022-DM-COM-006",
+      "source_ids": [
+        "AFTD2022-DM-COM-006"
+      ],
+      "category": "diabetes",
+      "condition": "non_insulin_conditional",
+      "rag_query_key": "diabetes_non_insulin_conditional_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "DM-COM-INSULIN-001",
+      "required_facts": [
+        "diabetes.gestational",
+        "diabetes.present",
+        "diabetes.treatment_category"
+      ],
+      "logic": "diabetes.treatment_category == insulin",
+      "predicate": {
+        "field": "diabetes.treatment_category",
+        "operator": "==",
+        "value": "insulin"
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "diabetes.present",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diabetes.gestational",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-DM-COM-007",
+      "source_ids": [
+        "AFTD2022-DM-COM-007"
+      ],
+      "category": "diabetes",
+      "condition": "insulin_treated_diabetes",
+      "rag_query_key": "diabetes_insulin_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "DM-COM-SEVERE-HYPO-WAIT-001",
+      "required_facts": [
+        "diabetes.present",
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+      ],
+      "logic": "(diabetes.severe_hypoglycaemic_event.occurred == True AND diabetes.severe_hypoglycaemic_event.weeks_since_last < 6)",
+      "predicate": {
+        "all": [
+          {
+            "field": "diabetes.severe_hypoglycaemic_event.occurred",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+            "operator": "<",
+            "value": 6
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "diabetes.present",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "temporarily_unfit",
+      "workflow_outcome": {
+        "assessment_outcome": "temporarily_unfit",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "minimum_non_driving_period": "generally_6_weeks"
+      },
+      "source_id": "AFTD2022-DM-COM-002",
+      "source_ids": [
+        "AFTD2022-DM-COM-002"
+      ],
+      "category": "diabetes",
+      "condition": "recent_severe_hypoglycaemic_event",
+      "rag_query_key": "severe_hypoglycaemia_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "DM-COM-INSULIN-CONDITIONAL-001",
+      "required_facts": [
+        "diabetes.driving_relevant_end_organ_effects",
+        "diabetes.glucose_monitoring_records_months",
+        "diabetes.hypoglycaemia_awareness",
+        "diabetes.present",
+        "diabetes.recent_severe_hypoglycaemic_event",
+        "diabetes.regimen_minimises_hypoglycaemia",
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+        "diabetes.specialist_information_available"
+      ],
+      "logic": "((diabetes.severe_hypoglycaemic_event.occurred == False OR (diabetes.severe_hypoglycaemic_event.occurred == True AND diabetes.severe_hypoglycaemic_event.weeks_since_last >= 6)) AND diabetes.regimen_minimises_hypoglycaemia == True AND diabetes.hypoglycaemia_awareness == True AND diabetes.driving_relevant_end_organ_effects == False AND diabetes.glucose_monitoring_records_months >= 3 AND diabetes.specialist_information_available == True AND diabetes.recent_severe_hypoglycaemic_event == False)",
+      "predicate": {
+        "all": [
+          {
+            "any": [
+              {
+                "field": "diabetes.severe_hypoglycaemic_event.occurred",
+                "operator": "==",
+                "value": false
+              },
+              {
+                "all": [
+                  {
+                    "field": "diabetes.severe_hypoglycaemic_event.occurred",
+                    "operator": "==",
+                    "value": true
+                  },
+                  {
+                    "field": "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+                    "operator": ">=",
+                    "value": 6
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "diabetes.regimen_minimises_hypoglycaemia",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diabetes.hypoglycaemia_awareness",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diabetes.driving_relevant_end_organ_effects",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "diabetes.glucose_monitoring_records_months",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "diabetes.specialist_information_available",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diabetes.recent_severe_hypoglycaemic_event",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "diabetes.present",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "triggered_rule": "DM-COM-INSULIN-001"
+          }
+        ]
+      },
+      "result": "may_meet_conditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "route": "rag_review",
+        "requires_human_review": true,
+        "review_interval": "at_least_annual"
+      },
+      "source_id": "AFTD2022-DM-COM-008",
+      "source_ids": [
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-DM-COM-009"
+      ],
+      "category": "diabetes",
+      "condition": "insulin_conditional",
+      "rag_query_key": "diabetes_insulin_conditional_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "DM-COM-ACUTE-UNSTABLE-001",
+      "required_facts": [
+        "diabetes.acutely_unwell",
+        "diabetes.metabolically_unstable",
+        "diabetes.present"
+      ],
+      "logic": "(diabetes.acutely_unwell == True AND diabetes.metabolically_unstable == True)",
+      "predicate": {
+        "all": [
+          {
+            "field": "diabetes.acutely_unwell",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "diabetes.metabolically_unstable",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "gate": {
+        "all": [
+          {
+            "field": "diabetes.present",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "result": "temporarily_unfit",
+      "workflow_outcome": {
+        "assessment_outcome": "temporarily_unfit",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-DM-COM-003",
+      "source_ids": [
+        "AFTD2022-DM-COM-003"
+      ],
+      "category": "diabetes",
+      "condition": "acute_metabolic_instability",
+      "rag_query_key": "acute_hyperglycaemia_commercial",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "HTN-COM-SCREEN-001",
+      "required_facts": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "logic": "(cardiovascular.blood_pressure.persistent_systolic <= 170 AND cardiovascular.blood_pressure.persistent_diastolic <= 100)",
+      "predicate": {
+        "all": [
+          {
+            "field": "cardiovascular.blood_pressure.persistent_systolic",
+            "operator": "<=",
+            "value": 170
+          },
+          {
+            "field": "cardiovascular.blood_pressure.persistent_diastolic",
+            "operator": "<=",
+            "value": 100
+          }
+        ]
+      },
+      "gate": null,
+      "result": "meets_unconditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "meets_unconditional_standard",
+        "route": "fast_path",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-HTN-COM-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "condition": "hypertension_screen",
+      "rag_query_key": "htn_com_screen_001",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "VIS-COM-SCREEN-001",
+      "required_facts": [
+        "vision.diplopia.present",
+        "vision.monocular",
+        "vision.uncorrected.better_eye",
+        "vision.uncorrected.left.snellen",
+        "vision.uncorrected.right.snellen",
+        "vision.visual_field.confirmed_defect"
+      ],
+      "logic": "(vision.uncorrected.better_eye at_least_snellen 6/9 AND vision.uncorrected.right.snellen at_least_snellen 6/18 AND vision.uncorrected.left.snellen at_least_snellen 6/18 AND vision.visual_field.confirmed_defect == False AND vision.diplopia.present == False AND vision.monocular == False)",
+      "predicate": {
+        "all": [
+          {
+            "field": "vision.uncorrected.better_eye",
+            "operator": "at_least_snellen",
+            "value": "6/9"
+          },
+          {
+            "field": "vision.uncorrected.right.snellen",
+            "operator": "at_least_snellen",
+            "value": "6/18"
+          },
+          {
+            "field": "vision.uncorrected.left.snellen",
+            "operator": "at_least_snellen",
+            "value": "6/18"
+          },
+          {
+            "field": "vision.visual_field.confirmed_defect",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "vision.diplopia.present",
+            "operator": "==",
+            "value": false
+          },
+          {
+            "field": "vision.monocular",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      "gate": null,
+      "result": "meets_unconditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "meets_unconditional_standard",
+        "route": "fast_path",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-VIS-COM-002",
+      "source_ids": [
+        "AFTD2022-VIS-COM-002",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-007"
+      ],
+      "category": "vision",
+      "condition": "vision_screen",
+      "rag_query_key": "vis_com_screen_001",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "HEAR-COM-SCREEN-001",
+      "required_facts": [
+        "hearing.average_frequencies_khz",
+        "hearing.clinical_assessment",
+        "hearing.unaided_better_ear_average_db"
+      ],
+      "logic": "(hearing.clinical_assessment == no_hearing_loss OR (hearing.average_frequencies_khz set_equals [0.5, 1, 2, 3] AND hearing.unaided_better_ear_average_db < 40))",
+      "predicate": {
+        "any": [
+          {
+            "field": "hearing.clinical_assessment",
+            "operator": "==",
+            "value": "no_hearing_loss"
+          },
+          {
+            "all": [
+              {
+                "field": "hearing.average_frequencies_khz",
+                "operator": "set_equals",
+                "value": [
+                  0.5,
+                  1,
+                  2,
+                  3
+                ]
+              },
+              {
+                "field": "hearing.unaided_better_ear_average_db",
+                "operator": "<",
+                "value": 40
+              }
+            ]
+          }
+        ]
+      },
+      "gate": null,
+      "result": "meets_unconditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "meets_unconditional_standard",
+        "route": "fast_path",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-HEAR-COM-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "condition": "hearing_screen",
+      "rag_query_key": "hear_com_screen_001",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "BLK-COM-NO-HISTORY-001",
+      "required_facts": [
+        "blackout.occurred"
+      ],
+      "logic": "blackout.occurred == False",
+      "predicate": {
+        "field": "blackout.occurred",
+        "operator": "==",
+        "value": false
+      },
+      "gate": null,
+      "result": "meets_unconditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "meets_unconditional_standard",
+        "route": "fast_path",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-BLK-COM-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "condition": "blackout_screen",
+      "rag_query_key": "blk_com_no_history_001",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "DM-COM-NO-HISTORY-001",
+      "required_facts": [
+        "diabetes.present"
+      ],
+      "logic": "diabetes.present == False",
+      "predicate": {
+        "field": "diabetes.present",
+        "operator": "==",
+        "value": false
+      },
+      "gate": null,
+      "result": "meets_unconditional_standard",
+      "workflow_outcome": {
+        "assessment_outcome": "meets_unconditional_standard",
+        "route": "fast_path",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-DM-COM-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-001"
+      ],
+      "category": "diabetes",
+      "condition": "diabetes_screen",
+      "rag_query_key": "dm_com_no_history_001",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
+      "required_facts": [
+        "blackout.diagnosis",
+        "blackout.occurred"
+      ],
+      "logic": "blackout.diagnosis in ['hypoglycaemia', 'seizure', 'cardiac_syncope', 'sleep_disorder', 'other']",
+      "predicate": {
+        "field": "blackout.diagnosis",
+        "operator": "in",
+        "value": [
+          "hypoglycaemia",
+          "seizure",
+          "cardiac_syncope",
+          "sleep_disorder",
+          "other"
+        ]
+      },
+      "gate": {
+        "field": "blackout.occurred",
+        "operator": "==",
+        "value": true
+      },
+      "result": "insufficient_information",
+      "workflow_outcome": {
+        "assessment_outcome": "insufficient_information",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-BLK-COM-006",
+      "source_ids": [
+        "AFTD2022-BLK-COM-006"
+      ],
+      "category": "blackout",
+      "condition": "blackout_screen",
+      "rag_query_key": "blk_com_diagnosed_referral_001",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    },
+    {
+      "rule_id": "DM-COM-GESTATIONAL-REVIEW-001",
+      "required_facts": [
+        "diabetes.gestational",
+        "diabetes.present"
+      ],
+      "logic": "diabetes.gestational == True",
+      "predicate": {
+        "field": "diabetes.gestational",
+        "operator": "==",
+        "value": true
+      },
+      "gate": {
+        "field": "diabetes.present",
+        "operator": "==",
+        "value": true
+      },
+      "result": "insufficient_information",
+      "workflow_outcome": {
+        "assessment_outcome": "insufficient_information",
+        "route": "rag_review",
+        "requires_human_review": true
+      },
+      "source_id": "AFTD2022-DM-COM-010",
+      "source_ids": [
+        "AFTD2022-DM-COM-010"
+      ],
+      "category": "diabetes",
+      "condition": "diabetes_screen",
+      "rag_query_key": "dm_com_gestational_review_001",
+      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+    }
+  ]
+}

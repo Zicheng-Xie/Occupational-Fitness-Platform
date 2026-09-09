@@ -1,0 +1,420 @@
+{
+  "$defs": {
+    "Fact": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "present",
+            "unknown",
+            "conflicting",
+            "requires_confirmation"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/TextSpan"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "method": {
+          "default": "not_recorded",
+          "title": "Method",
+          "type": "string"
+        },
+        "derived_from": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Derived From",
+          "type": "array"
+        }
+      },
+      "title": "Fact",
+      "type": "object"
+    },
+    "ModuleAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "module": {
+          "title": "Module",
+          "type": "string"
+        },
+        "assessment_outcome": {
+          "$ref": "#/$defs/Outcome"
+        },
+        "route": {
+          "$ref": "#/$defs/WorkflowRoute"
+        },
+        "triggered_rule_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Triggered Rule Ids",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "module",
+        "assessment_outcome",
+        "route",
+        "triggered_rule_ids",
+        "missing_fields"
+      ],
+      "title": "ModuleAssessment",
+      "type": "object"
+    },
+    "Outcome": {
+      "enum": [
+        "meets_unconditional_standard",
+        "may_meet_conditional_standard",
+        "temporarily_unfit",
+        "does_not_meet_standard",
+        "insufficient_information"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "RAGRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "request_type": {
+          "enum": [
+            "triggered_rule_evidence",
+            "missing_information_guidance"
+          ],
+          "title": "Request Type",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Ids",
+          "type": "array"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "subcondition": {
+          "title": "Subcondition",
+          "type": "string"
+        },
+        "licence_context": {
+          "const": "commercial",
+          "default": "commercial",
+          "title": "Licence Context",
+          "type": "string"
+        },
+        "rag_query_key": {
+          "title": "Rag Query Key",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_id",
+        "request_type",
+        "rule_id",
+        "source_ids",
+        "category",
+        "subcondition",
+        "rag_query_key"
+      ],
+      "title": "RAGRequest",
+      "type": "object"
+    },
+    "RuleEvaluation": {
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "module": {
+          "title": "Module",
+          "type": "string"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "subcondition": {
+          "title": "Subcondition",
+          "type": "string"
+        },
+        "result": {
+          "enum": [
+            "triggered",
+            "not_triggered",
+            "unknown",
+            "not_applicable"
+          ],
+          "title": "Result",
+          "type": "string"
+        },
+        "assessment_outcome": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Outcome"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Ids",
+          "type": "array"
+        },
+        "rag_query_key": {
+          "title": "Rag Query Key",
+          "type": "string"
+        },
+        "observed_facts": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Fact"
+          },
+          "title": "Observed Facts",
+          "type": "object"
+        },
+        "missing_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "condition_trace": {
+          "additionalProperties": true,
+          "title": "Condition Trace",
+          "type": "object"
+        }
+      },
+      "required": [
+        "rule_id",
+        "module",
+        "category",
+        "subcondition",
+        "result",
+        "reason",
+        "source_ids",
+        "rag_query_key"
+      ],
+      "title": "RuleEvaluation",
+      "type": "object"
+    },
+    "TextSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "line_start": {
+          "minimum": 1,
+          "title": "Line Start",
+          "type": "integer"
+        },
+        "line_end": {
+          "minimum": 1,
+          "title": "Line End",
+          "type": "integer"
+        },
+        "pdf_page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pdf Page"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "quote",
+        "line_start",
+        "line_end"
+      ],
+      "title": "TextSpan",
+      "type": "object"
+    },
+    "WorkflowRoute": {
+      "enum": [
+        "fast_path",
+        "rag_review",
+        "missing_information",
+        "human_review"
+      ],
+      "title": "WorkflowRoute",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0",
+      "default": "1.2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "result_id": {
+      "title": "Result Id",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "case_sha256": {
+      "title": "Case Sha256",
+      "type": "string"
+    },
+    "ruleset_id": {
+      "title": "Ruleset Id",
+      "type": "string"
+    },
+    "ruleset_version": {
+      "title": "Ruleset Version",
+      "type": "string"
+    },
+    "ruleset_sha256": {
+      "title": "Ruleset Sha256",
+      "type": "string"
+    },
+    "guideline_version": {
+      "const": "AP-G56-22",
+      "default": "AP-G56-22",
+      "title": "Guideline Version",
+      "type": "string"
+    },
+    "ruleset_status": {
+      "default": "pending_clinical_review",
+      "title": "Ruleset Status",
+      "type": "string"
+    },
+    "route": {
+      "$ref": "#/$defs/WorkflowRoute"
+    },
+    "assessment_outcome": {
+      "$ref": "#/$defs/Outcome"
+    },
+    "modules": {
+      "items": {
+        "$ref": "#/$defs/ModuleAssessment"
+      },
+      "title": "Modules",
+      "type": "array"
+    },
+    "rules_evaluated": {
+      "items": {
+        "$ref": "#/$defs/RuleEvaluation"
+      },
+      "title": "Rules Evaluated",
+      "type": "array"
+    },
+    "rag_requests": {
+      "items": {
+        "$ref": "#/$defs/RAGRequest"
+      },
+      "title": "Rag Requests",
+      "type": "array"
+    },
+    "processing_warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Processing Warnings",
+      "type": "array"
+    },
+    "requires_human_review": {
+      "const": true,
+      "default": true,
+      "title": "Requires Human Review",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "result_id",
+    "case_id",
+    "case_sha256",
+    "ruleset_id",
+    "ruleset_version",
+    "ruleset_sha256",
+    "route",
+    "assessment_outcome",
+    "modules",
+    "rules_evaluated",
+    "rag_requests"
+  ],
+  "title": "WorkflowRuleResult",
+  "type": "object"
+}

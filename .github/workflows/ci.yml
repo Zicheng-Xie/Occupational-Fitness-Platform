@@ -1,0 +1,20 @@
+name: Platform regression
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - run: python -m pip install -e '.[dev,api]'
+      - run: python -m ruff check src tests scripts examples
+      - run: python -m ruff format --check src tests scripts examples
+      - run: python -m pytest -q --junitxml=outputs/evaluation/pytest.xml
+      - run: fitness-rag build-knowledge
+      - run: fitness-rag benchmark --config configs/workflow.offline.yaml
+      - run: python scripts/check_english.py

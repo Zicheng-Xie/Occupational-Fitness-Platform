@@ -1,0 +1,157 @@
+{
+  "$defs": {
+    "ModuleAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "module": {
+          "title": "Module",
+          "type": "string"
+        },
+        "assessment_outcome": {
+          "$ref": "#/$defs/Outcome"
+        },
+        "route": {
+          "$ref": "#/$defs/WorkflowRoute"
+        },
+        "triggered_rule_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Triggered Rule Ids",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "module",
+        "assessment_outcome",
+        "route",
+        "triggered_rule_ids",
+        "missing_fields"
+      ],
+      "title": "ModuleAssessment",
+      "type": "object"
+    },
+    "Outcome": {
+      "enum": [
+        "meets_unconditional_standard",
+        "may_meet_conditional_standard",
+        "temporarily_unfit",
+        "does_not_meet_standard",
+        "insufficient_information"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "WorkflowRoute": {
+      "enum": [
+        "fast_path",
+        "rag_review",
+        "missing_information",
+        "human_review"
+      ],
+      "title": "WorkflowRoute",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0",
+      "default": "1.2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "status": {
+      "const": "DRAFT",
+      "default": "DRAFT",
+      "title": "Status",
+      "type": "string"
+    },
+    "assessment_outcome": {
+      "$ref": "#/$defs/Outcome"
+    },
+    "modules": {
+      "items": {
+        "$ref": "#/$defs/ModuleAssessment"
+      },
+      "title": "Modules",
+      "type": "array"
+    },
+    "rule_result_sha256": {
+      "title": "Rule Result Sha256",
+      "type": "string"
+    },
+    "evidence_pack_sha256": {
+      "title": "Evidence Pack Sha256",
+      "type": "string"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    },
+    "review_checklist": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Review Checklist",
+      "type": "array"
+    },
+    "llm_commentary": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Llm Commentary"
+    },
+    "clinician_name": {
+      "default": null,
+      "title": "Clinician Name",
+      "type": "null"
+    },
+    "signed_at": {
+      "default": null,
+      "title": "Signed At",
+      "type": "null"
+    },
+    "final_clinical_authorization_required": {
+      "const": true,
+      "default": true,
+      "title": "Final Clinical Authorization Required",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "case_id",
+    "assessment_outcome",
+    "modules",
+    "rule_result_sha256",
+    "evidence_pack_sha256",
+    "summary",
+    "review_checklist"
+  ],
+  "title": "ReviewNote",
+  "type": "object"
+}

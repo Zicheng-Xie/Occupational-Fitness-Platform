@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.2.0",
+  "case_id": "SYN-EXT-017",
+  "status": "DRAFT",
+  "assessment_outcome": "insufficient_information",
+  "modules": [
+    {
+      "module": "hypertension",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "HTN-COM-SCREEN-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "vision",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "VIS-COM-SCREEN-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "hearing",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [
+        "HEAR-COM-UNCONDITIONAL-001"
+      ],
+      "missing_fields": [
+        "hearing.aided_standard_met",
+        "hearing.ent_or_audiologist_information_available"
+      ],
+      "warnings": []
+    },
+    {
+      "module": "blackout",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "BLK-COM-NO-HISTORY-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "diabetes",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "DM-COM-NO-HISTORY-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    }
+  ],
+  "rule_result_sha256": "99df96a8fa60f34e65ff280ba942938c638539c84d3a88307cdbddc95efd0805",
+  "evidence_pack_sha256": "9fe11586ea72b57ec7eabf41e4679ab1ab7e2ecc4d551fc2d0b284a0c995f3d1",
+  "summary": "SYN-EXT-017: Insufficient information. 5 requested modules; 2 unresolved fact fields. This draft is occupational fitness decision support. The result is limited to the implemented criteria and is not a licensing or employment decision.",
+  "review_checklist": [
+    "Clinician: review source facts, rule applicability and every provisional conclusion.",
+    "Confirm the commercial driving task and assess conditions outside the five-module scope.",
+    "Confirm missing/unverified case fact: hearing.aided_standard_met",
+    "Confirm missing/unverified case fact: hearing.ent_or_audiologist_information_available",
+    "HEARING_40_DB_FIGURE_TABLE_CONFLICT: licensing table uses >= 40; Figure 11 uses > 40; clinical review pending"
+  ],
+  "llm_commentary": "This synthetic validation fixture presents a commercial driver assessment with insufficient information in the hearing module. The unaided better-ear average is 40 dB, which meets the unconditional standard for hearing. However, the aided assessment is missing, and the individualised assessment should be offered. The presence of possible hearing loss and the availability of audiometry suggest that further evaluation is necessary. A clinician must review the case to determine the appropriate assessment outcome.",
+  "clinician_name": null,
+  "signed_at": null,
+  "final_clinical_authorization_required": true
+}

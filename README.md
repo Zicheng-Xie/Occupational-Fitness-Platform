@@ -41,6 +41,10 @@ Reports remain **DRAFT / clinical review pending**. Rules retain `pending_clinic
 | `outputs/` | Current assessment records and verification results |
 | `scripts/`, `tests/` | Setup, generation, checks and regression tests |
 
+## Included demonstration reports
+
+The repository includes 30 fixed synthetic report bundles in `outputs/demo/`. After cloning or downloading the complete repository, open `outputs/index.html` in a browser; saved reports and evidence links work without Ollama. GitHub itself shows HTML source, so download the repository to use the interface. `outputs/demo/manifest.json` pins this collection; ordinary future runs in `outputs/runs/` remain ignored. See [the demonstration collection](outputs/demo/README.md).
+
 ## Deliverables and language
 
 Each run includes the original input, structured facts, category facts, rule results, evidence pack, model extraction audit, clinician checklist, HTML/Markdown reports and a fingerprinted run manifest.

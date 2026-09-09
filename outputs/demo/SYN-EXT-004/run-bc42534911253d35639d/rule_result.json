@@ -1,0 +1,3271 @@
+{
+  "schema_version": "1.2.0",
+  "result_id": "RR-0f1ee87238f2dc3ed793",
+  "case_id": "SYN-EXT-004",
+  "case_sha256": "cb1ffb6145002f15fc75471672d8b8e0ebee1f1baa0087f68810ff4133667fcc",
+  "ruleset_id": "austroads-commercial",
+  "ruleset_version": "1.2.0",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "guideline_version": "AP-G56-22",
+  "ruleset_status": "pending_clinical_review",
+  "route": "rag_review",
+  "assessment_outcome": "temporarily_unfit",
+  "modules": [
+    {
+      "module": "hypertension",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "HTN-COM-SCREEN-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "vision",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "VIS-COM-SCREEN-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "hearing",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "HEAR-COM-SCREEN-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "blackout",
+      "assessment_outcome": "temporarily_unfit",
+      "route": "rag_review",
+      "triggered_rule_ids": [
+        "BLK-COM-UNCERTAIN-UNCONDITIONAL-001",
+        "BLK-COM-SINGLE-WAIT-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "diabetes",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "DM-COM-NO-HISTORY-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    }
+  ],
+  "rules_evaluated": [
+    {
+      "rule_id": "HTN-COM-UNCONDITIONAL-001",
+      "module": "hypertension",
+      "category": "cardiovascular",
+      "subcondition": "hypertension",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "rag_query_key": "hypertension_commercial_unconditional",
+      "observed_facts": {
+        "cardiovascular.blood_pressure.persistent_diastolic": {
+          "value": 80.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 286,
+              "end": 341,
+              "quote": "cardiovascular.blood_pressure.persistent_diastolic = 80",
+              "line_start": 7,
+              "line_end": 7,
+              "pdf_page": null
+            },
+            {
+              "start": 286,
+              "end": 341,
+              "quote": "cardiovascular.blood_pressure.persistent_diastolic = 80",
+              "line_start": 7,
+              "line_end": 7,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "cardiovascular.blood_pressure.persistent_systolic": {
+          "value": 120.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 229,
+              "end": 284,
+              "quote": "cardiovascular.blood_pressure.persistent_systolic = 120",
+              "line_start": 6,
+              "line_end": 6,
+              "pdf_page": null
+            },
+            {
+              "start": 229,
+              "end": 284,
+              "quote": "cardiovascular.blood_pressure.persistent_systolic = 120",
+              "line_start": 6,
+              "line_end": 6,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "any": [
+            {
+              "field": "cardiovascular.blood_pressure.persistent_systolic",
+              "operator": ">",
+              "expected": 170,
+              "observed": 120.0,
+              "status": "present",
+              "truth": false
+            },
+            {
+              "field": "cardiovascular.blood_pressure.persistent_diastolic",
+              "operator": ">",
+              "expected": 100,
+              "observed": 80.0,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "HTN-COM-CONDITIONAL-001",
+      "module": "hypertension",
+      "category": "cardiovascular",
+      "subcondition": "hypertension_conditional",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-HTN-COM-002"
+      ],
+      "rag_query_key": "hypertension_commercial_conditional",
+      "observed_facts": {
+        "cardiovascular.hypertension.antihypertensive_therapy": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.controlled_for_4_weeks": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.driving_impairing_medication_side_effects": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.initial_specialist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.target_organ_damage_relevant_to_driving": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "dependency": "HTN-COM-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "dependency": "HTN-COM-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_mechanism_not_yet_ascertained",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "rag_query_key": "blackout_diagnostic_workup_commercial",
+      "observed_facts": {
+        "blackout.mechanism_status": {
+          "value": "undetermined_after_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 632,
+              "end": 694,
+              "quote": "blackout.mechanism_status = \"undetermined_after_investigation\"",
+              "line_start": 16,
+              "line_end": 16,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            },
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "in",
+              "expected": [
+                "not_investigated",
+                "under_investigation"
+              ],
+              "observed": "undetermined_after_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "provoked_vasovagal_syncope",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "rag_query_key": "provoked_vasovagal_syncope_commercial",
+      "observed_facts": {
+        "blackout.diagnosis": {
+          "value": "undetermined",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 696,
+              "end": 731,
+              "quote": "blackout.diagnosis = \"undetermined\"",
+              "line_start": 17,
+              "line_end": 17,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            },
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "blackout.provoking_factor_well_defined": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.recurrence_while_driving_unlikely": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.diagnosis",
+              "operator": "==",
+              "expected": "vasovagal_syncope",
+              "observed": "undetermined",
+              "status": "present",
+              "truth": false
+            },
+            {
+              "field": "blackout.provoking_factor_well_defined",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            },
+            {
+              "field": "blackout.recurrence_while_driving_unlikely",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-UNCERTAIN-UNCONDITIONAL-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_uncertain_nature",
+      "result": "triggered",
+      "assessment_outcome": "may_meet_conditional_standard",
+      "reason": "The blackout remains of uncertain nature after investigation, so the unconditional commercial standard is not met.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-003"
+      ],
+      "rag_query_key": "blackout_uncertain_commercial",
+      "observed_facts": {
+        "blackout.mechanism_status": {
+          "value": "undetermined_after_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 632,
+              "end": 694,
+              "quote": "blackout.mechanism_status = \"undetermined_after_investigation\"",
+              "line_start": 16,
+              "line_end": 16,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            },
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "undetermined_after_investigation",
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-SINGLE-WAIT-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "single_or_clustered_uncertain_blackout",
+      "result": "triggered",
+      "assessment_outcome": "temporarily_unfit",
+      "reason": "The five-year event-free period for a single or 24-hour-clustered uncertain blackout has not elapsed.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-004"
+      ],
+      "rag_query_key": "blackout_uncertain_single_commercial",
+      "observed_facts": {
+        "blackout.episodes_separated_by_24h_count": {
+          "value": 1,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 733,
+              "end": 777,
+              "quote": "blackout.episodes_separated_by_24h_count = 1",
+              "line_start": 18,
+              "line_end": 18,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.mechanism_status": {
+          "value": "undetermined_after_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 632,
+              "end": 694,
+              "quote": "blackout.mechanism_status = \"undetermined_after_investigation\"",
+              "line_start": 16,
+              "line_end": 16,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            },
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "blackout.years_since_last_event": {
+          "value": 4.99,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 779,
+              "end": 817,
+              "quote": "blackout.years_since_last_event = 4.99",
+              "line_start": 19,
+              "line_end": 19,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "undetermined_after_investigation",
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.episodes_separated_by_24h_count",
+              "operator": "==",
+              "expected": 1,
+              "observed": 1,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.years_since_last_event",
+              "operator": "<",
+              "expected": 5,
+              "observed": 4.99,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-RECURRENT-WAIT-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "recurrent_uncertain_blackout",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-005"
+      ],
+      "rag_query_key": "blackout_uncertain_recurrent_commercial",
+      "observed_facts": {
+        "blackout.episodes_separated_by_24h_count": {
+          "value": 1,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 733,
+              "end": 777,
+              "quote": "blackout.episodes_separated_by_24h_count = 1",
+              "line_start": 18,
+              "line_end": 18,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.mechanism_status": {
+          "value": "undetermined_after_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 632,
+              "end": 694,
+              "quote": "blackout.mechanism_status = \"undetermined_after_investigation\"",
+              "line_start": 16,
+              "line_end": 16,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            },
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "blackout.years_since_last_event": {
+          "value": 4.99,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 779,
+              "end": 817,
+              "quote": "blackout.years_since_last_event = 4.99",
+              "line_start": 19,
+              "line_end": 19,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "undetermined_after_investigation",
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.episodes_separated_by_24h_count",
+              "operator": ">=",
+              "expected": 2,
+              "observed": 1,
+              "status": "present",
+              "truth": false
+            },
+            {
+              "field": "blackout.years_since_last_event",
+              "operator": "<",
+              "expected": 10,
+              "observed": 4.99,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-CONDITIONAL-ELIGIBILITY-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "uncertain_blackout_conditional_eligibility",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005"
+      ],
+      "rag_query_key": "blackout_uncertain_conditional_commercial",
+      "observed_facts": {
+        "blackout.appropriate_specialist_information_available": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 819,
+              "end": 879,
+              "quote": "blackout.appropriate_specialist_information_available = true",
+              "line_start": 20,
+              "line_end": 20,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.episodes_separated_by_24h_count": {
+          "value": 1,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 733,
+              "end": 777,
+              "quote": "blackout.episodes_separated_by_24h_count = 1",
+              "line_start": 18,
+              "line_end": 18,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.mechanism_status": {
+          "value": "undetermined_after_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 632,
+              "end": 694,
+              "quote": "blackout.mechanism_status = \"undetermined_after_investigation\"",
+              "line_start": 16,
+              "line_end": 16,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            },
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "blackout.years_since_last_event": {
+          "value": 4.99,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 779,
+              "end": 817,
+              "quote": "blackout.years_since_last_event = 4.99",
+              "line_start": 19,
+              "line_end": 19,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "undetermined_after_investigation",
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "blackout.episodes_separated_by_24h_count",
+                  "operator": "==",
+                  "expected": 1,
+                  "observed": 1,
+                  "status": "present",
+                  "truth": true
+                },
+                {
+                  "field": "blackout.years_since_last_event",
+                  "operator": ">=",
+                  "expected": 5,
+                  "observed": 4.99,
+                  "status": "present",
+                  "truth": false
+                },
+                {
+                  "field": "blackout.appropriate_specialist_information_available",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": true,
+                  "status": "present",
+                  "truth": true
+                }
+              ],
+              "truth": false
+            },
+            {
+              "all": [
+                {
+                  "field": "blackout.episodes_separated_by_24h_count",
+                  "operator": ">=",
+                  "expected": 2,
+                  "observed": 1,
+                  "status": "present",
+                  "truth": false
+                },
+                {
+                  "field": "blackout.years_since_last_event",
+                  "operator": ">=",
+                  "expected": 10,
+                  "observed": 4.99,
+                  "status": "present",
+                  "truth": false
+                },
+                {
+                  "field": "blackout.appropriate_specialist_information_available",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": true,
+                  "status": "present",
+                  "truth": true
+                }
+              ],
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "VIS-COM-ACUITY-UNCONDITIONAL-001",
+      "module": "vision",
+      "category": "vision",
+      "subcondition": "visual_acuity",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-VIS-COM-002"
+      ],
+      "rag_query_key": "visual_acuity_commercial",
+      "observed_facts": {
+        "vision.uncorrected.better_eye": {
+          "value": "6/6",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 343,
+              "end": 383,
+              "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+              "line_start": 8,
+              "line_end": 8,
+              "pdf_page": null
+            },
+            {
+              "start": 385,
+              "end": 424,
+              "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "snellen_better_eye",
+          "derived_from": [
+            "vision.uncorrected.right.snellen",
+            "vision.uncorrected.left.snellen"
+          ]
+        },
+        "vision.uncorrected.left.snellen": {
+          "value": "6/6",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 385,
+              "end": 424,
+              "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 385,
+              "end": 424,
+              "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "vision.uncorrected.right.snellen": {
+          "value": "6/6",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 343,
+              "end": 383,
+              "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+              "line_start": 8,
+              "line_end": 8,
+              "pdf_page": null
+            },
+            {
+              "start": 343,
+              "end": 383,
+              "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+              "line_start": 8,
+              "line_end": 8,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "any": [
+            {
+              "field": "vision.uncorrected.better_eye",
+              "operator": "worse_than_snellen",
+              "expected": "6/9",
+              "observed": "6/6",
+              "status": "present",
+              "truth": false
+            },
+            {
+              "field": "vision.uncorrected.right.snellen",
+              "operator": "worse_than_snellen",
+              "expected": "6/18",
+              "observed": "6/6",
+              "status": "present",
+              "truth": false
+            },
+            {
+              "field": "vision.uncorrected.left.snellen",
+              "operator": "worse_than_snellen",
+              "expected": "6/18",
+              "observed": "6/6",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "VIS-COM-ACUITY-CONDITIONAL-001",
+      "module": "vision",
+      "category": "vision",
+      "subcondition": "corrected_visual_acuity",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-VIS-COM-003"
+      ],
+      "rag_query_key": "corrected_visual_acuity_commercial",
+      "observed_facts": {
+        "vision.corrected.better_eye": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.specialist_assessment_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "dependency": "VIS-COM-ACUITY-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "dependency": "VIS-COM-ACUITY-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "VIS-COM-FIELD-UNCONDITIONAL-001",
+      "module": "vision",
+      "category": "vision",
+      "subcondition": "visual_field_defect",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-VIS-COM-004"
+      ],
+      "rag_query_key": "visual_field_commercial",
+      "observed_facts": {
+        "vision.visual_field.confirmed_defect": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 426,
+              "end": 470,
+              "quote": "vision.visual_field.confirmed_defect = false",
+              "line_start": 10,
+              "line_end": 10,
+              "pdf_page": null
+            },
+            {
+              "start": 426,
+              "end": 470,
+              "quote": "vision.visual_field.confirmed_defect = false",
+              "line_start": 10,
+              "line_end": 10,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "field": "vision.visual_field.confirmed_defect",
+          "operator": "==",
+          "expected": true,
+          "observed": false,
+          "status": "present",
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "VIS-COM-FIELD-CONDITIONAL-001",
+      "module": "vision",
+      "category": "vision",
+      "subcondition": "visual_field_conditional",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-VIS-COM-005"
+      ],
+      "rag_query_key": "visual_field_conditional_commercial",
+      "observed_facts": {
+        "vision.specialist_assessment_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.visual_field.binocular_horizontal_extent_degrees": {
+          "value": null,
+          "status": "unknown",
+          "unit": "degrees",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.visual_field.confirmed_defect": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 426,
+              "end": 470,
+              "quote": "vision.visual_field.confirmed_defect = false",
+              "line_start": 10,
+              "line_end": 10,
+              "pdf_page": null
+            },
+            {
+              "start": 426,
+              "end": 470,
+              "quote": "vision.visual_field.confirmed_defect = false",
+              "line_start": 10,
+              "line_end": 10,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "vision.visual_field.measured_within_10_degrees_vertical": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.visual_field.significant_loss_likely_to_impede_driving": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.visual_field.static_and_unlikely_to_progress_rapidly": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "vision.visual_field.confirmed_defect",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "vision.visual_field.confirmed_defect",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "VIS-COM-MONOCULAR-001",
+      "module": "vision",
+      "category": "vision",
+      "subcondition": "monocular_vision",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-VIS-COM-006"
+      ],
+      "rag_query_key": "monocular_vision_commercial",
+      "observed_facts": {
+        "vision.monocular": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 505,
+              "end": 529,
+              "quote": "vision.monocular = false",
+              "line_start": 12,
+              "line_end": 12,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "field": "vision.monocular",
+          "operator": "==",
+          "expected": true,
+          "observed": false,
+          "status": "present",
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "VIS-COM-MONOCULAR-CONDITIONAL-001",
+      "module": "vision",
+      "category": "vision",
+      "subcondition": "monocular_vision_conditional",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-VIS-COM-006"
+      ],
+      "rag_query_key": "monocular_vision_conditional_commercial",
+      "observed_facts": {
+        "vision.monocular": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 505,
+              "end": 529,
+              "quote": "vision.monocular = false",
+              "line_start": 12,
+              "line_end": 12,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "vision.remaining_eye.field_measured_within_10_degrees_vertical": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.remaining_eye.horizontal_field_degrees": {
+          "value": null,
+          "status": "unknown",
+          "unit": "degrees",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.remaining_eye.other_significant_field_loss": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.remaining_eye.snellen": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.specialist_assessment_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "vision.monocular",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "vision.monocular",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "VIS-COM-DIPLOPIA-001",
+      "module": "vision",
+      "category": "vision",
+      "subcondition": "diplopia_central_20_degrees",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-VIS-COM-007"
+      ],
+      "rag_query_key": "diplopia_commercial",
+      "observed_facts": {
+        "vision.diplopia.physiological": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "vision.diplopia.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 472,
+              "end": 503,
+              "quote": "vision.diplopia.present = false",
+              "line_start": 11,
+              "line_end": 11,
+              "pdf_page": null
+            },
+            {
+              "start": 472,
+              "end": 503,
+              "quote": "vision.diplopia.present = false",
+              "line_start": 11,
+              "line_end": 11,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "vision.diplopia.within_20_degrees": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "vision.diplopia.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "vision.diplopia.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "HEAR-COM-AUDIOMETRY-MISSING-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "possible_hearing_loss",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001"
+      ],
+      "rag_query_key": "hearing_audiometry_required_commercial",
+      "observed_facts": {
+        "hearing.audiometry.available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.clinical_assessment": {
+          "value": "no_hearing_loss",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 531,
+              "end": 578,
+              "quote": "hearing.clinical_assessment = \"no_hearing_loss\"",
+              "line_start": 13,
+              "line_end": 13,
+              "pdf_page": null
+            },
+            {
+              "start": 531,
+              "end": 578,
+              "quote": "hearing.clinical_assessment = \"no_hearing_loss\"",
+              "line_start": 13,
+              "line_end": 13,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "hearing.clinical_assessment",
+              "operator": "==",
+              "expected": "possible_hearing_loss",
+              "observed": "no_hearing_loss",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "hearing.clinical_assessment",
+              "operator": "==",
+              "expected": "possible_hearing_loss",
+              "observed": "no_hearing_loss",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "HEAR-COM-UNCONDITIONAL-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "better_ear_hearing_loss",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "rag_query_key": "hearing_loss_commercial",
+      "observed_facts": {
+        "hearing.average_frequencies_khz": {
+          "value": null,
+          "status": "unknown",
+          "unit": "kHz",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.clinical_assessment": {
+          "value": "no_hearing_loss",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 531,
+              "end": 578,
+              "quote": "hearing.clinical_assessment = \"no_hearing_loss\"",
+              "line_start": 13,
+              "line_end": 13,
+              "pdf_page": null
+            },
+            {
+              "start": 531,
+              "end": 578,
+              "quote": "hearing.clinical_assessment = \"no_hearing_loss\"",
+              "line_start": 13,
+              "line_end": 13,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "hearing.unaided_better_ear_average_db": {
+          "value": null,
+          "status": "unknown",
+          "unit": "dB",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "hearing.clinical_assessment",
+              "operator": "==",
+              "expected": "possible_hearing_loss",
+              "observed": "no_hearing_loss",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "hearing.clinical_assessment",
+              "operator": "==",
+              "expected": "possible_hearing_loss",
+              "observed": "no_hearing_loss",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "HEAR-COM-CONDITIONAL-AID-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_met",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-003"
+      ],
+      "rag_query_key": "hearing_aid_conditional_commercial",
+      "observed_facts": {
+        "hearing.aided_standard_met": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.ent_or_audiologist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "dependency": "HEAR-COM-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "dependency": "HEAR-COM-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "HEAR-COM-INDIVIDUAL-ASSESSMENT-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_not_met",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-004"
+      ],
+      "rag_query_key": "hearing_individual_assessment_commercial",
+      "observed_facts": {
+        "hearing.aided_standard_met": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "dependency": "HEAR-COM-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "dependency": "HEAR-COM-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-DIET-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "diet_and_exercise_only",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-004"
+      ],
+      "rag_query_key": "diabetes_diet_exercise_commercial",
+      "observed_facts": {
+        "diabetes.driving_relevant_comorbidity_status": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            },
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "diabetes.treatment_category": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-NONINSULIN-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "non_insulin_glucose_lowering_agent",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-005"
+      ],
+      "rag_query_key": "diabetes_non_insulin_commercial",
+      "observed_facts": {
+        "diabetes.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            },
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "diabetes.treatment_category": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-NONINSULIN-CONDITIONAL-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "non_insulin_conditional",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-006"
+      ],
+      "rag_query_key": "diabetes_non_insulin_conditional_commercial",
+      "observed_facts": {
+        "diabetes.driving_relevant_end_organ_effects": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.hypoglycaemia_awareness": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.initial_specialist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            },
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "diabetes.recent_severe_hypoglycaemic_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.regimen_minimises_hypoglycaemia": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            },
+            {
+              "dependency": "DM-COM-NONINSULIN-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            },
+            {
+              "dependency": "DM-COM-NONINSULIN-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-INSULIN-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "insulin_treated_diabetes",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-007"
+      ],
+      "rag_query_key": "diabetes_insulin_commercial",
+      "observed_facts": {
+        "diabetes.gestational": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            },
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "diabetes.treatment_category": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            },
+            {
+              "field": "diabetes.gestational",
+              "operator": "==",
+              "expected": false,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            },
+            {
+              "field": "diabetes.gestational",
+              "operator": "==",
+              "expected": false,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-SEVERE-HYPO-WAIT-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "recent_severe_hypoglycaemic_event",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-002"
+      ],
+      "rag_query_key": "severe_hypoglycaemia_commercial",
+      "observed_facts": {
+        "diabetes.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            },
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "diabetes.severe_hypoglycaemic_event.occurred": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-INSULIN-CONDITIONAL-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "insulin_conditional",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-DM-COM-009"
+      ],
+      "rag_query_key": "diabetes_insulin_conditional_commercial",
+      "observed_facts": {
+        "diabetes.driving_relevant_end_organ_effects": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.glucose_monitoring_records_months": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.hypoglycaemia_awareness": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            },
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "diabetes.recent_severe_hypoglycaemic_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.regimen_minimises_hypoglycaemia": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.severe_hypoglycaemic_event.occurred": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.specialist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            },
+            {
+              "dependency": "DM-COM-INSULIN-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            },
+            {
+              "dependency": "DM-COM-INSULIN-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-ACUTE-UNSTABLE-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "acute_metabolic_instability",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-003"
+      ],
+      "rag_query_key": "acute_hyperglycaemia_commercial",
+      "observed_facts": {
+        "diabetes.acutely_unwell": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.metabolically_unstable": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            },
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": false,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "HTN-COM-SCREEN-001",
+      "module": "hypertension",
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "result": "triggered",
+      "assessment_outcome": "meets_unconditional_standard",
+      "reason": "Recorded persistent pressures do not exceed the hypertension threshold; this finding covers hypertension only.",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "rag_query_key": "htn_com_screen_001",
+      "observed_facts": {
+        "cardiovascular.blood_pressure.persistent_diastolic": {
+          "value": 80.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 286,
+              "end": 341,
+              "quote": "cardiovascular.blood_pressure.persistent_diastolic = 80",
+              "line_start": 7,
+              "line_end": 7,
+              "pdf_page": null
+            },
+            {
+              "start": 286,
+              "end": 341,
+              "quote": "cardiovascular.blood_pressure.persistent_diastolic = 80",
+              "line_start": 7,
+              "line_end": 7,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "cardiovascular.blood_pressure.persistent_systolic": {
+          "value": 120.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 229,
+              "end": 284,
+              "quote": "cardiovascular.blood_pressure.persistent_systolic = 120",
+              "line_start": 6,
+              "line_end": 6,
+              "pdf_page": null
+            },
+            {
+              "start": 229,
+              "end": 284,
+              "quote": "cardiovascular.blood_pressure.persistent_systolic = 120",
+              "line_start": 6,
+              "line_end": 6,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "all": [
+            {
+              "field": "cardiovascular.blood_pressure.persistent_systolic",
+              "operator": "<=",
+              "expected": 170,
+              "observed": 120.0,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "cardiovascular.blood_pressure.persistent_diastolic",
+              "operator": "<=",
+              "expected": 100,
+              "observed": 80.0,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        }
+      }
+    },
+    {
+      "rule_id": "VIS-COM-SCREEN-001",
+      "module": "vision",
+      "category": "vision",
+      "subcondition": "vision_screen",
+      "result": "triggered",
+      "assessment_outcome": "meets_unconditional_standard",
+      "reason": "Recorded acuity and explicit visual-field, diplopia and monocular screening satisfy the implemented vision criteria.",
+      "source_ids": [
+        "AFTD2022-VIS-COM-002",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-007"
+      ],
+      "rag_query_key": "vis_com_screen_001",
+      "observed_facts": {
+        "vision.diplopia.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 472,
+              "end": 503,
+              "quote": "vision.diplopia.present = false",
+              "line_start": 11,
+              "line_end": 11,
+              "pdf_page": null
+            },
+            {
+              "start": 472,
+              "end": 503,
+              "quote": "vision.diplopia.present = false",
+              "line_start": 11,
+              "line_end": 11,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "vision.monocular": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 505,
+              "end": 529,
+              "quote": "vision.monocular = false",
+              "line_start": 12,
+              "line_end": 12,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "vision.uncorrected.better_eye": {
+          "value": "6/6",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 343,
+              "end": 383,
+              "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+              "line_start": 8,
+              "line_end": 8,
+              "pdf_page": null
+            },
+            {
+              "start": 385,
+              "end": 424,
+              "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "snellen_better_eye",
+          "derived_from": [
+            "vision.uncorrected.right.snellen",
+            "vision.uncorrected.left.snellen"
+          ]
+        },
+        "vision.uncorrected.left.snellen": {
+          "value": "6/6",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 385,
+              "end": 424,
+              "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 385,
+              "end": 424,
+              "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "vision.uncorrected.right.snellen": {
+          "value": "6/6",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 343,
+              "end": 383,
+              "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+              "line_start": 8,
+              "line_end": 8,
+              "pdf_page": null
+            },
+            {
+              "start": 343,
+              "end": 383,
+              "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+              "line_start": 8,
+              "line_end": 8,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "vision.visual_field.confirmed_defect": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 426,
+              "end": 470,
+              "quote": "vision.visual_field.confirmed_defect = false",
+              "line_start": 10,
+              "line_end": 10,
+              "pdf_page": null
+            },
+            {
+              "start": 426,
+              "end": 470,
+              "quote": "vision.visual_field.confirmed_defect = false",
+              "line_start": 10,
+              "line_end": 10,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "all": [
+            {
+              "field": "vision.uncorrected.better_eye",
+              "operator": "at_least_snellen",
+              "expected": "6/9",
+              "observed": "6/6",
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "vision.uncorrected.right.snellen",
+              "operator": "at_least_snellen",
+              "expected": "6/18",
+              "observed": "6/6",
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "vision.uncorrected.left.snellen",
+              "operator": "at_least_snellen",
+              "expected": "6/18",
+              "observed": "6/6",
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "vision.visual_field.confirmed_defect",
+              "operator": "==",
+              "expected": false,
+              "observed": false,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "vision.diplopia.present",
+              "operator": "==",
+              "expected": false,
+              "observed": false,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "vision.monocular",
+              "operator": "==",
+              "expected": false,
+              "observed": false,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        }
+      }
+    },
+    {
+      "rule_id": "HEAR-COM-SCREEN-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "hearing_screen",
+      "result": "triggered",
+      "assessment_outcome": "meets_unconditional_standard",
+      "reason": "Explicit clinical screening or a documented four-frequency audiogram satisfies the implemented unaided hearing criterion.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "rag_query_key": "hear_com_screen_001",
+      "observed_facts": {
+        "hearing.average_frequencies_khz": {
+          "value": null,
+          "status": "unknown",
+          "unit": "kHz",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.clinical_assessment": {
+          "value": "no_hearing_loss",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 531,
+              "end": 578,
+              "quote": "hearing.clinical_assessment = \"no_hearing_loss\"",
+              "line_start": 13,
+              "line_end": 13,
+              "pdf_page": null
+            },
+            {
+              "start": 531,
+              "end": 578,
+              "quote": "hearing.clinical_assessment = \"no_hearing_loss\"",
+              "line_start": 13,
+              "line_end": 13,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "hearing.unaided_better_ear_average_db": {
+          "value": null,
+          "status": "unknown",
+          "unit": "dB",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "any": [
+            {
+              "field": "hearing.clinical_assessment",
+              "operator": "==",
+              "expected": "no_hearing_loss",
+              "observed": "no_hearing_loss",
+              "status": "present",
+              "truth": true
+            },
+            {
+              "all": [
+                {
+                  "field": "hearing.average_frequencies_khz",
+                  "operator": "set_equals",
+                  "expected": [
+                    0.5,
+                    1,
+                    2,
+                    3
+                  ],
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "hearing.unaided_better_ear_average_db",
+                  "operator": "<",
+                  "expected": 40,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            }
+          ],
+          "truth": true
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-NO-HISTORY-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "rag_query_key": "blk_com_no_history_001",
+      "observed_facts": {
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            },
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "field": "blackout.occurred",
+          "operator": "==",
+          "expected": false,
+          "observed": true,
+          "status": "present",
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-NO-HISTORY-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "diabetes_screen",
+      "result": "triggered",
+      "assessment_outcome": "meets_unconditional_standard",
+      "reason": "The note explicitly records no diabetes; this is a history-based screening result, not a diabetes diagnosis.",
+      "source_ids": [
+        "AFTD2022-DM-COM-001"
+      ],
+      "rag_query_key": "dm_com_no_history_001",
+      "observed_facts": {
+        "diabetes.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            },
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "field": "diabetes.present",
+          "operator": "==",
+          "expected": false,
+          "observed": false,
+          "status": "present",
+          "truth": true
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-006"
+      ],
+      "rag_query_key": "blk_com_diagnosed_referral_001",
+      "observed_facts": {
+        "blackout.diagnosis": {
+          "value": "undetermined",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 696,
+              "end": 731,
+              "quote": "blackout.diagnosis = \"undetermined\"",
+              "line_start": 17,
+              "line_end": 17,
+              "pdf_page": null
+            }
+          ],
+          "method": "structured_addendum",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            },
+            {
+              "start": 580,
+              "end": 604,
+              "quote": "blackout.occurred = true",
+              "line_start": 14,
+              "line_end": 14,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "field": "blackout.occurred",
+          "operator": "==",
+          "expected": true,
+          "observed": true,
+          "status": "present",
+          "truth": true
+        },
+        "predicate": {
+          "field": "blackout.diagnosis",
+          "operator": "in",
+          "expected": [
+            "hypoglycaemia",
+            "seizure",
+            "cardiac_syncope",
+            "sleep_disorder",
+            "other"
+          ],
+          "observed": "undetermined",
+          "status": "present",
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-GESTATIONAL-REVIEW-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "diabetes_screen",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-010"
+      ],
+      "rag_query_key": "dm_com_gestational_review_001",
+      "observed_facts": {
+        "diabetes.gestational": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": false,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            },
+            {
+              "start": 606,
+              "end": 630,
+              "quote": "diabetes.present = false",
+              "line_start": 15,
+              "line_end": 15,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "field": "diabetes.present",
+          "operator": "==",
+          "expected": true,
+          "observed": false,
+          "status": "present",
+          "truth": false
+        },
+        "predicate": {
+          "field": "diabetes.present",
+          "operator": "==",
+          "expected": true,
+          "observed": false,
+          "status": "present",
+          "truth": false
+        }
+      }
+    }
+  ],
+  "rag_requests": [
+    {
+      "request_id": "RAG-656c6fe7e5cfb2f8",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "BLK-COM-UNCERTAIN-UNCONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-003"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_uncertain_nature",
+      "licence_context": "commercial",
+      "rag_query_key": "blackout_uncertain_commercial"
+    },
+    {
+      "request_id": "RAG-fde27b078de1e1dd",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "BLK-COM-SINGLE-WAIT-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-004"
+      ],
+      "category": "blackout",
+      "subcondition": "single_or_clustered_uncertain_blackout",
+      "licence_context": "commercial",
+      "rag_query_key": "blackout_uncertain_single_commercial"
+    },
+    {
+      "request_id": "RAG-c7f11d8638a40678",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "HTN-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "htn_com_screen_001"
+    },
+    {
+      "request_id": "RAG-66945a4d0b2c8167",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "VIS-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-VIS-COM-002",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-007"
+      ],
+      "category": "vision",
+      "subcondition": "vision_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "vis_com_screen_001"
+    },
+    {
+      "request_id": "RAG-c35fee674a2d3886",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "HEAR-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "hear_com_screen_001"
+    },
+    {
+      "request_id": "RAG-5cf5d79246184587",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "DM-COM-NO-HISTORY-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-001"
+      ],
+      "category": "diabetes",
+      "subcondition": "diabetes_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "dm_com_no_history_001"
+    }
+  ],
+  "processing_warnings": [],
+  "requires_human_review": true
+}

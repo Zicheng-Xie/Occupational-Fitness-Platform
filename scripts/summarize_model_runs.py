@@ -10,7 +10,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
-    manifest = json.loads((ROOT / "outputs/demo_manifest.json").read_text(encoding="utf-8"))
+    manifest_path = ROOT / "outputs/demo/manifest.json"
+    if not manifest_path.exists():
+        manifest_path = ROOT / "outputs/demo_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     records = []
     for entry in manifest:
         directory = ROOT / entry["output"]

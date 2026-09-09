@@ -24,7 +24,10 @@ ROOT = Path(__file__).resolve().parents[1]
 def refresh(root: Path):
     root = root.resolve()
     workflow = OccupationalFitnessWorkflow(root / "configs/workflow.offline.yaml")
-    entries = json.loads((root / "outputs/demo_manifest.json").read_text(encoding="utf-8"))
+    manifest_path = root / "outputs/demo/manifest.json"
+    if not manifest_path.exists():
+        manifest_path = root / "outputs/demo_manifest.json"
+    entries = json.loads(manifest_path.read_text(encoding="utf-8"))
     style_hash = digest(
         {
             name: sha256_bytes(
@@ -37,7 +40,9 @@ def refresh(root: Path):
     # Validate every input and render every page before changing any deliverable.
     for entry in entries:
         output = (root / entry["output"]).resolve()
-        if not output.is_relative_to(root / "outputs/runs"):
+        if not any(
+            output.is_relative_to(root / folder) for folder in ("outputs/runs", "outputs/demo")
+        ):
             raise ValueError("Assessment path outside the report directory")
         workflow.verify_run(output)
         manifest_bytes = (output / "run_manifest.json").read_bytes()

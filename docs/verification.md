@@ -17,10 +17,14 @@ The exchange contracts contain 33 rules and 28 knowledge units, including source
 
 Llama proposals precede rule execution and must pass source-context and field validation. Quotes that omit negation or family-history context are withheld. Single readings do not establish persistent BP; audiometry frequencies are never fabricated. Commentary remains separate from authoritative rule outcomes.
 
-Reports use an enterprise layout with a dark navigation rail, compact tables, English labels and expandable evidence. Static link and content checks are automated. A connected browser has not been available for screenshot-level visual acceptance.
+Reports use a light enterprise workspace with a compact navigation rail, outcome badges, responsive tables, English labels and expandable evidence. Static link and content checks are automated. A connected browser has not been available for screenshot-level visual acceptance.
 
 These are integration and synthetic-regression results, not clinical accuracy estimates. Rules remain pending clinical review. Deployment dependencies are listed in [deployment boundaries](deployment.md). The previous environment emitted two third-party deprecation warnings; dependency consistency passed. Remote CI has not run.
 
 ## English report reissue
 
 The English release passed 103 automated tests. All 30 existing assessments were reissued as new report bundles: 180 input, fact, category, rule, evidence and extraction-audit files were byte-identical to their parents. Local-model call records are retained from those verified parent runs; clinical extraction was not repeated for localisation. Each manifest records its parent fingerprint, presentation code fingerprint and an additional audit event. See `outputs/evaluation/english_reissue.json`.
+
+## Presentation refresh
+
+Run `.venv/Scripts/python.exe scripts/refresh_presentation.py` to apply the current HTML styles to verified draft reports and rebuild the report directory. The refresh preserves all assessment, narrative and Markdown artifacts byte for byte, records presentation changes in the audit chain, and uses no model calls. Verification fingerprints are recorded in `outputs/evaluation/presentation_refresh.json`. The original assessment implementation fingerprint remains unchanged.

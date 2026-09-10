@@ -24,7 +24,7 @@ def test_api_text_to_evidence_round_trip():
         payload = response.json()
         assert payload["rule_result"]["assessment_outcome"] == "insufficient_information"
         assert payload["gp_review_note"]["status"] == "DRAFT"
-        assert client.post("/rag/retrieve", json=payload["rule_result"]).status_code == 200
+        assert client.post("/rag/retrieve", json=payload["rag_input"]).status_code == 200
         assert (
             client.post("/assess", json={"case_id": "../../bad", "text": "note"}).status_code == 422
         )
@@ -34,6 +34,39 @@ def test_api_text_to_evidence_round_trip():
             ).status_code
             == 422
         )
+
+
+def test_openapi_exposes_only_workflow_rule_result_v1_3():
+    with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+        schemas = client.get("/openapi.json").json()["components"]["schemas"]
+
+    assert "RedFlagResult" not in schemas
+    contract = schemas["WorkflowRuleResult"]
+    assert contract["additionalProperties"] is False
+    assert contract["properties"]["schema_version"]["const"] == "1.3.0"
+    assert contract["properties"]["ruleset"]["$ref"].endswith("/RulesetIdentity")
+    assert {"ruleset_id", "ruleset_version", "ruleset_sha256"}.isdisjoint(
+        contract["properties"]
+    )
+
+
+def test_api_missing_information_does_not_create_red_flag():
+    with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+        response = client.post(
+            "/assess",
+            json={
+                "case_id": "API-MISSING-001",
+                "text": "Reports reduced hearing. No audiometry or audiogram is available.",
+            },
+        )
+
+    assert response.status_code == 200
+    result = response.json()["rule_result"]
+    assert result["schema_version"] == "1.3.0"
+    assert result["assessment_outcome"] == "insufficient_information"
+    assert result["missing_information"]
+    assert result["has_red_flag"] is False
+    assert result["red_flags"] == []
 
 
 @pytest.mark.parametrize(

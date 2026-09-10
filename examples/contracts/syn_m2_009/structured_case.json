@@ -11,12 +11,12 @@
   ],
   "source_document": "SYN-M2-009.txt",
   "source_kind": "text",
-  "source_sha256": "e4ac19163f1dbcbc01e1354f1a0460ed9884b6db83f9dc068cc9c6fec19740f0",
-  "text_sha256": "e4ac19163f1dbcbc01e1354f1a0460ed9884b6db83f9dc068cc9c6fec19740f0",
-  "source_text": "Commercial driver medical. 52-year-old male freight driver. BP 130/82 mmHg; HR 70 bpm. Nil cardiac symptoms. Vision meets commercial driving standards without correction. Bilateral hearing loss; uses hearing aids. Audiometry completed, with unaided better ear average 45 dB. No audiologist report is available.\n",
+  "source_sha256": "9b19d3a611231c74c5c941ce0ad19cd98aed5ed224e837e964e315efd27a62d0",
+  "text_sha256": "9b19d3a611231c74c5c941ce0ad19cd98aed5ed224e837e964e315efd27a62d0",
+  "source_text": "Commercial driver medical. 52-year-old male freight driver. BP 130/82 mmHg; HR 70 bpm. Nil cardiac symptoms. Vision meets commercial driving standards without correction. Bilateral hearing loss; uses hearing aids. Audiometry completed, with unaided better ear average 45 dB. No audiologist report is available.\r\n",
   "facts": {
     "cardiovascular.blood_pressure.observed_systolic": {
-      "value": 130.0,
+      "value": 130,
       "status": "present",
       "unit": "mmHg",
       "evidence": [
@@ -27,21 +27,13 @@
           "line_start": 1,
           "line_end": 1,
           "pdf_page": null
-        },
-        {
-          "start": 60,
-          "end": 74,
-          "quote": "BP 130/82 mmHg",
-          "line_start": 1,
-          "line_end": 1,
-          "pdf_page": null
         }
       ],
-      "method": "llm_grounded",
+      "method": "regex",
       "derived_from": []
     },
     "cardiovascular.blood_pressure.observed_diastolic": {
-      "value": 82.0,
+      "value": 82,
       "status": "present",
       "unit": "mmHg",
       "evidence": [
@@ -52,17 +44,9 @@
           "line_start": 1,
           "line_end": 1,
           "pdf_page": null
-        },
-        {
-          "start": 60,
-          "end": 74,
-          "quote": "BP 130/82 mmHg",
-          "line_start": 1,
-          "line_end": 1,
-          "pdf_page": null
         }
       ],
-      "method": "llm_grounded",
+      "method": "regex",
       "derived_from": []
     },
     "cardiovascular.chest_pain": {
@@ -111,17 +95,9 @@
           "line_start": 1,
           "line_end": 1,
           "pdf_page": null
-        },
-        {
-          "start": 171,
-          "end": 213,
-          "quote": "Bilateral hearing loss; uses hearing aids.",
-          "line_start": 1,
-          "line_end": 1,
-          "pdf_page": null
         }
       ],
-      "method": "llm_grounded",
+      "method": "regex",
       "derived_from": []
     },
     "hearing.hearing_aid_used": {
@@ -170,17 +146,9 @@
           "line_start": 1,
           "line_end": 1,
           "pdf_page": null
-        },
-        {
-          "start": 214,
-          "end": 274,
-          "quote": "Audiometry completed, with unaided better ear average 45 dB.",
-          "line_start": 1,
-          "line_end": 1,
-          "pdf_page": null
         }
       ],
-      "method": "llm_grounded",
+      "method": "regex",
       "derived_from": []
     },
     "hearing.ent_or_audiologist_information_available": {
@@ -657,60 +625,14 @@
       "derived_from": []
     }
   },
-  "extraction_method": "local_llm_grounded_with_deterministic_fallback",
+  "extraction_method": "deterministic_fallback",
   "extraction_metadata": {
+    "status": "unavailable_fallback_to_template",
     "model": "llama3:8b",
-    "proposals": [
-      {
-        "field": "cardiovascular.blood_pressure.observed_systolic",
-        "value": 130.0,
-        "quote": "BP 130/82 mmHg",
-        "status": "requires_confirmation",
-        "source_start": 60
-      },
-      {
-        "field": "cardiovascular.blood_pressure.observed_diastolic",
-        "value": 82.0,
-        "quote": "BP 130/82 mmHg",
-        "status": "requires_confirmation",
-        "source_start": 60
-      },
-      {
-        "field": "hearing.clinical_assessment",
-        "value": "possible_hearing_loss",
-        "quote": "Bilateral hearing loss; uses hearing aids.",
-        "status": "requires_confirmation",
-        "source_start": 171
-      },
-      {
-        "field": "hearing.unaided_better_ear_average_db",
-        "value": 45.0,
-        "quote": "Audiometry completed, with unaided better ear average 45 dB.",
-        "status": "requires_confirmation",
-        "source_start": 214
-      }
-    ],
-    "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
-    "rejected": [],
-    "authoritative_facts_modified": true,
-    "calls": [
-      {
-        "model": "llama3:8b",
-        "done_reason": "stop",
-        "prompt_eval_count": 1530,
-        "eval_count": 160,
-        "total_duration": 3028836100
-      }
-    ],
-    "accepted_fields": [
-      "cardiovascular.blood_pressure.observed_diastolic",
-      "cardiovascular.blood_pressure.observed_systolic",
-      "hearing.clinical_assessment",
-      "hearing.unaided_better_ear_average_db"
-    ],
-    "withheld": [],
-    "grounding_policy": "exact_quote_type_range_and_field_semantics_v1",
-    "status": "completed"
+    "error_type": "ValueError",
+    "accepted_fields": []
   },
-  "warnings": []
+  "warnings": [
+    "LOCAL_MODEL_UNAVAILABLE:deterministic_fallback"
+  ]
 }

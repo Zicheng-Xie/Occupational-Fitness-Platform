@@ -126,8 +126,9 @@ class ModuleAssessment(Contract):
     warnings: list[str] = Field(default_factory=list)
 
 
-class WorkflowRuleResult(Contract):
-    schema_version: Literal["1.2.0"] = "1.2.0"
+class RuleEngineResult(Contract):
+    """Internal rule-engine output; not a public/versioned workflow contract."""
+
     result_id: str
     case_id: str
     case_sha256: str

@@ -10,8 +10,8 @@ from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     ReviewNote,
     WorkflowEvidencePack,
-    WorkflowRuleResult,
 )
+from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 
 ROOT = Path(__file__).resolve().parents[1]
 

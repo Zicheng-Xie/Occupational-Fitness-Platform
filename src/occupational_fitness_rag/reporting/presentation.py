@@ -248,7 +248,7 @@ def render_case_html(case, result, evidence, note, root: Path, output: Path):
             "<p class='description'>No required fields are missing for these rules. A clinician must still verify the information and rule applicability.</p>"
         )
     if result.processing_warnings or evidence.unresolved_requests:
-        warnings = result.processing_warnings + [
+        warnings = [warning.message for warning in result.processing_warnings] + [
             f"Unresolved guideline evidence: {key}" for key in evidence.unresolved_requests
         ]
         body.append(

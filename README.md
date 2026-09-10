@@ -1,6 +1,6 @@
 # Occupational Fitness Platform
 
-A traceable assessment platform for occupational health teams and commercial-driver reviews. Software **0.4.0**, schema **1.2.0**, guideline baseline **AP-G56-22**.
+A traceable assessment platform for occupational health teams and commercial-driver reviews. Software **0.4.0**, canonical `WorkflowRuleResult` schema **1.3.0** (supporting artifacts are independently versioned), guideline baseline **AP-G56-22**.
 
 The platform uses local **Llama 3 8B** to propose structured facts, validates their source quotations, types and meaning, runs deterministic rules, and links each assessment to guideline evidence through **Chroma, nomic-embed-text and BM25/RRF**.
 
@@ -23,7 +23,7 @@ The default configuration enables Llama extraction and separate model commentary
 1. Read UTF-8 text, Markdown or a PDF with a text layer.
 2. Extract and validate facts; retain source locations, conflicts and unknown values.
 3. Map facts to hypertension, vision, hearing, blackout and diabetes.
-4. Execute rules and identify provisional outcomes, missing information and evidence requests.
+4. Execute the dedicated pre-RAG Red Flag evaluator, producing provisional outcomes, missing information and evidence requests.
 5. Bind required source IDs and filter retrieval by category, condition, commercial standard and version.
 6. Produce an English review report with case quotations, guideline pages, sections and coordinates.
 

@@ -215,9 +215,9 @@ def test_three_cardiovascular_cases_are_escalated(workflow):
 
 def test_rag_cannot_mutate_rules_and_covers_every_request(workflow):
     case = _case(workflow, {}, text="Reports reduced hearing.")
-    result = workflow.book.evaluate(case)
+    result = workflow.red_flag.evaluate(case)
     before = digest(result)
-    evidence = workflow.retriever.run(result)
+    evidence = workflow.retriever.run(result.rag_input())
     assert before == digest(result) == evidence.rule_result_sha256
     assert len(evidence.evidence_items) == len(result.rag_requests)
     assert not evidence.unresolved_requests
@@ -226,9 +226,14 @@ def test_rag_cannot_mutate_rules_and_covers_every_request(workflow):
 
 
 def test_request_identity_cannot_switch_source(workflow):
-    result = workflow.book.evaluate(_case(workflow, {}))
-    request = result.rag_requests[0].model_copy(update={"source_ids": ["AFTD2022-HEAR-COM-002"]})
-    corrupt = result.model_copy(update={"rag_requests": [request, *result.rag_requests[1:]]})
+    result = workflow.red_flag.evaluate(_case(workflow, {}))
+    rag_input = result.rag_input()
+    request = rag_input.rag_requests[0].model_copy(
+        update={"source_ids": ["AFTD2022-HEAR-COM-002"]}
+    )
+    corrupt = rag_input.model_copy(
+        update={"rag_requests": [request, *rag_input.rag_requests[1:]]}
+    )
     with pytest.raises(ValueError, match="authoritative"):
         workflow.retriever.run(corrupt)
 

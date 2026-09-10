@@ -7,13 +7,23 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
 from occupational_fitness_rag.pipeline.workflow import OccupationalFitnessWorkflow
-from occupational_fitness_rag.schemas.workflow import WorkflowEvidencePack, WorkflowRuleResult
+from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
+from occupational_fitness_rag.schemas.workflow import ClinicalCase, ReviewNote, WorkflowEvidencePack
 
 
 class AssessmentInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     case_id: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$")
     text: str = Field(min_length=1, max_length=100000)
+
+
+class AssessmentResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    structured_case: ClinicalCase
+    rule_result: WorkflowRuleResult
+    rag_input: RAGInput
+    evidence_pack: WorkflowEvidencePack
+    gp_review_note: ReviewNote
 
 
 def create_app(config_path: str | None = None) -> FastAPI:
@@ -38,7 +48,7 @@ def create_app(config_path: str | None = None) -> FastAPI:
             "index_sha256": app.state.workflow.catalogue.index_sha256,
         }
 
-    @app.post("/assess")
+    @app.post("/assess", response_model=AssessmentResponse)
     def assess(request: AssessmentInput):
         try:
             case, result, evidence, note = app.state.workflow.from_text(
@@ -49,12 +59,13 @@ def create_app(config_path: str | None = None) -> FastAPI:
         return {
             "structured_case": case.model_dump(mode="json"),
             "rule_result": result.model_dump(mode="json"),
+            "rag_input": result.rag_input().model_dump(mode="json"),
             "evidence_pack": evidence.model_dump(mode="json"),
             "gp_review_note": note.model_dump(mode="json"),
         }
 
     @app.post("/rag/retrieve", response_model=WorkflowEvidencePack)
-    def retrieve(result: WorkflowRuleResult):
+    def retrieve(result: RAGInput):
         try:
             return app.state.workflow.retriever.run(result)
         except ValueError as exc:

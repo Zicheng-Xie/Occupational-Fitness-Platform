@@ -10,8 +10,8 @@ from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     ReviewNote,
     WorkflowEvidencePack,
-    WorkflowRuleResult,
 )
+from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 
 LABELS = {
     "meets_unconditional_standard": "Meets unconditional standard",
@@ -65,7 +65,7 @@ def build_review_note(
         "Confirm the commercial driving task and assess conditions outside the five-module scope.",
     ]
     checklist += [f"Confirm missing/unverified case fact: {key}" for key in missing]
-    checklist += result.processing_warnings
+    checklist += [warning.message for warning in result.processing_warnings]
     checklist += [
         f"Unresolved guideline evidence request: {key}" for key in evidence.unresolved_requests
     ]

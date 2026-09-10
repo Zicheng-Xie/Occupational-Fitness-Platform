@@ -6,11 +6,11 @@ from occupational_fitness_rag.ingestion.models import GuidelineChunk
 from occupational_fitness_rag.ingestion.source_catalogue import SourceCatalogue
 from occupational_fitness_rag.provenance import digest
 from occupational_fitness_rag.rules.engine import RuleBook
+from occupational_fitness_rag.schemas.red_flag_result import RAGInput
 from occupational_fitness_rag.schemas.workflow import (
     RequestEvidence,
     WorkflowEvidencePack,
     WorkflowRoute,
-    WorkflowRuleResult,
 )
 
 
@@ -58,7 +58,7 @@ class WorkflowRetriever:
                 if source_id not in catalogue.units:
                     raise ValueError(f"Unresolved rule source ID: {source_id}")
 
-    def run(self, result: WorkflowRuleResult) -> WorkflowEvidencePack:
+    def run(self, result: RAGInput) -> WorkflowEvidencePack:
         if result.ruleset_sha256 != self.book.sha256:
             raise ValueError("Rule result belongs to a different ruleset version")
         request_ids = [r.request_id for r in result.rag_requests]
@@ -91,7 +91,11 @@ class WorkflowRetriever:
             query = None
             ranked_candidates = []
             # Required exact citations are never displaced by top-k ranking.
-            if self.engine and result.route != WorkflowRoute.FAST:
+            if (
+                self.engine
+                and result.route != WorkflowRoute.FAST
+                and request.request_type == "missing_information_guidance"
+            ):
                 query = f"{request.category} {request.subcondition} {rule['reason_template']}"
                 hits = self.engine.retrieve(query, filters)
                 semantic_calls += 1
@@ -142,7 +146,7 @@ class WorkflowRetriever:
         payload = dict(
             result_id=result.result_id,
             case_id=result.case_id,
-            rule_result_sha256=before,
+            rule_result_sha256=result.red_flag_result_sha256,
             index_sha256=self.catalogue.index_sha256,
             retrieval={
                 "query_mode": "per_request",

@@ -20,7 +20,7 @@ from occupational_fitness_rag.schemas.workflow import (
     RAGRequest,
     RuleEvaluation,
     WorkflowRoute,
-    WorkflowRuleResult,
+    RuleEngineResult,
 )
 
 PRECEDENCE = [
@@ -181,7 +181,7 @@ class RuleBook:
             seen.add(rule["rule_id"])
         self.field_specs = collect_field_specs(self.rules)
 
-    def evaluate(self, case: ClinicalCase) -> WorkflowRuleResult:
+    def evaluate(self, case: ClinicalCase) -> RuleEngineResult:
         for name, fact in case.facts.items():
             if name not in self.field_specs:
                 raise ValueError(f"Unknown canonical fact: {name}")
@@ -337,9 +337,11 @@ class RuleBook:
         requests = [
             RAGRequest(
                 request_id="RAG-" + digest([case.case_id, x.rule_id])[:16],
-                request_type="triggered_rule_evidence"
-                if x.result == "triggered"
-                else "missing_information_guidance",
+                request_type=(
+                    "missing_information_guidance"
+                    if x.result == "unknown" or x.assessment_outcome == Outcome.INSUFFICIENT
+                    else "triggered_rule_evidence"
+                ),
                 rule_id=x.rule_id,
                 source_ids=x.source_ids,
                 category=x.category,
@@ -349,7 +351,7 @@ class RuleBook:
             for x in evaluations.values()
             if x.result in {"triggered", "unknown"}
         ]
-        return WorkflowRuleResult(
+        return RuleEngineResult(
             result_id="RR-" + digest([digest(case), self.sha256])[:20],
             case_id=case.case_id,
             case_sha256=digest(case),

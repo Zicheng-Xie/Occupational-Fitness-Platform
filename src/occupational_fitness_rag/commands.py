@@ -73,20 +73,21 @@ def export_schemas(args):
         ClinicalCase,
         ReviewNote,
         WorkflowEvidencePack,
-        WorkflowRuleResult,
     )
+    from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
 
     config, root = load_workflow_config(args.config)
     for name, model in {
         "knowledge_unit": Citation,
         "structured_case": ClinicalCase,
         "rule_result": WorkflowRuleResult,
+        "rag_input": RAGInput,
         "evidence_pack": WorkflowEvidencePack,
         "gp_review_note": ReviewNote,
     }.items():
         write_json(root / "schemas" / (name + ".schema.json"), model.model_json_schema())
     write_json(root / "schemas/field_dictionary.json", RuleBook(root / config.rules).field_specs)
-    return {"directory": str(root / "schemas"), "schemas": 5}
+    return {"directory": str(root / "schemas"), "schemas": 6}
 
 
 def verify_run(args):

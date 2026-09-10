@@ -1,6 +1,6 @@
 # Data contracts
 
-Software 0.4.0 uses schema 1.2.0. Run `fitness-rag export-schemas` to export JSON Schema and the field dictionary. Run `fitness-rag build-knowledge` to rebuild source units and rule associations from the original guideline.
+Software 0.4.0 uses `WorkflowRuleResult` 1.3.0 as its sole rule-result contract. Supporting artifacts are independently versioned. Run `fitness-rag export-schemas` to export JSON Schema and the field dictionary. Run `fitness-rag build-knowledge` to rebuild source units and rule associations from the original guideline.
 
 ## Facts and model audit
 
@@ -39,6 +39,18 @@ The aliases `source_text/evidence_text` and `bounding_box/bbox` must agree. Load
 Readable logic is for review; execution uses whitelisted structured predicates, never eval. Existing identifiers remain stable. Required facts must match the fields used by gates and predicates. Three-valued logic preserves false AND unknown = false and true OR unknown = true.
 
 ## Retrieval and reporting
+
+`WorkflowRuleResult` schema 1.3.0 is the public deterministic-assessment output. It
+contains the source/context/ruleset identities, five-class outcome, explicit
+`has_red_flag`, `red_flags`, all `triggered_rules`, structured
+`missing_information`, warnings and audit traces. The internal `RuleBook`
+result is converted to this contract before retrieval. Missing information is
+recorded separately and never becomes a Red Flag merely because it is missing.
+
+RAG accepts only the separate immutable `RAGInput` envelope: result identity,
+ruleset/guideline fingerprints, route and `rag_requests`. It does not receive
+the internal evaluation tree, Red Flag list or missing-information decisions.
+The returned evidence pack binds itself to the complete Red Flag result hash.
 
 Rule requests identify their rule, sources, category, subcondition and commercial context. Each evidence item returns complete, partial or no_evidence status, unresolved sources, actual filters, citations and ranking records.
 

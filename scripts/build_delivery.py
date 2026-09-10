@@ -56,7 +56,7 @@ def main():
                 {
                     "generated_from": path.relative_to(ROOT).as_posix(),
                     "case_id": run["case_id"],
-                    "schema_version": "1.2.0",
+                    "rule_result_schema_version": "1.3.0",
                     "note": "Exact copies of verified generated JSON artifacts. Original nurse note lacks audiometry frequencies; no hearing threshold breach is inferred from dB alone.",
                 },
             )

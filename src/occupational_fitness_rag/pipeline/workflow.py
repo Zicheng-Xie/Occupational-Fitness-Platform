@@ -18,6 +18,8 @@ from occupational_fitness_rag.ingestion.source_catalogue import SourceCatalogue,
 from occupational_fitness_rag.llm import OllamaClient
 from occupational_fitness_rag.pipeline.config import load_workflow_config
 from occupational_fitness_rag.provenance import digest, sha256_bytes, write_json
+from occupational_fitness_rag.red_flag import RedFlagEvaluator
+from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 from occupational_fitness_rag.reporting.builder import (
     build_review_note,
     render_reports,
@@ -29,7 +31,6 @@ from occupational_fitness_rag.rules.engine import RuleBook
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     WorkflowEvidencePack,
-    WorkflowRuleResult,
 )
 from occupational_fitness_rag.settings import RetrievalSettings
 
@@ -38,6 +39,7 @@ class OccupationalFitnessWorkflow:
     def __init__(self, config_path="configs/workflow.yaml", *, build_missing=True):
         self.config, self.root = load_workflow_config(config_path)
         self.book = RuleBook(self.root / self.config.rules)
+        self.red_flag = RedFlagEvaluator(self.book)
         target = self.root / self.config.catalogue
         if not target.exists() and build_missing:
             build_catalogue(self.root, self.root / self.config.anchors, target)
@@ -68,8 +70,9 @@ class OccupationalFitnessWorkflow:
         )
 
     def assess(self, case: ClinicalCase):
-        result = self.book.evaluate(case)
-        evidence = self.retriever.run(result)
+        # Red Flag classification is completed before RAG receives the result.
+        result = self.red_flag.evaluate(case)
+        evidence = self.retriever.run(result.rag_input())
         note = build_review_note(case, result, evidence)
         return result, evidence, note
 
@@ -288,7 +291,7 @@ class OccupationalFitnessWorkflow:
             (output / "evidence_pack.json").read_text(encoding="utf-8")
         )
         validate_report_inputs(case, result, evidence)
-        if digest(self.book.evaluate(case)) != digest(result):
+        if digest(self.red_flag.evaluate(case)) != digest(result):
             raise ValueError("Rules do not replay to the saved result")
         self.catalogue.verify()
         for item in evidence.evidence_items:

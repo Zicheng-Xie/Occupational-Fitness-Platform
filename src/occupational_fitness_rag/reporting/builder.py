@@ -6,12 +6,12 @@ from urllib.parse import quote
 
 from occupational_fitness_rag.provenance import digest
 from occupational_fitness_rag.reporting.presentation import render_case_html
+from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     ReviewNote,
     WorkflowEvidencePack,
 )
-from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 
 LABELS = {
     "meets_unconditional_standard": "Meets unconditional standard",

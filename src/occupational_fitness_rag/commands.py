@@ -68,13 +68,13 @@ def demo(args):
 
 def export_schemas(args):
     from occupational_fitness_rag.rules.engine import RuleBook
+    from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
     from occupational_fitness_rag.schemas.workflow import (
         Citation,
         ClinicalCase,
         ReviewNote,
         WorkflowEvidencePack,
     )
-    from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
 
     config, root = load_workflow_config(args.config)
     for name, model in {

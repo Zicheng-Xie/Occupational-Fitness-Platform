@@ -18,9 +18,9 @@ from occupational_fitness_rag.schemas.workflow import (
     ModuleAssessment,
     Outcome,
     RAGRequest,
+    RuleEngineResult,
     RuleEvaluation,
     WorkflowRoute,
-    RuleEngineResult,
 )
 
 PRECEDENCE = [

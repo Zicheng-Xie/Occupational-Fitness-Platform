@@ -7,7 +7,6 @@ from occupational_fitness_rag.pipeline.workflow import OccupationalFitnessWorkfl
 from occupational_fitness_rag.red_flag import RedFlagEvaluator
 from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
 
-
 PUBLIC_FIELDS = {
     "schema_version",
     "result_id",
@@ -65,8 +64,7 @@ def test_missing_information_is_not_mislabeled_as_red_flag(workflow):
     assert result.has_red_flag is False
     assert result.missing_information
     assert any(
-        request.request_type == "missing_information_guidance"
-        for request in result.rag_requests
+        request.request_type == "missing_information_guidance" for request in result.rag_requests
     )
     evidence = workflow.retriever.run(result.rag_input())
     assert evidence.retrieval["ranking_calls"] > 0
@@ -86,8 +84,7 @@ def test_deterministic_red_flag_does_not_request_rag_judgment(workflow):
     )
     evidence = workflow.retriever.run(result.rag_input())
     assert evidence.retrieval["ranking_calls"] == sum(
-        request.request_type == "missing_information_guidance"
-        for request in result.rag_requests
+        request.request_type == "missing_information_guidance" for request in result.rag_requests
     )
 
 

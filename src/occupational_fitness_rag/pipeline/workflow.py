@@ -19,7 +19,6 @@ from occupational_fitness_rag.llm import OllamaClient
 from occupational_fitness_rag.pipeline.config import load_workflow_config
 from occupational_fitness_rag.provenance import digest, sha256_bytes, write_json
 from occupational_fitness_rag.red_flag import RedFlagEvaluator
-from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 from occupational_fitness_rag.reporting.builder import (
     build_review_note,
     render_reports,
@@ -28,6 +27,7 @@ from occupational_fitness_rag.reporting.builder import (
 from occupational_fitness_rag.retrieval.engine import RetrievalEngine
 from occupational_fitness_rag.retrieval.workflow import WorkflowRetriever, catalogue_chunks
 from occupational_fitness_rag.rules.engine import RuleBook
+from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     WorkflowEvidencePack,

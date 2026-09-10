@@ -10,12 +10,12 @@ from occupational_fitness_rag.llm import LocalNarrative
 from occupational_fitness_rag.pipeline.workflow import OccupationalFitnessWorkflow
 from occupational_fitness_rag.provenance import digest, sha256_bytes, write_json
 from occupational_fitness_rag.reporting.builder import build_review_note, render_reports
+from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     ReviewNote,
     WorkflowEvidencePack,
 )
-from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 
 ROOT = Path(__file__).resolve().parents[1]
 

@@ -45,9 +45,7 @@ def test_openapi_exposes_only_workflow_rule_result_v1_3():
     assert contract["additionalProperties"] is False
     assert contract["properties"]["schema_version"]["const"] == "1.3.0"
     assert contract["properties"]["ruleset"]["$ref"].endswith("/RulesetIdentity")
-    assert {"ruleset_id", "ruleset_version", "ruleset_sha256"}.isdisjoint(
-        contract["properties"]
-    )
+    assert {"ruleset_id", "ruleset_version", "ruleset_sha256"}.isdisjoint(contract["properties"])
 
 
 def test_api_missing_information_does_not_create_red_flag():
@@ -99,6 +97,7 @@ def test_api_rejects_duplicate_or_unknown_modules():
 
 def test_red_flag_endpoint_stops_before_rag():
     with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+
         def retrieval_must_not_run(*args, **kwargs):
             raise AssertionError("Red Flag boundary invoked retrieval")
 

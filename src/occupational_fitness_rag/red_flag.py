@@ -12,18 +12,18 @@ from occupational_fitness_rag.schemas.red_flag_result import (
     AssessmentContext,
     MissingInformation,
     ProcessingWarning,
-    WorkflowRuleResult,
     ResultSource,
     RulesetIdentity,
     TriggeredRule,
+    WorkflowRuleResult,
 )
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     Fact,
     Outcome,
+    RuleEngineResult,
     RuleEvaluation,
     WorkflowRoute,
-    RuleEngineResult,
 )
 
 RED_FLAG_OUTCOMES = frozenset({Outcome.TEMPORARY, Outcome.DOES_NOT_MEET})
@@ -45,7 +45,9 @@ class RedFlagEvaluator:
     def evaluate(self, case: ClinicalCase) -> WorkflowRuleResult:
         internal = self.rulebook.evaluate(case)
         self._validate(internal)
-        triggered = [self._triggered(rule) for rule in internal.rules_evaluated if rule.result == "triggered"]
+        triggered = [
+            self._triggered(rule) for rule in internal.rules_evaluated if rule.result == "triggered"
+        ]
         red_flags = [rule for rule in triggered if rule.assessment_outcome in RED_FLAG_OUTCOMES]
         missing = []
         seen = set()

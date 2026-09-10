@@ -207,10 +207,7 @@ def test_three_cardiovascular_cases_are_escalated(workflow):
         )
         result = workflow.book.evaluate(case)
         assert result.route == "human_review"
-        assert any(
-            x.startswith("OUTSIDE_HYPERTENSION_SCOPE")
-            for x in result.processing_warnings
-        )
+        assert any(x.startswith("OUTSIDE_HYPERTENSION_SCOPE") for x in result.processing_warnings)
 
 
 def test_rag_cannot_mutate_rules_and_covers_every_request(workflow):
@@ -228,12 +225,8 @@ def test_rag_cannot_mutate_rules_and_covers_every_request(workflow):
 def test_request_identity_cannot_switch_source(workflow):
     result = workflow.red_flag.evaluate(_case(workflow, {}))
     rag_input = result.rag_input()
-    request = rag_input.rag_requests[0].model_copy(
-        update={"source_ids": ["AFTD2022-HEAR-COM-002"]}
-    )
-    corrupt = rag_input.model_copy(
-        update={"rag_requests": [request, *rag_input.rag_requests[1:]]}
-    )
+    request = rag_input.rag_requests[0].model_copy(update={"source_ids": ["AFTD2022-HEAR-COM-002"]})
+    corrupt = rag_input.model_copy(update={"rag_requests": [request, *rag_input.rag_requests[1:]]})
     with pytest.raises(ValueError, match="authoritative"):
         workflow.retriever.run(corrupt)
 

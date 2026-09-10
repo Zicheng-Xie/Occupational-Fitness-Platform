@@ -6,12 +6,12 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 from occupational_fitness_rag.provenance import write_json
+from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     ReviewNote,
     WorkflowEvidencePack,
 )
-from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 
 ROOT = Path(__file__).resolve().parents[1]
 

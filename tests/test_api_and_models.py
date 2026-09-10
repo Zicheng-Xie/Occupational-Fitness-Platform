@@ -57,6 +57,7 @@ def test_api_missing_information_does_not_create_red_flag():
             json={
                 "case_id": "API-MISSING-001",
                 "text": "Reports reduced hearing. No audiometry or audiogram is available.",
+                "modules_requested": ["hearing"],
             },
         )
 
@@ -67,6 +68,59 @@ def test_api_missing_information_does_not_create_red_flag():
     assert result["missing_information"]
     assert result["has_red_flag"] is False
     assert result["red_flags"] == []
+    assert result["assessment_context"]["modules_requested"] == ["hearing"]
+    assert [module["module"] for module in result["modules"]] == ["hearing"]
+    assert all(rule["module"] == "hearing" for rule in result["rules_evaluated"])
+    assert all(request["category"] == "hearing" for request in result["rag_requests"])
+
+
+def test_api_rejects_duplicate_or_unknown_modules():
+    with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+        duplicate = client.post(
+            "/assess",
+            json={
+                "case_id": "API-MODULES-001",
+                "text": "Reports reduced hearing.",
+                "modules_requested": ["hearing", "hearing"],
+            },
+        )
+        unknown = client.post(
+            "/assess",
+            json={
+                "case_id": "API-MODULES-002",
+                "text": "Reports reduced hearing.",
+                "modules_requested": ["respiratory"],
+            },
+        )
+
+    assert duplicate.status_code == 422
+    assert unknown.status_code == 422
+
+
+def test_red_flag_endpoint_stops_before_rag():
+    with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+        def retrieval_must_not_run(*args, **kwargs):
+            raise AssertionError("Red Flag boundary invoked retrieval")
+
+        client.app.state.workflow.retriever.run = retrieval_must_not_run
+        response = client.post(
+            "/red-flag/evaluate",
+            json={
+                "case_id": "API-RED-FLAG-BOUNDARY-001",
+                "text": "Reports reduced hearing. No audiometry or audiogram is available.",
+                "modules_requested": ["hearing"],
+            },
+        )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert set(payload) == {"structured_case", "rule_result", "rag_input"}
+    assert payload["rule_result"]["schema_version"] == "1.3.0"
+    assert payload["rule_result"]["has_red_flag"] is False
+    assert payload["rule_result"]["missing_information"]
+    assert payload["rag_input"]["rag_requests"] == payload["rule_result"]["rag_requests"]
+    assert "evidence_pack" not in payload
+    assert "gp_review_note" not in payload
 
 
 @pytest.mark.parametrize(

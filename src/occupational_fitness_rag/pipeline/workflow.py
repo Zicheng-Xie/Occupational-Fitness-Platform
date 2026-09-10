@@ -77,12 +77,20 @@ class OccupationalFitnessWorkflow:
         return result, evidence, note
 
     def from_text(self, text, case_id, modules=None):
+        case, result = self.red_flag_from_text(text, case_id, modules)
+        evidence = self.retriever.run(result.rag_input())
+        note = build_review_note(case, result, evidence)
+        return case, result, evidence, note
+
+    def red_flag_from_text(self, text, case_id, modules=None):
+        """Build the canonical Red Flag result without invoking retrieval."""
+
         case = extract_traceable_text(
             text, case_id, "api_input.txt", self.book.field_specs, modules=modules
         )
         case, intake = model_intake(case, self.book.field_specs, self.config.llm)
         case = case.model_copy(update={"extraction_metadata": intake})
-        return case, *self.assess(case)
+        return case, self.red_flag.evaluate(case)
 
     def run_file(self, input_path, output_root=None, modules=None):
         case = extract_traceable_file(input_path, self.book.field_specs, modules)

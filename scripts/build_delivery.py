@@ -14,8 +14,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
-    workflow = OccupationalFitnessWorkflow(ROOT / "configs/workflow.yaml")
-    runs = json.loads((ROOT / "outputs/demo_manifest.json").read_text(encoding="utf-8"))
+    workflow = OccupationalFitnessWorkflow(ROOT / "configs/workflow.offline.yaml")
+    manifest_path = ROOT / "outputs/demo/manifest.json"
+    if not manifest_path.exists():
+        manifest_path = ROOT / "outputs/demo_manifest.json"
+    runs = json.loads(manifest_path.read_text(encoding="utf-8"))
     if len(runs) != 30 or len({r["case_id"] for r in runs}) != 30:
         raise ValueError("Expected ten supplied and twenty added cases")
     records, entries, links = [], [], []

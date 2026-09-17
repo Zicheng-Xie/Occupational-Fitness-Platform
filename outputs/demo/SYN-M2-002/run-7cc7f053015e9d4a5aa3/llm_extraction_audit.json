@@ -1,0 +1,73 @@
+{
+  "model": "llama3:8b",
+  "proposals": [
+    {
+      "field": "cardiovascular.blood_pressure.observed_systolic",
+      "value": 132.0,
+      "quote": "BP 132/82 mmHg",
+      "status": "requires_confirmation",
+      "source_start": 117
+    },
+    {
+      "field": "cardiovascular.blood_pressure.observed_diastolic",
+      "value": 82.0,
+      "quote": "BP 132/82 mmHg",
+      "status": "requires_confirmation",
+      "source_start": 117
+    },
+    {
+      "field": "vision.normal_statement",
+      "value": true,
+      "quote": "Unaided visual acuity: right eye 6/12, left eye 6/6; corrected with glasses to right eye 6/6 and left eye 6/6. Visual fields normal.",
+      "status": "requires_confirmation",
+      "source_start": 165
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": "no_hearing_loss",
+      "quote": "Hearing: normal; no hearing loss or hearing aids.",
+      "status": "requires_confirmation",
+      "source_start": 298
+    }
+  ],
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "rejected": [
+    {
+      "field": "diabetes.present",
+      "value": false,
+      "quote": "No diabetes."
+    }
+  ],
+  "authoritative_facts_modified": true,
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 1555,
+      "eval_count": 202,
+      "total_duration": 3388428600
+    }
+  ],
+  "accepted_fields": [
+    "cardiovascular.blood_pressure.observed_diastolic",
+    "cardiovascular.blood_pressure.observed_systolic",
+    "hearing.clinical_assessment"
+  ],
+  "withheld": [
+    {
+      "field": "diabetes.present",
+      "value": false,
+      "quote": "No diabetes."
+    },
+    {
+      "field": "vision.normal_statement",
+      "value": true,
+      "quote": "Unaided visual acuity: right eye 6/12, left eye 6/6; corrected with glasses to right eye 6/6 and left eye 6/6. Visual fields normal.",
+      "status": "requires_confirmation",
+      "source_start": 165,
+      "reason": "value_not_supported_by_quote"
+    }
+  ],
+  "grounding_policy": "exact_quote_type_range_and_field_semantics_v1",
+  "status": "completed"
+}

@@ -32,7 +32,10 @@ class LinkParser(HTMLParser):
 
 
 def main():
-    manifest = json.loads((ROOT / "outputs/demo_manifest.json").read_text(encoding="utf-8"))
+    manifest_path = ROOT / "outputs/demo/manifest.json"
+    if not manifest_path.exists():
+        manifest_path = ROOT / "outputs/demo_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     pages = [ROOT / "outputs/index.html"] + [
         ROOT / r["output"] / "draft_report.html" for r in manifest
     ]

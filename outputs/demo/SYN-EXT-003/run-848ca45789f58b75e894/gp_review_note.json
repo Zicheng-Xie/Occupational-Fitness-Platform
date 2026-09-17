@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.2.0",
+  "case_id": "SYN-EXT-003",
+  "status": "DRAFT",
+  "assessment_outcome": "temporarily_unfit",
+  "modules": [
+    {
+      "module": "hypertension",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "HTN-COM-SCREEN-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "vision",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "VIS-COM-SCREEN-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "hearing",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "HEAR-COM-SCREEN-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "blackout",
+      "assessment_outcome": "temporarily_unfit",
+      "route": "rag_review",
+      "triggered_rule_ids": [
+        "BLK-COM-UNDIAGNOSED-001"
+      ],
+      "missing_fields": [
+        "blackout.diagnosis",
+        "blackout.provoking_factor_well_defined",
+        "blackout.recurrence_while_driving_unlikely"
+      ],
+      "warnings": []
+    },
+    {
+      "module": "diabetes",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "DM-COM-NO-HISTORY-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    }
+  ],
+  "rule_result_sha256": "73296970498080e6b57af7be1f5cab56bda4c234c7f264a12807afd56db8e8a8",
+  "evidence_pack_sha256": "afb2e89ef8157db4dfb3f76d45f04680cd919f0bacaf6e623b816013aa9a6881",
+  "summary": "SYN-EXT-003: Temporarily unfit. 5 requested modules; 3 unresolved fact fields. This draft is occupational fitness decision support. The result is limited to the implemented criteria and is not a licensing or employment decision.",
+  "review_checklist": [
+    "Clinician: review source facts, rule applicability and every provisional conclusion.",
+    "Confirm the commercial driving task and assess conditions outside the five-module scope.",
+    "Confirm missing/unverified case fact: blackout.diagnosis",
+    "Confirm missing/unverified case fact: blackout.provoking_factor_well_defined",
+    "Confirm missing/unverified case fact: blackout.recurrence_while_driving_unlikely"
+  ],
+  "llm_commentary": "This synthetic validation fixture presents a commercial driver assessment with a reported blackout still under investigation. The patient meets unconditional standards for hypertension, vision, and hearing, but is temporarily unfit for driving due to the blackout. A clinician must review the case note and evidence to determine the patient's fitness to drive.",
+  "clinician_name": null,
+  "signed_at": null,
+  "final_clinical_authorization_required": true
+}

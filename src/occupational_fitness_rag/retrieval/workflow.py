@@ -96,7 +96,12 @@ class WorkflowRetriever:
                 and result.route != WorkflowRoute.FAST
                 and request.request_type == "missing_information_guidance"
             ):
-                query = f"{request.category} {request.subcondition} {rule['reason_template']}"
+                ambiguity = " ".join(request.ambiguity_reasons)
+                fields = " ".join(sorted(request.fact_context))
+                query = (
+                    f"{request.category} {request.subcondition} "
+                    f"{rule['reason_template']} {ambiguity} {fields}"
+                ).strip()
                 hits = self.engine.retrieve(query, filters)
                 semantic_calls += 1
                 scores = {}

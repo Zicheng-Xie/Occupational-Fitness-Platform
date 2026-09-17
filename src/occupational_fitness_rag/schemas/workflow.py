@@ -115,6 +115,17 @@ class RAGRequest(Contract):
     subcondition: str
     licence_context: Literal["commercial"] = "commercial"
     rag_query_key: str
+    ambiguity_reasons: list[
+        Literal[
+            "missing_fact",
+            "conflicting_fact",
+            "requires_confirmation",
+            "cross_chapter_condition",
+        ]
+    ] = Field(default_factory=list)
+    fact_context: dict[
+        str, Literal["unknown", "conflicting", "requires_confirmation"]
+    ] = Field(default_factory=dict)
 
 
 class ModuleAssessment(Contract):

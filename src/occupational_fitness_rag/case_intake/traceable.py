@@ -281,12 +281,15 @@ def extract_traceable_text(
     )
     c.pattern(
         "blackout.occurred",
-        r"Reports? (?:a |an |one |two |recurrent )?blackouts?\b|A blackout occurred",
+        r"Reports? (?:a |an |one |two |recurrent )?blackouts?\b"
+        r"|\b(?:the (?:patient|driver|commercial driver) (?:had|experienced) (?:a )?blackout"
+        r"|a blackout (?:definitely |clearly )?occurred)\b"
+        r"(?![^.;\n]{0,40}\b(?:ruled out|not confirmed)\b)",
         True,
     )
     c.pattern(
         "blackout.mechanism_status",
-        r"Blackout mechanism (?:is )?under investigation",
+        r"(?:Blackout|The) mechanism (?:is |remains )?under investigation",
         "under_investigation",
     )
     c.pattern(

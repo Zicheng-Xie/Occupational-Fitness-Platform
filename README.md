@@ -2,13 +2,13 @@
 
 A traceable assessment platform for occupational health teams and commercial-driver reviews. Software **0.4.0**, canonical `WorkflowRuleResult` schema **1.3.0** (supporting artifacts are independently versioned), guideline baseline **AP-G56-22**.
 
-The platform uses local **Llama 3 8B** to propose structured facts, validates their source quotations, types and meaning, runs deterministic rules, and links each assessment to guideline evidence through **Chroma, nomic-embed-text and BM25/RRF**.
+The platform uses local **Qwen3 8B** to propose structured facts, validates their source quotations, types and meaning, runs deterministic rules, and links each assessment to guideline evidence through **Chroma, nomic-embed-text and BM25/RRF**.
 
 **[Open assessment records](outputs/index.html)** · [Runbook](docs/runbook.md) · [Data contracts](docs/contracts.md) · [Verification](docs/verification.md)
 
 ## Getting started
 
-Run `powershell -ExecutionPolicy Bypass -File scripts/bootstrap.ps1 -Chroma`, or install `python -m pip install -e ".[dev,api,chroma]"` in the project environment. Ollama must have `llama3:8b` and `nomic-embed-text:latest` installed.
+Run `powershell -ExecutionPolicy Bypass -File scripts/bootstrap.ps1 -Chroma`, or install `python -m pip install -e ".[dev,api,chroma]"` in the project environment. Ollama must have `qwen3:8b` and `nomic-embed-text:latest` installed.
 
 ```powershell
 .\.venv\Scripts\fitness-rag.exe assess --input data/cases/nurse_notes/SYN-M2-009.txt
@@ -16,7 +16,7 @@ Run `powershell -ExecutionPolicy Bypass -File scripts/bootstrap.ps1 -Chroma`, or
 .\.venv\Scripts\python.exe scripts/build_delivery.py
 ```
 
-The default configuration enables Llama extraction and separate model commentary. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
+The default configuration enables Qwen extraction and separate model commentary. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
 
 ## Assessment workflow
 
@@ -28,6 +28,9 @@ The default configuration enables Llama extraction and separate model commentary
 6. Produce an English review report with case quotations, guideline pages, sections and coordinates.
 
 Reports remain **DRAFT / clinical review pending**. Rules retain `pending_clinical_review`; the system does not issue driving licences or employment decisions.
+
+See [Red Flag routing examples](docs/red_flag_cases/README.md) for the missing-evidence,
+local fast-path and cross-chapter RAG-review flows.
 
 ## Project structure
 

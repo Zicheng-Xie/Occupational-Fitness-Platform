@@ -13,3 +13,5 @@ API regression tests pin the OpenAPI component name and version, reject the remo
 `AssessmentInput.modules_requested` now scopes rule and Red Flag execution before the `RAGInput` boundary. A hearing-only request therefore emits only hearing assessments, rule evaluations, missing-information records, and RAG requests. Retrieval and evidence-ranking behavior are unchanged.
 
 `POST /red-flag/evaluate` exposes that boundary directly. It returns the structured case, canonical `WorkflowRuleResult`, and immutable `RAGInput` without invoking retrieval or producing an evidence pack or review note. The existing `POST /assess` endpoint remains the complete end-to-end workflow.
+
+When enabled, the local Ollama model now proposes both grounded fact candidates and a constrained pre-RAG route (`local_result`, `needs_more_information`, or `rag_fusion`). Route advice must quote the nurse note verbatim, may only escalate deterministic handling, and cannot revise rule outcomes or Red Flag status. The basic Red Flag API returns the route category and concise relevant-section locators; it returns a structured `RAGInput` only for `rag_fusion`.

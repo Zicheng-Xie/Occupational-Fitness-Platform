@@ -106,6 +106,33 @@ def test_unrecorded_history_is_not_negative(workflow, note, field):
     assert _case(workflow, {}, text=note).facts[field].status == "unknown"
 
 
+def test_explicit_blackout_prose_maps_to_red_flag_fields(workflow):
+    note = (
+        "Emergency department handover: the commercial driver had a blackout yesterday. "
+        "A blackout definitely occurred. The mechanism remains under investigation."
+    )
+    case = _case(workflow, {}, ["blackout"], note)
+    result = workflow.red_flag.evaluate(case)
+
+    assert case.facts["blackout.occurred"].value is True
+    assert case.facts["blackout.mechanism_status"].value == "under_investigation"
+    assert result.has_red_flag is True
+    assert result.assessment_outcome == "temporarily_unfit"
+    assert "BLK-COM-UNDIAGNOSED-001" in {rule.rule_id for rule in result.red_flags}
+
+
+@pytest.mark.parametrize(
+    "note",
+    [
+        "A possible blackout was discussed.",
+        "A blackout was ruled out after review.",
+        "The driver had no blackout.",
+    ],
+)
+def test_uncertain_or_negated_blackout_does_not_become_positive(workflow, note):
+    assert _case(workflow, {}, ["blackout"], note).facts["blackout.occurred"].value is not True
+
+
 def test_exact_case_spans_and_no_frequency_invention(workflow):
     case = extract_traceable_file(
         ROOT / "data/cases/nurse_notes/SYN-M2-009.txt", workflow.book.field_specs

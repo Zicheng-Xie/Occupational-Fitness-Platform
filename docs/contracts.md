@@ -17,6 +17,63 @@ False requires an explicit negative statement. Model-grounded facts must pass qu
 
 `llm_extraction_audit.json` records the model, weight digest, accepted fields, withheld proposals, call statistics and fallback status. Product-facing summaries use English; original evidence retains its source wording.
 
+The model input is UTF-8 case text plus only the requested modules' entries from
+`field_dictionary.json`. Model output is a strict `proposals` JSON object. Each
+proposal contains an exact dictionary field name, typed value, verbatim quote,
+patient/other subject, explicit/uncertain certainty and temporality. Only facts
+that pass deterministic validation enter `ClinicalCase.facts`.
+
+Example input:
+
+```text
+The patient denies a history of diabetes mellitus.
+```
+
+Model proposal contract:
+
+```json
+{
+  "proposals": [
+    {
+      "field": "diabetes.present",
+      "value": false,
+      "quote": "The patient denies a history of diabetes mellitus.",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "history"
+    }
+  ]
+}
+```
+
+After validation the canonical output remains dictionary keyed:
+
+```json
+{
+  "facts": {
+    "diabetes.present": {
+      "value": false,
+      "status": "present",
+      "unit": null,
+      "evidence": [
+        {
+          "start": 0,
+          "end": 50,
+          "quote": "The patient denies a history of diabetes mellitus.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ],
+      "method": "llm_grounded",
+      "derived_from": []
+    }
+  }
+}
+```
+
+Runtime `present` facts always contain an exact source span.
+
 ## Structured knowledge units
 
 `data/knowledge/processed/knowledge_units.json` contains 28 source units:
@@ -53,6 +110,9 @@ the internal evaluation tree, Red Flag list or missing-information decisions.
 The returned evidence pack binds itself to the complete Red Flag result hash.
 
 Rule requests identify their rule, sources, category, subcondition and commercial context. Each evidence item returns complete, partial or no_evidence status, unresolved sources, actual filters, citations and ranking records.
+For an unresolved rule, the request also carries dictionary-keyed `fact_context`
+and bounded `ambiguity_reasons`; it never carries an unverified model value as a
+patient fact.
 
 Exact-source scores are not medical confidence estimates. Evidence must match the case, rule version, result fingerprint, request ownership and guideline text. `verify-run` replays rules and checks artifact fingerprints.
 

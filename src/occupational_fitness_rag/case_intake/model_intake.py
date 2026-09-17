@@ -11,6 +11,39 @@ from occupational_fitness_rag.llm import OllamaClient
 from occupational_fitness_rag.schemas.workflow import ClinicalCase, Fact, TextSpan
 
 
+FIELD_EVIDENCE_TERMS = {
+    "cardiovascular": ("blood pressure", "bp", "hypertension", "cardiac", "heart"),
+    "blackout": ("blackout", "syncope", "loss of consciousness", "fainted", "fainting"),
+    "vision": ("vision", "visual", "eye", "diplopia", "monocular"),
+    "hearing": ("hearing", "audiometry", "audiogram", "audiologist", "ear"),
+    "diabetes": ("diabetes", "diabetic", "glucose", "insulin", "hypoglycaemia"),
+}
+
+
+def quote_mentions_field(field, quote):
+    lowered = quote.casefold()
+    root = field.split(".", 1)[0]
+    if any(term in lowered for term in FIELD_EVIDENCE_TERMS.get(root, ())):
+        return True
+    meaningful = {
+        token
+        for token in re.split(r"[._]", field)
+        if len(token) > 3
+        and token
+        not in {
+            "present",
+            "occurred",
+            "available",
+            "relevant",
+            "observed",
+            "confirmed",
+            "assessment",
+            "information",
+        }
+    }
+    return any(token in lowered for token in meaningful)
+
+
 def same_value(left, right):
     if type(left) is bool or type(right) is bool:
         return type(left) is type(right) and left == right
@@ -53,6 +86,31 @@ def quote_supports(field, value, quote, specs):
     return same_value(value, expected)
 
 
+def generic_quote_supports(field, value, quote, specs):
+    """Apply conservative type-specific evidence checks to model-only phrasing."""
+    lowered = quote.casefold()
+    if re.search(r"\b(?:family history|mother|father|sibling|if|hypothetical)\b", lowered):
+        return False
+    if re.search(r"\b(?:possible|possibly|suspected|query|uncertain|may have|might have)\b", lowered):
+        return False
+    if not quote_mentions_field(field, quote):
+        return False
+    kind = specs[field]["type"]
+    if kind == "boolean":
+        negated = bool(re.search(r"\b(?:no|not|nil|denies|without|negative for|never)\b", lowered))
+        return negated if value is False else not negated
+    if kind == "number":
+        numbers = [float(item) for item in re.findall(r"(?<![\w.])-?\d+(?:\.\d+)?", quote)]
+        return any(float(value) == item for item in numbers)
+    if kind == "snellen":
+        return str(value).replace(" ", "") in quote.replace(" ", "")
+    if kind == "list":
+        numbers = [float(item) for item in re.findall(r"(?<![\w.])-?\d+(?:\.\d+)?", quote)]
+        return all(any(float(expected) == actual for actual in numbers) for expected in value)
+    tokens = [part for part in str(value).casefold().split("_") if len(part) > 2]
+    return bool(tokens) and all(token in lowered for token in tokens)
+
+
 def apply_model_proposals(case, response, specs, page_ranges=()):
     facts = dict(case.facts)
     accepted, withheld = [], list(response.get("rejected", []))
@@ -62,9 +120,16 @@ def apply_model_proposals(case, response, specs, page_ranges=()):
         reason = None
         if field not in specs or not valid_value(field, value, specs):
             reason = "invalid_field_type_or_range"
+        elif proposal.get("subject", "patient") != "patient":
+            reason = "subject_is_not_patient"
+        elif proposal.get("certainty", "explicit") != "explicit":
+            reason = "statement_is_not_explicit"
         elif not quote or quote not in case.source_text:
             reason = "quote_not_in_input"
-        elif not quote_supports(field, value, quote, specs):
+        elif not (
+            quote_supports(field, value, quote, specs)
+            or generic_quote_supports(field, value, quote, specs)
+        ):
             reason = "value_not_supported_by_quote"
         elif re.search(
             r"\b(?:no|denies|without|negative for|family|if|hypothetical)\b[^.;:\n]{0,80}$",
@@ -77,7 +142,13 @@ def apply_model_proposals(case, response, specs, page_ranges=()):
         if reason:
             withheld.append({**proposal, "reason": reason})
             continue
-        start = case.source_text.index(quote)
+        start = proposal.get("source_start")
+        if (
+            type(start) is not int
+            or start < 0
+            or case.source_text[start : start + len(quote)] != quote
+        ):
+            start = case.source_text.index(quote)
         end = start + len(quote)
         span = TextSpan(
             start=start,
@@ -132,7 +203,7 @@ def model_intake(case, specs, config, page_ranges=()):
         return case, {"status": "disabled", "accepted_fields": []}
     client = OllamaClient(config)
     try:
-        response = client.extract(case.source_text, specs)
+        response = client.extract(case.source_text, specs, case.modules_requested)
         return apply_model_proposals(case, response, specs, page_ranges)
     except Exception as exc:
         updated = ClinicalCase.model_validate(

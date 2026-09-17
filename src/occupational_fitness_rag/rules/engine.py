@@ -178,7 +178,9 @@ class RuleBook:
             if not rule["source_ids"]:
                 raise ValueError("Every rule requires source IDs")
             Outcome(rule["outcome"]["assessment_outcome"])
+            WorkflowRoute(rule["outcome"]["route"])
             seen.add(rule["rule_id"])
+        self.rules_by_id = {rule["rule_id"]: rule for rule in self.rules}
         self.field_specs = collect_field_specs(self.rules)
 
     def evaluate(self, case: ClinicalCase) -> RuleEngineResult:
@@ -305,15 +307,24 @@ class RuleBook:
                 module_warnings.append("Conflicting case facts require reconciliation.")
             if module == "vision" and value("vision.visual_field.reported_defect") is True:
                 module_warnings.append("A reported field defect requires objective confirmation.")
-            route = (
-                WorkflowRoute.FAST
-                if outcome == Outcome.MEETS
-                else WorkflowRoute.MISSING
-                if outcome == Outcome.INSUFFICIENT
-                else WorkflowRoute.REVIEW
-            )
+            configured_routes = {
+                WorkflowRoute(self.rules_by_id[item.rule_id]["outcome"]["route"])
+                for item in positives
+            }
             if module_warnings:
                 route = WorkflowRoute.HUMAN
+            elif missing:
+                route = WorkflowRoute.MISSING
+            elif WorkflowRoute.REVIEW in configured_routes:
+                route = WorkflowRoute.REVIEW
+            elif positives:
+                route = WorkflowRoute.FAST
+            else:
+                route = (
+                    WorkflowRoute.MISSING
+                    if outcome == Outcome.INSUFFICIENT
+                    else WorkflowRoute.REVIEW
+                )
             modules.append(
                 ModuleAssessment(
                     module=module,
@@ -331,7 +342,7 @@ class RuleBook:
             else WorkflowRoute.HUMAN
             if any(m.route == WorkflowRoute.HUMAN for m in modules)
             else WorkflowRoute.MISSING
-            if outcome == Outcome.INSUFFICIENT
+            if any(m.route == WorkflowRoute.MISSING for m in modules)
             else WorkflowRoute.REVIEW
         )
         requests = [
@@ -347,6 +358,26 @@ class RuleBook:
                 category=x.category,
                 subcondition=x.subcondition,
                 rag_query_key=x.rag_query_key,
+                ambiguity_reasons=sorted(
+                    {
+                        {
+                            "unknown": "missing_fact",
+                            "conflicting": "conflicting_fact",
+                            "requires_confirmation": "requires_confirmation",
+                        }[case.facts.get(field, Fact()).status]
+                        for field in x.missing_fields
+                    }
+                    | (
+                        {"cross_chapter_condition"}
+                        if x.result == "triggered"
+                        and WorkflowRoute(self.rules_by_id[x.rule_id]["outcome"]["route"])
+                        == WorkflowRoute.REVIEW
+                        else set()
+                    )
+                ),
+                fact_context={
+                    field: case.facts.get(field, Fact()).status for field in x.missing_fields
+                },
             )
             for x in evaluations.values()
             if x.result in {"triggered", "unknown"}

@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", default="llama3:8b")
+    parser.add_argument("--model", default="qwen3:8b")
     parser.add_argument("--timeout", type=int, default=120)
     args = parser.parse_args()
     client = OllamaClient(LLMConfig(enabled=True, model=args.model, timeout_seconds=args.timeout))

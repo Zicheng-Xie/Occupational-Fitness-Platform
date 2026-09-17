@@ -90,7 +90,33 @@ class OccupationalFitnessWorkflow:
         )
         case, intake = model_intake(case, self.book.field_specs, self.config.llm)
         case = case.model_copy(update={"extraction_metadata": intake})
-        return case, self.red_flag.evaluate(case)
+        result = self.red_flag.evaluate(case)
+        if self.config.llm.enabled and self.config.llm.route_classification_enabled:
+            client = OllamaClient(self.config.llm)
+            try:
+                suggestion = client.classify_route(
+                    case.source_text,
+                    {
+                        "route": result.route,
+                        "assessment_outcome": result.assessment_outcome,
+                        "has_red_flag": result.has_red_flag,
+                        "missing_fields": sorted(
+                            {item.field for item in result.missing_information}
+                        ),
+                        "triggered_rules": [item.rule_id for item in result.triggered_rules],
+                    },
+                )
+            except Exception as exc:
+                suggestion = {
+                    "status": "unavailable",
+                    "route": None,
+                    "reason": "Local route model unavailable; deterministic route retained.",
+                    "evidence_quotes": [],
+                    "model": self.config.llm.model,
+                    "error_type": type(exc).__name__,
+                }
+            result = self.red_flag.apply_route_suggestion(result, suggestion)
+        return case, result
 
     def run_file(self, input_path, output_root=None, modules=None):
         case = extract_traceable_file(input_path, self.book.field_specs, modules)

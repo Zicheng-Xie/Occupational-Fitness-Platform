@@ -38,7 +38,7 @@
       "category": "cardiovascular",
       "condition": "hypertension",
       "rag_query_key": "hypertension_commercial_unconditional",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "HTN-COM-CONDITIONAL-001",
@@ -100,7 +100,7 @@
       "category": "cardiovascular",
       "condition": "hypertension_conditional",
       "rag_query_key": "hypertension_commercial_conditional",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "BLK-COM-UNDIAGNOSED-001",
@@ -148,7 +148,7 @@
       "category": "blackout",
       "condition": "blackout_mechanism_not_yet_ascertained",
       "rag_query_key": "blackout_diagnostic_workup_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
@@ -158,7 +158,7 @@
         "blackout.provoking_factor_well_defined",
         "blackout.recurrence_while_driving_unlikely"
       ],
-      "logic": "(blackout.diagnosis == vasovagal_syncope AND blackout.provoking_factor_well_defined == True AND blackout.recurrence_while_driving_unlikely == True)",
+      "logic": "(blackout.diagnosis == vasovagal_syncope AND (blackout.provoking_factor_well_defined == True OR blackout.recurrence_while_driving_unlikely == True))",
       "predicate": {
         "all": [
           {
@@ -167,14 +167,18 @@
             "value": "vasovagal_syncope"
           },
           {
-            "field": "blackout.provoking_factor_well_defined",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "blackout.recurrence_while_driving_unlikely",
-            "operator": "==",
-            "value": true
+            "any": [
+              {
+                "field": "blackout.provoking_factor_well_defined",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "field": "blackout.recurrence_while_driving_unlikely",
+                "operator": "==",
+                "value": true
+              }
+            ]
           }
         ]
       },
@@ -200,7 +204,7 @@
       "category": "blackout",
       "condition": "provoked_vasovagal_syncope",
       "rag_query_key": "provoked_vasovagal_syncope_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "BLK-COM-UNCERTAIN-UNCONDITIONAL-001",
@@ -245,7 +249,7 @@
       "category": "blackout",
       "condition": "blackout_uncertain_nature",
       "rag_query_key": "blackout_uncertain_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "BLK-COM-SINGLE-WAIT-001",
@@ -298,7 +302,7 @@
       "category": "blackout",
       "condition": "single_or_clustered_uncertain_blackout",
       "rag_query_key": "blackout_uncertain_single_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "BLK-COM-RECURRENT-WAIT-001",
@@ -351,7 +355,7 @@
       "category": "blackout",
       "condition": "recurrent_uncertain_blackout",
       "rag_query_key": "blackout_uncertain_recurrent_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "BLK-COM-CONDITIONAL-ELIGIBILITY-001",
@@ -434,7 +438,7 @@
       "category": "blackout",
       "condition": "uncertain_blackout_conditional_eligibility",
       "rag_query_key": "blackout_uncertain_conditional_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "VIS-COM-ACUITY-UNCONDITIONAL-001",
@@ -477,7 +481,7 @@
       "category": "vision",
       "condition": "visual_acuity",
       "rag_query_key": "visual_acuity_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "VIS-COM-ACUITY-CONDITIONAL-001",
@@ -521,7 +525,7 @@
       "category": "vision",
       "condition": "corrected_visual_acuity",
       "rag_query_key": "corrected_visual_acuity_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "VIS-COM-FIELD-UNCONDITIONAL-001",
@@ -548,7 +552,7 @@
       "category": "vision",
       "condition": "visual_field_defect",
       "rag_query_key": "visual_field_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "VIS-COM-FIELD-CONDITIONAL-001",
@@ -614,7 +618,7 @@
       "category": "vision",
       "condition": "visual_field_conditional",
       "rag_query_key": "visual_field_conditional_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "VIS-COM-MONOCULAR-001",
@@ -641,7 +645,7 @@
       "category": "vision",
       "condition": "monocular_vision",
       "rag_query_key": "monocular_vision_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "VIS-COM-MONOCULAR-CONDITIONAL-001",
@@ -707,7 +711,7 @@
       "category": "vision",
       "condition": "monocular_vision_conditional",
       "rag_query_key": "monocular_vision_conditional_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "VIS-COM-DIPLOPIA-001",
@@ -758,7 +762,7 @@
       "category": "vision",
       "condition": "diplopia_central_20_degrees",
       "rag_query_key": "diplopia_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "HEAR-COM-AUDIOMETRY-MISSING-001",
@@ -803,7 +807,7 @@
       "category": "hearing",
       "condition": "possible_hearing_loss",
       "rag_query_key": "hearing_audiometry_required_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "HEAR-COM-UNCONDITIONAL-001",
@@ -855,7 +859,7 @@
       "category": "hearing",
       "condition": "better_ear_hearing_loss",
       "rag_query_key": "hearing_loss_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "HEAR-COM-CONDITIONAL-AID-001",
@@ -899,7 +903,7 @@
       "category": "hearing",
       "condition": "hearing_aid_standard_met",
       "rag_query_key": "hearing_aid_conditional_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "HEAR-COM-INDIVIDUAL-ASSESSMENT-001",
@@ -932,7 +936,7 @@
       "category": "hearing",
       "condition": "hearing_aid_standard_not_met",
       "rag_query_key": "hearing_individual_assessment_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "DM-COM-DIET-001",
@@ -984,7 +988,7 @@
       "category": "diabetes",
       "condition": "diet_and_exercise_only",
       "rag_query_key": "diabetes_diet_exercise_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "DM-COM-NONINSULIN-001",
@@ -1020,7 +1024,7 @@
       "category": "diabetes",
       "condition": "non_insulin_glucose_lowering_agent",
       "rag_query_key": "diabetes_non_insulin_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "DM-COM-NONINSULIN-CONDITIONAL-001",
@@ -1088,7 +1092,7 @@
       "category": "diabetes",
       "condition": "non_insulin_conditional",
       "rag_query_key": "diabetes_non_insulin_conditional_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "DM-COM-INSULIN-001",
@@ -1130,7 +1134,7 @@
       "category": "diabetes",
       "condition": "insulin_treated_diabetes",
       "rag_query_key": "diabetes_insulin_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "DM-COM-SEVERE-HYPO-WAIT-001",
@@ -1177,7 +1181,7 @@
       "category": "diabetes",
       "condition": "recent_severe_hypoglycaemic_event",
       "rag_query_key": "severe_hypoglycaemia_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "DM-COM-INSULIN-CONDITIONAL-001",
@@ -1277,7 +1281,7 @@
       "category": "diabetes",
       "condition": "insulin_conditional",
       "rag_query_key": "diabetes_insulin_conditional_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "DM-COM-ACUTE-UNSTABLE-001",
@@ -1323,7 +1327,7 @@
       "category": "diabetes",
       "condition": "acute_metabolic_instability",
       "rag_query_key": "acute_hyperglycaemia_commercial",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "HTN-COM-SCREEN-001",
@@ -1360,7 +1364,7 @@
       "category": "cardiovascular",
       "condition": "hypertension_screen",
       "rag_query_key": "htn_com_screen_001",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "VIS-COM-SCREEN-001",
@@ -1423,7 +1427,7 @@
       "category": "vision",
       "condition": "vision_screen",
       "rag_query_key": "vis_com_screen_001",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "HEAR-COM-SCREEN-001",
@@ -1476,7 +1480,7 @@
       "category": "hearing",
       "condition": "hearing_screen",
       "rag_query_key": "hear_com_screen_001",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "BLK-COM-NO-HISTORY-001",
@@ -1503,7 +1507,7 @@
       "category": "blackout",
       "condition": "blackout_screen",
       "rag_query_key": "blk_com_no_history_001",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "DM-COM-NO-HISTORY-001",
@@ -1530,7 +1534,7 @@
       "category": "diabetes",
       "condition": "diabetes_screen",
       "rag_query_key": "dm_com_no_history_001",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
@@ -1568,7 +1572,7 @@
       "category": "blackout",
       "condition": "blackout_screen",
       "rag_query_key": "blk_com_diagnosed_referral_001",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     },
     {
       "rule_id": "DM-COM-GESTATIONAL-REVIEW-001",
@@ -1600,7 +1604,7 @@
       "category": "diabetes",
       "condition": "diabetes_screen",
       "rag_query_key": "dm_com_gestational_review_001",
-      "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa"
+      "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664"
     }
   ]
 }

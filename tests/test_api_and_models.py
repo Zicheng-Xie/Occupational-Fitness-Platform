@@ -4,7 +4,12 @@ import pytest
 from fastapi.testclient import TestClient
 
 from occupational_fitness_rag.api import create_app
-from occupational_fitness_rag.llm import ExtractionProposals, OllamaClient, require_local_url
+from occupational_fitness_rag.llm import (
+    ExtractionProposals,
+    OllamaClient,
+    RouteSuggestion,
+    require_local_url,
+)
 from occupational_fitness_rag.pipeline.config import LLMConfig
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,6 +51,58 @@ def test_openapi_exposes_only_workflow_rule_result_v1_3():
     assert contract["properties"]["schema_version"]["const"] == "1.3.0"
     assert contract["properties"]["ruleset"]["$ref"].endswith("/RulesetIdentity")
     assert {"ruleset_id", "ruleset_version", "ruleset_sha256"}.isdisjoint(contract["properties"])
+
+
+def test_openapi_exposes_experiment_cases_and_three_way_summary():
+    with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+        cases = client.get("/experiment/cases")
+        one_case = client.get("/experiment/cases/BLK-REDFLAG-EDNOTE")
+        missing = client.get("/experiment/cases/NOT-A-CASE")
+        openapi = client.get("/openapi.json").json()
+
+    assert cases.status_code == 200
+    assert len(cases.json()) == 15
+    assert {item["module"] for item in cases.json()} == {
+        "hypertension",
+        "vision",
+        "hearing",
+        "blackout",
+        "diabetes",
+    }
+    assert one_case.status_code == 200
+    assert "A blackout definitely occurred" in one_case.json()["text"]
+    assert one_case.json()["expected_red_flag_classification"] == "RED_FLAG"
+    assert missing.status_code == 404
+    assert "/experiment/cases/{case_id}/evaluate" in openapi["paths"]
+    summary = openapi["components"]["schemas"]["ExperimentAssessmentResponse"]
+    assert {
+        "red_flag_classification",
+        "triggered_rule_ids",
+        "missing_fields",
+        "guideline_references",
+    } <= set(summary["properties"])
+    reference = openapi["components"]["schemas"]["GuidelineReference"]
+    assert {"source_text", "printed_page", "pdf_page", "verified_against_source"} <= set(
+        reference["properties"]
+    )
+
+
+def test_blackout_experiment_case_matches_expected_red_flag_offline():
+    with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+        response = client.post("/experiment/cases/BLK-REDFLAG-EDNOTE/evaluate")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["red_flag_classification"] == "RED_FLAG"
+    assert payload["has_red_flag"] is True
+    assert payload["assessment_outcome"] == "temporarily_unfit"
+    assert payload["red_flag_rule_ids"] == ["BLK-COM-UNDIAGNOSED-001"]
+    assert "blackout.occurred" not in payload["missing_fields"]
+    assert "blackout.mechanism_status" not in payload["missing_fields"]
+    assert payload["matches_expected_classification"] is True
+    assert payload["matches_expected_outcome"] is True
+    assert payload["guideline_references"]
+    assert all(item["verified_against_source"] for item in payload["guideline_references"])
 
 
 def test_api_missing_information_does_not_create_red_flag():
@@ -113,11 +170,25 @@ def test_red_flag_endpoint_stops_before_rag():
 
     assert response.status_code == 200
     payload = response.json()
-    assert set(payload) == {"structured_case", "rule_result", "rag_input"}
+    assert set(payload) == {
+        "structured_case",
+        "routing_category",
+        "rule_result",
+        "relevant_sections",
+        "rag_input",
+    }
+    assert payload["routing_category"] == "needs_more_information"
     assert payload["rule_result"]["schema_version"] == "1.3.0"
     assert payload["rule_result"]["has_red_flag"] is False
     assert payload["rule_result"]["missing_information"]
-    assert payload["rag_input"]["rag_requests"] == payload["rule_result"]["rag_requests"]
+    assert payload["relevant_sections"]
+    assert set(payload["relevant_sections"][0]) == {
+        "source_id",
+        "section",
+        "printed_page",
+        "pdf_page",
+    }
+    assert payload["rag_input"] is None
     assert "evidence_pack" not in payload
     assert "gp_review_note" not in payload
 
@@ -154,6 +225,28 @@ def test_llm_fabricated_quote_is_rejected(monkeypatch):
     assert len(result["rejected"]) == 1
     assert result["proposals"][0]["status"] == "requires_confirmation"
     assert result["authoritative_facts_modified"] is False
+
+
+def test_llm_route_with_fabricated_quote_is_withheld(monkeypatch):
+    client = OllamaClient(LLMConfig())
+    monkeypatch.setattr(
+        client,
+        "generate",
+        lambda *args: RouteSuggestion.model_validate(
+            {
+                "route": "rag_fusion",
+                "reason": "The case requires synthesis.",
+                "evidence_quotes": ["This wording is not in the note."],
+            }
+        ),
+    )
+
+    result = client.classify_route(
+        "Reports reduced hearing.",
+        {"route": "fast_path", "assessment_outcome": "meets_unconditional_standard"},
+    )
+
+    assert result["status"] == "withheld"
 
 
 def test_model_timeout_preserves_replayable_template_report(monkeypatch, tmp_path):

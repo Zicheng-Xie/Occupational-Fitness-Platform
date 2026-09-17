@@ -206,14 +206,18 @@
             "value": "vasovagal_syncope"
           },
           {
-            "field": "blackout.provoking_factor_well_defined",
-            "operator": "==",
-            "value": true
-          },
-          {
-            "field": "blackout.recurrence_while_driving_unlikely",
-            "operator": "==",
-            "value": true
+            "any": [
+              {
+                "field": "blackout.provoking_factor_well_defined",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "field": "blackout.recurrence_while_driving_unlikely",
+                "operator": "==",
+                "value": true
+              }
+            ]
           }
         ]
       },
@@ -222,7 +226,7 @@
         "route": "fast_path",
         "requires_human_review": false
       },
-      "reason_template": "The episode is documented as provoked vasovagal syncope with a situation unlikely to recur while driving.",
+      "reason_template": "The episode is documented as vasovagal syncope with a well-defined provoking factor or a situation unlikely to recur while driving.",
       "rag_query_key": "provoked_vasovagal_syncope_commercial",
       "module": "blackout",
       "source_ids": [

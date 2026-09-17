@@ -19,7 +19,7 @@ def merge(workflow, text, field, value, quote):
     case = extract_traceable_text(text, "MODEL-TEST", "input.txt", workflow.book.field_specs)
     return case, *apply_model_proposals(
         case,
-        {"model": "llama3:8b", "proposals": [{"field": field, "value": value, "quote": quote}]},
+        {"model": "qwen3:8b", "proposals": [{"field": field, "value": value, "quote": quote}]},
         workflow.book.field_specs,
     )
 
@@ -75,15 +75,49 @@ def test_model_cannot_remove_context_from_quote(workflow, text):
     assert updated.facts["diabetes.present"] == original.facts["diabetes.present"]
 
 
+def test_model_cannot_map_unrelated_positive_sentence_to_dictionary_field(workflow):
+    text = "The patient has normal vision."
+    original, updated, audit = merge(
+        workflow, text, "diabetes.present", True, text
+    )
+    assert not audit["accepted_fields"]
+    assert updated.facts["diabetes.present"] == original.facts["diabetes.present"]
+
+
+def test_model_source_start_selects_the_intended_repeated_quote(workflow):
+    quote = "No diabetes."
+    text = f"{quote}\nReview repeated: {quote}"
+    case = extract_traceable_text(text, "REPEATED", "input.txt", workflow.book.field_specs)
+    second_start = text.rindex(quote)
+    updated, audit = apply_model_proposals(
+        case,
+        {
+            "model": "qwen3:8b",
+            "proposals": [
+                {
+                    "field": "diabetes.present",
+                    "value": False,
+                    "quote": quote,
+                    "source_start": second_start,
+                }
+            ],
+        },
+        workflow.book.field_specs,
+    )
+    assert audit["accepted_fields"] == ["diabetes.present"]
+    assert updated.facts["diabetes.present"].evidence[-1].start == second_start
+
+
 def test_model_stage_precedes_rule_evaluation(monkeypatch):
     workflow = OccupationalFitnessWorkflow(ROOT / "configs/workflow.offline.yaml")
     workflow.config.llm.enabled = True
+    workflow.config.llm.route_classification_enabled = False
     quote = "The patient denies a history of diabetes mellitus."
     monkeypatch.setattr(
         OllamaClient,
         "extract",
         lambda *args: {
-            "model": "llama3:8b",
+            "model": "qwen3:8b",
             "proposals": [{"field": "diabetes.present", "value": False, "quote": quote}],
         },
     )
@@ -96,7 +130,7 @@ def test_model_stage_precedes_rule_evaluation(monkeypatch):
     monkeypatch.setattr(workflow.book, "evaluate", checked)
     case, result, _, _ = workflow.from_text(quote, "MODEL-ORDER")
     assert result.case_id == case.case_id
-    assert case.extraction_metadata["model"] == "llama3:8b"
+    assert case.extraction_metadata["model"] == "qwen3:8b"
 
 
 def test_structured_knowledge_contract_is_source_bound(workflow):

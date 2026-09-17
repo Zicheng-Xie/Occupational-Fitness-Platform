@@ -102,6 +102,35 @@ class RedFlagEvaluator:
         )
 
     @staticmethod
+    def apply_route_suggestion(result: WorkflowRuleResult, suggestion: dict) -> WorkflowRuleResult:
+        """Apply grounded model escalation without downgrading deterministic routing."""
+
+        if suggestion.get("status") != "grounded":
+            return result.model_copy(
+                update={"internal_metadata": {**result.internal_metadata, "llm_route": suggestion}}
+            )
+        suggested = {
+            "local_result": WorkflowRoute.FAST,
+            "needs_more_information": WorkflowRoute.MISSING,
+            "rag_fusion": WorkflowRoute.REVIEW,
+        }[suggestion["route"]]
+        rank = {
+            WorkflowRoute.FAST: 0,
+            WorkflowRoute.MISSING: 1,
+            WorkflowRoute.REVIEW: 2,
+            WorkflowRoute.HUMAN: 3,
+        }
+        route = suggested if rank[suggested] > rank[result.route] else result.route
+        return result.model_copy(
+            update={
+                "route": route,
+                "requires_human_review": result.requires_human_review
+                or route != WorkflowRoute.FAST,
+                "internal_metadata": {**result.internal_metadata, "llm_route": suggestion},
+            }
+        )
+
+    @staticmethod
     def _triggered(rule: RuleEvaluation) -> TriggeredRule:
         evidence = []
         seen = set()

@@ -4,7 +4,7 @@ Software 0.4.0 uses `WorkflowRuleResult` 1.3.0 as its sole rule-result contract.
 
 ```mermaid
 flowchart TD
-  A[Text or text-layer PDF] --> B[Local Llama 3 8B extraction]
+  A[Text or text-layer PDF] --> B[Local Qwen3 8B extraction]
   A --> C[Deterministic extraction and numeric fallback]
   B --> D[Quotation, context, type, range and conflict checks]
   C --> D
@@ -25,7 +25,7 @@ flowchart TD
 
 | Component | Implementation | Output |
 |---|---|---|
-| Local extraction | Ollama and Llama 3 8B | Typed proposals with exact quotations |
+| Local extraction | Ollama and Qwen3 8B | Typed proposals with exact quotations |
 | Fact validation | `case_intake/model_intake.py`, `traceable.py` | Structured case and extraction audit |
 | Category mapping | Hypertension, vision, hearing, blackout, diabetes | Category-specific facts |
 | Red Flag boundary | `red_flag.py`, executed before retrieval | Explicit Red Flag classification and validated rule result |

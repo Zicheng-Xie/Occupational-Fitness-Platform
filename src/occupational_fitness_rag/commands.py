@@ -34,12 +34,75 @@ def assess(args):
     workflow = _workflow(args)
     path = workflow.run_file(args.input, args.output_dir, args.modules)
     result = json.loads((path / "rule_result.json").read_text(encoding="utf-8"))
+    evidence = json.loads((path / "evidence_pack.json").read_text(encoding="utf-8"))
+    return _assessment_summary(result, evidence, path)
+
+
+def _assessment_summary(result, evidence, path):
+    """Return the three-way Red Flag result with its verified PDF evidence."""
+
+    if result["has_red_flag"]:
+        classification = "RED_FLAG"
+    elif result["assessment_outcome"] == "insufficient_information" or result[
+        "missing_information"
+    ]:
+        classification = "NEEDS_MORE_INFORMATION"
+    else:
+        classification = "NO_RED_FLAG"
+
+    citations = {}
+    for item in evidence["evidence_items"]:
+        for citation in item["citations"]:
+            citations[citation["source_id"]] = {
+                "source_id": citation["source_id"],
+                "document": citation["document_id"],
+                "section": citation["section"],
+                "printed_page": citation["printed_page"],
+                "pdf_page": citation["pdf_page"],
+                "table_row": citation["table_row"],
+                "source_text": citation["source_text"],
+                "source_path": citation["source_path"],
+                "verified_against_source": citation["verified_against_source"],
+            }
+
     return {
-        "output": str(path.resolve()),
-        "report": str((path / "draft_report.html").resolve()),
+        "case_id": result["case_id"],
+        "red_flag_classification": classification,
+        "has_red_flag": result["has_red_flag"],
         "assessment_outcome": result["assessment_outcome"],
         "route": result["route"],
+        "triggered_rule_ids": [rule["rule_id"] for rule in result["triggered_rules"]],
+        "red_flag_rule_ids": [rule["rule_id"] for rule in result["red_flags"]],
+        "missing_fields": sorted({item["field"] for item in result["missing_information"]}),
+        "guideline_references": list(citations.values()),
+        "output": str(path.resolve()),
+        "report": str((path / "draft_report.html").resolve()),
     }
+
+
+def assess_suite(args):
+    workflow = _workflow(args)
+    manifest_path = Path(args.manifest)
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    base = manifest_path.parent
+    summaries = []
+    for number, item in enumerate(manifest["cases"], 1):
+        source = base / item["file"]
+        path = workflow.run_file(source, args.output_dir, [item["module"]])
+        result = json.loads((path / "rule_result.json").read_text(encoding="utf-8"))
+        evidence = json.loads((path / "evidence_pack.json").read_text(encoding="utf-8"))
+        summary = _assessment_summary(result, evidence, path)
+        summary["expected_red_flag_classification"] = item["expected_red_flag_classification"]
+        summary["matches_expected_classification"] = (
+            summary["red_flag_classification"] == item["expected_red_flag_classification"]
+        )
+        summary["expected_assessment_outcome"] = item["expected_outcome"]
+        summary["matches_expected_outcome"] = (
+            summary["assessment_outcome"] == item["expected_outcome"]
+        )
+        summaries.append(summary)
+        print(f"Completed {number}/{len(manifest['cases'])}: {item['case_id']}", file=sys.stderr)
+    return {"cases": summaries}
 
 
 def demo(args):
@@ -118,6 +181,11 @@ def main():
             build_knowledge,
         ),
         ("assess", "Run report intake, rules, evidence and draft generation", assess),
+        (
+            "assess-suite",
+            "Run the varied five-module Red Flag experiment manifest",
+            assess_suite,
+        ),
         ("demo", "Run all original and added synthetic case fixtures", demo),
         ("export-schemas", "Export strict JSON schemas and fact dictionary", export_schemas),
         ("verify-run", "Replay rules and verify an existing artifact bundle", verify_run),
@@ -133,7 +201,12 @@ def main():
                 nargs="+",
                 choices=["hypertension", "vision", "hearing", "blackout", "diabetes"],
             )
-        if name in {"assess", "demo"}:
+        if name == "assess-suite":
+            command.add_argument(
+                "--manifest",
+                default="data/cases/red_flag_experiment/manifest.json",
+            )
+        if name in {"assess", "assess-suite", "demo"}:
             command.add_argument("--output-dir")
         if name == "verify-run":
             command.add_argument("--run-dir", required=True)

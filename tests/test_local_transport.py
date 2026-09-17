@@ -18,7 +18,7 @@ def local_endpoint(monkeypatch):
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
-            self.respond({"models": [{"name": "llama3:8b", "digest": "test-digest"}]})
+            self.respond({"models": [{"name": "qwen3:8b", "digest": "test-digest"}]})
 
         def do_POST(self):
             self.rfile.read(int(self.headers["Content-Length"]))

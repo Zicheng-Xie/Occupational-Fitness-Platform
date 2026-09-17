@@ -1,8 +1,8 @@
 {
   "schema_version": "1.3.0",
-  "result_id": "RR-45f235549f1b550ca1a8",
+  "result_id": "RR-8ced6a48d2555b70bcd0",
   "case_id": "SYN-M2-009",
-  "case_sha256": "a3ccab72125cf123471b6e67ce6cee554cd22917723e04a68dcd2777c217d525",
+  "case_sha256": "786fa3867fb2b14194e076096d715298161a98c232957c4e490153aca711e5c2",
   "source": {
     "type": "nurse_note",
     "source_file": "SYN-M2-009.txt"
@@ -22,7 +22,7 @@
   "ruleset": {
     "ruleset_id": "austroads-commercial",
     "ruleset_version": "1.2.0",
-    "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+    "ruleset_sha256": "8f404219223bf8a708e01639d6602638fcdf44307e3ed88b40a0a0c23943e664",
     "guideline_version": "AP-G56-22",
     "status": "pending_clinical_review"
   },
@@ -1043,19 +1043,24 @@
                   "truth": null
                 },
                 {
-                  "field": "blackout.provoking_factor_well_defined",
-                  "operator": "==",
-                  "expected": true,
-                  "observed": null,
-                  "status": "unknown",
-                  "truth": null
-                },
-                {
-                  "field": "blackout.recurrence_while_driving_unlikely",
-                  "operator": "==",
-                  "expected": true,
-                  "observed": null,
-                  "status": "unknown",
+                  "any": [
+                    {
+                      "field": "blackout.provoking_factor_well_defined",
+                      "operator": "==",
+                      "expected": true,
+                      "observed": null,
+                      "status": "unknown",
+                      "truth": null
+                    },
+                    {
+                      "field": "blackout.recurrence_while_driving_unlikely",
+                      "operator": "==",
+                      "expected": true,
+                      "observed": null,
+                      "status": "unknown",
+                      "truth": null
+                    }
+                  ],
                   "truth": null
                 }
               ],
@@ -3854,13 +3859,7 @@
       }
     }
   ],
-  "processing_warnings": [
-    {
-      "code": "LOCAL_MODEL_UNAVAILABLE",
-      "message": "deterministic_fallback",
-      "requires_human_review": true
-    }
-  ],
+  "processing_warnings": [],
   "requires_human_review": true,
   "rag_requests": [
     {
@@ -3873,7 +3872,14 @@
       "category": "cardiovascular",
       "subcondition": "hypertension",
       "licence_context": "commercial",
-      "rag_query_key": "hypertension_commercial_unconditional"
+      "rag_query_key": "hypertension_commercial_unconditional",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "cardiovascular.blood_pressure.persistent_diastolic": "unknown",
+        "cardiovascular.blood_pressure.persistent_systolic": "unknown"
+      }
     },
     {
       "request_id": "RAG-b6444f4c9de61c94",
@@ -3885,7 +3891,14 @@
       "category": "cardiovascular",
       "subcondition": "hypertension_conditional",
       "licence_context": "commercial",
-      "rag_query_key": "hypertension_commercial_conditional"
+      "rag_query_key": "hypertension_commercial_conditional",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "cardiovascular.blood_pressure.persistent_diastolic": "unknown",
+        "cardiovascular.blood_pressure.persistent_systolic": "unknown"
+      }
     },
     {
       "request_id": "RAG-f6bd658cf68cb493",
@@ -3897,7 +3910,13 @@
       "category": "blackout",
       "subcondition": "blackout_mechanism_not_yet_ascertained",
       "licence_context": "commercial",
-      "rag_query_key": "blackout_diagnostic_workup_commercial"
+      "rag_query_key": "blackout_diagnostic_workup_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.occurred": "unknown"
+      }
     },
     {
       "request_id": "RAG-29e7d13da9126f2b",
@@ -3909,7 +3928,13 @@
       "category": "blackout",
       "subcondition": "provoked_vasovagal_syncope",
       "licence_context": "commercial",
-      "rag_query_key": "provoked_vasovagal_syncope_commercial"
+      "rag_query_key": "provoked_vasovagal_syncope_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.occurred": "unknown"
+      }
     },
     {
       "request_id": "RAG-8c6dbc96356b7e02",
@@ -3921,7 +3946,13 @@
       "category": "blackout",
       "subcondition": "blackout_uncertain_nature",
       "licence_context": "commercial",
-      "rag_query_key": "blackout_uncertain_commercial"
+      "rag_query_key": "blackout_uncertain_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.occurred": "unknown"
+      }
     },
     {
       "request_id": "RAG-706e32b1d549f57f",
@@ -3933,7 +3964,14 @@
       "category": "blackout",
       "subcondition": "single_or_clustered_uncertain_blackout",
       "licence_context": "commercial",
-      "rag_query_key": "blackout_uncertain_single_commercial"
+      "rag_query_key": "blackout_uncertain_single_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.mechanism_status": "unknown",
+        "blackout.occurred": "unknown"
+      }
     },
     {
       "request_id": "RAG-f6bcabafb506a19f",
@@ -3945,7 +3983,14 @@
       "category": "blackout",
       "subcondition": "recurrent_uncertain_blackout",
       "licence_context": "commercial",
-      "rag_query_key": "blackout_uncertain_recurrent_commercial"
+      "rag_query_key": "blackout_uncertain_recurrent_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.mechanism_status": "unknown",
+        "blackout.occurred": "unknown"
+      }
     },
     {
       "request_id": "RAG-0ed9f90cc610f9c6",
@@ -3958,7 +4003,14 @@
       "category": "blackout",
       "subcondition": "uncertain_blackout_conditional_eligibility",
       "licence_context": "commercial",
-      "rag_query_key": "blackout_uncertain_conditional_commercial"
+      "rag_query_key": "blackout_uncertain_conditional_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.mechanism_status": "unknown",
+        "blackout.occurred": "unknown"
+      }
     },
     {
       "request_id": "RAG-5e4aa8936c8dd5bc",
@@ -3970,7 +4022,15 @@
       "category": "vision",
       "subcondition": "visual_acuity",
       "licence_context": "commercial",
-      "rag_query_key": "visual_acuity_commercial"
+      "rag_query_key": "visual_acuity_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "vision.uncorrected.better_eye": "unknown",
+        "vision.uncorrected.left.snellen": "unknown",
+        "vision.uncorrected.right.snellen": "unknown"
+      }
     },
     {
       "request_id": "RAG-a19afd42ea281346",
@@ -3982,7 +4042,15 @@
       "category": "vision",
       "subcondition": "corrected_visual_acuity",
       "licence_context": "commercial",
-      "rag_query_key": "corrected_visual_acuity_commercial"
+      "rag_query_key": "corrected_visual_acuity_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "vision.uncorrected.better_eye": "unknown",
+        "vision.uncorrected.left.snellen": "unknown",
+        "vision.uncorrected.right.snellen": "unknown"
+      }
     },
     {
       "request_id": "RAG-5d5bbc35b3197fdd",
@@ -3994,7 +4062,13 @@
       "category": "vision",
       "subcondition": "visual_field_defect",
       "licence_context": "commercial",
-      "rag_query_key": "visual_field_commercial"
+      "rag_query_key": "visual_field_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "vision.visual_field.confirmed_defect": "unknown"
+      }
     },
     {
       "request_id": "RAG-b5a30c2e39a2cd7b",
@@ -4006,7 +4080,13 @@
       "category": "vision",
       "subcondition": "visual_field_conditional",
       "licence_context": "commercial",
-      "rag_query_key": "visual_field_conditional_commercial"
+      "rag_query_key": "visual_field_conditional_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "vision.visual_field.confirmed_defect": "unknown"
+      }
     },
     {
       "request_id": "RAG-306e29b1c23ac09b",
@@ -4018,7 +4098,13 @@
       "category": "vision",
       "subcondition": "monocular_vision",
       "licence_context": "commercial",
-      "rag_query_key": "monocular_vision_commercial"
+      "rag_query_key": "monocular_vision_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "vision.monocular": "unknown"
+      }
     },
     {
       "request_id": "RAG-7156b27493a824da",
@@ -4030,7 +4116,13 @@
       "category": "vision",
       "subcondition": "monocular_vision_conditional",
       "licence_context": "commercial",
-      "rag_query_key": "monocular_vision_conditional_commercial"
+      "rag_query_key": "monocular_vision_conditional_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "vision.monocular": "unknown"
+      }
     },
     {
       "request_id": "RAG-f40c82dd94b79da6",
@@ -4042,7 +4134,13 @@
       "category": "vision",
       "subcondition": "diplopia_central_20_degrees",
       "licence_context": "commercial",
-      "rag_query_key": "diplopia_commercial"
+      "rag_query_key": "diplopia_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "vision.diplopia.present": "unknown"
+      }
     },
     {
       "request_id": "RAG-63f6554294dda67c",
@@ -4054,7 +4152,13 @@
       "category": "hearing",
       "subcondition": "better_ear_hearing_loss",
       "licence_context": "commercial",
-      "rag_query_key": "hearing_loss_commercial"
+      "rag_query_key": "hearing_loss_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "hearing.average_frequencies_khz": "unknown"
+      }
     },
     {
       "request_id": "RAG-0889afdd4fa88ce3",
@@ -4066,7 +4170,13 @@
       "category": "hearing",
       "subcondition": "hearing_aid_standard_not_met",
       "licence_context": "commercial",
-      "rag_query_key": "hearing_individual_assessment_commercial"
+      "rag_query_key": "hearing_individual_assessment_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "hearing.average_frequencies_khz": "unknown"
+      }
     },
     {
       "request_id": "RAG-fa39ae9ac546fde3",
@@ -4078,7 +4188,13 @@
       "category": "diabetes",
       "subcondition": "diet_and_exercise_only",
       "licence_context": "commercial",
-      "rag_query_key": "diabetes_diet_exercise_commercial"
+      "rag_query_key": "diabetes_diet_exercise_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.present": "unknown"
+      }
     },
     {
       "request_id": "RAG-b7881121220ec50f",
@@ -4090,7 +4206,13 @@
       "category": "diabetes",
       "subcondition": "non_insulin_glucose_lowering_agent",
       "licence_context": "commercial",
-      "rag_query_key": "diabetes_non_insulin_commercial"
+      "rag_query_key": "diabetes_non_insulin_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.present": "unknown"
+      }
     },
     {
       "request_id": "RAG-9f05cd2ad1e374ba",
@@ -4102,7 +4224,13 @@
       "category": "diabetes",
       "subcondition": "non_insulin_conditional",
       "licence_context": "commercial",
-      "rag_query_key": "diabetes_non_insulin_conditional_commercial"
+      "rag_query_key": "diabetes_non_insulin_conditional_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.present": "unknown"
+      }
     },
     {
       "request_id": "RAG-ab56ee1087103c5d",
@@ -4114,7 +4242,14 @@
       "category": "diabetes",
       "subcondition": "insulin_treated_diabetes",
       "licence_context": "commercial",
-      "rag_query_key": "diabetes_insulin_commercial"
+      "rag_query_key": "diabetes_insulin_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.gestational": "unknown",
+        "diabetes.present": "unknown"
+      }
     },
     {
       "request_id": "RAG-babde766a87b6835",
@@ -4126,7 +4261,13 @@
       "category": "diabetes",
       "subcondition": "recent_severe_hypoglycaemic_event",
       "licence_context": "commercial",
-      "rag_query_key": "severe_hypoglycaemia_commercial"
+      "rag_query_key": "severe_hypoglycaemia_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.present": "unknown"
+      }
     },
     {
       "request_id": "RAG-33a284d0f9399d30",
@@ -4139,7 +4280,14 @@
       "category": "diabetes",
       "subcondition": "insulin_conditional",
       "licence_context": "commercial",
-      "rag_query_key": "diabetes_insulin_conditional_commercial"
+      "rag_query_key": "diabetes_insulin_conditional_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.gestational": "unknown",
+        "diabetes.present": "unknown"
+      }
     },
     {
       "request_id": "RAG-764c6efac3bc0fcb",
@@ -4151,7 +4299,13 @@
       "category": "diabetes",
       "subcondition": "acute_metabolic_instability",
       "licence_context": "commercial",
-      "rag_query_key": "acute_hyperglycaemia_commercial"
+      "rag_query_key": "acute_hyperglycaemia_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.present": "unknown"
+      }
     },
     {
       "request_id": "RAG-61b664ff3eda150a",
@@ -4163,7 +4317,14 @@
       "category": "cardiovascular",
       "subcondition": "hypertension_screen",
       "licence_context": "commercial",
-      "rag_query_key": "htn_com_screen_001"
+      "rag_query_key": "htn_com_screen_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "cardiovascular.blood_pressure.persistent_diastolic": "unknown",
+        "cardiovascular.blood_pressure.persistent_systolic": "unknown"
+      }
     },
     {
       "request_id": "RAG-d1c3c4fe3acf08db",
@@ -4177,7 +4338,18 @@
       "category": "vision",
       "subcondition": "vision_screen",
       "licence_context": "commercial",
-      "rag_query_key": "vis_com_screen_001"
+      "rag_query_key": "vis_com_screen_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "vision.diplopia.present": "unknown",
+        "vision.monocular": "unknown",
+        "vision.uncorrected.better_eye": "unknown",
+        "vision.uncorrected.left.snellen": "unknown",
+        "vision.uncorrected.right.snellen": "unknown",
+        "vision.visual_field.confirmed_defect": "unknown"
+      }
     },
     {
       "request_id": "RAG-2f064ca545702cdf",
@@ -4189,7 +4361,13 @@
       "category": "blackout",
       "subcondition": "blackout_screen",
       "licence_context": "commercial",
-      "rag_query_key": "blk_com_no_history_001"
+      "rag_query_key": "blk_com_no_history_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.occurred": "unknown"
+      }
     },
     {
       "request_id": "RAG-766811291d463c89",
@@ -4201,7 +4379,13 @@
       "category": "diabetes",
       "subcondition": "diabetes_screen",
       "licence_context": "commercial",
-      "rag_query_key": "dm_com_no_history_001"
+      "rag_query_key": "dm_com_no_history_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.present": "unknown"
+      }
     },
     {
       "request_id": "RAG-bc0df57a25f80566",
@@ -4213,7 +4397,13 @@
       "category": "blackout",
       "subcondition": "blackout_screen",
       "licence_context": "commercial",
-      "rag_query_key": "blk_com_diagnosed_referral_001"
+      "rag_query_key": "blk_com_diagnosed_referral_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.occurred": "unknown"
+      }
     },
     {
       "request_id": "RAG-f35abfc5c7f8d175",
@@ -4225,7 +4415,13 @@
       "category": "diabetes",
       "subcondition": "diabetes_screen",
       "licence_context": "commercial",
-      "rag_query_key": "dm_com_gestational_review_001"
+      "rag_query_key": "dm_com_gestational_review_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.present": "unknown"
+      }
     }
   ],
   "internal_metadata": {

@@ -77,9 +77,7 @@ def test_model_cannot_remove_context_from_quote(workflow, text):
 
 def test_model_cannot_map_unrelated_positive_sentence_to_dictionary_field(workflow):
     text = "The patient has normal vision."
-    original, updated, audit = merge(
-        workflow, text, "diabetes.present", True, text
-    )
+    original, updated, audit = merge(workflow, text, "diabetes.present", True, text)
     assert not audit["accepted_fields"]
     assert updated.facts["diabetes.present"] == original.facts["diabetes.present"]
 

@@ -123,9 +123,9 @@ class RAGRequest(Contract):
             "cross_chapter_condition",
         ]
     ] = Field(default_factory=list)
-    fact_context: dict[
-        str, Literal["unknown", "conflicting", "requires_confirmation"]
-    ] = Field(default_factory=dict)
+    fact_context: dict[str, Literal["unknown", "conflicting", "requires_confirmation"]] = Field(
+        default_factory=dict
+    )
 
 
 class ModuleAssessment(Contract):

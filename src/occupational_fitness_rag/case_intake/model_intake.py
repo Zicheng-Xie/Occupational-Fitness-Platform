@@ -92,7 +92,9 @@ def generic_quote_supports(field, value, quote, specs):
         return False
     if re.search(r"\b(?:family history|mother|father|sibling|if|hypothetical)\b", lowered):
         return False
-    if re.search(r"\b(?:possible|possibly|suspected|query|uncertain|may have|might have)\b", lowered):
+    if re.search(
+        r"\b(?:possible|possibly|suspected|query|uncertain|may have|might have)\b", lowered
+    ):
         return False
     if not quote_mentions_field(field, quote):
         return False

@@ -43,9 +43,9 @@ def _assessment_summary(result, evidence, path):
 
     if result["has_red_flag"]:
         classification = "RED_FLAG"
-    elif result["assessment_outcome"] == "insufficient_information" or result[
-        "missing_information"
-    ]:
+    elif (
+        result["assessment_outcome"] == "insufficient_information" or result["missing_information"]
+    ):
         classification = "NEEDS_MORE_INFORMATION"
     else:
         classification = "NO_RED_FLAG"

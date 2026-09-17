@@ -184,9 +184,7 @@ def create_app(config_path: str | None = None) -> FastAPI:
         source_ids = sorted(
             {source_id for item in result.rag_requests for source_id in item.source_ids}
         )
-        citations = [
-            app.state.workflow.catalogue.citation(source_id) for source_id in source_ids
-        ]
+        citations = [app.state.workflow.catalogue.citation(source_id) for source_id in source_ids]
         return {
             "structured_case": case.model_dump(mode="json"),
             "routing_category": category,

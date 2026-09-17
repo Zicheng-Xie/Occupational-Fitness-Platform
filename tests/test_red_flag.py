@@ -166,9 +166,7 @@ def test_diagnosed_blackout_uses_rag_review_without_claiming_missing_facts(workf
     assert result.modules[0].route == "rag_review"
     assert result.missing_information == []
     assert result.has_red_flag is False
-    assert [rule.rule_id for rule in result.triggered_rules] == [
-        "BLK-COM-DIAGNOSED-REFERRAL-001"
-    ]
+    assert [rule.rule_id for rule in result.triggered_rules] == ["BLK-COM-DIAGNOSED-REFERRAL-001"]
     assert [request.rule_id for request in result.rag_requests] == [
         "BLK-COM-DIAGNOSED-REFERRAL-001"
     ]
@@ -218,6 +216,4 @@ def test_vasovagal_exception_uses_guideline_or_condition(workflow):
         ["blackout"],
     )
 
-    assert "BLK-COM-VASOVAGAL-EXCEPTION-001" in {
-        item.rule_id for item in result.triggered_rules
-    }
+    assert "BLK-COM-VASOVAGAL-EXCEPTION-001" in {item.rule_id for item in result.triggered_rules}

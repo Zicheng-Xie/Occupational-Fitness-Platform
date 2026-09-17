@@ -21,8 +21,10 @@ llm:
   model: qwen3:8b
   timeout_seconds: 120
   extraction_enabled: true
-  route_classification_enabled: true
-  narrative_enabled: true
+  # The small local LLM is an intake extractor only. Rules own the decision,
+  # and the downstream RAG binds/retrieves the supporting guideline evidence.
+  route_classification_enabled: false
+  narrative_enabled: false
   context_length: 8192
   max_output_tokens: 2048
   max_input_chars: 10000

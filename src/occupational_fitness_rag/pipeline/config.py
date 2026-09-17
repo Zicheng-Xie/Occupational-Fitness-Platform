@@ -24,7 +24,7 @@ class LLMConfig(BaseModel):
     model: str = "qwen3:8b"
     timeout_seconds: int = Field(default=60, ge=1, le=120)
     extraction_enabled: bool = True
-    route_classification_enabled: bool = True
+    route_classification_enabled: bool = False
     narrative_enabled: bool = False
     context_length: int = Field(default=8192, ge=2048, le=32768)
     max_output_tokens: int = Field(default=2048, ge=128, le=4096)

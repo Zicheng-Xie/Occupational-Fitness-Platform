@@ -147,16 +147,14 @@ processing conflict or explicit manual escalation -> human_review
 limited to triggered rules whose assessment outcomes are `temporarily_unfit`
 or `does_not_meet_standard`.
 
-## Optional local-model assistance
+## Local-model extraction boundary
 
-With `llm.enabled` and `llm.route_classification_enabled` enabled, Ollama reads
-the original nurse note after deterministic extraction. It may propose fields
-only when it supplies an exact quotation that passes field type and semantic
-validation. The rule engine still owns the assessment outcome and Red Flag.
+In the standard `configs/workflow.yaml`, Ollama reads the original case note
+only during intake and proposes dictionary fields. A proposal is accepted only
+when it includes an exact quotation that passes field type and semantic
+validation.
 
-After rule evaluation, Ollama may propose one of `local_result`,
-`needs_more_information`, or `rag_fusion`. Its evidence quotations must occur
-verbatim in the note. A grounded proposal may escalate handling, for example
-from a local result to RAG fusion, but it may never downgrade a deterministic
-missing-information or review route. If Ollama is unavailable or its quotation
-is fabricated, the deterministic route is retained.
+The local model does not select the processing route, decide the Red Flag, or
+write the final clinical narrative. The deterministic rule engine owns those
+decisions. The downstream RAG receives the completed rule result and retrieves
+the source-bound guideline evidence without modifying the result.

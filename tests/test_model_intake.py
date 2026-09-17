@@ -5,9 +5,18 @@ import pytest
 from occupational_fitness_rag.case_intake.model_intake import apply_model_proposals
 from occupational_fitness_rag.case_intake.traceable import extract_traceable_text
 from occupational_fitness_rag.llm import OllamaClient
+from occupational_fitness_rag.pipeline.config import load_workflow_config
 from occupational_fitness_rag.pipeline.workflow import OccupationalFitnessWorkflow
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_standard_workflow_limits_small_llm_to_extraction():
+    config, _ = load_workflow_config(ROOT / "configs/workflow.yaml")
+    assert config.llm.enabled is True
+    assert config.llm.extraction_enabled is True
+    assert config.llm.route_classification_enabled is False
+    assert config.llm.narrative_enabled is False
 
 
 @pytest.fixture(scope="module")

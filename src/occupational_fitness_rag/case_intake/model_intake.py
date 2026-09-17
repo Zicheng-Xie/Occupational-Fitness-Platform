@@ -10,7 +10,6 @@ from occupational_fitness_rag.case_intake.traceable import extract_traceable_tex
 from occupational_fitness_rag.llm import OllamaClient
 from occupational_fitness_rag.schemas.workflow import ClinicalCase, Fact, TextSpan
 
-
 FIELD_EVIDENCE_TERMS = {
     "cardiovascular": ("blood pressure", "bp", "hypertension", "cardiac", "heart"),
     "blackout": ("blackout", "syncope", "loss of consciousness", "fainted", "fainting"),
@@ -89,6 +88,8 @@ def quote_supports(field, value, quote, specs):
 def generic_quote_supports(field, value, quote, specs):
     """Apply conservative type-specific evidence checks to model-only phrasing."""
     lowered = quote.casefold()
+    if re.search(r"\b(?:no|not)\s+(?:\w+\s+){0,3}(?:information|data|details|history)\b", lowered):
+        return False
     if re.search(r"\b(?:family history|mother|father|sibling|if|hypothetical)\b", lowered):
         return False
     if re.search(r"\b(?:possible|possibly|suspected|query|uncertain|may have|might have)\b", lowered):
@@ -100,6 +101,10 @@ def generic_quote_supports(field, value, quote, specs):
         negated = bool(re.search(r"\b(?:no|not|nil|denies|without|negative for|never)\b", lowered))
         return negated if value is False else not negated
     if kind == "number":
+        if "persistent" in field and not re.search(
+            r"\b(?:persistent|persistently|sustained|repeated|average)\b", lowered
+        ):
+            return False
         numbers = [float(item) for item in re.findall(r"(?<![\w.])-?\d+(?:\.\d+)?", quote)]
         return any(float(value) == item for item in numbers)
     if kind == "snellen":

@@ -1,0 +1,206 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v5",
+  "system_prompt_sha256": "05f0e1538255d28d2b276c908db223395bf4bd40b36a9cb9a3a9f88c7357952a",
+  "source_text_sha256": "6f571f05fc6360ff4ee25e2920ccbb08eb05d50e384021f13bf3d40a1f9f4cd0",
+  "input_facts_sha256": "c96cb3acb4ab75610e87f557d70aa8c54671c7855cc835ae327c8d31798d22a6",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 1012,
+      "eval_count": 318,
+      "total_duration": 5185081000
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 858,
+      "eval_count": 97,
+      "total_duration": 1618476000
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "blackout.mechanism_status",
+      "kind": "uncertainty",
+      "quote": "Today's BP 168/94 mmHg was measured after he arrived late and anxious, while an undated photograph shows 182/106 on a home device with no patient identifier. A cardiac monitor and a diabetes specialist appointment have been requested, but neither result is available, and the cause of the altered-awareness episode remains unconfirmed.",
+      "explanation": "Independent source reading differs from the extraction. The cause of the altered-awareness episode remains unconfirmed.",
+      "evidence": [
+        {
+          "start": 1087,
+          "end": 1422,
+          "quote": "Today's BP 168/94 mmHg was measured after he arrived late and anxious, while an undated photograph shows 182/106 on a home device with no patient identifier. A cardiac monitor and a diabetes specialist appointment have been requested, but neither result is available, and the cause of the altered-awareness episode remains unconfirmed.",
+          "line_start": 7,
+          "line_end": 7,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "blackout.occurred",
+      "kind": "uncertainty",
+      "quote": "At a commercial-driver review, the driver describes an episode near the end of an overnight delivery in which the radio seemed distant and he cannot remember the next part of a conversation; his colleague says he remained seated with his eyes open but did not answer for around 15 seconds, whereas the driver insists he was merely concentrating and did not lose consciousness. There was no glucose measurement during the episode, and a value of 5.4 mmol/L obtained after a sandwich and sweet tea does not establish his glucose level at the time.",
+      "explanation": "Independent source reading differs from the extraction. The driver describes an episode near the end of an overnight delivery in which the radio seemed distant and he cannot remember the next part of a conversation; his colleague says he remained seated with his eyes open but did not answer for around 15 seconds, whereas the driver insists he was merely concentrating and did not lose consciousness.",
+      "evidence": [
+        {
+          "start": 66,
+          "end": 611,
+          "quote": "At a commercial-driver review, the driver describes an episode near the end of an overnight delivery in which the radio seemed distant and he cannot remember the next part of a conversation; his colleague says he remained seated with his eyes open but did not answer for around 15 seconds, whereas the driver insists he was merely concentrating and did not lose consciousness. There was no glucose measurement during the episode, and a value of 5.4 mmol/L obtained after a sandwich and sweet tea does not establish his glucose level at the time.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "He reports established type 2 diabetes and brings two medication lists, one listing tablets alone and the other adding a bedtime insulin injection six weeks ago; he confirms using an injection but cannot identify its name or explain whether the earlier tablets were stopped. He sometimes notices sweating before breakfast, although he also attributes this to the hot cab, and cannot provide a complete glucose log or say whether anyone has previously needed to assist him.",
+      "explanation": "Independent source reading differs from the extraction. The patient brings two medication lists, one listing tablets alone and the other adding a bedtime insulin injection six weeks ago.",
+      "evidence": [
+        {
+          "start": 613,
+          "end": 1085,
+          "quote": "He reports established type 2 diabetes and brings two medication lists, one listing tablets alone and the other adding a bedtime insulin injection six weeks ago; he confirms using an injection but cannot identify its name or explain whether the earlier tablets were stopped. He sometimes notices sweating before breakfast, although he also attributes this to the hot cab, and cannot provide a complete glucose log or say whether anyone has previously needed to assist him.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "blackout.mechanism_status",
+    "blackout.occurred",
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [
+    "cardiovascular.blood_pressure.observed_diastolic",
+    "cardiovascular.blood_pressure.observed_systolic",
+    "diabetes.present"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "blackout",
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "prompt_payload_sha256": "63f4e27d2c846f4a1724658c34e14bd465894a2cf64209af4d0115f1f46c2fd6",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "blackout.mechanism_status": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "blackout.occurred": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status",
+        "blackout.occurred",
+        "cardiovascular.blood_pressure.observed_diastolic",
+        "cardiovascular.blood_pressure.observed_systolic",
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "status": "valid"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present",
+        "diabetes.treatment_category"
+      ],
+      "status": "valid"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": null,
+      "status": "uncertain",
+      "quote": "Today's BP 168/94 mmHg was measured after he arrived late and anxious, while an undated photograph shows 182/106 on a home device with no patient identifier. A cardiac monitor and a diabetes specialist appointment have been requested, but neither result is available, and the cause of the altered-awareness episode remains unconfirmed.",
+      "explanation": "The cause of the altered-awareness episode remains unconfirmed."
+    },
+    {
+      "field": "blackout.occurred",
+      "value": null,
+      "status": "uncertain",
+      "quote": "At a commercial-driver review, the driver describes an episode near the end of an overnight delivery in which the radio seemed distant and he cannot remember the next part of a conversation; his colleague says he remained seated with his eyes open but did not answer for around 15 seconds, whereas the driver insists he was merely concentrating and did not lose consciousness. There was no glucose measurement during the episode, and a value of 5.4 mmol/L obtained after a sandwich and sweet tea does not establish his glucose level at the time.",
+      "explanation": "The driver describes an episode near the end of an overnight delivery in which the radio seemed distant and he cannot remember the next part of a conversation; his colleague says he remained seated with his eyes open but did not answer for around 15 seconds, whereas the driver insists he was merely concentrating and did not lose consciousness."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.observed_diastolic",
+      "value": 94.0,
+      "status": "documented",
+      "quote": "Today's BP 168/94 mmHg was measured after he arrived late and anxious, while an undated photograph shows 182/106 on a home device with no patient identifier. A cardiac monitor and a diabetes specialist appointment have been requested, but neither result is available, and the cause of the altered-awareness episode remains unconfirmed.",
+      "explanation": "Today's BP 168/94 mmHg was measured after he arrived late and anxious."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.observed_systolic",
+      "value": 168.0,
+      "status": "documented",
+      "quote": "Today's BP 168/94 mmHg was measured after he arrived late and anxious, while an undated photograph shows 182/106 on a home device with no patient identifier. A cardiac monitor and a diabetes specialist appointment have been requested, but neither result is available, and the cause of the altered-awareness episode remains unconfirmed.",
+      "explanation": "Today's BP 168/94 mmHg was measured after he arrived late and anxious."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "A single BP is not persistent BP."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "A single BP is not persistent BP."
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "He reports established type 2 diabetes and brings two medication lists, one listing tablets alone and the other adding a bedtime insulin injection six weeks ago; he confirms using an injection but cannot identify its name or explain whether the earlier tablets were stopped. He sometimes notices sweating before breakfast, although he also attributes this to the hot cab, and cannot provide a complete glucose log or say whether anyone has previously needed to assist him.",
+      "explanation": "The patient reports established type 2 diabetes."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "insulin",
+      "status": "documented",
+      "quote": "He reports established type 2 diabetes and brings two medication lists, one listing tablets alone and the other adding a bedtime insulin injection six weeks ago; he confirms using an injection but cannot identify its name or explain whether the earlier tablets were stopped. He sometimes notices sweating before breakfast, although he also attributes this to the hot cab, and cannot provide a complete glucose log or say whether anyone has previously needed to assist him.",
+      "explanation": "The patient brings two medication lists, one listing tablets alone and the other adding a bedtime insulin injection six weeks ago."
+    }
+  ],
+  "output_facts_sha256": "52d534f38205aebfba4c757c13eb685af004bd082b2c4640a9da64ee13bbd098",
+  "facts_quarantined": true
+}

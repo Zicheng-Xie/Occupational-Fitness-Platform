@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0.0",
+  "split": "development_stress_test",
+  "clinical_review_status": "pending",
+  "independent_clinical_gold": false,
+  "description": "Synthetic long-form nurse notes. Expected sources are scoring labels, not retrieval inputs. No real patient data or clinical diagnoses are supplied.",
+  "cases": [
+    {
+      "id": "CX-HTN-01", "modules": ["hypertension"], "expect_ranking": true,
+      "challenges": ["time_change", "numeric_conflict", "missing_confirmation"],
+      "paragraphs": [
+        "At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today's seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.",
+        "He restarted his blood-pressure tablets nine days ago after missing several doses, sometimes feels light-headed on standing, and has no repeat measurement or specialist letter with him; the nurse cannot establish persistent blood pressure, four weeks of stable control, or whether the symptoms are medication related from this interview."
+      ],
+      "checks": [{"field":"cardiovascular.blood_pressure.persistent_systolic","kind":"not_present"}],
+      "queries": [{"module":"hypertension","paragraph":0,"expected_source_ids":["AFTD2022-HTN-COM-001"]}]
+    },
+    {
+      "id": "CX-HTN-02", "modules": ["hypertension"], "expect_ranking": true,
+      "challenges": ["historical_measurement", "family_history", "conditional_statement"],
+      "paragraphs": [
+        "The driver's father had a myocardial infarction at 54, but the driver has no known myocardial infarction and reports no chest pain; an old clinic letter states Persistent BP 176/102 mmHg before treatment last year, while the driver now recalls a usual home pressure near 132/82 without bringing the log, so the old persistent reading must not be treated as a confirmed current measurement.",
+        "Medication was changed three weeks ago because of ankle swelling, and he says that he would stop a long trip if dizziness returned, rather than reporting an actual episode today; a review of treatment tolerance, current persistent pressure and any relevant target-organ effects is still outstanding."
+      ],
+      "checks": [{"field":"cardiovascular.blood_pressure.persistent_systolic","kind":"not_present"},{"field":"cardiovascular.myocardial_infarction_history","kind":"not_true"},{"field":"cardiovascular.chest_pain","kind":"not_true"}],
+      "queries": [{"module":"hypertension","paragraph":1,"expected_source_ids":["AFTD2022-HTN-COM-002"]}]
+    },
+    {
+      "id": "CX-VIS-01", "modules": ["vision"], "expect_ranking": true,
+      "challenges": ["correction_status", "intermittent_symptom", "uncertain_measurement"],
+      "paragraphs": [
+        "During the evening-shift interview the driver explains that road signs sometimes appear as two overlapping images after several hours, improving when either eye is covered, although this did not occur during the short consultation; he reports no diplopia at rest, and the nurse has not established the angle from central fixation or whether the symptom persists with the updated lenses.",
+        "A loose optometry slip lists right 6/12 and left 6/18 beside an earlier date and right 6/6 and left 6/9 beside a later date, but it does not identify which measurements were corrected; the driver describes a blurred patch off to one side, has no formal binocular field result, and has not supplied the specialist assessment."
+      ],
+      "checks": [{"field":"vision.diplopia.present","kind":"not_present"},{"field":"vision.corrected.better_eye","kind":"not_present"}],
+      "queries": [{"module":"vision","paragraph":0,"expected_source_ids":["AFTD2022-VIS-COM-007"]},{"module":"vision","paragraph":1,"expected_source_ids":["AFTD2022-VIS-COM-002","AFTD2022-VIS-COM-004"]}]
+    },
+    {
+      "id": "CX-VIS-02", "modules": ["vision"], "expect_ranking": true,
+      "challenges": ["technical_measurement", "missing_test_protocol", "conflicting_reports"],
+      "paragraphs": [
+        "The driver says he repeatedly misses a vehicle approaching from the left even though straight-ahead letters look sharp, and brings a binocular field printout labelled 140 degrees whose reliability flag is poor; no one has confirmed whether testing covered the required vertical extent, whether a central scotoma exists, or whether the apparent loss is stable rather than progressing.",
+        "He remembers being told his remaining useful eye saw 6/9 after an old injury, but another note mentions useful vision in both eyes and neither document accompanies today's interview; no conclusion about monocularity or a current field standard can be made from the recollection alone, and an optometrist appointment is booked rather than completed."
+      ],
+      "checks": [{"field":"vision.monocular","kind":"not_present"}],
+      "queries": [{"module":"vision","paragraph":0,"expected_source_ids":["AFTD2022-VIS-COM-004","AFTD2022-VIS-COM-005"]}]
+    },
+    {
+      "id": "CX-HEAR-01", "modules": ["hearing"], "expect_ranking": true,
+      "challenges": ["aided_versus_unaided", "incomplete_frequencies", "functional_symptom"],
+      "paragraphs": [
+        "The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.",
+        "A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist's signed report has been requested."
+      ],
+      "checks": [{"field":"hearing.unaided_better_ear_average_db","kind":"not_present"}],
+      "queries": [{"module":"hearing","paragraph":0,"expected_source_ids":["AFTD2022-HEAR-COM-001","AFTD2022-HEAR-COM-003"]},{"module":"hearing","paragraph":1,"expected_source_ids":["AFTD2022-HEAR-COM-002"]}]
+    },
+    {
+      "id": "CX-HEAR-02", "modules": ["hearing"], "expect_ranking": true,
+      "challenges": ["negation_scope", "contradictory_sources", "test_conditions"],
+      "paragraphs": [
+        "The driver reports no hearing loss during ordinary conversation, yet his partner says he has started missing the doorbell and radio calls; the employment form copied from last year says Hearing: normal, whereas the nurse observes repeated requests for instructions today and cannot decide whether background noise, equipment failure or a hearing problem explains the difference.",
+        "An unsigned worksheet records unaided better ear average 42 dB averaged over 0.5, 1, 2 and 3 kHz, but the driver remembers wearing both aids during that test and the worksheet's date is missing; the number should remain unconfirmed until the testing conditions and an audiologist's assessment are checked."
+      ],
+      "checks": [{"field":"hearing.unaided_better_ear_average_db","kind":"not_present"}],
+      "queries": [{"module":"hearing","paragraph":1,"expected_source_ids":["AFTD2022-HEAR-COM-002","AFTD2022-HEAR-COM-003"]}]
+    },
+    {
+      "id": "CX-BLK-01", "modules": ["blackout"], "expect_ranking": true,
+      "challenges": ["euphemism", "witness_disagreement", "differential_diagnosis"],
+      "paragraphs": [
+        "The driver calls yesterday's event a brief blank spell rather than a blackout: while seated after a delivery he stopped answering for roughly 20 seconds and cannot remember his colleague moving the cup from his hand, although he did not fall and denies having lost consciousness; the colleague describes an unresponsive stare, and whether awareness was actually lost remains uncertain.",
+        "A similar episode may have occurred ten days earlier, but dates and duration are unclear; the referral mentions a possible rhythm disturbance, seizure or sleep-related event without a confirmed diagnosis, and both ambulatory cardiac monitoring and neurological review are pending, so neither a benign cause nor a recurrence-free interval has been established."
+      ],
+      "checks": [{"field":"blackout.diagnosis","kind":"not_present"}],
+      "queries": [{"module":"blackout","paragraph":1,"expected_source_ids":["AFTD2022-BLK-COM-001","AFTD2022-BLK-COM-006"]}]
+    },
+    {
+      "id": "CX-BLK-02", "modules": ["blackout"], "expect_ranking": true,
+      "challenges": ["temporal_contradiction", "hypothetical_diagnosis", "episode_count"],
+      "paragraphs": [
+        "The initial form says No blackouts, but during further questioning the driver reports a blackout while queuing in the heat six weeks ago and describes a second collapse the following week; he recovered quickly, says someone suggested a faint, and has not been told by a treating clinician that either event was definitively vasovagal syncope.",
+        "He asks whether heat would count as a provoking factor, yet one episode apparently occurred indoors and the witness is unavailable; investigations have started but no final mechanism, specialist opinion or reliable long-term event-free interval is documented, and the two different dates must not be merged into a single event."
+      ],
+      "checks": [{"field":"blackout.occurred","kind":"not_present"},{"field":"blackout.diagnosis","kind":"not_present"}],
+      "queries": [{"module":"blackout","paragraph":1,"expected_source_ids":["AFTD2022-BLK-COM-001"]}]
+    },
+    {
+      "id": "CX-DM-01", "modules": ["diabetes"], "expect_ranking": true,
+      "challenges": ["treatment_change", "third_party_assistance", "measurement_after_event"],
+      "paragraphs": [
+        "The driver was diagnosed with type 2 diabetes several years ago and says the old diet-only label is no longer correct because he now injects insulin each evening, although he cannot name the preparation or dose; after skipping lunch last week he became sweaty and confused in the depot, and a colleague had to bring a sweet drink because he could not organise it himself.",
+        "A glucose value of 3.1 mmol/L was recorded only after he started drinking, he denies having passed out, and there is no contemporaneous clinical assessment confirming how severe the episode was; he also describes occasions when the sensor alarm sounded before he noticed symptoms, has not brought three months of monitoring records, and is waiting for endocrinology review."
+      ],
+      "checks": [{"field":"diabetes.treatment_category","kind":"not_value","value":"diet_and_exercise_only"}],
+      "queries": [{"module":"diabetes","paragraph":0,"expected_source_ids":["AFTD2022-DM-COM-007","AFTD2022-DM-COM-002"]},{"module":"diabetes","paragraph":1,"expected_source_ids":["AFTD2022-DM-COM-009"]}]
+    },
+    {
+      "id": "CX-DM-02", "modules": ["diabetes"], "expect_ranking": true,
+      "challenges": ["family_history", "uncertain_diagnosis", "nonspecific_symptoms"],
+      "paragraphs": [
+        "There is a family history of diabetes in the driver's mother, but he says nobody has diagnosed him; over the last fortnight he has been unusually thirsty, getting up several times at night to pass urine and noticing intermittent blur after long shifts, while a borrowed meter displayed 17.8 mmol/L once without a verified testing protocol or confirmatory laboratory result.",
+        "He felt nauseated this morning and asks whether the reading means diabetes, but medication history is empty and the nurse records suspected metabolic disturbance requiring clinical assessment rather than a confirmed diagnosis, insulin treatment or an established complication; a normal reading remembered from last year does not resolve today's symptoms."
+      ],
+      "checks": [{"field":"diabetes.present","kind":"not_true"}],
+      "queries": [{"module":"diabetes","paragraph":1,"expected_source_ids":["AFTD2022-DM-COM-003"]}]
+    },
+    {
+      "id": "CX-MIX-01", "modules": ["blackout", "diabetes"], "expect_ranking": true,
+      "challenges": ["cross_condition", "causal_uncertainty", "conflicting_explanations"],
+      "paragraphs": [
+        "The driver has a history of diabetes and says Diabetes is treated with insulin, but after an overnight shift he became unresponsive for about half a minute and later could not recall the conversation; a coworker gave glucose before any measurement, so the subsequent 4.2 mmol/L reading cannot establish whether a low glucose level caused the spell or exclude a different mechanism.",
+        "The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.",
+        "His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes."
+      ],
+      "checks": [{"field":"blackout.diagnosis","kind":"not_present"}],
+      "queries": [{"module":"blackout","paragraph":1,"expected_source_ids":["AFTD2022-BLK-COM-001","AFTD2022-BLK-COM-006"]},{"module":"diabetes","paragraph":2,"expected_source_ids":["AFTD2022-DM-COM-008","AFTD2022-DM-COM-009"]}]
+    },
+    {
+      "id": "CX-MIX-02", "modules": ["hypertension", "vision", "hearing"], "expect_ranking": true,
+      "challenges": ["multiple_modules", "distractor_numbers", "unverified_records"],
+      "paragraphs": [
+        "At today's assessment BP 172/98 mmHg was recorded after the driver hurried up the stairs, but he recalls lower readings at home and no repeat has been taken; he recently changed tablets and feels briefly light-headed when rising, so persistent pressure, treatment stability and driving-impairing side effects remain to be clarified.",
+        "He also says headlights split into two after several hours at night, although the effect disappeared before examination and he cannot say whether covering one eye changes it; a six-month-old slip with 6/9 and 6/12 does not identify correction status, and no current acuity or specialist report is available.",
+        "In the noisy depot he misses spoken dispatch instructions despite using an aid, while a screening sheet marked 45 dB does not identify the ear or test frequencies; the nurse cannot use that number as an unaided better-ear average and has requested formal audiometry."
+      ],
+      "checks": [{"field":"cardiovascular.blood_pressure.persistent_systolic","kind":"not_present"},{"field":"hearing.unaided_better_ear_average_db","kind":"not_present"}],
+      "queries": [{"module":"hypertension","paragraph":0,"expected_source_ids":["AFTD2022-HTN-COM-001"]},{"module":"vision","paragraph":1,"expected_source_ids":["AFTD2022-VIS-COM-007"]},{"module":"hearing","paragraph":2,"expected_source_ids":["AFTD2022-HEAR-COM-001"]}]
+    },
+    {
+      "id": "CX-CTRL-01", "modules": ["diabetes"], "expect_ranking": false,
+      "challenges": ["negative_control"],
+      "paragraphs": ["No diabetes."],
+      "checks": [{"field":"diabetes.present","kind":"equals","value":false}], "queries": []
+    },
+    {
+      "id": "CX-CTRL-02", "modules": ["blackout"], "expect_ranking": false,
+      "challenges": ["negative_control"],
+      "paragraphs": ["No history of blackouts."],
+      "checks": [{"field":"blackout.occurred","kind":"equals","value":false}], "queries": []
+    }
+  ]
+}

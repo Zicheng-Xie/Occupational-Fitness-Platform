@@ -8,6 +8,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from occupational_fitness_rag.provenance import digest
+from occupational_fitness_rag.reporting.semantic_review import REVIEW_LIMIT, STATUS_LABELS
 from occupational_fitness_rag.reporting.styles import CSS
 
 OUTCOMES = {
@@ -217,6 +218,9 @@ def page(title, navigation, body, *, library=False):
 
 
 def render_case_html(case, result, evidence, note, root: Path, output: Path):
+    from occupational_fitness_rag.reporting.assessment_summary import render_assessment_summary
+    from occupational_fitness_rag.reporting.retrieval_status import render_retrieval_status
+
     citations = {c.source_id: c for item in evidence.evidence_items for c in item.citations}
     refs = {sid: f"{n:02}" for n, sid in enumerate(citations, 1)}
     missing = sorted({key for m in result.modules for key in m.missing_fields})
@@ -235,9 +239,13 @@ def render_case_html(case, result, evidence, note, root: Path, output: Path):
     ]
     extraction = case.extraction_metadata
     if extraction.get("model"):
-        accepted = len(extraction.get("accepted_fields", []))
+        accepted = sum(
+            case.facts[key].status == "present"
+            for key in extraction.get("accepted_fields", [])
+            if key in case.facts
+        )
         state = (
-            "Extraction validated"
+            "Extraction schema and source checks completed"
             if extraction.get("status", "").startswith("completed")
             else "Model unavailable; deterministic extraction applied"
         )
@@ -254,9 +262,31 @@ def render_case_html(case, result, evidence, note, root: Path, output: Path):
     body.append(
         "</tbody></table></div><p class='reference-state'>Undocumented information remains unknown. Clinical review is pending; this report is not a final fitness or licensing decision.</p></section>"
     )
+    body.append(render_assessment_summary(case, result))
+    body.append(render_retrieval_status(evidence, lambda path: local_link(root, output, path)))
     body.append(
         "<section class='section' id='review'><div class='section-heading'><h2><span class='section-no'>01</span>Information and review</h2><small>Grouped by module</small></div>"
     )
+    semantic = case.extraction_metadata.get("semantic_review")
+    if semantic:
+        body.append(
+            "<div class='semantic-review-panel' id='semantic-review'><h3>Extraction semantic review</h3>"
+            f"<p><strong>{esc(STATUS_LABELS.get(semantic['status'], 'Review status unavailable'))}</strong></p>"
+        )
+        for issue in semantic.get("issues", []):
+            body.append(
+                f"<div class='semantic-concern'><h4>{esc(field_label(issue['field']))}</h4>"
+                f"<p>{esc(issue['explanation'])}</p>"
+            )
+            for span in issue["evidence"]:
+                body.append(
+                    f"<blockquote class='case-quote'><a href='#case-line-{span['line_start']}'>"
+                    f"Source lines {span['line_start']}–{span['line_end']} · "
+                    f"characters {span['start']}:{span['end']}</a>{esc(span['quote'])}</blockquote>"
+                )
+            body.append("</div>")
+        body.append(f"<p class='reference-state'>{esc(REVIEW_LIMIT)}</p>")
+        body.append("<a href='llm_semantic_review.json'>Open semantic review audit ↗</a></div>")
     for module in result.modules:
         if module.missing_fields:
             fields = "".join(
@@ -298,9 +328,10 @@ def render_case_html(case, result, evidence, note, root: Path, output: Path):
     )
     for module in result.modules:
         items = [r for r in result.rules_evaluated if r.module == module.module]
-        relevant = sum(r.result in {"triggered", "unknown"} for r in items)
+        trigger_count = sum(r.result == "triggered" for r in items)
+        unresolved_count = sum(r.result == "unknown" for r in items)
         body.append(
-            f"<details class='rule-group' id='rules-{esc(module.module)}'><summary><span class='summary-main'><strong>{MODULES[module.module]}</strong></span><span class='summary-end'>{relevant} triggered or unresolved / {len(items)} rules</span></summary><div class='detail-body'>"
+            f"<details class='rule-group' id='rules-{esc(module.module)}'><summary><span class='summary-main'><strong>{MODULES[module.module]}</strong></span><span class='summary-end'>{trigger_count} triggered / {unresolved_count} unresolved / {len(items)} rules</span></summary><div class='detail-body'>"
         )
         for item in items:
             body.append(
@@ -360,6 +391,8 @@ def render_case_html(case, result, evidence, note, root: Path, output: Path):
         ("Category facts", "condition_map.json"),
     ):
         body.append(f"<a href='{name}'>{label} ↗</a>")
+    if semantic:
+        body.append("<a href='llm_semantic_review.json'>Semantic review audit ↗</a>")
     body.append(
         f"</div><details class='technical'><summary>Input and result fingerprints</summary><pre>Input SHA-256: {esc(case.source_sha256)}\nRule-result SHA-256: {digest(result)}\nEvidence-pack SHA-256: {digest(evidence)}</pre></details></section><footer class='page-end'><span>{esc(case.case_id)} · Assessment draft · Clinical sign-off pending</span><a href='#main'>Back to top ↑</a></footer>"
     )

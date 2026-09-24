@@ -1,0 +1,179 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v4",
+  "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+  "source_text_sha256": "3d34ea9896edc0c207f877385e10cdaf8eb24c3bafa9e32b1079fd29f86f8831",
+  "input_facts_sha256": "8d56ce8491ca43e3b68f30c61ca9aff52b28294ce75eff0bcd1c5f8089fb7744",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 576,
+      "eval_count": 448,
+      "total_duration": 7539421000
+    }
+  ],
+  "attempts": [
+    {
+      "attempt": 1,
+      "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+      "status": "valid"
+    }
+  ],
+  "issues": [
+    {
+      "field": "hearing.hearing_aid_used",
+      "kind": "unsupported",
+      "quote": "uses hearing aids",
+      "explanation": "Independent source reading differs from the extraction. The patient uses hearing aids inconsistently because one whistles, but it is not explicitly stated whether they were used during the audiometry test.",
+      "evidence": [
+        {
+          "start": 246,
+          "end": 263,
+          "quote": "uses hearing aids",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "hearing.audiometry.available",
+      "kind": "omission",
+      "quote": "A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn;",
+      "explanation": "Independent source reading differs from the extraction. The patient has a phone photograph showing audiometry results, but it is incomplete and does not indicate whether an aid was worn.",
+      "evidence": [
+        {
+          "start": 397,
+          "end": 572,
+          "quote": "A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn;",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "hearing.ent_or_audiologist_information_available",
+      "kind": "omission",
+      "quote": "the audiologist's signed report has been requested",
+      "explanation": "Independent source reading differs from the extraction. The patient's audiologist's signed report is requested, but not yet available.",
+      "evidence": [
+        {
+          "start": 695,
+          "end": 745,
+          "quote": "the audiologist's signed report has been requested",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "hearing.audiometry.available",
+    "hearing.ent_or_audiologist_information_available",
+    "hearing.hearing_aid_used"
+  ],
+  "checked_fields": [
+    "hearing.hearing_aid_used"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "hearing"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "prompt_payload_sha256": "a1fa48e2ef0bc2172b66c99fd4099225e0630be987606f1f972b9001d92dcb2a",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "hearing.audiometry.available": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "hearing.ent_or_audiologist_information_available": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "hearing.hearing_aid_used": {
+      "value": true,
+      "status": "present",
+      "unit": null,
+      "evidence": [
+        {
+          "start": 246,
+          "end": 263,
+          "quote": "uses hearing aids",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ],
+      "method": "regex",
+      "derived_from": []
+    }
+  },
+  "source_observations": [
+    {
+      "field": "hearing.hearing_aid_used",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The patient uses hearing aids inconsistently because one whistles, but it is not explicitly stated whether they were used during the audiometry test."
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The patient's hearing assessment is not explicitly stated, but it is mentioned that the patient has possible diagnoses remaining uncertain."
+    },
+    {
+      "field": "hearing.audiometry.available",
+      "value": true,
+      "status": "documented",
+      "quote": "A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn;",
+      "explanation": "The patient has a phone photograph showing audiometry results, but it is incomplete and does not indicate whether an aid was worn."
+    },
+    {
+      "field": "hearing.average_frequencies_khz",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The audiometry results do not include the average frequencies in kHz."
+    },
+    {
+      "field": "hearing.unaided_better_ear_average_db",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The audiometry results do not provide an unaided better-ear average in dB."
+    },
+    {
+      "field": "hearing.aided_standard_met",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The audiometry results do not indicate whether the patient met the standard with their hearing aid."
+    },
+    {
+      "field": "hearing.ent_or_audiologist_information_available",
+      "value": true,
+      "status": "documented",
+      "quote": "the audiologist's signed report has been requested",
+      "explanation": "The patient's audiologist's signed report is requested, but not yet available."
+    }
+  ],
+  "output_facts_sha256": "210114204b732087b0a1b6d1d7c2d56582aff9775b1a2645d405d429a60e5715",
+  "facts_quarantined": true
+}

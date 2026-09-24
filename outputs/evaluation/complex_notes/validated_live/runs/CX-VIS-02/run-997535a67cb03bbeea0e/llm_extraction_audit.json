@@ -1,0 +1,89 @@
+{
+  "model": "llama3:8b",
+  "proposals": [
+    {
+      "field": "vision.visual_field.reported_defect",
+      "value": true,
+      "quote": "no one has confirmed whether testing covered the required vertical extent, whether a central scotoma exists, or whether the apparent loss is stable rather than progressing",
+      "subject": "patient",
+      "certainty": "uncertain",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 211,
+      "source_end": 382
+    },
+    {
+      "field": "vision.specialist_assessment_available",
+      "value": true,
+      "quote": "an optometrist appointment is booked rather than completed",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 676,
+      "source_end": 734
+    }
+  ],
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "rejected": [
+    {
+      "field": "vision.remaining_eye.snellen",
+      "value": "6/9",
+      "quote": "he remembers being told his remaining useful eye saw 6/9 after an old injury",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "history",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    }
+  ],
+  "authoritative_facts_modified": false,
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 739,
+      "eval_count": 201,
+      "total_duration": 2892401000
+    }
+  ],
+  "input_format": "utf-8 text",
+  "output_format": "field_dictionary_grounded_proposals_v1",
+  "accepted_fields": [],
+  "withheld": [
+    {
+      "field": "vision.remaining_eye.snellen",
+      "value": "6/9",
+      "quote": "he remembers being told his remaining useful eye saw 6/9 after an old injury",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "history",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    },
+    {
+      "field": "vision.visual_field.reported_defect",
+      "value": true,
+      "quote": "no one has confirmed whether testing covered the required vertical extent, whether a central scotoma exists, or whether the apparent loss is stable rather than progressing",
+      "subject": "patient",
+      "certainty": "uncertain",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 211,
+      "source_end": 382,
+      "reason": "statement_is_not_explicit"
+    },
+    {
+      "field": "vision.specialist_assessment_available",
+      "value": true,
+      "quote": "an optometrist appointment is booked rather than completed",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 676,
+      "source_end": 734,
+      "reason": "value_not_supported_by_quote"
+    }
+  ],
+  "grounding_policy": "exact_quote_type_range_and_field_semantics_v1",
+  "status": "completed_no_grounded_fields"
+}

@@ -1,0 +1,2310 @@
+{
+  "schema_version": "1.3.0",
+  "result_id": "RR-bce179128c843e980feb",
+  "case_id": "CX-MIX-01",
+  "case_sha256": "a419ec2fddb9e10bf4a44a35e173cd41bfad71bc85ef2f5ab9eba16e0fd8139f",
+  "source": {
+    "type": "nurse_note",
+    "source_file": "CX-MIX-01.txt"
+  },
+  "assessment_context": {
+    "framework": "Austroads",
+    "licence_context": "commercial",
+    "job_title": null,
+    "modules_requested": [
+      "blackout",
+      "diabetes"
+    ]
+  },
+  "ruleset": {
+    "ruleset_id": "austroads-commercial",
+    "ruleset_version": "1.2.0",
+    "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+    "guideline_version": "AP-G56-22",
+    "status": "pending_clinical_review"
+  },
+  "route": "rag_review",
+  "assessment_outcome": "temporarily_unfit",
+  "outcome_label": "Temporarily unfit",
+  "has_red_flag": true,
+  "red_flags": [
+    {
+      "rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_mechanism_not_yet_ascertained",
+      "rule_result": "triggered",
+      "assessment_outcome": "temporarily_unfit",
+      "reason": "A blackout has occurred and its mechanism has not yet been ascertained.",
+      "observed_facts": {
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 605,
+              "end": 646,
+              "quote": "the mechanism remains under investigation",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "source_evidence": [
+        "the mechanism remains under investigation",
+        "reports a blackout"
+      ],
+      "rag_query_key": "blackout_diagnostic_workup_commercial"
+    }
+  ],
+  "triggered_rules": [
+    {
+      "rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_mechanism_not_yet_ascertained",
+      "rule_result": "triggered",
+      "assessment_outcome": "temporarily_unfit",
+      "reason": "A blackout has occurred and its mechanism has not yet been ascertained.",
+      "observed_facts": {
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 605,
+              "end": 646,
+              "quote": "the mechanism remains under investigation",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "source_evidence": [
+        "the mechanism remains under investigation",
+        "reports a blackout"
+      ],
+      "rag_query_key": "blackout_diagnostic_workup_commercial"
+    }
+  ],
+  "missing_information": [
+    {
+      "field": "blackout.diagnosis",
+      "status": "unknown",
+      "category": "blackout",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "provoked_vasovagal_syncope_commercial"
+    },
+    {
+      "field": "blackout.provoking_factor_well_defined",
+      "status": "unknown",
+      "category": "blackout",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "provoked_vasovagal_syncope_commercial"
+    },
+    {
+      "field": "blackout.recurrence_while_driving_unlikely",
+      "status": "unknown",
+      "category": "blackout",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "provoked_vasovagal_syncope_commercial"
+    },
+    {
+      "field": "diabetes.gestational",
+      "status": "unknown",
+      "category": "diabetes",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "DM-COM-INSULIN-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-007"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "diabetes_insulin_commercial"
+    },
+    {
+      "field": "diabetes.severe_hypoglycaemic_event.occurred",
+      "status": "unknown",
+      "category": "diabetes",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "DM-COM-SEVERE-HYPO-WAIT-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "severe_hypoglycaemia_commercial"
+    },
+    {
+      "field": "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+      "status": "unknown",
+      "category": "diabetes",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "DM-COM-SEVERE-HYPO-WAIT-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "severe_hypoglycaemia_commercial"
+    },
+    {
+      "field": "diabetes.gestational",
+      "status": "unknown",
+      "category": "diabetes",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "DM-COM-INSULIN-CONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-DM-COM-009"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "diabetes_insulin_conditional_commercial"
+    },
+    {
+      "field": "diabetes.acutely_unwell",
+      "status": "unknown",
+      "category": "diabetes",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "DM-COM-ACUTE-UNSTABLE-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-003"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "acute_hyperglycaemia_commercial"
+    },
+    {
+      "field": "diabetes.metabolically_unstable",
+      "status": "unknown",
+      "category": "diabetes",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "DM-COM-ACUTE-UNSTABLE-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-003"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "acute_hyperglycaemia_commercial"
+    },
+    {
+      "field": "blackout.diagnosis",
+      "status": "unknown",
+      "category": "blackout",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-006"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "blk_com_diagnosed_referral_001"
+    },
+    {
+      "field": "diabetes.gestational",
+      "status": "unknown",
+      "category": "diabetes",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "DM-COM-GESTATIONAL-REVIEW-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-010"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "dm_com_gestational_review_001"
+    }
+  ],
+  "modules": [
+    {
+      "module": "blackout",
+      "assessment_outcome": "temporarily_unfit",
+      "route": "rag_review",
+      "triggered_rule_ids": [
+        "BLK-COM-UNDIAGNOSED-001"
+      ],
+      "missing_fields": [
+        "blackout.diagnosis",
+        "blackout.provoking_factor_well_defined",
+        "blackout.recurrence_while_driving_unlikely"
+      ],
+      "warnings": []
+    },
+    {
+      "module": "diabetes",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "diabetes.acutely_unwell",
+        "diabetes.gestational",
+        "diabetes.metabolically_unstable",
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+      ],
+      "warnings": []
+    }
+  ],
+  "rules_evaluated": [
+    {
+      "rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_mechanism_not_yet_ascertained",
+      "result": "triggered",
+      "assessment_outcome": "temporarily_unfit",
+      "reason": "A blackout has occurred and its mechanism has not yet been ascertained.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "rag_query_key": "blackout_diagnostic_workup_commercial",
+      "observed_facts": {
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 605,
+              "end": 646,
+              "quote": "the mechanism remains under investigation",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "in",
+              "expected": [
+                "not_investigated",
+                "under_investigation"
+              ],
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "provoked_vasovagal_syncope",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "rag_query_key": "provoked_vasovagal_syncope_commercial",
+      "observed_facts": {
+        "blackout.diagnosis": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.provoking_factor_well_defined": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.recurrence_while_driving_unlikely": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "blackout.diagnosis",
+        "blackout.provoking_factor_well_defined",
+        "blackout.recurrence_while_driving_unlikely"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.diagnosis",
+              "operator": "==",
+              "expected": "vasovagal_syncope",
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            },
+            {
+              "field": "blackout.provoking_factor_well_defined",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            },
+            {
+              "field": "blackout.recurrence_while_driving_unlikely",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-UNCERTAIN-UNCONDITIONAL-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_uncertain_nature",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-003"
+      ],
+      "rag_query_key": "blackout_uncertain_commercial",
+      "observed_facts": {
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 605,
+              "end": 646,
+              "quote": "the mechanism remains under investigation",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-SINGLE-WAIT-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "single_or_clustered_uncertain_blackout",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-004"
+      ],
+      "rag_query_key": "blackout_uncertain_single_commercial",
+      "observed_facts": {
+        "blackout.episodes_separated_by_24h_count": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 605,
+              "end": 646,
+              "quote": "the mechanism remains under investigation",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.years_since_last_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-RECURRENT-WAIT-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "recurrent_uncertain_blackout",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-005"
+      ],
+      "rag_query_key": "blackout_uncertain_recurrent_commercial",
+      "observed_facts": {
+        "blackout.episodes_separated_by_24h_count": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 605,
+              "end": 646,
+              "quote": "the mechanism remains under investigation",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.years_since_last_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-CONDITIONAL-ELIGIBILITY-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "uncertain_blackout_conditional_eligibility",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005"
+      ],
+      "rag_query_key": "blackout_uncertain_conditional_commercial",
+      "observed_facts": {
+        "blackout.appropriate_specialist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.episodes_separated_by_24h_count": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 605,
+              "end": 646,
+              "quote": "the mechanism remains under investigation",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "blackout.years_since_last_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-DIET-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "diet_and_exercise_only",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-004"
+      ],
+      "rag_query_key": "diabetes_diet_exercise_commercial",
+      "observed_facts": {
+        "diabetes.driving_relevant_comorbidity_status": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 17,
+              "end": 36,
+              "quote": "history of diabetes",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "diabetes.treatment_category": {
+          "value": "insulin",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 46,
+              "end": 78,
+              "quote": "Diabetes is treated with insulin",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "diabetes.treatment_category",
+              "operator": "==",
+              "expected": "diet_and_exercise_only",
+              "observed": "insulin",
+              "status": "present",
+              "truth": false
+            },
+            {
+              "field": "diabetes.driving_relevant_comorbidity_status",
+              "operator": "==",
+              "expected": "assessed_no_disqualifying_effect",
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-NONINSULIN-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "non_insulin_glucose_lowering_agent",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-005"
+      ],
+      "rag_query_key": "diabetes_non_insulin_commercial",
+      "observed_facts": {
+        "diabetes.present": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 17,
+              "end": 36,
+              "quote": "history of diabetes",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "diabetes.treatment_category": {
+          "value": "insulin",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 46,
+              "end": 78,
+              "quote": "Diabetes is treated with insulin",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "field": "diabetes.treatment_category",
+          "operator": "==",
+          "expected": "glucose_lowering_agent_non_insulin",
+          "observed": "insulin",
+          "status": "present",
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-NONINSULIN-CONDITIONAL-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "non_insulin_conditional",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-006"
+      ],
+      "rag_query_key": "diabetes_non_insulin_conditional_commercial",
+      "observed_facts": {
+        "diabetes.driving_relevant_end_organ_effects": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.hypoglycaemia_awareness": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.initial_specialist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 17,
+              "end": 36,
+              "quote": "history of diabetes",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "diabetes.recent_severe_hypoglycaemic_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.regimen_minimises_hypoglycaemia": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "dependency": "DM-COM-NONINSULIN-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "dependency": "DM-COM-NONINSULIN-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-INSULIN-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "insulin_treated_diabetes",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-DM-COM-007"
+      ],
+      "rag_query_key": "diabetes_insulin_commercial",
+      "observed_facts": {
+        "diabetes.gestational": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 17,
+              "end": 36,
+              "quote": "history of diabetes",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "diabetes.treatment_category": {
+          "value": "insulin",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 46,
+              "end": 78,
+              "quote": "Diabetes is treated with insulin",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "diabetes.gestational"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "diabetes.gestational",
+              "operator": "==",
+              "expected": false,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diabetes.present",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": true,
+                  "status": "present",
+                  "truth": true
+                },
+                {
+                  "field": "diabetes.gestational",
+                  "operator": "==",
+                  "expected": false,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            },
+            {
+              "field": "diabetes.treatment_category",
+              "operator": "==",
+              "expected": "insulin",
+              "observed": "insulin",
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-SEVERE-HYPO-WAIT-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "recent_severe_hypoglycaemic_event",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-DM-COM-002"
+      ],
+      "rag_query_key": "severe_hypoglycaemia_commercial",
+      "observed_facts": {
+        "diabetes.present": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 17,
+              "end": 36,
+              "quote": "history of diabetes",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "diabetes.severe_hypoglycaemic_event.occurred": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.severe_hypoglycaemic_event.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            },
+            {
+              "field": "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+              "operator": "<",
+              "expected": 6,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-INSULIN-CONDITIONAL-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "insulin_conditional",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-DM-COM-009"
+      ],
+      "rag_query_key": "diabetes_insulin_conditional_commercial",
+      "observed_facts": {
+        "diabetes.driving_relevant_end_organ_effects": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.glucose_monitoring_records_months": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.hypoglycaemia_awareness": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 17,
+              "end": 36,
+              "quote": "history of diabetes",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        },
+        "diabetes.recent_severe_hypoglycaemic_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.regimen_minimises_hypoglycaemia": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.severe_hypoglycaemic_event.occurred": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.specialist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "diabetes.gestational"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "dependency": "DM-COM-INSULIN-001",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diabetes.present",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": true,
+                  "status": "present",
+                  "truth": true
+                },
+                {
+                  "dependency": "DM-COM-INSULIN-001",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            },
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "field": "diabetes.severe_hypoglycaemic_event.occurred",
+                      "operator": "==",
+                      "expected": false,
+                      "observed": null,
+                      "status": "unknown",
+                      "truth": null
+                    },
+                    {
+                      "all": [
+                        {
+                          "field": "diabetes.severe_hypoglycaemic_event.occurred",
+                          "operator": "==",
+                          "expected": true,
+                          "observed": null,
+                          "status": "unknown",
+                          "truth": null
+                        },
+                        {
+                          "field": "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+                          "operator": ">=",
+                          "expected": 6,
+                          "observed": null,
+                          "status": "unknown",
+                          "truth": null
+                        }
+                      ],
+                      "truth": null
+                    }
+                  ],
+                  "truth": null
+                },
+                {
+                  "field": "diabetes.regimen_minimises_hypoglycaemia",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "diabetes.hypoglycaemia_awareness",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "diabetes.driving_relevant_end_organ_effects",
+                  "operator": "==",
+                  "expected": false,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "diabetes.glucose_monitoring_records_months",
+                  "operator": ">=",
+                  "expected": 3,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "diabetes.specialist_information_available",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "diabetes.recent_severe_hypoglycaemic_event",
+                  "operator": "==",
+                  "expected": false,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-ACUTE-UNSTABLE-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "acute_metabolic_instability",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-DM-COM-003"
+      ],
+      "rag_query_key": "acute_hyperglycaemia_commercial",
+      "observed_facts": {
+        "diabetes.acutely_unwell": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.metabolically_unstable": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 17,
+              "end": 36,
+              "quote": "history of diabetes",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "diabetes.acutely_unwell",
+        "diabetes.metabolically_unstable"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "diabetes.present",
+              "operator": "==",
+              "expected": true,
+              "observed": true,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "diabetes.acutely_unwell",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            },
+            {
+              "field": "diabetes.metabolically_unstable",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-NO-HISTORY-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "rag_query_key": "blk_com_no_history_001",
+      "observed_facts": {
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "field": "blackout.occurred",
+          "operator": "==",
+          "expected": false,
+          "observed": true,
+          "status": "present",
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-NO-HISTORY-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "diabetes_screen",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-DM-COM-001"
+      ],
+      "rag_query_key": "dm_com_no_history_001",
+      "observed_facts": {
+        "diabetes.present": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 17,
+              "end": 36,
+              "quote": "history of diabetes",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "field": "diabetes.present",
+          "operator": "==",
+          "expected": false,
+          "observed": true,
+          "status": "present",
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-006"
+      ],
+      "rag_query_key": "blk_com_diagnosed_referral_001",
+      "observed_facts": {
+        "blackout.diagnosis": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 502,
+              "end": 520,
+              "quote": "reports a blackout",
+              "line_start": 3,
+              "line_end": 3,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "blackout.diagnosis"
+      ],
+      "condition_trace": {
+        "gate": {
+          "field": "blackout.occurred",
+          "operator": "==",
+          "expected": true,
+          "observed": true,
+          "status": "present",
+          "truth": true
+        },
+        "predicate": {
+          "field": "blackout.diagnosis",
+          "operator": "in",
+          "expected": [
+            "hypoglycaemia",
+            "seizure",
+            "cardiac_syncope",
+            "sleep_disorder",
+            "other"
+          ],
+          "observed": null,
+          "status": "unknown",
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "DM-COM-GESTATIONAL-REVIEW-001",
+      "module": "diabetes",
+      "category": "diabetes",
+      "subcondition": "diabetes_screen",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-DM-COM-010"
+      ],
+      "rag_query_key": "dm_com_gestational_review_001",
+      "observed_facts": {
+        "diabetes.gestational": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "diabetes.present": {
+          "value": true,
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 17,
+              "end": 36,
+              "quote": "history of diabetes",
+              "line_start": 1,
+              "line_end": 1,
+              "pdf_page": null
+            }
+          ],
+          "method": "regex",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "diabetes.gestational"
+      ],
+      "condition_trace": {
+        "gate": {
+          "field": "diabetes.present",
+          "operator": "==",
+          "expected": true,
+          "observed": true,
+          "status": "present",
+          "truth": true
+        },
+        "predicate": {
+          "field": "diabetes.gestational",
+          "operator": "==",
+          "expected": true,
+          "observed": null,
+          "status": "unknown",
+          "truth": null
+        }
+      }
+    }
+  ],
+  "processing_warnings": [],
+  "requires_human_review": true,
+  "rag_requests": [
+    {
+      "request_id": "RAG-ba08ddf0e7f8a96b",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_mechanism_not_yet_ascertained",
+      "licence_context": "commercial",
+      "rag_query_key": "blackout_diagnostic_workup_commercial",
+      "ambiguity_reasons": [
+        "cross_chapter_condition"
+      ],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-f5479a518dd0849f",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "category": "blackout",
+      "subcondition": "provoked_vasovagal_syncope",
+      "licence_context": "commercial",
+      "rag_query_key": "provoked_vasovagal_syncope_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.diagnosis": "unknown",
+        "blackout.provoking_factor_well_defined": "unknown",
+        "blackout.recurrence_while_driving_unlikely": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-3a1c8ddbf1492427",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-INSULIN-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-007"
+      ],
+      "category": "diabetes",
+      "subcondition": "insulin_treated_diabetes",
+      "licence_context": "commercial",
+      "rag_query_key": "diabetes_insulin_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.gestational": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-b77a99c3c0242d06",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-SEVERE-HYPO-WAIT-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-002"
+      ],
+      "category": "diabetes",
+      "subcondition": "recent_severe_hypoglycaemic_event",
+      "licence_context": "commercial",
+      "rag_query_key": "severe_hypoglycaemia_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.severe_hypoglycaemic_event.occurred": "unknown",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-e228ea2f867aa07e",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-INSULIN-CONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-DM-COM-009"
+      ],
+      "category": "diabetes",
+      "subcondition": "insulin_conditional",
+      "licence_context": "commercial",
+      "rag_query_key": "diabetes_insulin_conditional_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.gestational": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-c4c76aa3f36253af",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-ACUTE-UNSTABLE-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-003"
+      ],
+      "category": "diabetes",
+      "subcondition": "acute_metabolic_instability",
+      "licence_context": "commercial",
+      "rag_query_key": "acute_hyperglycaemia_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.acutely_unwell": "unknown",
+        "diabetes.metabolically_unstable": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-edaa28094c43d632",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-006"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "blk_com_diagnosed_referral_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "blackout.diagnosis": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-edd234fbaba473f1",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-GESTATIONAL-REVIEW-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-010"
+      ],
+      "category": "diabetes",
+      "subcondition": "diabetes_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "dm_com_gestational_review_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.gestational": "unknown"
+      }
+    }
+  ],
+  "internal_metadata": {
+    "rule_engine_contract": "internal",
+    "narrative_context": {
+      "RAG-ba08ddf0e7f8a96b": [
+        {
+          "start": 0,
+          "end": 381,
+          "quote": "The driver has a history of diabetes and says Diabetes is treated with insulin, but after an overnight shift he became unresponsive for about half a minute and later could not recall the conversation; a coworker gave glucose before any measurement, so the subsequent 4.2 mmol/L reading cannot establish whether a low glucose level caused the spell or exclude a different mechanism.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 385,
+          "end": 728,
+          "quote": "The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        },
+        {
+          "start": 732,
+          "end": 1031,
+          "quote": "His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "RAG-f5479a518dd0849f": [
+        {
+          "start": 0,
+          "end": 381,
+          "quote": "The driver has a history of diabetes and says Diabetes is treated with insulin, but after an overnight shift he became unresponsive for about half a minute and later could not recall the conversation; a coworker gave glucose before any measurement, so the subsequent 4.2 mmol/L reading cannot establish whether a low glucose level caused the spell or exclude a different mechanism.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 385,
+          "end": 728,
+          "quote": "The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        },
+        {
+          "start": 732,
+          "end": 1031,
+          "quote": "His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "RAG-3a1c8ddbf1492427": [
+        {
+          "start": 0,
+          "end": 381,
+          "quote": "The driver has a history of diabetes and says Diabetes is treated with insulin, but after an overnight shift he became unresponsive for about half a minute and later could not recall the conversation; a coworker gave glucose before any measurement, so the subsequent 4.2 mmol/L reading cannot establish whether a low glucose level caused the spell or exclude a different mechanism.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 385,
+          "end": 728,
+          "quote": "The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        },
+        {
+          "start": 732,
+          "end": 1031,
+          "quote": "His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "RAG-b77a99c3c0242d06": [
+        {
+          "start": 0,
+          "end": 381,
+          "quote": "The driver has a history of diabetes and says Diabetes is treated with insulin, but after an overnight shift he became unresponsive for about half a minute and later could not recall the conversation; a coworker gave glucose before any measurement, so the subsequent 4.2 mmol/L reading cannot establish whether a low glucose level caused the spell or exclude a different mechanism.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 385,
+          "end": 728,
+          "quote": "The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        },
+        {
+          "start": 732,
+          "end": 1031,
+          "quote": "His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "RAG-e228ea2f867aa07e": [
+        {
+          "start": 0,
+          "end": 381,
+          "quote": "The driver has a history of diabetes and says Diabetes is treated with insulin, but after an overnight shift he became unresponsive for about half a minute and later could not recall the conversation; a coworker gave glucose before any measurement, so the subsequent 4.2 mmol/L reading cannot establish whether a low glucose level caused the spell or exclude a different mechanism.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 385,
+          "end": 728,
+          "quote": "The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        },
+        {
+          "start": 732,
+          "end": 1031,
+          "quote": "His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "RAG-c4c76aa3f36253af": [
+        {
+          "start": 0,
+          "end": 381,
+          "quote": "The driver has a history of diabetes and says Diabetes is treated with insulin, but after an overnight shift he became unresponsive for about half a minute and later could not recall the conversation; a coworker gave glucose before any measurement, so the subsequent 4.2 mmol/L reading cannot establish whether a low glucose level caused the spell or exclude a different mechanism.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 385,
+          "end": 728,
+          "quote": "The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        },
+        {
+          "start": 732,
+          "end": 1031,
+          "quote": "His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "RAG-edaa28094c43d632": [
+        {
+          "start": 0,
+          "end": 381,
+          "quote": "The driver has a history of diabetes and says Diabetes is treated with insulin, but after an overnight shift he became unresponsive for about half a minute and later could not recall the conversation; a coworker gave glucose before any measurement, so the subsequent 4.2 mmol/L reading cannot establish whether a low glucose level caused the spell or exclude a different mechanism.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 385,
+          "end": 728,
+          "quote": "The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        },
+        {
+          "start": 732,
+          "end": 1031,
+          "quote": "His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "RAG-edd234fbaba473f1": [
+        {
+          "start": 0,
+          "end": 381,
+          "quote": "The driver has a history of diabetes and says Diabetes is treated with insulin, but after an overnight shift he became unresponsive for about half a minute and later could not recall the conversation; a coworker gave glucose before any measurement, so the subsequent 4.2 mmol/L reading cannot establish whether a low glucose level caused the spell or exclude a different mechanism.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 385,
+          "end": 728,
+          "quote": "The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        },
+        {
+          "start": 732,
+          "end": 1031,
+          "quote": "His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    "narrative_source_text_sha256": "089080592fe22aef4f96d8e0965b35b0b99c9d0ff99326832f15db1f8fd11e8c"
+  }
+}

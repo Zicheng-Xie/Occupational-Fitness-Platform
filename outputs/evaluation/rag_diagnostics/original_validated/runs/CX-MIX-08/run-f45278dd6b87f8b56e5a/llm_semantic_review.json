@@ -1,0 +1,232 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v5",
+  "system_prompt_sha256": "05f0e1538255d28d2b276c908db223395bf4bd40b36a9cb9a3a9f88c7357952a",
+  "source_text_sha256": "2e419b57f6ff2bca7a09394233fdb7beff873eb5d715518873731cc84b3dd9af",
+  "input_facts_sha256": "20a98aefc22044040f13022b84f3024371dd336169fbec13d07f5c85fc35667c",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 984,
+      "eval_count": 292,
+      "total_duration": 4955498100
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 830,
+      "eval_count": 87,
+      "total_duration": 1550036200
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "blackout.mechanism_status",
+      "kind": "uncertainty",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. The note does not explicitly state the mechanism status, so it is uncertain.",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 64,
+          "quote": "Synthetic nurse note for software testing. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "blackout.occurred",
+      "kind": "uncertainty",
+      "quote": "He denies having lost consciousness or needing another person to treat the episode, although a supervisor says a colleague took over the loading paperwork because he seemed confused. His home diary contains several blank days and a single 3.8 mmol/L reading with no time or symptom annotation, so the relationship between that entry and the workplace event cannot be determined.",
+      "explanation": "Independent source reading differs from the extraction. The note does not explicitly state whether the blackout occurred, so it is uncertain.",
+      "evidence": [
+        {
+          "start": 548,
+          "end": 926,
+          "quote": "He denies having lost consciousness or needing another person to treat the episode, although a supervisor says a colleague took over the loading paperwork because he seemed confused. His home diary contains several blank days and a single 3.8 mmol/L reading with no time or symptom annotation, so the relationship between that entry and the workplace event cannot be determined.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "kind": "uncertainty",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. The note does not explicitly state the persistent diastolic blood pressure, so it is uncertain.",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 64,
+          "quote": "Synthetic nurse note for software testing. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "kind": "uncertainty",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. The note does not explicitly state the persistent systolic blood pressure, so it is uncertain.",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 64,
+          "quote": "Synthetic nurse note for software testing. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "blackout.mechanism_status",
+    "blackout.occurred",
+    "cardiovascular.blood_pressure.persistent_diastolic",
+    "cardiovascular.blood_pressure.persistent_systolic"
+  ],
+  "checked_fields": [
+    "cardiovascular.blood_pressure.observed_diastolic",
+    "cardiovascular.blood_pressure.observed_systolic",
+    "diabetes.present",
+    "diabetes.treatment_category"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "blackout",
+    "hypertension"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "prompt_payload_sha256": "006686c1ac35d8b91eb8b6cf65e7c7a9ee79b0d193bd7b1a3ae83f03a65e8471",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "blackout.mechanism_status": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "blackout.occurred": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "cardiovascular.blood_pressure.persistent_diastolic": {
+      "value": null,
+      "status": "unknown",
+      "unit": "mmHg",
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "cardiovascular.blood_pressure.persistent_systolic": {
+      "value": null,
+      "status": "unknown",
+      "unit": "mmHg",
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status",
+        "blackout.occurred",
+        "cardiovascular.blood_pressure.observed_diastolic",
+        "cardiovascular.blood_pressure.observed_systolic",
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "status": "valid"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present",
+        "diabetes.treatment_category"
+      ],
+      "status": "valid"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": null,
+      "status": "uncertain",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "The note does not explicitly state the mechanism status, so it is uncertain."
+    },
+    {
+      "field": "blackout.occurred",
+      "value": null,
+      "status": "uncertain",
+      "quote": "He denies having lost consciousness or needing another person to treat the episode, although a supervisor says a colleague took over the loading paperwork because he seemed confused. His home diary contains several blank days and a single 3.8 mmol/L reading with no time or symptom annotation, so the relationship between that entry and the workplace event cannot be determined.",
+      "explanation": "The note does not explicitly state whether the blackout occurred, so it is uncertain."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.observed_diastolic",
+      "value": 102.0,
+      "status": "documented",
+      "quote": "At today's review BP 174/102 mmHg was followed after rest by BP 158/92 mmHg, and he says he missed a blood-pressure tablet that morning. There is no documented persistent reading, no verified four-week period of control and no recent specialist report; the nurse records possible glucose-related symptoms and variable pressure measurements without assigning a definite cause or choosing one reading as representative.",
+      "explanation": "The note explicitly states the observed diastolic blood pressure as 102 mmHg."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.observed_systolic",
+      "value": 174.0,
+      "status": "documented",
+      "quote": "At today's review BP 174/102 mmHg was followed after rest by BP 158/92 mmHg, and he says he missed a blood-pressure tablet that morning. There is no documented persistent reading, no verified four-week period of control and no recent specialist report; the nurse records possible glucose-related symptoms and variable pressure measurements without assigning a definite cause or choosing one reading as representative.",
+      "explanation": "The note explicitly states the observed systolic blood pressure as 174 mmHg."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "value": null,
+      "status": "uncertain",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "The note does not explicitly state the persistent diastolic blood pressure, so it is uncertain."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "value": null,
+      "status": "uncertain",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "The note does not explicitly state the persistent systolic blood pressure, so it is uncertain."
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The driver reports diabetes managed with tablets, but an older specialist letter describes diet and exercise alone and the current medication box is not available for verification; he says the tablets were changed last month and has not used insulin to his knowledge. During a late shift he became shaky and struggled to read a docket, then ate a snack without assistance and felt better, but no glucose was checked until nearly an hour later, when the meter displayed 6.2 mmol/L.",
+      "explanation": "The driver reports diabetes managed with tablets."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "glucose_lowering_agent_non_insulin",
+      "status": "documented",
+      "quote": "The driver reports diabetes managed with tablets, but an older specialist letter describes diet and exercise alone and the current medication box is not available for verification; he says the tablets were changed last month and has not used insulin to his knowledge. During a late shift he became shaky and struggled to read a docket, then ate a snack without assistance and felt better, but no glucose was checked until nearly an hour later, when the meter displayed 6.2 mmol/L.",
+      "explanation": "The driver reports diabetes managed with tablets."
+    }
+  ],
+  "output_facts_sha256": "92d7b7266eb8340e7b67a7ec82199495356bf3862037fe732f5aae6aef2b3cb8",
+  "facts_quarantined": true
+}

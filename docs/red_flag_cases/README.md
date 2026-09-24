@@ -1,162 +1,19 @@
-# Red Flag routing examples
+# Red Flag boundary under the established workflow
 
-This document describes the three minimum pre-RAG paths implemented by the
-Occupational Fitness Platform. All examples call `POST /red-flag/evaluate` and
-therefore stop at the pre-RAG boundary. Every response includes the structured
-case, `WorkflowRuleResult`, a three-way `routing_category`, and concise
-`relevant_sections` entries containing source ID, section, printed page and PDF
-page. Only `rag_fusion` includes a `RAGInput`.
-Retrieval does not decide or change the assessment.
+The Red Flag module adapts deterministic rule results to `WorkflowRuleResult` 1.3.0. It does not replace the owner's workflow or add a model decision stage. Local-model extraction, field/source validation and independent semantic review precede rule evaluation. Additional model route advice is disabled by default.
 
-## Involved files
+`POST /red-flag/evaluate` stops before retrieval and returns the structured case, public rule result, source locators and `RAGInput` for every route. The complete `/assess` and browser/file workflows then retrieve evidence and produce drafts.
 
-| File | Responsibility |
-|---|---|
-| `src/occupational_fitness_rag/api.py` | Accepts the case text and `modules_requested`; exposes the Red Flag boundary. |
-| `src/occupational_fitness_rag/pipeline/workflow.py` | Runs intake and Red Flag evaluation without invoking retrieval. |
-| `src/occupational_fitness_rag/llm.py` | Uses local Ollama for grounded field proposals and constrained route advice. |
-| `src/occupational_fitness_rag/rules/engine.py` | Evaluates gates and predicates, then preserves configured `fast_path`, `rag_review` or missing-information routing. |
-| `src/occupational_fitness_rag/red_flag.py` | Converts the internal rule result to canonical `WorkflowRuleResult` v1.3.0. |
-| `src/occupational_fitness_rag/schemas/red_flag_result.py` | Defines the public result and immutable `RAGInput`. |
-| `configs/rules/austroads_commercial_v1.yaml` | Defines rule IDs, conditions, outcomes, source IDs and configured routes. |
-| `tests/test_red_flag.py` | Protects Red Flag separation and the three routing behaviours. |
+| Example | Outcome and route | Evidence behavior in the complete workflow |
+|---|---|---|
+| Reduced hearing with incomplete audiometry | Insufficient information; `missing_information` | Bind required sources and rank every emitted request |
+| Supported four-frequency audiometry below the rule threshold, without other outstanding findings | Meets unconditional standard; `fast_path` | Bind exact required sources; skip ranking |
+| Documented diagnosed blackout requiring interpretation outside the blackout-only scope | Insufficient information; `missing_information` under the original outcome-based routing policy | Bind referral evidence and rank the emitted triggered-rule request |
 
-## Case 1: hearing evidence is missing
+The last example may have an empty `missing_information` collection: its insufficiency concerns assessment scope rather than an absent blackout field. The retained legacy route name is not itself a missing-field claim. Existing referral sources do not constitute a complete cross-disease knowledge graph.
 
-Important input fields:
+Request types retain their original meanings: a triggered rule emits `triggered_rule_evidence`; an unresolved rule emits `missing_information_guidance`. Both types rank in a non-fast case when a ranking backend is configured. `has_red_flag` is based on triggered Red Flag outcomes, not on missing information alone.
 
-```text
-hearing.clinical_assessment = possible_hearing_loss
-hearing.audiometry.available = false
-```
+Implementation: `src/occupational_fitness_rag/rules/engine.py` preserves routing; `red_flag.py` converts the internal result; `retrieval/workflow.py` binds and ranks sources. `tests/test_red_flag.py` and `tests/test_framework_preservation.py` protect these boundaries.
 
-Important output fields:
-
-```text
-assessment_outcome = insufficient_information
-route = missing_information
-has_red_flag = false
-red_flags = []
-missing_information = [hearing.average_frequencies_khz, hearing.unaided_better_ear_average_db]
-rag request type = missing_information_guidance
-API routing_category = needs_more_information
-API rag_input = null
-```
-
-```mermaid
-flowchart TD
-    A[Nurse note reports reduced hearing] --> B[Local intake extracts possible hearing loss]
-    B --> C[Local intake confirms audiometry unavailable]
-    C --> D[RuleBook triggers HEAR-COM-AUDIOMETRY-MISSING-001]
-    D --> E[Outcome: insufficient information]
-    E --> F[Route: missing information]
-    F --> G[No Red Flag is created]
-    F --> H[Return result and corresponding source IDs]
-    H --> I[Wait for additional patient evidence]
-```
-
-## Case 2: hearing evidence is sufficient for a local result
-
-Important input fields:
-
-```text
-hearing.clinical_assessment = possible_hearing_loss
-hearing.audiometry.available = true
-hearing.average_frequencies_khz = [0.5, 1, 2, 3]
-hearing.unaided_better_ear_average_db = 39.9
-```
-
-Important output fields:
-
-```text
-assessment_outcome = meets_unconditional_standard
-route = fast_path
-has_red_flag = false
-red_flags = []
-missing_information = []
-triggered rule = HEAR-COM-SCREEN-001
-rag request type = triggered_rule_evidence
-API routing_category = local_result
-API rag_input = null
-```
-
-```mermaid
-flowchart TD
-    A[Documented four-frequency audiometry] --> B[Validate frequencies and 39.9 dB value]
-    B --> C{39.9 dB is below 40 dB}
-    C --> D[RuleBook triggers HEAR-COM-SCREEN-001]
-    D --> E[Outcome: meets unconditional standard]
-    E --> F[Route: fast path]
-    F --> G[Return result and corresponding source IDs]
-    G --> H[No RAG call]
-```
-
-The assessment is made locally. A later RAG stage may bind the configured
-guideline sources, but it cannot revise the outcome.
-
-## Case 3: diagnosed blackout requires cross-chapter guidance
-
-Important input fields:
-
-```text
-blackout.occurred = true
-blackout.mechanism_status = diagnosed
-blackout.diagnosis = cardiac_syncope
-```
-
-Important output fields:
-
-```text
-assessment_outcome = insufficient_information
-route = rag_review
-has_red_flag = false
-red_flags = []
-missing_information = []
-triggered rule = BLK-COM-DIAGNOSED-REFERRAL-001
-rag request type = missing_information_guidance
-API routing_category = rag_fusion
-API rag_input = structured object
-```
-
-```mermaid
-flowchart TD
-    A[Documented blackout] --> B[Local intake identifies cardiac syncope]
-    B --> C[RuleBook triggers BLK-COM-DIAGNOSED-REFERRAL-001]
-    C --> D[Do not apply uncertain-blackout waiting rules]
-    D --> E[Outcome: insufficient within the blackout-only scope]
-    E --> F[Route: RAG review]
-    F --> G[Request corresponding-chapter guidance]
-    G --> H[RAGInput boundary]
-    H --> I[Later retrieval supplies evidence for human review]
-```
-
-This case has no missing blackout fact. The limitation is cross-chapter scope,
-so `rag_review` is preserved instead of incorrectly reporting
-`missing_information`.
-
-## Routing invariant
-
-```text
-unknown or unconfirmed required facts -> missing_information
-fully determined local passing rule -> fast_path
-fully determined complex or cross-chapter rule -> rag_review
-processing conflict or explicit manual escalation -> human_review
-```
-
-`missing_information` never creates a Red Flag automatically. Red Flags remain
-limited to triggered rules whose assessment outcomes are `temporarily_unfit`
-or `does_not_meet_standard`.
-
-## Optional local-model assistance
-
-With `llm.enabled` and `llm.route_classification_enabled` enabled, Ollama reads
-the original nurse note after deterministic extraction. It may propose fields
-only when it supplies an exact quotation that passes field type and semantic
-validation. The rule engine still owns the assessment outcome and Red Flag.
-
-After rule evaluation, Ollama may propose one of `local_result`,
-`needs_more_information`, or `rag_fusion`. Its evidence quotations must occur
-verbatim in the note. A grounded proposal may escalate handling, for example
-from a local result to RAG fusion, but it may never downgrade a deterministic
-missing-information or review route. If Ollama is unavailable or its quotation
-is fabricated, the deterministic route is retained.
+See [framework preservation](../framework_preservation.md) for the fixed sequence and [contracts](../contracts.md) for API schemas.

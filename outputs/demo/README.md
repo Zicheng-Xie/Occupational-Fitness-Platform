@@ -4,7 +4,7 @@ This directory contains 30 verified synthetic assessment bundles selected for di
 
 `manifest.json` pins the exact demonstration runs. Each bundle includes HTML and Markdown reports, its original synthetic input, structured facts, rule results, guideline evidence, model audit records and a fingerprinted run manifest. These are assessment drafts, not signed clinical decisions.
 
-The bundles are byte-identical copies of the selected local runs. Their historical configuration and provenance remain unchanged. Relative links retain access to the original guideline PDF and report directory.
+This collection was regenerated offline with the restored 0.7.1 workflow. Model extraction and semantic review are disabled in these offline snapshots; live assessments use the normal model configuration. Superseded bundles remain in the local restoration backup and Git history. Relative links retain access to the original guideline PDF and report directory.
 
 Ordinary future assessment runs remain excluded by `outputs/runs/` in `.gitignore`. Generating new local runs does not replace this pinned collection. Updating the fixed collection is an explicit maintenance action.
 

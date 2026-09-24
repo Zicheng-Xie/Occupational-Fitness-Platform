@@ -28,6 +28,7 @@ class RetrievalSettings:
     bm25_k: int = 30
     top_k: int = 5
     use_bm25: bool = True
+    use_vector: bool = True
     rrf_k: int = 60
     reranker: str = "none"
     cross_encoder_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"

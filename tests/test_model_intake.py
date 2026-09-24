@@ -109,6 +109,7 @@ def test_model_source_start_selects_the_intended_repeated_quote(workflow):
 def test_model_stage_precedes_rule_evaluation(monkeypatch):
     workflow = OccupationalFitnessWorkflow(ROOT / "configs/workflow.offline.yaml")
     workflow.config.llm.enabled = True
+    workflow.config.llm.semantic_review_enabled = False  # This test isolates extraction order.
     workflow.config.llm.route_classification_enabled = False
     quote = "The patient denies a history of diabetes mellitus."
     monkeypatch.setattr(

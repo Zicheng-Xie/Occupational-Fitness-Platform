@@ -1,3 +1,3 @@
 """Occupational Fitness traceable occupational-fitness assessment workflow."""
 
-__version__ = "0.4.0"
+__version__ = "0.7.1"

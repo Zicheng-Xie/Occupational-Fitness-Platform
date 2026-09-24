@@ -21,17 +21,18 @@ class LLMConfig(BaseModel):
     enabled: bool = False
     provider: Literal["ollama"] = "ollama"
     base_url: str = "http://127.0.0.1:11434"
-    model: str = "qwen3:8b"
+    model: str = "llama3:8b"
     timeout_seconds: int = Field(default=60, ge=1, le=120)
     extraction_enabled: bool = True
-    route_classification_enabled: bool = True
+    semantic_review_enabled: bool = True
+    route_classification_enabled: bool = False
     narrative_enabled: bool = False
     context_length: int = Field(default=8192, ge=2048, le=32768)
     max_output_tokens: int = Field(default=2048, ge=128, le=4096)
     max_input_chars: int = Field(default=10000, ge=100, le=30000)
     extraction_chunk_chars: int = Field(default=6000, ge=500, le=20000)
     extraction_chunk_overlap: int = Field(default=400, ge=0, le=2000)
-    think: bool | None = False
+    think: bool | None = None
     model_digest: str | None = None
 
     @model_validator(mode="after")

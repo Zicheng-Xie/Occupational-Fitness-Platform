@@ -1,0 +1,496 @@
+{
+  "schema_version": "1.3.0",
+  "result_id": "RR-f3ebec66b38beb886045",
+  "case_id": "CX-HTN-01",
+  "case_sha256": "316b4a18f60a6d441172559d552c580fe9df929055e9c13d87d6a82dc6ea4a56",
+  "source": {
+    "type": "nurse_note",
+    "source_file": "CX-HTN-01.txt"
+  },
+  "assessment_context": {
+    "framework": "Austroads",
+    "licence_context": "commercial",
+    "job_title": null,
+    "modules_requested": [
+      "hypertension"
+    ]
+  },
+  "ruleset": {
+    "ruleset_id": "austroads-commercial",
+    "ruleset_version": "1.2.0",
+    "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+    "guideline_version": "AP-G56-22",
+    "status": "pending_clinical_review"
+  },
+  "route": "human_review",
+  "assessment_outcome": "insufficient_information",
+  "outcome_label": "Insufficient information / Human review required",
+  "has_red_flag": false,
+  "red_flags": [],
+  "triggered_rules": [],
+  "missing_information": [
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "status": "unknown",
+      "category": "cardiovascular",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HTN-COM-UNCONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hypertension_commercial_unconditional"
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "status": "unknown",
+      "category": "cardiovascular",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HTN-COM-UNCONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hypertension_commercial_unconditional"
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "status": "unknown",
+      "category": "cardiovascular",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HTN-COM-CONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hypertension_commercial_conditional"
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "status": "unknown",
+      "category": "cardiovascular",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HTN-COM-CONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hypertension_commercial_conditional"
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "status": "unknown",
+      "category": "cardiovascular",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HTN-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "htn_com_screen_001"
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "status": "unknown",
+      "category": "cardiovascular",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HTN-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "htn_com_screen_001"
+    }
+  ],
+  "modules": [
+    {
+      "module": "hypertension",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    }
+  ],
+  "rules_evaluated": [
+    {
+      "rule_id": "HTN-COM-UNCONDITIONAL-001",
+      "module": "hypertension",
+      "category": "cardiovascular",
+      "subcondition": "hypertension",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "rag_query_key": "hypertension_commercial_unconditional",
+      "observed_facts": {
+        "cardiovascular.blood_pressure.persistent_diastolic": {
+          "value": null,
+          "status": "unknown",
+          "unit": "mmHg",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.blood_pressure.persistent_systolic": {
+          "value": null,
+          "status": "unknown",
+          "unit": "mmHg",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "any": [
+            {
+              "field": "cardiovascular.blood_pressure.persistent_systolic",
+              "operator": ">",
+              "expected": 170,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            },
+            {
+              "field": "cardiovascular.blood_pressure.persistent_diastolic",
+              "operator": ">",
+              "expected": 100,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "HTN-COM-CONDITIONAL-001",
+      "module": "hypertension",
+      "category": "cardiovascular",
+      "subcondition": "hypertension_conditional",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-HTN-COM-002"
+      ],
+      "rag_query_key": "hypertension_commercial_conditional",
+      "observed_facts": {
+        "cardiovascular.hypertension.antihypertensive_therapy": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.controlled_for_4_weeks": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.driving_impairing_medication_side_effects": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.initial_specialist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.target_organ_damage_relevant_to_driving": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "dependency": "HTN-COM-UNCONDITIONAL-001",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "all": [
+                {
+                  "dependency": "HTN-COM-UNCONDITIONAL-001",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            },
+            {
+              "all": [
+                {
+                  "field": "cardiovascular.hypertension.antihypertensive_therapy",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "cardiovascular.hypertension.controlled_for_4_weeks",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "cardiovascular.hypertension.driving_impairing_medication_side_effects",
+                  "operator": "==",
+                  "expected": false,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "cardiovascular.hypertension.target_organ_damage_relevant_to_driving",
+                  "operator": "==",
+                  "expected": false,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "cardiovascular.hypertension.initial_specialist_information_available",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "HTN-COM-SCREEN-001",
+      "module": "hypertension",
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "rag_query_key": "htn_com_screen_001",
+      "observed_facts": {
+        "cardiovascular.blood_pressure.persistent_diastolic": {
+          "value": null,
+          "status": "unknown",
+          "unit": "mmHg",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.blood_pressure.persistent_systolic": {
+          "value": null,
+          "status": "unknown",
+          "unit": "mmHg",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "all": [
+            {
+              "field": "cardiovascular.blood_pressure.persistent_systolic",
+              "operator": "<=",
+              "expected": 170,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            },
+            {
+              "field": "cardiovascular.blood_pressure.persistent_diastolic",
+              "operator": "<=",
+              "expected": 100,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    }
+  ],
+  "processing_warnings": [
+    {
+      "code": "SEMANTIC_REVIEW_REQUIRES_CONFIRMATION",
+      "message": "unavailable_or_invalid",
+      "requires_human_review": true
+    }
+  ],
+  "requires_human_review": true,
+  "rag_requests": [
+    {
+      "request_id": "RAG-9bb4d035f51f0738",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HTN-COM-UNCONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension",
+      "licence_context": "commercial",
+      "rag_query_key": "hypertension_commercial_unconditional",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "cardiovascular.blood_pressure.persistent_diastolic": "unknown",
+        "cardiovascular.blood_pressure.persistent_systolic": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-098140d20714845a",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HTN-COM-CONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-002"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension_conditional",
+      "licence_context": "commercial",
+      "rag_query_key": "hypertension_commercial_conditional",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "cardiovascular.blood_pressure.persistent_diastolic": "unknown",
+        "cardiovascular.blood_pressure.persistent_systolic": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-b83410dcd2a37237",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HTN-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "htn_com_screen_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "cardiovascular.blood_pressure.persistent_diastolic": "unknown",
+        "cardiovascular.blood_pressure.persistent_systolic": "unknown"
+      }
+    }
+  ],
+  "internal_metadata": {
+    "rule_engine_contract": "internal",
+    "narrative_context": {
+      "RAG-9bb4d035f51f0738": [
+        {
+          "start": 0,
+          "end": 414,
+          "quote": "At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today's seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 418,
+          "end": 755,
+          "quote": "He restarted his blood-pressure tablets nine days ago after missing several doses, sometimes feels light-headed on standing, and has no repeat measurement or specialist letter with him; the nurse cannot establish persistent blood pressure, four weeks of stable control, or whether the symptoms are medication related from this interview.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ],
+      "RAG-098140d20714845a": [
+        {
+          "start": 0,
+          "end": 414,
+          "quote": "At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today's seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 418,
+          "end": 755,
+          "quote": "He restarted his blood-pressure tablets nine days ago after missing several doses, sometimes feels light-headed on standing, and has no repeat measurement or specialist letter with him; the nurse cannot establish persistent blood pressure, four weeks of stable control, or whether the symptoms are medication related from this interview.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ],
+      "RAG-b83410dcd2a37237": [
+        {
+          "start": 0,
+          "end": 414,
+          "quote": "At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today's seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 418,
+          "end": 755,
+          "quote": "He restarted his blood-pressure tablets nine days ago after missing several doses, sometimes feels light-headed on standing, and has no repeat measurement or specialist letter with him; the nurse cannot establish persistent blood pressure, four weeks of stable control, or whether the symptoms are medication related from this interview.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    },
+    "narrative_source_text_sha256": "544f300fbd29fcd85a5cca5be02186f7c611314f9e634859bfb429e0c539ed6e"
+  }
+}

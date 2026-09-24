@@ -1,0 +1,119 @@
+{
+  "config": {
+    "schema_version": "1.2.0",
+    "project_root": "..",
+    "rules": "configs/rules/austroads_commercial_v1.yaml",
+    "anchors": "configs/source_anchors.json",
+    "catalogue": "data/knowledge/processed/source_catalogue.json",
+    "output_directory": "outputs/runs",
+    "retrieval": {
+      "mode": "chroma",
+      "top_k": 5,
+      "candidate_k": 20,
+      "collection_name": "aftd_commercial_v1_1",
+      "persist_directory": "data/knowledge/indexes/chroma",
+      "embedding_model": "nomic-embed-text",
+      "ollama_url": "http://127.0.0.1:11434"
+    },
+    "llm": {
+      "enabled": true,
+      "provider": "ollama",
+      "base_url": "http://127.0.0.1:11434",
+      "model": "llama3:8b",
+      "timeout_seconds": 120,
+      "extraction_enabled": true,
+      "semantic_review_enabled": true,
+      "route_classification_enabled": false,
+      "narrative_enabled": false,
+      "context_length": 8192,
+      "max_output_tokens": 2048,
+      "max_input_chars": 10000,
+      "extraction_chunk_chars": 6000,
+      "extraction_chunk_overlap": 400,
+      "think": null,
+      "model_digest": null
+    }
+  },
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "index_sha256": "61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f",
+  "expectations_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "independent_clinical_gold": false,
+  "rows": [
+    {
+      "case_id": "CX-MIX-03",
+      "input_sha256": "6f571f05fc6360ff4ee25e2920ccbb08eb05d50e384021f13bf3d40a1f9f4cd0",
+      "report": "runs/CX-MIX-03/run-8176704f6da25900d40a/draft_report.html",
+      "outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rules": [],
+      "present_fields": [
+        "cardiovascular.blood_pressure.observed_systolic",
+        "cardiovascular.blood_pressure.observed_diastolic",
+        "diabetes.present"
+      ],
+      "review_status": "requires_confirmation",
+      "ranking_calls": 32,
+      "ranked_candidates": 37,
+      "discovery_modules": [
+        "blackout",
+        "diabetes",
+        "hypertension"
+      ],
+      "discovery_sources": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-BLK-COM-002",
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005",
+        "AFTD2022-BLK-COM-006",
+        "AFTD2022-DM-COM-001",
+        "AFTD2022-DM-COM-002",
+        "AFTD2022-DM-COM-004",
+        "AFTD2022-DM-COM-006",
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-HTN-COM-001",
+        "AFTD2022-HTN-COM-002"
+      ],
+      "expected": {},
+      "expected_rules_found": [],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [],
+      "expected_sources_found_in_rule_citations": []
+    },
+    {
+      "case_id": "CX-MIX-04",
+      "input_sha256": "cf01d846ccf2d9b5463c7f44548387b7041815f6ca87684033a655c66ea68b9e",
+      "report": "runs/CX-MIX-04/run-5d37f7ca6acd371a8617/draft_report.html",
+      "outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rules": [],
+      "present_fields": [
+        "hearing.clinical_assessment"
+      ],
+      "review_status": "unavailable_or_invalid",
+      "ranking_calls": 33,
+      "ranked_candidates": 38,
+      "discovery_modules": [
+        "hearing",
+        "vision"
+      ],
+      "discovery_sources": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002",
+        "AFTD2022-HEAR-COM-003",
+        "AFTD2022-HEAR-COM-004",
+        "AFTD2022-VIS-COM-002",
+        "AFTD2022-VIS-COM-003",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-005",
+        "AFTD2022-VIS-COM-006"
+      ],
+      "expected": {},
+      "expected_rules_found": [],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [],
+      "expected_sources_found_in_rule_citations": []
+    }
+  ]
+}

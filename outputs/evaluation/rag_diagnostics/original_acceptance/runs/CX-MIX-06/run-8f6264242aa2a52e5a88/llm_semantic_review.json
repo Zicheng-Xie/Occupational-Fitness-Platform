@@ -1,0 +1,232 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v9",
+  "system_prompt_sha256": "e5f90f3ee79bddcb0dce06c9f155d8eac5229c24c58b83090948f5ce6ae5c4de",
+  "source_text_sha256": "eeaf6ab0faf1c720c1cf8c866e27f431a791fa7704ebffbfd1d1fcaf20ecaea4",
+  "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 455,
+      "eval_count": 68,
+      "total_duration": 1640869300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 563,
+      "eval_count": 145,
+      "total_duration": 2884493000
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 512,
+      "eval_count": 47,
+      "total_duration": 1289838300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 515,
+      "eval_count": 36,
+      "total_duration": 1258828300
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.present",
+      "kind": "omission",
+      "quote": "During review the driver describes increased thirst, frequent overnight urination and fluctuating blur over approximately three weeks, but says a diagnosis of diabetes has never been confirmed for him; his sister uses insulin, and he is concerned that this means he must have the same condition. A borrowed meter showed 16.9 mmol/L shortly after a meal, whereas another reading the next morning was 8.1 mmol/L, with no verified technique or accompanying laboratory report.",
+      "explanation": "Independent source reading differs from the extraction. The patient has diabetes, as confirmed by the borrowed meter showing 16.9 mmol/L shortly after a meal and 8.1 mmol/L the next morning.",
+      "evidence": [
+        {
+          "start": 66,
+          "end": 538,
+          "quote": "During review the driver describes increased thirst, frequent overnight urination and fluctuating blur over approximately three weeks, but says a diagnosis of diabetes has never been confirmed for him; his sister uses insulin, and he is concerned that this means he must have the same condition. A borrowed meter showed 16.9 mmol/L shortly after a meal, whereas another reading the next morning was 8.1 mmol/L, with no verified technique or accompanying laboratory report.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. The patient has not been confirmed to have diabetes, but is concerned about it due to his sister's diagnosis and his own symptoms. He has taken a glucose meter reading of 16.9 mmol/L shortly after a meal, and 8.1 mmol/L the next morning. However, these readings are not verified and there is no accompanying laboratory report. He also has fluctuating blur and glare, but no persistent double image. He has not had a current visual field examination. Therefore, the patient's diabetes treatment category is: none.",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 64,
+          "quote": "Synthetic nurse note for software testing. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "vision.diplopia.present",
+      "kind": "omission",
+      "quote": "He brought an optometry card from eight months ago recording corrected right eye 6/6 and left eye 6/9, yet says the current blur varies during the day and is sometimes accompanied by glare rather than two separate images. He denies a persistent double image, has not had a current visual field examination and cannot determine whether the symptoms change when either eye is covered.",
+      "explanation": "Independent source reading differs from the extraction. The patient does not explicitly have diplopia (double vision).",
+      "evidence": [
+        {
+          "start": 540,
+          "end": 922,
+          "quote": "He brought an optometry card from eight months ago recording corrected right eye 6/6 and left eye 6/9, yet says the current blur varies during the day and is sometimes accompanied by glare rather than two separate images. He denies a persistent double image, has not had a current visual field examination and cannot determine whether the symptoms change when either eye is covered.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "kind": "omission",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. Not documented",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 64,
+          "quote": "Synthetic nurse note for software testing. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.present",
+    "diabetes.treatment_category",
+    "vision.diplopia.present",
+    "vision.visual_field.confirmed_defect"
+  ],
+  "checked_fields": [],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes",
+    "vision"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "e0f424a84de0f3694314f552a142ce8cbb3447e92ffa0c1c59750db79bc3a605",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.present": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "vision.diplopia.present": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "vision.visual_field.confirmed_defect": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "c9ac7ce401f602b25191388d77138ed692a68eef277f4f4a7d1d011f65eb0933",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "48f4e0e8957c87219f60f749ceabe073a87566d15d4a6d9af8f960f4f334761e",
+      "response_schema_sha256": "fcfc16c5a189ad3642a528b7f19075826c6ae96146665516dc6667a9cf57b37d"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "vision.diplopia.present"
+      ],
+      "status": "valid",
+      "request_sha256": "a13028f4a94ff018a5da5818d666896cbdc3516494b8cde073e8dde8b348b656",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    },
+    {
+      "batch": 4,
+      "attempt": 1,
+      "fields": [
+        "vision.visual_field.confirmed_defect"
+      ],
+      "status": "valid",
+      "request_sha256": "4ed8e429d81c5cb39ad28dd34d7803d91a89f888479054fee533f3c41699cc47",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "During review the driver describes increased thirst, frequent overnight urination and fluctuating blur over approximately three weeks, but says a diagnosis of diabetes has never been confirmed for him; his sister uses insulin, and he is concerned that this means he must have the same condition. A borrowed meter showed 16.9 mmol/L shortly after a meal, whereas another reading the next morning was 8.1 mmol/L, with no verified technique or accompanying laboratory report.",
+      "explanation": "The patient has diabetes, as confirmed by the borrowed meter showing 16.9 mmol/L shortly after a meal and 8.1 mmol/L the next morning."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "none",
+      "status": "documented",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "The patient has not been confirmed to have diabetes, but is concerned about it due to his sister's diagnosis and his own symptoms. He has taken a glucose meter reading of 16.9 mmol/L shortly after a meal, and 8.1 mmol/L the next morning. However, these readings are not verified and there is no accompanying laboratory report. He also has fluctuating blur and glare, but no persistent double image. He has not had a current visual field examination. Therefore, the patient's diabetes treatment category is: none."
+    },
+    {
+      "field": "vision.diplopia.present",
+      "value": false,
+      "status": "documented",
+      "quote": "He brought an optometry card from eight months ago recording corrected right eye 6/6 and left eye 6/9, yet says the current blur varies during the day and is sometimes accompanied by glare rather than two separate images. He denies a persistent double image, has not had a current visual field examination and cannot determine whether the symptoms change when either eye is covered.",
+      "explanation": "The patient does not explicitly have diplopia (double vision)."
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "value": false,
+      "status": "documented",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Not documented"
+    }
+  ],
+  "output_facts_sha256": "f7bc416b62b5a7e2279abdab95c5ba1f28d5c547d0298e0448f1d74273db9b9d",
+  "facts_quarantined": true
+}

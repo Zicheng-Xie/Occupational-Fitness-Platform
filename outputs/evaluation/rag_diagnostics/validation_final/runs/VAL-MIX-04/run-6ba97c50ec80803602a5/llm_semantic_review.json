@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v6",
+  "system_prompt_sha256": "d4b88acb336b0da439d13933a2a8c26a26222687286345d827862cddb0451f07",
+  "source_text_sha256": "43c91490fd5a48302fc376d3d4f25bcf121755d1240f947319bcdf0da41a3a34",
+  "input_facts_sha256": "af9163331f4da92c6b58cc3dd4b2bcdeced0067bdb751dca4fa1a19f60ece281",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 1025,
+      "eval_count": 265,
+      "total_duration": 4727366900
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 797,
+      "eval_count": 142,
+      "total_duration": 2333646500
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "kind": "omission",
+      "quote": "The ophthalmologist confirms non-physiological diplopia following a recent examination. Diplopia is present within 20 degrees of central fixation. The driver says the double image is more noticeable after prolonged night driving, yet the specialist reproduced it during daytime testing, so its absence during a short nursing interview is not treated as proof that the documented finding has resolved.",
+      "explanation": "Independent source reading differs from the extraction. The ophthalmologist confirms non-physiological diplopia following a recent examination.",
+      "evidence": [
+        {
+          "start": 499,
+          "end": 899,
+          "quote": "The ophthalmologist confirms non-physiological diplopia following a recent examination. Diplopia is present within 20 degrees of central fixation. The driver says the double image is more noticeable after prolonged night driving, yet the specialist reproduced it during daytime testing, so its absence during a short nursing interview is not treated as proof that the documented finding has resolved.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "vision.visual_field.confirmed_defect"
+  ],
+  "checked_fields": [
+    "diabetes.gestational",
+    "diabetes.present",
+    "diabetes.treatment_category",
+    "vision.diplopia.physiological",
+    "vision.diplopia.present",
+    "vision.diplopia.within_20_degrees"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "vision"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "prompt_payload_sha256": "537b7a2f52fd282d9fda0efe902a1dc5e088051569b6d9f73f23de26b7d8e74d",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "vision.visual_field.confirmed_defect": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status",
+        "blackout.occurred",
+        "diabetes.gestational",
+        "diabetes.present",
+        "diabetes.treatment_category",
+        "vision.diplopia.physiological"
+      ],
+      "status": "valid",
+      "request_sha256": "4143b3a35d1f495760a7d42d8352f0015f1428bc99e11b7fcea8a8ceba205026",
+      "response_schema_sha256": "97cd2e3a28e714f7eace4c565aeba4cb44bdd931ad0eb2b909afd9c03fb26272"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "vision.diplopia.present",
+        "vision.diplopia.within_20_degrees",
+        "vision.visual_field.confirmed_defect"
+      ],
+      "status": "valid",
+      "request_sha256": "3ece73c2408d7bc07472828faebd8526d9afde3eaa7d9afb6bbd1ca8138694fd",
+      "response_schema_sha256": "0278666f66e7b886ea31c6a09fc769542e023e9b2177070a01367f1bf08bd965"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The note does not mention the investigation status of the blackout."
+    },
+    {
+      "field": "blackout.occurred",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The note does not mention the occurrence of a blackout."
+    },
+    {
+      "field": "diabetes.gestational",
+      "value": false,
+      "status": "documented",
+      "quote": "The driver has established diabetes. The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. The driver has been adjusting meal times around split shifts and sometimes receives a sensor warning before feeling symptoms, but there is no documented recent episode requiring another person's assistance and no complete assessment of hypoglycaemia awareness in the material provided.",
+      "explanation": "The note explicitly states that the diabetes is not gestational."
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The driver has established diabetes. The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. The driver has been adjusting meal times around split shifts and sometimes receives a sensor warning before feeling symptoms, but there is no documented recent episode requiring another person's assistance and no complete assessment of hypoglycaemia awareness in the material provided.",
+      "explanation": "The note explicitly states that the driver has established diabetes."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "insulin",
+      "status": "documented",
+      "quote": "The driver has established diabetes. The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. The driver has been adjusting meal times around split shifts and sometimes receives a sensor warning before feeling symptoms, but there is no documented recent episode requiring another person's assistance and no complete assessment of hypoglycaemia awareness in the material provided.",
+      "explanation": "The note explicitly states that the diabetes is managed with insulin."
+    },
+    {
+      "field": "vision.diplopia.physiological",
+      "value": false,
+      "status": "documented",
+      "quote": "The ophthalmologist confirms non-physiological diplopia following a recent examination. Diplopia is present within 20 degrees of central fixation. The driver says the double image is more noticeable after prolonged night driving, yet the specialist reproduced it during daytime testing, so its absence during a short nursing interview is not treated as proof that the documented finding has resolved.",
+      "explanation": "The note explicitly states that the ophthalmologist confirms non-physiological diplopia."
+    },
+    {
+      "field": "vision.diplopia.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The ophthalmologist confirms non-physiological diplopia following a recent examination. Diplopia is present within 20 degrees of central fixation. The driver says the double image is more noticeable after prolonged night driving, yet the specialist reproduced it during daytime testing, so its absence during a short nursing interview is not treated as proof that the documented finding has resolved.",
+      "explanation": "The ophthalmologist confirms non-physiological diplopia following a recent examination."
+    },
+    {
+      "field": "vision.diplopia.within_20_degrees",
+      "value": true,
+      "status": "documented",
+      "quote": "The ophthalmologist confirms non-physiological diplopia following a recent examination. Diplopia is present within 20 degrees of central fixation. The driver says the double image is more noticeable after prolonged night driving, yet the specialist reproduced it during daytime testing, so its absence during a short nursing interview is not treated as proof that the documented finding has resolved.",
+      "explanation": "Diplopia is present within 20 degrees of central fixation."
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "value": true,
+      "status": "documented",
+      "quote": "The ophthalmologist confirms non-physiological diplopia following a recent examination. Diplopia is present within 20 degrees of central fixation. The driver says the double image is more noticeable after prolonged night driving, yet the specialist reproduced it during daytime testing, so its absence during a short nursing interview is not treated as proof that the documented finding has resolved.",
+      "explanation": "The ophthalmologist confirms non-physiological diplopia following a recent examination."
+    }
+  ],
+  "output_facts_sha256": "4c67eebf201b858edaa0f66cc14afb5b308534361f1916f2594b10491b56d7d0",
+  "facts_quarantined": true
+}

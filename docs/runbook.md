@@ -13,7 +13,7 @@ ollama list
 .\.venv\Scripts\python.exe scripts/check_english.py
 ```
 
-The default configuration uses `qwen3:8b` for extraction and separate English commentary, with `nomic-embed-text` for Chroma guideline vectors. Only case evidence can establish patient facts. Unsupported proposals are withheld; supported deterministic extraction fills gaps in model coverage.
+The default configuration uses `llama3:8b` for extraction, independent semantic review and separate English commentary, with `nomic-embed-text` for Chroma guideline vectors. Additional model route classification is disabled by default. Only case evidence can establish patient facts. Unsupported proposals are withheld; supported deterministic extraction fills gaps in model coverage.
 
 `workflow.offline.yaml` disables model and vector services. `workflow.chroma.yaml` isolates retrieval; its alternative Qwen setting is disabled by default. Use `llm.model_digest` to pin model weights. A mismatch, timeout, malformed response or unsupported quotation cannot silently become a successful fact.
 

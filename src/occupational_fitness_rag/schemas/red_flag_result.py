@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from .workflow import (
     Contract,
@@ -13,6 +13,7 @@ from .workflow import (
     Outcome,
     RAGRequest,
     RuleEvaluation,
+    TextSpan,
     WorkflowRoute,
 )
 
@@ -70,7 +71,7 @@ class ProcessingWarning(Contract):
 class RAGInput(Contract):
     """Minimal immutable envelope accepted by retrieval."""
 
-    schema_version: Literal["1.0.0"] = "1.0.0"
+    schema_version: Literal["1.0.0", "1.1.0", "1.2.0"] = "1.1.0"
     result_id: str
     case_id: str
     red_flag_result_sha256: str
@@ -78,6 +79,27 @@ class RAGInput(Contract):
     guideline_version: Literal["AP-G56-22"] = "AP-G56-22"
     route: WorkflowRoute
     rag_requests: list[RAGRequest]
+    indicator_context: dict[str, dict[str, Fact]] = Field(default_factory=dict)
+    narrative_context: dict[str, list[TextSpan]] = Field(default_factory=dict)
+    narrative_source_text_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+
+    @model_validator(mode="after")
+    def validate_context(self):
+        if self.schema_version == "1.0.0" and self.indicator_context:
+            raise ValueError("Indicator context requires RAGInput 1.1.0")
+        if not set(self.indicator_context) <= {r.request_id for r in self.rag_requests}:
+            raise ValueError("Indicator context refers to an unknown request")
+        if self.narrative_context:
+            if self.schema_version != "1.2.0" or not self.narrative_source_text_sha256:
+                raise ValueError("Narrative context requires RAGInput 1.2.0 and a source hash")
+            if not set(self.narrative_context) <= {r.request_id for r in self.rag_requests}:
+                raise ValueError("Narrative context refers to an unknown request")
+            for spans in self.narrative_context.values():
+                if sum(len(s.quote) for s in spans) > 2000:
+                    raise ValueError("Narrative context exceeds its per-request budget")
+                if any(s.end - s.start != len(s.quote) for s in spans):
+                    raise ValueError("Narrative span length mismatch")
+        return self
 
 
 class WorkflowRuleResult(Contract):
@@ -105,7 +127,10 @@ class WorkflowRuleResult(Contract):
     def rag_input(self) -> RAGInput:
         from occupational_fitness_rag.provenance import digest
 
+        evaluations = {item.rule_id: item for item in self.rules_evaluated}
+        narrative = self.internal_metadata.get("narrative_context", {})
         return RAGInput(
+            schema_version="1.2.0" if narrative else "1.1.0",
             result_id=self.result_id,
             case_id=self.case_id,
             red_flag_result_sha256=digest(self),
@@ -113,4 +138,13 @@ class WorkflowRuleResult(Contract):
             guideline_version=self.ruleset.guideline_version,
             route=self.route,
             rag_requests=self.rag_requests,
+            indicator_context={
+                request.request_id: evaluations[request.rule_id].observed_facts
+                for request in self.rag_requests
+                if request.rule_id in evaluations
+            },
+            narrative_context=narrative,
+            narrative_source_text_sha256=(
+                self.internal_metadata.get("narrative_source_text_sha256") if narrative else None
+            ),
         )

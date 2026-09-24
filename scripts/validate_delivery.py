@@ -6,7 +6,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 from occupational_fitness_rag.provenance import write_json
-from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
+from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     ReviewNote,
@@ -61,22 +61,29 @@ def main():
     for name, model in {
         "structured_case": ClinicalCase,
         "rule_result": WorkflowRuleResult,
+        "rag_input": RAGInput,
         "evidence_pack": WorkflowEvidencePack,
         "gp_review_note": ReviewNote,
     }.items():
         model.model_validate_json((target / f"{name}.json").read_text(encoding="utf-8"))
+    result = WorkflowRuleResult.model_validate_json(
+        (target / "rule_result.json").read_text(encoding="utf-8")
+    )
+    request = RAGInput.model_validate_json((target / "rag_input.json").read_text(encoding="utf-8"))
+    if request != result.rag_input():
+        raise ValueError("Example RAG input differs from the public result projection")
     write_json(
         ROOT / "outputs/evaluation/artifact_checks.json",
         {
             "status": "passed",
             "html_documents": len(pages),
             "links_checked": count,
-            "contract_examples": 4,
+            "contract_examples": 5,
             "browser_visual_review": "not_performed_no_connected_browser_available",
             "scope": "Static link, internal anchor, draft marker, UTF-8 and contract validation. Does not claim pixel-level browser rendering QA.",
         },
     )
-    print(f"Validated {len(pages)} HTML documents, {count} links, and 4 contract examples")
+    print(f"Validated {len(pages)} HTML documents, {count} links, and 5 contract examples")
 
 
 if __name__ == "__main__":

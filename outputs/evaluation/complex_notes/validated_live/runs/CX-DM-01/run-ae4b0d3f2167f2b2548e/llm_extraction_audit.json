@@ -1,0 +1,106 @@
+{
+  "model": "llama3:8b",
+  "proposals": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "quote": "The driver was diagnosed with type 2 diabetes several years ago",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "history",
+      "status": "requires_confirmation",
+      "source_start": 0,
+      "source_end": 63
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "insulin",
+      "quote": "he now injects insulin each evening",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 126,
+      "source_end": 161
+    },
+    {
+      "field": "diabetes.recent_severe_hypoglycaemic_event",
+      "value": true,
+      "quote": "after skipping lunch last week he became sweaty and confused",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 212,
+      "source_end": 272
+    },
+    {
+      "field": "diabetes.hypoglycaemia_awareness",
+      "value": true,
+      "quote": "has not brought three months of monitoring records, and is waiting for endocrinology review",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 656,
+      "source_end": 747
+    }
+  ],
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "rejected": [],
+  "authoritative_facts_modified": true,
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 682,
+      "eval_count": 275,
+      "total_duration": 4620640600
+    }
+  ],
+  "input_format": "utf-8 text",
+  "output_format": "field_dictionary_grounded_proposals_v1",
+  "accepted_fields": [
+    "diabetes.present"
+  ],
+  "withheld": [
+    {
+      "field": "diabetes.treatment_category",
+      "value": "insulin",
+      "quote": "he now injects insulin each evening",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 126,
+      "source_end": 161,
+      "reason": "value_not_supported_by_quote"
+    },
+    {
+      "field": "diabetes.recent_severe_hypoglycaemic_event",
+      "value": true,
+      "quote": "after skipping lunch last week he became sweaty and confused",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 212,
+      "source_end": 272,
+      "reason": "value_not_supported_by_quote"
+    },
+    {
+      "field": "diabetes.hypoglycaemia_awareness",
+      "value": true,
+      "quote": "has not brought three months of monitoring records, and is waiting for endocrinology review",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 656,
+      "source_end": 747,
+      "reason": "value_not_supported_by_quote"
+    }
+  ],
+  "grounding_policy": "exact_quote_type_range_and_field_semantics_v1",
+  "status": "completed"
+}

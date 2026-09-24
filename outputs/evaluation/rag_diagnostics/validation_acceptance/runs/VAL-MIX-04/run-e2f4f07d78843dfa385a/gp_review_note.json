@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.2.0",
+  "case_id": "VAL-MIX-04",
+  "status": "DRAFT",
+  "assessment_outcome": "does_not_meet_standard",
+  "modules": [
+    {
+      "module": "hypertension",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "warnings": []
+    },
+    {
+      "module": "vision",
+      "assessment_outcome": "does_not_meet_standard",
+      "route": "human_review",
+      "triggered_rule_ids": [
+        "VIS-COM-DIPLOPIA-001"
+      ],
+      "missing_fields": [
+        "vision.monocular",
+        "vision.uncorrected.better_eye",
+        "vision.uncorrected.left.snellen",
+        "vision.uncorrected.right.snellen",
+        "vision.visual_field.confirmed_defect"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    },
+    {
+      "module": "hearing",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "hearing.average_frequencies_khz",
+        "hearing.clinical_assessment",
+        "hearing.unaided_better_ear_average_db"
+      ],
+      "warnings": []
+    },
+    {
+      "module": "blackout",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "blackout.mechanism_status",
+        "blackout.occurred"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    },
+    {
+      "module": "diabetes",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [
+        "DM-COM-INSULIN-001"
+      ],
+      "missing_fields": [
+        "diabetes.acutely_unwell",
+        "diabetes.driving_relevant_end_organ_effects",
+        "diabetes.glucose_monitoring_records_months",
+        "diabetes.hypoglycaemia_awareness",
+        "diabetes.metabolically_unstable",
+        "diabetes.recent_severe_hypoglycaemic_event",
+        "diabetes.regimen_minimises_hypoglycaemia",
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+        "diabetes.specialist_information_available"
+      ],
+      "warnings": []
+    }
+  ],
+  "rule_result_sha256": "1b38748694e1b33e6c9cf1bf41efcba9ddc859b1a209cce491b4513017290dc0",
+  "evidence_pack_sha256": "bd3a633888c01edef9e1ee1fa1542627d206714dc62ba5501915603ba0c59b8d",
+  "summary": "VAL-MIX-04: Does not meet standard. 5 requested modules; 22 unresolved fact fields. This draft is occupational fitness decision support. The result is limited to the implemented criteria and is not a licensing or employment decision.",
+  "review_checklist": [
+    "Clinician: review source facts, rule applicability and every provisional conclusion.",
+    "Confirm the commercial driving task and assess conditions outside the five-module scope.",
+    "Confirm missing/unverified case fact: blackout.mechanism_status",
+    "Confirm missing/unverified case fact: blackout.occurred",
+    "Confirm missing/unverified case fact: cardiovascular.blood_pressure.persistent_diastolic",
+    "Confirm missing/unverified case fact: cardiovascular.blood_pressure.persistent_systolic",
+    "Confirm missing/unverified case fact: diabetes.acutely_unwell",
+    "Confirm missing/unverified case fact: diabetes.driving_relevant_end_organ_effects",
+    "Confirm missing/unverified case fact: diabetes.glucose_monitoring_records_months",
+    "Confirm missing/unverified case fact: diabetes.hypoglycaemia_awareness",
+    "Confirm missing/unverified case fact: diabetes.metabolically_unstable",
+    "Confirm missing/unverified case fact: diabetes.recent_severe_hypoglycaemic_event",
+    "Confirm missing/unverified case fact: diabetes.regimen_minimises_hypoglycaemia",
+    "Confirm missing/unverified case fact: diabetes.severe_hypoglycaemic_event.occurred",
+    "Confirm missing/unverified case fact: diabetes.severe_hypoglycaemic_event.weeks_since_last",
+    "Confirm missing/unverified case fact: diabetes.specialist_information_available",
+    "Confirm missing/unverified case fact: hearing.average_frequencies_khz",
+    "Confirm missing/unverified case fact: hearing.clinical_assessment",
+    "Confirm missing/unverified case fact: hearing.unaided_better_ear_average_db",
+    "Confirm missing/unverified case fact: vision.monocular",
+    "Confirm missing/unverified case fact: vision.uncorrected.better_eye",
+    "Confirm missing/unverified case fact: vision.uncorrected.left.snellen",
+    "Confirm missing/unverified case fact: vision.uncorrected.right.snellen",
+    "Confirm missing/unverified case fact: vision.visual_field.confirmed_defect",
+    "requires_confirmation",
+    "Extraction semantic review: Possible extraction issues require confirmation",
+    "This second-pass model review does not establish clinical accuracy. A clinician must verify the original record and any flagged information.",
+    "Confirm blackout.mechanism_status (omission): Independent source reading differs from the extraction. The driver has established diabetes. The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. The driver has been adjusting meal times around split shifts and sometimes receives a sensor warning before feeling symptoms, but there is no documented recent episode requiring another person's assistance and no complete assessment of hypoglycaemia awareness in the material provided.",
+    "Confirm blackout.occurred (omission): Independent source reading differs from the extraction. Not documented",
+    "Confirm vision.visual_field.confirmed_defect (omission): Independent source reading differs from the extraction. The question is about the confirmation of a visual field defect, not the presence of diplopia or reduced visual acuity. The passage 2 confirms the presence of non-physiological diplopia, but this does not establish a visual field defect. Therefore, the answer is: not documented.",
+    "Fields withheld from rule inputs: blackout.mechanism_status, blackout.occurred, vision.visual_field.confirmed_defect"
+  ],
+  "llm_commentary": null,
+  "clinician_name": null,
+  "signed_at": null,
+  "final_clinical_authorization_required": true
+}

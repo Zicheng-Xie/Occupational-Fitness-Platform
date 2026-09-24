@@ -10,38 +10,6 @@ from occupational_fitness_rag.case_intake.traceable import extract_traceable_tex
 from occupational_fitness_rag.llm import OllamaClient
 from occupational_fitness_rag.schemas.workflow import ClinicalCase, Fact, TextSpan
 
-FIELD_EVIDENCE_TERMS = {
-    "cardiovascular": ("blood pressure", "bp", "hypertension", "cardiac", "heart"),
-    "blackout": ("blackout", "syncope", "loss of consciousness", "fainted", "fainting"),
-    "vision": ("vision", "visual", "eye", "diplopia", "monocular"),
-    "hearing": ("hearing", "audiometry", "audiogram", "audiologist", "ear"),
-    "diabetes": ("diabetes", "diabetic", "glucose", "insulin", "hypoglycaemia"),
-}
-
-
-def quote_mentions_field(field, quote):
-    lowered = quote.casefold()
-    root = field.split(".", 1)[0]
-    if any(term in lowered for term in FIELD_EVIDENCE_TERMS.get(root, ())):
-        return True
-    meaningful = {
-        token
-        for token in re.split(r"[._]", field)
-        if len(token) > 3
-        and token
-        not in {
-            "present",
-            "occurred",
-            "available",
-            "relevant",
-            "observed",
-            "confirmed",
-            "assessment",
-            "information",
-        }
-    }
-    return any(token in lowered for token in meaningful)
-
 
 def same_value(left, right):
     if type(left) is bool or type(right) is bool:
@@ -85,45 +53,15 @@ def quote_supports(field, value, quote, specs):
     return same_value(value, expected)
 
 
-def generic_quote_supports(field, value, quote, specs):
-    """Apply conservative type-specific evidence checks to model-only phrasing."""
-    lowered = quote.casefold()
-    if re.search(r"\b(?:no|not)\s+(?:\w+\s+){0,3}(?:information|data|details|history)\b", lowered):
-        return False
-    if re.search(r"\b(?:family history|mother|father|sibling|if|hypothetical)\b", lowered):
-        return False
-    if re.search(
-        r"\b(?:possible|possibly|suspected|query|uncertain|may have|might have)\b", lowered
-    ):
-        return False
-    if not quote_mentions_field(field, quote):
-        return False
-    kind = specs[field]["type"]
-    if kind == "boolean":
-        negated = bool(re.search(r"\b(?:no|not|nil|denies|without|negative for|never)\b", lowered))
-        return negated if value is False else not negated
-    if kind == "number":
-        if "persistent" in field and not re.search(
-            r"\b(?:persistent|persistently|sustained|repeated|average)\b", lowered
-        ):
-            return False
-        numbers = [float(item) for item in re.findall(r"(?<![\w.])-?\d+(?:\.\d+)?", quote)]
-        return any(float(value) == item for item in numbers)
-    if kind == "snellen":
-        return str(value).replace(" ", "") in quote.replace(" ", "")
-    if kind == "list":
-        numbers = [float(item) for item in re.findall(r"(?<![\w.])-?\d+(?:\.\d+)?", quote)]
-        return all(any(float(expected) == actual for actual in numbers) for expected in value)
-    tokens = [part for part in str(value).casefold().split("_") if len(part) > 2]
-    return bool(tokens) and all(token in lowered for token in tokens)
-
-
 def apply_model_proposals(case, response, specs, page_ranges=()):
     facts = dict(case.facts)
     accepted, withheld = [], list(response.get("rejected", []))
     warnings = list(case.warnings)
     for proposal in response.get("proposals", []):
         field, value, quote = proposal["field"], proposal["value"], proposal["quote"]
+        start = proposal.get("source_start")
+        if start is None:
+            start = case.source_text.find(quote) if quote else -1
         reason = None
         if field not in specs or not valid_value(field, value, specs):
             reason = "invalid_field_type_or_range"
@@ -131,31 +69,37 @@ def apply_model_proposals(case, response, specs, page_ranges=()):
             reason = "subject_is_not_patient"
         elif proposal.get("certainty", "explicit") != "explicit":
             reason = "statement_is_not_explicit"
+        elif proposal.get("temporality") == "history" and (
+            "blood_pressure" in field
+            or field.startswith(("vision.", "hearing."))
+            or field == "diabetes.treatment_category"
+        ):
+            reason = "historical_measurement_or_treatment_is_not_current"
         elif not quote or quote not in case.source_text:
             reason = "quote_not_in_input"
-        elif not (
-            quote_supports(field, value, quote, specs)
-            or generic_quote_supports(field, value, quote, specs)
+        elif (
+            type(start) is not int
+            or start < 0
+            or case.source_text[start : start + len(quote)] != quote
         ):
+            reason = "quote_offset_does_not_match_input"
+        elif field == "diabetes.treatment_category" and re.search(
+            r"not available for verification|awaiting verification|cannot be verified",
+            re.split(r"[.!?;](?=\s|$)|\n", case.source_text[start:], maxsplit=1)[0],
+            re.I,
+        ):
+            reason = "current_treatment_requires_verification"
+        elif not quote_supports(field, value, quote, specs):
             reason = "value_not_supported_by_quote"
         elif re.search(
-            r"\b(?:no|denies|without|negative for|family|if|hypothetical)\b[^.;:\n]{0,80}$",
-            case.source_text[
-                max(0, case.source_text.index(quote) - 100) : case.source_text.index(quote)
-            ],
+            r"\b(?:no|denies|without|negative for|family|mother|father|sister|brother|if|hypothetical)\b[^.;\n]{0,80}$",
+            case.source_text[max(0, start - 100) : start],
             flags=re.I,
         ):
             reason = "quote_omits_possible_negation_or_subject_context"
         if reason:
             withheld.append({**proposal, "reason": reason})
             continue
-        start = proposal.get("source_start")
-        if (
-            type(start) is not int
-            or start < 0
-            or case.source_text[start : start + len(quote)] != quote
-        ):
-            start = case.source_text.index(quote)
         end = start + len(quote)
         span = TextSpan(
             start=start,
@@ -173,6 +117,8 @@ def apply_model_proposals(case, response, specs, page_ranges=()):
                 status="conflicting",
                 evidence=[*previous.evidence, span],
                 method="model_baseline_conflict",
+                unit=specs[field].get("unit"),
+                derived_from=previous.derived_from,
             )
             warnings.append(f"CONFLICTING_FACT:{field}")
             withheld.append({**proposal, "reason": "conflict_with_other_input_evidence"})

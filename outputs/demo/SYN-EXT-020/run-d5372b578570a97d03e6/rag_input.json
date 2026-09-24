@@ -1,0 +1,333 @@
+{
+  "schema_version": "1.1.0",
+  "result_id": "RR-cead0332dbcbb1781a35",
+  "case_id": "SYN-EXT-020",
+  "red_flag_result_sha256": "476197e9c5818275eb5c60a8716a0a1d9213db653f4f2376d19f70cb2a3493dc",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "guideline_version": "AP-G56-22",
+  "route": "fast_path",
+  "rag_requests": [
+    {
+      "request_id": "RAG-9567e0628a80bd15",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "HTN-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "htn_com_screen_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-ee7e29fecf70f1b8",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "VIS-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-VIS-COM-002",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-007"
+      ],
+      "category": "vision",
+      "subcondition": "vision_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "vis_com_screen_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-1314dd9018e04bf2",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "HEAR-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "hear_com_screen_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-cf68ecbef1fe0315",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "BLK-COM-NO-HISTORY-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "blk_com_no_history_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-6aa84c4122cb47d2",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "DM-COM-NO-HISTORY-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-001"
+      ],
+      "category": "diabetes",
+      "subcondition": "diabetes_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "dm_com_no_history_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    }
+  ],
+  "indicator_context": {
+    "RAG-9567e0628a80bd15": {
+      "cardiovascular.blood_pressure.persistent_diastolic": {
+        "value": 80,
+        "status": "present",
+        "unit": "mmHg",
+        "evidence": [
+          {
+            "start": 290,
+            "end": 345,
+            "quote": "cardiovascular.blood_pressure.persistent_diastolic = 80",
+            "line_start": 7,
+            "line_end": 7,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "cardiovascular.blood_pressure.persistent_systolic": {
+        "value": 120,
+        "status": "present",
+        "unit": "mmHg",
+        "evidence": [
+          {
+            "start": 233,
+            "end": 288,
+            "quote": "cardiovascular.blood_pressure.persistent_systolic = 120",
+            "line_start": 6,
+            "line_end": 6,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    },
+    "RAG-ee7e29fecf70f1b8": {
+      "vision.diplopia.present": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 476,
+            "end": 507,
+            "quote": "vision.diplopia.present = false",
+            "line_start": 11,
+            "line_end": 11,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "vision.monocular": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 509,
+            "end": 533,
+            "quote": "vision.monocular = false",
+            "line_start": 12,
+            "line_end": 12,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "vision.uncorrected.better_eye": {
+        "value": "6/6",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 347,
+            "end": 387,
+            "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+            "line_start": 8,
+            "line_end": 8,
+            "pdf_page": null
+          },
+          {
+            "start": 389,
+            "end": 428,
+            "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          }
+        ],
+        "method": "snellen_better_eye",
+        "derived_from": [
+          "vision.uncorrected.right.snellen",
+          "vision.uncorrected.left.snellen"
+        ]
+      },
+      "vision.uncorrected.left.snellen": {
+        "value": "6/6",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 389,
+            "end": 428,
+            "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "vision.uncorrected.right.snellen": {
+        "value": "6/6",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 347,
+            "end": 387,
+            "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+            "line_start": 8,
+            "line_end": 8,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "vision.visual_field.confirmed_defect": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 430,
+            "end": 474,
+            "quote": "vision.visual_field.confirmed_defect = false",
+            "line_start": 10,
+            "line_end": 10,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    },
+    "RAG-1314dd9018e04bf2": {
+      "hearing.average_frequencies_khz": {
+        "value": [
+          0.5,
+          1,
+          2,
+          3
+        ],
+        "status": "present",
+        "unit": "kHz",
+        "evidence": [
+          {
+            "start": 726,
+            "end": 774,
+            "quote": "hearing.average_frequencies_khz = [0.5, 1, 2, 3]",
+            "line_start": 18,
+            "line_end": 18,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "hearing.clinical_assessment": {
+        "value": "possible_hearing_loss",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 535,
+            "end": 588,
+            "quote": "hearing.clinical_assessment = \"possible_hearing_loss\"",
+            "line_start": 13,
+            "line_end": 13,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "hearing.unaided_better_ear_average_db": {
+        "value": 39.9,
+        "status": "present",
+        "unit": "dB",
+        "evidence": [
+          {
+            "start": 680,
+            "end": 724,
+            "quote": "hearing.unaided_better_ear_average_db = 39.9",
+            "line_start": 17,
+            "line_end": 17,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    },
+    "RAG-cf68ecbef1fe0315": {
+      "blackout.occurred": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 590,
+            "end": 615,
+            "quote": "blackout.occurred = false",
+            "line_start": 14,
+            "line_end": 14,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    },
+    "RAG-6aa84c4122cb47d2": {
+      "diabetes.present": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 617,
+            "end": 641,
+            "quote": "diabetes.present = false",
+            "line_start": 15,
+            "line_end": 15,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    }
+  }
+}

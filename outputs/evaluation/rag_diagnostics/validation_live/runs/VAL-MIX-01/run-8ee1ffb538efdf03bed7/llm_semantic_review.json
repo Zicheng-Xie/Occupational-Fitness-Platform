@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v5",
+  "system_prompt_sha256": "05f0e1538255d28d2b276c908db223395bf4bd40b36a9cb9a3a9f88c7357952a",
+  "source_text_sha256": "f555d3b95eba79ade954a319ea1f3f4912182bdc5a4faa13a651c60525b9d2d5",
+  "input_facts_sha256": "4ace5d045c44d76934b5a31c9060b40f76eeb93d876d34c1fff28d3371bc5154",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 889,
+      "eval_count": 253,
+      "total_duration": 4772747300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 724,
+      "eval_count": 44,
+      "total_duration": 865883500
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "hearing.audiometry.available",
+      "kind": "unsupported",
+      "quote": "During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. No formal audiogram is available. He brought an invoice for a hearing aid consultation rather than a completed test, and neither the better-ear average nor the required frequencies has been measured in the supplied record.",
+      "explanation": "Independent source reading differs from the extraction. Hearing screening suggests possible hearing loss, but no formal audiogram is available.",
+      "evidence": [
+        {
+          "start": 602,
+          "end": 987,
+          "quote": "During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. No formal audiogram is available. He brought an invoice for a hearing aid consultation rather than a completed test, and neither the better-ear average nor the required frequencies has been measured in the supplied record.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "hearing.audiometry.available"
+  ],
+  "checked_fields": [
+    "cardiovascular.blood_pressure.persistent_diastolic",
+    "cardiovascular.blood_pressure.persistent_systolic",
+    "cardiovascular.chest_pain",
+    "hearing.audiometry.available",
+    "hearing.clinical_assessment"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "hearing"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "prompt_payload_sha256": "a9b5283b02472d600c9b89b965a979084bb22e7a45ad646d3bbaf1e85603ce25",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "hearing.audiometry.available": {
+      "value": false,
+      "status": "present",
+      "unit": null,
+      "evidence": [
+        {
+          "start": 765,
+          "end": 799,
+          "quote": "No formal audiogram is available. ",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "prose_explicit",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status",
+        "blackout.occurred",
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic",
+        "cardiovascular.chest_pain",
+        "hearing.audiometry.available"
+      ],
+      "status": "valid"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "hearing.clinical_assessment"
+      ],
+      "status": "valid"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "No information provided about blackout mechanism status."
+    },
+    {
+      "field": "blackout.occurred",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "No information provided about blackout occurrence."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "value": 106.0,
+      "status": "documented",
+      "quote": "The driver attends with a current signed GP summary and a three-week measurement log; after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. The driver recalls a much lower reading after exercise last summer, but that recollection is recorded separately from the current verified log and does not replace its persistent measurements. He denies current chest pain and has not experienced a definite blackout, although he occasionally feels light-headed when getting out of the cab.",
+      "explanation": "Current persistent diastolic blood pressure is 178/106 mmHg."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "value": 178.0,
+      "status": "documented",
+      "quote": "The driver attends with a current signed GP summary and a three-week measurement log; after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. The driver recalls a much lower reading after exercise last summer, but that recollection is recorded separately from the current verified log and does not replace its persistent measurements. He denies current chest pain and has not experienced a definite blackout, although he occasionally feels light-headed when getting out of the cab.",
+      "explanation": "Current persistent systolic blood pressure is 178/106 mmHg."
+    },
+    {
+      "field": "cardiovascular.chest_pain",
+      "value": false,
+      "status": "documented",
+      "quote": "The driver attends with a current signed GP summary and a three-week measurement log; after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. The driver recalls a much lower reading after exercise last summer, but that recollection is recorded separately from the current verified log and does not replace its persistent measurements. He denies current chest pain and has not experienced a definite blackout, although he occasionally feels light-headed when getting out of the cab.",
+      "explanation": "Driver denies current chest pain."
+    },
+    {
+      "field": "hearing.audiometry.available",
+      "value": null,
+      "status": "uncertain",
+      "quote": "During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. No formal audiogram is available. He brought an invoice for a hearing aid consultation rather than a completed test, and neither the better-ear average nor the required frequencies has been measured in the supplied record.",
+      "explanation": "Hearing screening suggests possible hearing loss, but no formal audiogram is available."
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": "possible_hearing_loss",
+      "status": "documented",
+      "quote": "During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. No formal audiogram is available. He brought an invoice for a hearing aid consultation rather than a completed test, and neither the better-ear average nor the required frequencies has been measured in the supplied record.",
+      "explanation": "Hearing screening suggests possible hearing loss."
+    }
+  ],
+  "output_facts_sha256": "7e4b39311d2a2cdcdbf494de2a1bd5c09c787dec52212596b3e902bf0bb76a30",
+  "facts_quarantined": true
+}

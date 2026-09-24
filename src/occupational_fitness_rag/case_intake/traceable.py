@@ -127,6 +127,31 @@ class FactCollector:
 
     def add(self, name, value, match, method="regex"):
         start, end = match.span() if hasattr(match, "span") else match
+        # A number found in an old or explicitly disputed record is not a
+        # verified current measurement. Keep its surrounding source for review.
+        contextual_uncertainty = False
+        if method == "regex" and (
+            type(value) in (int, float)
+            or name
+            in {"hearing.clinical_assessment", "vision.normal_statement", "vision.diplopia.present"}
+        ):
+            boundaries = [0, *[m.end() for m in re.finditer(r"[.!?;]\s+|\n+", self.text)]]
+            left = max(p for p in boundaries if p <= start)
+            right = next((p for p in boundaries if p >= end), len(self.text))
+            context = self.text[left:right]
+            if re.search(
+                r"\b(?:old|historical|unsigned|unverified|unconfirmed|unreliable)\b"
+                r"|\blast year\b|\bbefore treatment\b|\bdate is missing\b"
+                r"|\b(?:cannot|could not) confirm\b",
+                context,
+                re.I,
+            ) or (
+                name == "vision.diplopia.present"
+                and value is False
+                and re.match(r"\s+(?:at rest|today|during)\b", self.text[end:], re.I)
+            ):
+                contextual_uncertainty = True
+                start, end = left, right
         span = TextSpan(
             start=start,
             end=end,
@@ -136,18 +161,54 @@ class FactCollector:
             pdf_page=next((page for a, b, page in self.page_ranges if a <= start < b), None),
         )
         if not valid_value(name, value, self.specs):
-            self.facts[name] = Fact(status="requires_confirmation", evidence=[span], method=method)
+            self.facts[name] = Fact(
+                status="requires_confirmation",
+                evidence=[span],
+                method=method,
+                unit=self.specs[name].get("unit"),
+            )
             self.warnings.append(f"INVALID_VALUE:{name}")
             return
         previous = self.facts.get(name)
         evidence = [*(previous.evidence if previous else []), span]
+        if method == "regex" and (
+            (
+                name == "hearing.clinical_assessment"
+                and value == "no_hearing_loss"
+                and re.match(
+                    r"\s+(?:in|during) (?:ordinary |quiet )?conversation", self.text[end:], re.I
+                )
+            )
+            or (
+                name == "blackout.occurred"
+                and value is False
+                and re.search(
+                    r"\b(?:initially|ticks|initial form)\b",
+                    self.text[max(0, start - 60) : start],
+                    re.I,
+                )
+            )
+        ):
+            contextual_uncertainty = True
+        if contextual_uncertainty:
+            self.facts[name] = Fact(
+                status="requires_confirmation",
+                evidence=evidence,
+                unit=self.specs[name].get("unit"),
+                method="contextual_measurement_withheld",
+            )
+            self.warnings.append(f"UNCONFIRMED_MEASUREMENT_CONTEXT:{name}")
+            return
         if previous and (
             previous.status != "present"
             or type(previous.value) is not type(value)
             or previous.value != value
         ):
             self.facts[name] = Fact(
-                status="conflicting", evidence=evidence, method="conflict_detection"
+                status="conflicting",
+                evidence=evidence,
+                method="conflict_detection",
+                unit=self.specs[name].get("unit"),
             )
             self.warnings.append(f"CONFLICTING_FACT:{name}")
             return
@@ -161,6 +222,11 @@ class FactCollector:
 
     def pattern(self, name, pattern, value):
         for match in re.finditer(pattern, self.text, re.I):
+            # "Reports no chest pain/hearing loss" must not satisfy a positive
+            # report pattern. Negative patterns below retain their own semantics.
+            if value in (True, "possible_hearing_loss") and re.match(r"reports?\b", match[0], re.I):
+                if re.search(r"\b(?:no|not|denies|without)\b", match[0], re.I):
+                    continue
             self.add(name, value(match) if callable(value) else value, match)
 
 
@@ -197,7 +263,7 @@ def extract_traceable_text(
     c.pattern("cardiovascular.chest_pain", r"Reports?[^.;\n]*chest pain", True)
     c.pattern(
         "cardiovascular.chest_pain",
-        r"(?:Denies|No current)[^.;\n]*chest pain|(?:No|Nil|Denies) cardiac symptoms",
+        r"(?:Denies|No current|Reports? no)[^.;\n]*chest pain|(?:No|Nil|Denies) cardiac symptoms",
         False,
     )
     c.pattern(
@@ -313,6 +379,10 @@ def extract_traceable_text(
     )
     c.pattern("diabetes.treatment_category", r"Diabetes (?:is )?treated with insulin", "insulin")
 
+    from occupational_fitness_rag.case_intake.prose import extract_supported_prose
+
+    extract_supported_prose(c)
+
     # Optional structured addendum. Whitelisted fields, JSON types and units are
     # defined by the exported data dictionary; invalid facts abstain explicitly.
     for match in re.finditer(r"(?m)^([a-z][a-z0-9_.]+)\s*=\s*([^\n\r]+)", text):
@@ -376,6 +446,8 @@ def extract_traceable_file(path: str | Path, specs: dict, modules=None) -> Clini
     if path.suffix.lower() == ".pdf":
         parts, offset = [], 0
         with pymupdf.open(path) as doc:
+            if doc.page_count > 200:
+                raise ValueError("Case PDF exceeds the 200-page intake limit")
             for number, page in enumerate(doc, 1):
                 text = page.get_text(sort=True)
                 if not text.strip():
@@ -385,11 +457,15 @@ def extract_traceable_file(path: str | Path, specs: dict, modules=None) -> Clini
                 parts.append(text)
                 page_ranges.append((offset, offset + len(text), number))
                 offset += len(text) + 1
+                if offset > 100000:
+                    raise ValueError("Case PDF exceeds the 100,000-character intake limit")
         text, kind = "\n".join(parts), "pdf"
     elif path.suffix.lower() in {".txt", ".md"}:
         text, kind = source.decode("utf-8-sig"), "text"
     else:
         raise ValueError("Supported report files: UTF-8 .txt/.md and text-bearing .pdf")
+    if not text.strip() or len(text) > 100000:
+        raise ValueError("Case text must contain 1 to 100,000 characters")
     return extract_traceable_text(
         text,
         path.stem,

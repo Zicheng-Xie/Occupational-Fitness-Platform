@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.2.0",
+  "run_id": "run-2ede3d8b2cb8c8cfd5ab",
+  "case_id": "CX-MIX-09",
+  "input_file": "source_input.txt",
+  "created_at": "2026-09-23T19:45:59.913830+00:00",
+  "runtime": {
+    "python": "3.14.7",
+    "pydantic": "2.13.5",
+    "pymupdf": "1.28.2"
+  },
+  "config": {
+    "schema_version": "1.2.0",
+    "project_root": "..",
+    "rules": "configs/rules/austroads_commercial_v1.yaml",
+    "anchors": "configs/source_anchors.json",
+    "catalogue": "data/knowledge/processed/source_catalogue.json",
+    "output_directory": "outputs/runs",
+    "retrieval": {
+      "mode": "chroma",
+      "top_k": 5,
+      "candidate_k": 20,
+      "collection_name": "aftd_commercial_v1_1",
+      "persist_directory": "data/knowledge/indexes/chroma",
+      "embedding_model": "nomic-embed-text",
+      "ollama_url": "http://127.0.0.1:11434"
+    },
+    "llm": {
+      "enabled": true,
+      "provider": "ollama",
+      "base_url": "http://127.0.0.1:11434",
+      "model": "llama3:8b",
+      "timeout_seconds": 120,
+      "extraction_enabled": true,
+      "semantic_review_enabled": true,
+      "route_classification_enabled": false,
+      "narrative_enabled": false,
+      "context_length": 8192,
+      "max_output_tokens": 2048,
+      "max_input_chars": 10000,
+      "extraction_chunk_chars": 6000,
+      "extraction_chunk_overlap": 400,
+      "think": null,
+      "model_digest": null
+    }
+  },
+  "implementation_sha256": "3138bd3587d889e4dbd1b864adbc78fb18ea8b49c53ff91dbd732ec4d192b08e",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "index_sha256": "61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f",
+  "llm_status": "completed",
+  "semantic_review_status": "requires_confirmation",
+  "files": {
+    "audit_events.jsonl": "d4454cee7b55d35f2e054ebf14f511475308f41a90f7d3e5669b186da51d2b24",
+    "condition_map.json": "831603cbd447dceb244952758b7385f88a4d4058b89ced137af569207592edc9",
+    "draft_report.html": "c4f12169fb7fa00f93e9eec3d493362ca192cc02632fb57f5b866b3edd79e951",
+    "draft_report.md": "b1e6b96943e123c09d0f9ff017c658554017acdf66cb2e98d8ef87a6ba41ab58",
+    "evidence_pack.json": "c4668497118112430ca459718b4f50ff62f95839a57f63dd9cb5e948cde7be3c",
+    "gp_review_note.json": "4ba736b04e79699d1e7dcef5a6e28a1a8f95826ceb0ed768d87cc3e6f5de6618",
+    "llm_extraction_audit.json": "4d9bb37c79d389f1273c4ba11a1ac42892669966f402d4a9322e85428a4210f2",
+    "llm_semantic_review.json": "d450bd61f046822f227c6ad1c0cdb6725ac7e5068169c2eadf091c0b702c7104",
+    "rag_input.json": "e73bcb40b50598ba7bc66ed299afea571a3030d112ea889d86ea4969065335d3",
+    "rule_result.json": "3aadefa88e06b142542af01b643db51e49fa83a59b731c9d08d236a64a00187d",
+    "source_input.txt": "38094015d33619734a74e02b82927dc6f6f9c126b5d793cd4be126aefa1ab6dd",
+    "structured_case.json": "97d4752e6b397ec661355937c0d28e63e5c9880c641101cc2e1b442b3d06f380"
+  },
+  "audit_head_sha256": "a6d8d90b63da78ad951e164e0583371ac768e1858f6b8f6ae2af2141aee48cf7",
+  "review_status": "pending"
+}

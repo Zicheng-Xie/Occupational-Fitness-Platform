@@ -305,26 +305,24 @@ class RuleBook:
                 )
             if module in contradictions:
                 module_warnings.append("Conflicting case facts require reconciliation.")
+            review = case.extraction_metadata.get("semantic_review", {})
+            if review.get("manual_review_required") and module in review.get("review_modules", []):
+                module_warnings.append(
+                    "Extraction semantic review requires human confirmation before this draft is used."
+                )
             if module == "vision" and value("vision.visual_field.reported_defect") is True:
                 module_warnings.append("A reported field defect requires objective confirmation.")
-            configured_routes = {
-                WorkflowRoute(self.rules_by_id[item.rule_id]["outcome"]["route"])
-                for item in positives
-            }
+            # Preserve the established outcome-based routing policy. Contract
+            # adapters must not substitute collaborator-specific routing rules.
+            route = (
+                WorkflowRoute.FAST
+                if outcome == Outcome.MEETS
+                else WorkflowRoute.MISSING
+                if outcome == Outcome.INSUFFICIENT
+                else WorkflowRoute.REVIEW
+            )
             if module_warnings:
                 route = WorkflowRoute.HUMAN
-            elif missing:
-                route = WorkflowRoute.MISSING
-            elif WorkflowRoute.REVIEW in configured_routes:
-                route = WorkflowRoute.REVIEW
-            elif positives:
-                route = WorkflowRoute.FAST
-            else:
-                route = (
-                    WorkflowRoute.MISSING
-                    if outcome == Outcome.INSUFFICIENT
-                    else WorkflowRoute.REVIEW
-                )
             modules.append(
                 ModuleAssessment(
                     module=module,
@@ -342,16 +340,16 @@ class RuleBook:
             else WorkflowRoute.HUMAN
             if any(m.route == WorkflowRoute.HUMAN for m in modules)
             else WorkflowRoute.MISSING
-            if any(m.route == WorkflowRoute.MISSING for m in modules)
+            if outcome == Outcome.INSUFFICIENT
             else WorkflowRoute.REVIEW
         )
         requests = [
             RAGRequest(
                 request_id="RAG-" + digest([case.case_id, x.rule_id])[:16],
                 request_type=(
-                    "missing_information_guidance"
-                    if x.result == "unknown" or x.assessment_outcome == Outcome.INSUFFICIENT
-                    else "triggered_rule_evidence"
+                    "triggered_rule_evidence"
+                    if x.result == "triggered"
+                    else "missing_information_guidance"
                 ),
                 rule_id=x.rule_id,
                 source_ids=x.source_ids,

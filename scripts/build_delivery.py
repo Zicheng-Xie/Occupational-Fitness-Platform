@@ -50,6 +50,7 @@ def main():
             for filename in (
                 "structured_case.json",
                 "rule_result.json",
+                "rag_input.json",
                 "evidence_pack.json",
                 "gp_review_note.json",
             ):

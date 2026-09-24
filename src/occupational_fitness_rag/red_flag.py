@@ -7,6 +7,7 @@ the decision.
 
 from __future__ import annotations
 
+from occupational_fitness_rag.case_intake.narrative_context import select_narrative_context
 from occupational_fitness_rag.rules.engine import RuleBook
 from occupational_fitness_rag.schemas.red_flag_result import (
     AssessmentContext,
@@ -42,7 +43,7 @@ class RedFlagEvaluator:
     def __init__(self, rulebook: RuleBook):
         self.rulebook = rulebook
 
-    def evaluate(self, case: ClinicalCase) -> WorkflowRuleResult:
+    def evaluate(self, case: ClinicalCase, *, context_version=2) -> WorkflowRuleResult:
         internal = self.rulebook.evaluate(case)
         self._validate(internal)
         triggered = [
@@ -98,7 +99,16 @@ class RedFlagEvaluator:
             processing_warnings=warnings,
             requires_human_review=internal.requires_human_review,
             rag_requests=internal.rag_requests,
-            internal_metadata={"rule_engine_contract": "internal"},
+            internal_metadata={
+                "rule_engine_contract": "internal",
+                **({"narrative_context_version": context_version} if context_version != 1 else {}),
+                "narrative_context": select_narrative_context(
+                    case, internal.rag_requests, self.rulebook.rules_by_id, version=context_version
+                )
+                if internal.route != WorkflowRoute.FAST
+                else {},
+                "narrative_source_text_sha256": case.text_sha256,
+            },
         )
 
     @staticmethod

@@ -19,7 +19,11 @@ class RetrievalEngine:
 
     def retrieve(self, query: str, filters: dict[str, str]) -> list[FusedResult]:
         # HARD boundary: metadata filtering is supplied to the vector search itself.
-        vector_ranked = self.store.search(query, filters, self.settings.candidate_k)
+        vector_ranked = (
+            self.store.search(query, filters, self.settings.candidate_k)
+            if self.settings.use_vector
+            else []
+        )
 
         bm25_ranked = []
         if self.settings.use_bm25:

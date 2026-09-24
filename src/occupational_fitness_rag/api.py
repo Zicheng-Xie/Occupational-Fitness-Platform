@@ -9,6 +9,7 @@ from typing import Literal
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
+from occupational_fitness_rag import __version__
 from occupational_fitness_rag.pipeline.workflow import OccupationalFitnessWorkflow
 from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
@@ -128,19 +129,28 @@ def _load_experiment_cases(root: Path) -> dict[str, ExperimentCase]:
     return cases
 
 
-def create_app(config_path: str | None = None) -> FastAPI:
+def create_app(config_path: str | None = None, *, output_root=None) -> FastAPI:
     config_path = config_path or os.environ.get("FITNESS_WORKFLOW_CONFIG", "configs/workflow.yaml")
 
     @asynccontextmanager
     async def lifespan(app):
+        from occupational_fitness_rag.web.jobs import AssessmentJobs
+
         app.state.workflow = OccupationalFitnessWorkflow(config_path)
         app.state.experiment_cases = _load_experiment_cases(app.state.workflow.root)
-        yield
+        app.state.jobs = AssessmentJobs(app.state.workflow, output_root)
+        app.state.indicators = None
+        try:
+            yield
+        finally:
+            app.state.jobs.close()
 
     app = FastAPI(
         title="Occupational Fitness Platform",
-        version="0.4.0",
+        version=__version__,
         lifespan=lifespan,
+        docs_url=None,
+        redoc_url=None,
     )
 
     @app.get("/health")
@@ -154,9 +164,10 @@ def create_app(config_path: str | None = None) -> FastAPI:
     @app.post("/assess", response_model=AssessmentResponse)
     def assess(request: AssessmentInput):
         try:
-            case, result, evidence, note = app.state.workflow.from_text(
-                request.text, request.case_id, modules=request.modules_requested
-            )
+            with app.state.jobs.workflow_lock:
+                case, result, evidence, note = app.state.workflow.from_text(
+                    request.text, request.case_id, modules=request.modules_requested
+                )
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
         return {
@@ -170,9 +181,10 @@ def create_app(config_path: str | None = None) -> FastAPI:
     @app.post("/red-flag/evaluate", response_model=RedFlagAssessmentResponse)
     def evaluate_red_flag(request: AssessmentInput):
         try:
-            case, result = app.state.workflow.red_flag_from_text(
-                request.text, request.case_id, modules=request.modules_requested
-            )
+            with app.state.jobs.workflow_lock:
+                case, result = app.state.workflow.red_flag_from_text(
+                    request.text, request.case_id, modules=request.modules_requested
+                )
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
         category = {
@@ -199,9 +211,8 @@ def create_app(config_path: str | None = None) -> FastAPI:
                 for citation in citations
                 if citation is not None
             ],
-            "rag_input": result.rag_input().model_dump(mode="json")
-            if category == "rag_fusion"
-            else None,
+            # Every route binds its required evidence; non-fast routes also rank.
+            "rag_input": result.rag_input().model_dump(mode="json"),
         }
 
     @app.get(
@@ -236,11 +247,12 @@ def create_app(config_path: str | None = None) -> FastAPI:
         if experiment is None:
             raise HTTPException(404, "Experiment case not found")
         try:
-            _, result, evidence, _ = app.state.workflow.from_text(
-                experiment.text,
-                experiment.case_id,
-                modules=[experiment.module],
-            )
+            with app.state.jobs.workflow_lock:
+                _, result, evidence, _ = app.state.workflow.from_text(
+                    experiment.text,
+                    experiment.case_id,
+                    modules=[experiment.module],
+                )
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
 
@@ -284,10 +296,14 @@ def create_app(config_path: str | None = None) -> FastAPI:
     @app.post("/rag/retrieve", response_model=WorkflowEvidencePack)
     def retrieve(result: RAGInput):
         try:
-            return app.state.workflow.retriever.run(result)
+            with app.state.jobs.workflow_lock:
+                return app.state.workflow.retriever.run(result)
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
 
+    from occupational_fitness_rag.web.routes import attach_routes
+
+    attach_routes(app)
     return app
 
 

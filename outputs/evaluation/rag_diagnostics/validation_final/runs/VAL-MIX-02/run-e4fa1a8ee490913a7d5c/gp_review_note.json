@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.2.0",
+  "case_id": "VAL-MIX-02",
+  "status": "DRAFT",
+  "assessment_outcome": "insufficient_information",
+  "modules": [
+    {
+      "module": "hypertension",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "warnings": []
+    },
+    {
+      "module": "vision",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [
+        "VIS-COM-ACUITY-UNCONDITIONAL-001"
+      ],
+      "missing_fields": [
+        "vision.corrected.better_eye",
+        "vision.diplopia.present",
+        "vision.monocular",
+        "vision.specialist_assessment_available",
+        "vision.visual_field.confirmed_defect"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    },
+    {
+      "module": "hearing",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "hearing.average_frequencies_khz",
+        "hearing.clinical_assessment",
+        "hearing.unaided_better_ear_average_db"
+      ],
+      "warnings": []
+    },
+    {
+      "module": "blackout",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "blackout.diagnosis",
+        "blackout.mechanism_status",
+        "blackout.provoking_factor_well_defined",
+        "blackout.recurrence_while_driving_unlikely"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    },
+    {
+      "module": "diabetes",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "diabetes.gestational",
+        "diabetes.present"
+      ],
+      "warnings": []
+    }
+  ],
+  "rule_result_sha256": "df3dcb46cfc4988e135e9ce3069856b14e245ba85eed26b317986b80b6c685c4",
+  "evidence_pack_sha256": "35756769b5f20a4d2559906766afcbbf2afcd3ec705de653e7685b0d1d5be58c",
+  "summary": "VAL-MIX-02: Insufficient information. 5 requested modules; 16 unresolved fact fields. This draft is occupational fitness decision support. The result is limited to the implemented criteria and is not a licensing or employment decision.",
+  "review_checklist": [
+    "Clinician: review source facts, rule applicability and every provisional conclusion.",
+    "Confirm the commercial driving task and assess conditions outside the five-module scope.",
+    "Confirm missing/unverified case fact: blackout.diagnosis",
+    "Confirm missing/unverified case fact: blackout.mechanism_status",
+    "Confirm missing/unverified case fact: blackout.provoking_factor_well_defined",
+    "Confirm missing/unverified case fact: blackout.recurrence_while_driving_unlikely",
+    "Confirm missing/unverified case fact: cardiovascular.blood_pressure.persistent_diastolic",
+    "Confirm missing/unverified case fact: cardiovascular.blood_pressure.persistent_systolic",
+    "Confirm missing/unverified case fact: diabetes.gestational",
+    "Confirm missing/unverified case fact: diabetes.present",
+    "Confirm missing/unverified case fact: hearing.average_frequencies_khz",
+    "Confirm missing/unverified case fact: hearing.clinical_assessment",
+    "Confirm missing/unverified case fact: hearing.unaided_better_ear_average_db",
+    "Confirm missing/unverified case fact: vision.corrected.better_eye",
+    "Confirm missing/unverified case fact: vision.diplopia.present",
+    "Confirm missing/unverified case fact: vision.monocular",
+    "Confirm missing/unverified case fact: vision.specialist_assessment_available",
+    "Confirm missing/unverified case fact: vision.visual_field.confirmed_defect",
+    "requires_confirmation",
+    "Extraction semantic review: Possible extraction issues require confirmation",
+    "This second-pass model review does not establish clinical accuracy. A clinician must verify the original record and any flagged information.",
+    "Confirm blackout.mechanism_status (unsupported): Independent source reading differs from the extraction. The note does not explicitly state the mechanism status, but it is under investigation. The reading guidance advises not to infer the cause of an event, so the status is uncertain.",
+    "Confirm vision.specialist_assessment_available (omission): Independent source reading differs from the extraction. The note mentions that current visual measurements are available.",
+    "Confirm vision.visual_field.confirmed_defect (uncertainty): Independent source reading differs from the extraction. The note mentions a witnessed blackout, but the cause remains under investigation, so the status is uncertain and the value is null.",
+    "Fields withheld from rule inputs: blackout.mechanism_status, vision.specialist_assessment_available, vision.visual_field.confirmed_defect"
+  ],
+  "llm_commentary": null,
+  "clinician_name": null,
+  "signed_at": null,
+  "final_clinical_authorization_required": true
+}

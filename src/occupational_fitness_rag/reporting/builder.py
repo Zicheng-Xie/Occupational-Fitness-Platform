@@ -6,6 +6,7 @@ from urllib.parse import quote
 
 from occupational_fitness_rag.provenance import digest
 from occupational_fitness_rag.reporting.presentation import render_case_html
+from occupational_fitness_rag.reporting.semantic_review import review_lines
 from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
@@ -66,6 +67,9 @@ def build_review_note(
     ]
     checklist += [f"Confirm missing/unverified case fact: {key}" for key in missing]
     checklist += [warning.message for warning in result.processing_warnings]
+    review = case.extraction_metadata.get("semantic_review")
+    if review and review.get("manual_review_required"):
+        checklist += review_lines(review)
     checklist += [
         f"Unresolved guideline evidence request: {key}" for key in evidence.unresolved_requests
     ]
@@ -105,8 +109,47 @@ def render_reports(case, result, evidence, note, root: Path, output: Path) -> di
         md.append(
             f"| {module.module} | {LABELS[module.assessment_outcome]} | {module.route} | {len(module.missing_fields)} |"
         )
+    from occupational_fitness_rag.reporting.assessment_summary import assessment_summary
+
+    summary = assessment_summary(case, result)
+    md += ["", "## Established rule findings", "", summary["explanation"], ""]
+    md += [f"- {r.module}: `{r.rule_id}` - {r.reason}" for r in summary["findings"]]
+    md += ["", "## Information coverage", ""]
+    md += [
+        f"- {m['module']}: {m['status']}; {m['present']} supported fields; "
+        f"{m['missing']} unresolved rule fields."
+        for m in summary["modules"]
+    ]
     input_link = "source_input" + Path(case.source_document).suffix.lower()
+    audit = evidence.retrieval
+    md += [
+        "",
+        "## Retrieval activity",
+        "",
+        f"Rule-scoped ranking calls: {audit.get('ranking_calls', 0)}.",
+        f"Symptom discovery searches: {audit.get('symptom_discovery_calls', 0)}.",
+        "Zero triggered rules does not mean retrieval failed. Retrieved text is not a diagnosis.",
+        "",
+    ]
+    for group in audit.get("symptom_discovery", []):
+        md += [f"### {group['module']} symptom retrieval", "", "> " + group["query"], ""]
+        for citation in group["citations"]:
+            link = _relative_link(root, output, citation["source_path"], citation["pdf_page"])
+            md += [f"- [{citation['source_id']}, PDF {citation['pdf_page']}]({link})"]
     md += ["", f"[Original case input]({input_link})", ""]
+    review = case.extraction_metadata.get("semantic_review")
+    if review:
+        md += ["## Extraction semantic review", "", *review_lines(review), ""]
+        for issue in review.get("issues", []):
+            md += [f"### {issue['field']} — {issue['kind']}", "", issue["explanation"], ""]
+            for span in issue["evidence"]:
+                md += [
+                    f"Source lines {span['line_start']}–{span['line_end']}; "
+                    f"characters {span['start']}:{span['end']}",
+                    "> " + span["quote"].replace("\n", "\n> "),
+                    "",
+                ]
+        md += ["[Semantic review audit](llm_semantic_review.json)", ""]
     md += ["", "## Rule-to-source trace", ""]
     for item in result.rules_evaluated:
         if item.result not in {"triggered", "unknown"}:

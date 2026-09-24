@@ -188,7 +188,8 @@ def test_red_flag_endpoint_stops_before_rag():
         "printed_page",
         "pdf_page",
     }
-    assert payload["rag_input"] is None
+    assert payload["rag_input"]["rag_requests"]
+    assert payload["rag_input"]["route"] == "missing_information"
     assert "evidence_pack" not in payload
     assert "gp_review_note" not in payload
 
@@ -261,6 +262,7 @@ def test_model_timeout_preserves_replayable_template_report(monkeypatch, tmp_pat
         raise TimeoutError("synthetic timeout")
 
     monkeypatch.setattr(OllamaClient, "extract", unavailable)
+    monkeypatch.setattr(OllamaClient, "generate", unavailable)
     run = workflow.run_file(ROOT / "data/cases/nurse_notes/SYN-M2-009.txt", tmp_path)
     manifest = json.loads((run / "run_manifest.json").read_text(encoding="utf-8"))
     assert manifest["llm_status"] == "unavailable_fallback_to_template"

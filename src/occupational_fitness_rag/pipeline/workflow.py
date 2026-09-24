@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from occupational_fitness_rag.case_intake.model_intake import model_intake, pdf_ranges
+from occupational_fitness_rag.case_intake.semantic_review import semantic_review
 from occupational_fitness_rag.case_intake.traceable import (
     extract_traceable_file,
     extract_traceable_text,
@@ -25,9 +26,10 @@ from occupational_fitness_rag.reporting.builder import (
     validate_report_inputs,
 )
 from occupational_fitness_rag.retrieval.engine import RetrievalEngine
+from occupational_fitness_rag.retrieval.indicators import IndicatorRetriever
 from occupational_fitness_rag.retrieval.workflow import WorkflowRetriever, catalogue_chunks
 from occupational_fitness_rag.rules.engine import RuleBook
-from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
+from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     WorkflowEvidencePack,
@@ -66,12 +68,19 @@ class OccupationalFitnessWorkflow:
                 store, RetrievalSettings(candidate_k=ret.candidate_k, top_k=ret.top_k)
             )
         self.retriever = WorkflowRetriever(
-            self.catalogue, self.book, engine, ret.mode, ret.embedding_model
+            self.catalogue,
+            self.book,
+            engine,
+            ret.mode,
+            ret.embedding_model,
+            discovery_factory=(lambda: IndicatorRetriever(self)) if engine else None,
         )
 
-    def assess(self, case: ClinicalCase):
-        # Red Flag classification is completed before RAG receives the result.
-        result = self.red_flag.evaluate(case)
+    def assess(self, case: ClinicalCase, progress=None):
+        progress = progress or (lambda stage: None)
+        progress("rules")
+        result = self.evaluate_red_flag(case)
+        progress("retrieval")
         evidence = self.retriever.run(result.rag_input())
         note = build_review_note(case, result, evidence)
         return result, evidence, note
@@ -90,6 +99,10 @@ class OccupationalFitnessWorkflow:
         )
         case, intake = model_intake(case, self.book.field_specs, self.config.llm)
         case = case.model_copy(update={"extraction_metadata": intake})
+        case, _ = semantic_review(case, self.book.field_specs, self.config.llm)
+        return case, self.evaluate_red_flag(case)
+
+    def evaluate_red_flag(self, case: ClinicalCase):
         result = self.red_flag.evaluate(case)
         if self.config.llm.enabled and self.config.llm.route_classification_enabled:
             client = OllamaClient(self.config.llm)
@@ -116,15 +129,19 @@ class OccupationalFitnessWorkflow:
                     "error_type": type(exc).__name__,
                 }
             result = self.red_flag.apply_route_suggestion(result, suggestion)
-        return case, result
+        return result
 
-    def run_file(self, input_path, output_root=None, modules=None):
+    def run_file(self, input_path, output_root=None, modules=None, progress=None):
+        progress = progress or (lambda stage: None)
+        progress("parsing")
         case = extract_traceable_file(input_path, self.book.field_specs, modules)
-        case, intake = model_intake(
-            case, self.book.field_specs, self.config.llm, pdf_ranges(Path(input_path))
-        )
+        progress("extraction")
+        page_ranges = pdf_ranges(Path(input_path))
+        case, intake = model_intake(case, self.book.field_specs, self.config.llm, page_ranges)
         case = case.model_copy(update={"extraction_metadata": intake})
-        result, evidence, note = self.assess(case)
+        progress("semantic_review")
+        case, review = semantic_review(case, self.book.field_specs, self.config.llm, page_ranges)
+        result, evidence, note = self.assess(case, progress)
         code_files = sorted((self.root / "src/occupational_fitness_rag").rglob("*.py"))
         code_hash = digest(
             {p.relative_to(self.root).as_posix(): sha256_bytes(p.read_bytes()) for p in code_files}
@@ -154,6 +171,7 @@ class OccupationalFitnessWorkflow:
         (output / input_copy).write_bytes(Path(input_path).read_bytes())
         llm_status = intake["status"]
         write_json(output / "llm_extraction_audit.json", intake)
+        write_json(output / "llm_semantic_review.json", review)
         if self.config.llm.enabled and self.config.llm.narrative_enabled:
             client = OllamaClient(self.config.llm)
             try:
@@ -162,6 +180,11 @@ class OccupationalFitnessWorkflow:
                         "case_id": case.case_id,
                         "assessment_outcome": result.assessment_outcome,
                         "modules": [m.model_dump(mode="json") for m in result.modules],
+                        "semantic_review": {
+                            "status": review["status"],
+                            "quarantined_fields": review["quarantined_fields"],
+                            "manual_review_required": review["manual_review_required"],
+                        },
                         "case_note": case.source_text[:4000],
                         "evidence": [
                             {
@@ -202,6 +225,7 @@ class OccupationalFitnessWorkflow:
                     output / "llm_status.json",
                     {"status": llm_status, "error_type": type(exc).__name__},
                 )
+        progress("report")
         artifacts = {
             "structured_case.json": case,
             "condition_map.json": {
@@ -222,6 +246,7 @@ class OccupationalFitnessWorkflow:
                 },
             },
             "rule_result.json": result,
+            "rag_input.json": result.rag_input(),
             "evidence_pack.json": evidence,
             "gp_review_note.json": note,
         }
@@ -233,6 +258,7 @@ class OccupationalFitnessWorkflow:
             "case_loaded",
             "local_model_extraction_completed_or_fallback",
             "facts_validated",
+            "semantic_review_" + review["status"],
             "categories_mapped",
             "rules_evaluated",
             "evidence_bound",
@@ -274,6 +300,7 @@ class OccupationalFitnessWorkflow:
                 "ruleset_sha256": self.book.sha256,
                 "index_sha256": self.catalogue.index_sha256,
                 "llm_status": llm_status,
+                "semantic_review_status": review["status"],
                 "files": {
                     p.name: sha256_bytes(p.read_bytes())
                     for p in sorted(output.iterdir())
@@ -283,6 +310,7 @@ class OccupationalFitnessWorkflow:
                 "review_status": "pending",
             },
         )
+        progress("verification")
         self.verify_run(output)
         return output
 
@@ -313,6 +341,17 @@ class OccupationalFitnessWorkflow:
         case = ClinicalCase.model_validate_json(
             (output / "structured_case.json").read_text(encoding="utf-8")
         )
+        review = case.extraction_metadata.get("semantic_review")
+        if review is not None:
+            if "llm_semantic_review.json" not in manifest["files"]:
+                raise ValueError("Run manifest omits its semantic review audit")
+            saved_review = json.loads(
+                (output / "llm_semantic_review.json").read_text(encoding="utf-8")
+            )
+            if saved_review != review or review["output_facts_sha256"] != digest(case.facts):
+                raise ValueError("Semantic review does not match the saved facts")
+            if manifest.get("semantic_review_status") != review["status"]:
+                raise ValueError("Semantic review status differs from the manifest")
         input_copy = manifest.get("input_file")
         if not input_copy or input_copy not in manifest["files"]:
             raise ValueError("Run manifest omits its original case input")
@@ -325,9 +364,54 @@ class OccupationalFitnessWorkflow:
             (output / "evidence_pack.json").read_text(encoding="utf-8")
         )
         validate_report_inputs(case, result, evidence)
-        if digest(self.red_flag.evaluate(case)) != digest(result):
+        context_version = result.internal_metadata.get("narrative_context_version", 1)
+        replayed = (
+            self.red_flag.evaluate(case)
+            if context_version == 2
+            else self.red_flag.evaluate(case, context_version=context_version)
+        )
+        # Historical bundles predate bounded narrative context. Reproduce their
+        # original projection rather than rewriting immutable saved artifacts.
+        if "narrative_context" not in result.internal_metadata:
+            replayed = replayed.model_copy(
+                update={
+                    "internal_metadata": {
+                        key: value
+                        for key, value in replayed.internal_metadata.items()
+                        if key not in {"narrative_context", "narrative_source_text_sha256"}
+                    }
+                }
+            )
+        suggestion = result.internal_metadata.get("llm_route")
+        if suggestion is not None:
+            if suggestion.get("status") == "grounded" and not (
+                suggestion.get("evidence_quotes")
+                and all(
+                    isinstance(quote, str) and quote.strip() and quote in case.source_text
+                    for quote in suggestion["evidence_quotes"]
+                )
+            ):
+                raise ValueError("Saved route suggestion lacks source evidence")
+            replayed = self.red_flag.apply_route_suggestion(replayed, suggestion)
+        if digest(replayed) != digest(result):
             raise ValueError("Rules do not replay to the saved result")
+        if "rag_input.json" in manifest["files"]:
+            saved_input = json.loads((output / "rag_input.json").read_text(encoding="utf-8"))
+            if RAGInput.model_validate(saved_input) != result.rag_input():
+                raise ValueError("Saved RAG input differs from the Red Flag projection")
         self.catalogue.verify()
+        for item in evidence.retrieval.get("symptom_discovery", []):
+            if item["source_text_sha256"] != case.text_sha256:
+                raise ValueError("Symptom retrieval input fingerprint mismatch")
+            for span in item["source_passages"]:
+                if case.source_text[span["start"] : span["end"]] != span["quote"]:
+                    raise ValueError("Symptom retrieval source passage mismatch")
+            for citation in item["citations"]:
+                expected = self.catalogue.citation(
+                    citation["source_id"], citation["retrieval_score"], citation["score_type"]
+                ).model_dump(mode="json")
+                if citation != expected:
+                    raise ValueError("Symptom citation differs from the verified source catalogue")
         for item in evidence.evidence_items:
             for citation in item.citations:
                 if citation != self.catalogue.citation(

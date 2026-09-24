@@ -1,0 +1,1096 @@
+{
+  "schema_version": "1.0.0",
+  "cases": 8,
+  "completed": 7,
+  "fixture_sha256": "db0cf3d6765e9e4bb3a41d0a9f50894782689e53b10400438595b08c932ff208",
+  "model": "llama3:8b",
+  "label_origin": "engineering_seeded_extraction_errors",
+  "clinical_validation": false,
+  "exact_field_matches": 7,
+  "review_completion_rate": 0.875,
+  "seeded_issue_recall_all": 0.8571428571428571,
+  "clean_controls": 2,
+  "clean_controls_completed": 2,
+  "clean_controls_with_flags": 0,
+  "seeded_issue_recall_completed": 1.0,
+  "label_precision_completed": 1.0,
+  "limitations": [
+    "Small synthetic development set with deliberately seeded extraction errors.",
+    "Measures extraction review, not clinical outcomes or end-to-end extraction accuracy.",
+    "Expected fields are not sent to the model; additional flags require human adjudication.",
+    "Using the same model for extraction and review can preserve correlated errors.",
+    "Failed or skipped reviews are counted separately, never as successful checks."
+  ],
+  "rows": [
+    {
+      "case_id": "SR-NEG-01",
+      "module": "diabetes",
+      "expected_issue_fields": [
+        "diabetes.present"
+      ],
+      "flagged_fields": [
+        "diabetes.present"
+      ],
+      "expected_fields_detected": [
+        "diabetes.present"
+      ],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 10.905,
+      "input_case_sha256": "cf3e0d943ef9cfecf9bb9257e86309f09f66f128dde2e2e5ded7c80ad18a805d",
+      "reviewed_case_sha256": "61c80f1e56cd5047031172e1e98f368e9ce7f510c0a9f0575a48cb40506da9ee",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "independent_source_review_v4",
+        "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+        "source_text_sha256": "f81f90d314ba38b135d1fdf512afaf1dcf6ffa3fddc6d78f991e53e21aa45b7e",
+        "input_facts_sha256": "b1a6668529b13049662c18b5d48e002656390137770579ada2654c000ed91426",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 574,
+            "eval_count": 780,
+            "total_duration": 10850820800
+          }
+        ],
+        "attempts": [
+          {
+            "attempt": 1,
+            "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+            "status": "valid"
+          }
+        ],
+        "issues": [
+          {
+            "field": "diabetes.present",
+            "kind": "contradiction",
+            "quote": "No diabetes.",
+            "explanation": "Independent source reading differs from the extraction. The patient does not have diabetes.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 12,
+                "quote": "No diabetes.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "diabetes.present"
+        ],
+        "checked_fields": [
+          "diabetes.present"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "diabetes"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "a8d8bb072abe141f5013cce599d5ce859b91990b0e1072b17b45b8fae2512591",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "diabetes.present": {
+            "value": true,
+            "status": "present",
+            "unit": null,
+            "evidence": [
+              {
+                "start": 0,
+                "end": 12,
+                "quote": "No diabetes.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "source_observations": [
+          {
+            "field": "diabetes.present",
+            "value": false,
+            "status": "documented",
+            "quote": "No diabetes.",
+            "explanation": "The patient does not have diabetes."
+          },
+          {
+            "field": "diabetes.treatment_category",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The treatment category for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.driving_relevant_comorbidity_status",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The driving relevant comorbidity status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.recent_severe_hypoglycaemic_event",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The recent severe hypoglycaemic event status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.hypoglycaemia_awareness",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The hypoglycaemia awareness status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.regimen_minimises_hypoglycaemia",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The regimen minimises hypoglycaemia status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.driving_relevant_end_organ_effects",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The driving relevant end organ effects status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.initial_specialist_information_available",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The initial specialist information available status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.gestational",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The gestational status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.severe_hypoglycaemic_event.occurred",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The severe hypoglycaemic event occurred status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The weeks since last severe hypoglycaemic event status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.glucose_monitoring_records_months",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The glucose monitoring records months status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.specialist_information_available",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The specialist information available status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.acutely_unwell",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The acutely unwell status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.metabolically_unstable",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The metabolically unstable status for diabetes is not documented."
+          }
+        ],
+        "output_facts_sha256": "7b8d9a50ef504a8c7cc31ba36f40066af445b7fb1582ab5aa30c3b89a2486891",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-SUB-01",
+      "module": "diabetes",
+      "expected_issue_fields": [
+        "diabetes.present"
+      ],
+      "flagged_fields": [
+        "diabetes.present"
+      ],
+      "expected_fields_detected": [
+        "diabetes.present"
+      ],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 7.813,
+      "input_case_sha256": "b5cd38acad99faf2695bca78ca821d714732f73ef56c80d115a8f822b1cb4ba3",
+      "reviewed_case_sha256": "1d6528c61d9ea250a0559e4b47bb15012a29a50a9acab37fda1ad98818d70195",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "independent_source_review_v4",
+        "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+        "source_text_sha256": "f00edad6ffdf0774d77e89d39ce52b29bd5489eb0bdfaae17b15f049828022e6",
+        "input_facts_sha256": "1d0bb2a106a93b76910d7733412fbb948b6074bccf468ef2276dfa36bddea8b1",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 588,
+            "eval_count": 497,
+            "total_duration": 7776006700
+          }
+        ],
+        "attempts": [
+          {
+            "attempt": 1,
+            "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+            "status": "valid"
+          }
+        ],
+        "issues": [
+          {
+            "field": "diabetes.present",
+            "kind": "unsupported",
+            "quote": "The patient's mother has diabetes.",
+            "explanation": "Independent source reading differs from the extraction. The patient's own diabetes status is not recorded.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 34,
+                "quote": "The patient's mother has diabetes.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "diabetes.present"
+        ],
+        "checked_fields": [
+          "diabetes.present"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "diabetes"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "e9d81e5d82c06610a38ab6ba3de2cbca01effec2f11deff93d48acd9e8303407",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "diabetes.present": {
+            "value": true,
+            "status": "present",
+            "unit": null,
+            "evidence": [
+              {
+                "start": 0,
+                "end": 34,
+                "quote": "The patient's mother has diabetes.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "source_observations": [
+          {
+            "field": "diabetes.present",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The patient's own diabetes status is not recorded."
+          },
+          {
+            "field": "diabetes.gestational",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "No information provided about the patient's gestational diabetes status."
+          },
+          {
+            "field": "diabetes.recent_severe_hypoglycaemic_event",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "No information provided about the patient's recent severe hypoglycaemic event."
+          },
+          {
+            "field": "diabetes.hypoglycaemia_awareness",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "No information provided about the patient's hypoglycaemia awareness."
+          },
+          {
+            "field": "diabetes.regimen_minimises_hypoglycaemia",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "No information provided about the patient's regimen minimising hypoglycaemia."
+          },
+          {
+            "field": "diabetes.driving_relevant_end_organ_effects",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "No information provided about the patient's driving relevant end organ effects."
+          },
+          {
+            "field": "diabetes.initial_specialist_information_available",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "No information provided about the patient's initial specialist information available."
+          },
+          {
+            "field": "diabetes.specialist_information_available",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "No information provided about the patient's specialist information available."
+          },
+          {
+            "field": "diabetes.acutely_unwell",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "No information provided about the patient's acutely unwell status."
+          },
+          {
+            "field": "diabetes.metabolically_unstable",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "No information provided about the patient's metabolically unstable status."
+          }
+        ],
+        "output_facts_sha256": "8f9b44763a2e42bec939310fda01cf011f9de87f37827f52752deb26b6cce568",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-TIME-01",
+      "module": "hypertension",
+      "expected_issue_fields": [
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "flagged_fields": [
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "expected_fields_detected": [
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 4.011,
+      "input_case_sha256": "fd240d8d3eb62d6f7a9922824755611f9614cb9f0c11478f75ae9b7ae3d68615",
+      "reviewed_case_sha256": "e208e4aaf00665c98a4b274976a1af26f31ed3e038d38a71cfe9e5381ea84ce0",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "independent_source_review_v4",
+        "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+        "source_text_sha256": "5ac89b3282154c4525bd758a2772a07e4a738322a5fb7458c5695d0fe1a267c4",
+        "input_facts_sha256": "2c684c00c59e52e893bdae794be4e88354bd7e099e6b13c6491524d07c91d8b8",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 623,
+            "eval_count": 234,
+            "total_duration": 3971248300
+          }
+        ],
+        "attempts": [
+          {
+            "attempt": 1,
+            "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+            "status": "valid"
+          }
+        ],
+        "issues": [
+          {
+            "field": "cardiovascular.blood_pressure.persistent_systolic",
+            "kind": "unsupported",
+            "quote": "BP 172/102 mmHg was measured once today.",
+            "explanation": "Independent source reading differs from the extraction. The patient's persistent systolic blood pressure is not documented.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 40,
+                "quote": "BP 172/102 mmHg was measured once today.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "cardiovascular.blood_pressure.persistent_systolic"
+        ],
+        "checked_fields": [
+          "cardiovascular.blood_pressure.observed_diastolic",
+          "cardiovascular.blood_pressure.observed_systolic",
+          "cardiovascular.blood_pressure.persistent_systolic"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "hypertension"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "bcd354bbe1fd26b6e5b51db5ec2b9c431388f53df128dbb46f75401a0f3f3f31",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "cardiovascular.blood_pressure.persistent_systolic": {
+            "value": 172,
+            "status": "present",
+            "unit": "mmHg",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 40,
+                "quote": "BP 172/102 mmHg was measured once today.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "source_observations": [
+          {
+            "field": "cardiovascular.blood_pressure.observed_systolic",
+            "value": 172.0,
+            "status": "documented",
+            "quote": "BP 172/102 mmHg was measured once today.",
+            "explanation": "The patient's systolic blood pressure was measured once today."
+          },
+          {
+            "field": "cardiovascular.blood_pressure.observed_diastolic",
+            "value": 102.0,
+            "status": "documented",
+            "quote": "BP 172/102 mmHg was measured once today.",
+            "explanation": "The patient's diastolic blood pressure was measured once today."
+          },
+          {
+            "field": "cardiovascular.blood_pressure.persistent_systolic",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The patient's persistent systolic blood pressure is not documented."
+          },
+          {
+            "field": "cardiovascular.blood_pressure.persistent_diastolic",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The patient's persistent diastolic blood pressure is not documented."
+          }
+        ],
+        "output_facts_sha256": "a9e03b433fd74fe1c0c890f69ab24e77f255f052a1ef856787d63694ce38f45c",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-UNC-01",
+      "module": "blackout",
+      "expected_issue_fields": [
+        "blackout.diagnosis",
+        "blackout.mechanism_status"
+      ],
+      "flagged_fields": [
+        "blackout.diagnosis",
+        "blackout.mechanism_status"
+      ],
+      "expected_fields_detected": [
+        "blackout.diagnosis",
+        "blackout.mechanism_status"
+      ],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 2.504,
+      "input_case_sha256": "52afbc8e1c8be48e734d8246853c0f49ab7537368780e52ab6eb87becf4f9d52",
+      "reviewed_case_sha256": "6fb02724a81e715d12de4629a259f437bbbbdefbdf447b2e78f9ae21e501cd93",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "independent_source_review_v4",
+        "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+        "source_text_sha256": "44d9c01bf3468a3099181fef1fde331be202018b7894fd9fedcf99d4267ccebb",
+        "input_facts_sha256": "4bb2ccd43fd7206da23eb94902f63981ce01f254a27716702cc7bdcf8b0fbc73",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 491,
+            "eval_count": 139,
+            "total_duration": 2487738900
+          }
+        ],
+        "attempts": [
+          {
+            "attempt": 1,
+            "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+            "status": "valid"
+          }
+        ],
+        "issues": [
+          {
+            "field": "blackout.mechanism_status",
+            "kind": "contradiction",
+            "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+            "explanation": "Independent source reading differs from the extraction. The patient's blackout mechanism status is under investigation, but a diagnosis has not been established.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 85,
+                "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          },
+          {
+            "field": "blackout.diagnosis",
+            "kind": "contradiction",
+            "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+            "explanation": "Independent source reading differs from the extraction. The patient's diagnosis is undetermined, as a diagnosis has not been established.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 85,
+                "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "blackout.diagnosis",
+          "blackout.mechanism_status"
+        ],
+        "checked_fields": [
+          "blackout.diagnosis",
+          "blackout.mechanism_status"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "blackout"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "e114308301f1a37515024662d3bb2e185a34f199f099ca1b7cb28d558f123583",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "blackout.diagnosis": {
+            "value": "cardiac_syncope",
+            "status": "present",
+            "unit": null,
+            "evidence": [
+              {
+                "start": 0,
+                "end": 85,
+                "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          },
+          "blackout.mechanism_status": {
+            "value": "diagnosed",
+            "status": "present",
+            "unit": null,
+            "evidence": [
+              {
+                "start": 0,
+                "end": 85,
+                "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "source_observations": [
+          {
+            "field": "blackout.mechanism_status",
+            "value": "under_investigation",
+            "status": "documented",
+            "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+            "explanation": "The patient's blackout mechanism status is under investigation, but a diagnosis has not been established."
+          },
+          {
+            "field": "blackout.diagnosis",
+            "value": "undetermined",
+            "status": "documented",
+            "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+            "explanation": "The patient's diagnosis is undetermined, as a diagnosis has not been established."
+          }
+        ],
+        "output_facts_sha256": "9c284f39ac2d3831db65f6bcc02b4bb8c16766172e638f63d15033d1d937eb2b",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-MISSING-01",
+      "module": "hearing",
+      "expected_issue_fields": [
+        "hearing.average_frequencies_khz"
+      ],
+      "flagged_fields": [
+        "hearing.average_frequencies_khz"
+      ],
+      "expected_fields_detected": [
+        "hearing.average_frequencies_khz"
+      ],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 1.296,
+      "input_case_sha256": "c48c86981808e3564ab611e3ff65ecefad78378da2a1fd7d996a570975c13d52",
+      "reviewed_case_sha256": "86a07998245ea8d115f6b1234259ce54c29efb97657c0ff0a02191ff10fe1153",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "independent_source_review_v4",
+        "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+        "source_text_sha256": "55f7adb4ea1d5239fc09dc92ae6e0385ee92f73b15664c9b26b6e5774df5066a",
+        "input_facts_sha256": "e8457bd6cc9e1923a69f15b21c7badf04a0a3c73517959097c9517e2c50398db",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 431,
+            "eval_count": 63,
+            "total_duration": 1280239900
+          }
+        ],
+        "attempts": [
+          {
+            "attempt": 1,
+            "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+            "status": "valid"
+          }
+        ],
+        "issues": [
+          {
+            "field": "hearing.average_frequencies_khz",
+            "kind": "unsupported",
+            "quote": "The tested frequencies were not documented.",
+            "explanation": "Independent source reading differs from the extraction. The average frequencies were not documented, so the value is not available.",
+            "evidence": [
+              {
+                "start": 38,
+                "end": 81,
+                "quote": "The tested frequencies were not documented.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "hearing.average_frequencies_khz"
+        ],
+        "checked_fields": [
+          "hearing.average_frequencies_khz"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "hearing"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "2ed8144769457c4800c2dfb5d778cd549b000fa96b227055812e832277bfedb7",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "hearing.average_frequencies_khz": {
+            "value": [
+              0.5,
+              1,
+              2,
+              3
+            ],
+            "status": "present",
+            "unit": "kHz",
+            "evidence": [
+              {
+                "start": 38,
+                "end": 81,
+                "quote": "The tested frequencies were not documented.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "source_observations": [
+          {
+            "field": "hearing.average_frequencies_khz",
+            "value": null,
+            "status": "not_documented",
+            "quote": "The tested frequencies were not documented.",
+            "explanation": "The average frequencies were not documented, so the value is not available."
+          }
+        ],
+        "output_facts_sha256": "0e86c931dc6ced49b092d9b0c9937a6aceaedc0125a6ebe3e99646b1eceaf5da",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-OMIT-01",
+      "module": "vision",
+      "expected_issue_fields": [
+        "vision.uncorrected.right.snellen"
+      ],
+      "flagged_fields": [],
+      "expected_fields_detected": [],
+      "expected_fields_missed": [
+        "vision.uncorrected.right.snellen"
+      ],
+      "additional_flagged_fields": [],
+      "exact_field_match": false,
+      "completed": false,
+      "seconds": 22.888,
+      "input_case_sha256": "b5f15f8908d51a02d9c9d8e91bf880aad721e1656119dbe32c6a1024db3f245f",
+      "reviewed_case_sha256": "537090eccc54b2acba624412097e08fc613cadcb73c60ed3661db3afe103b5ae",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "independent_source_review_v4",
+        "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+        "source_text_sha256": "85689399f445950b2eebbd5733f56e677d2a86a5a2245a468c6c7abf0f95e6a8",
+        "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 656,
+            "eval_count": 208,
+            "total_duration": 3560845100
+          },
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 709,
+            "eval_count": 1192,
+            "total_duration": 19296762000
+          }
+        ],
+        "attempts": [
+          {
+            "attempt": 1,
+            "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+            "status": "invalid",
+            "error_type": "ValueError"
+          },
+          {
+            "attempt": 2,
+            "system_prompt_sha256": "3a4aead7fa0cd876b821522a8f4ad0c9a5cfe2c0c684b2689f05c84c708754b4",
+            "status": "invalid",
+            "error_type": "ValueError"
+          }
+        ],
+        "issues": [],
+        "quarantined_fields": [],
+        "checked_fields": [],
+        "manual_review_required": true,
+        "review_modules": [
+          "vision"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "66d913ef679ec89aa42854a423f08259782b9b613dd240f2c391b58680908b51",
+        "status": "unavailable_or_invalid",
+        "error_type": "ValueError",
+        "output_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+        "facts_quarantined": false
+      }
+    },
+    {
+      "case_id": "SR-CLEAN-01",
+      "module": "diabetes",
+      "expected_issue_fields": [],
+      "flagged_fields": [],
+      "expected_fields_detected": [],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 12.556,
+      "input_case_sha256": "d47cbee56b95c3d856f4863ad2f64cf367b0b3e23a7146d3439554f42dae0dff",
+      "reviewed_case_sha256": "47d131006f6cb27a033d71088767b9fc316a91bf077fe0e30a81074c82c86f93",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "independent_source_review_v4",
+        "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+        "source_text_sha256": "f81f90d314ba38b135d1fdf512afaf1dcf6ffa3fddc6d78f991e53e21aa45b7e",
+        "input_facts_sha256": "cdf88327be1f2e23dfc7915286939e2ee7cb921d79da467039ece229d30e689a",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 574,
+            "eval_count": 780,
+            "total_duration": 12540605500
+          }
+        ],
+        "attempts": [
+          {
+            "attempt": 1,
+            "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+            "status": "valid"
+          }
+        ],
+        "issues": [],
+        "quarantined_fields": [],
+        "checked_fields": [
+          "diabetes.present"
+        ],
+        "manual_review_required": false,
+        "review_modules": [],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "a8d8bb072abe141f5013cce599d5ce859b91990b0e1072b17b45b8fae2512591",
+        "status": "completed_no_issues",
+        "original_facts": {},
+        "source_observations": [
+          {
+            "field": "diabetes.present",
+            "value": false,
+            "status": "documented",
+            "quote": "No diabetes.",
+            "explanation": "The patient does not have diabetes."
+          },
+          {
+            "field": "diabetes.treatment_category",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The treatment category for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.driving_relevant_comorbidity_status",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The driving relevant comorbidity status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.recent_severe_hypoglycaemic_event",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The recent severe hypoglycaemic event status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.hypoglycaemia_awareness",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The hypoglycaemia awareness status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.regimen_minimises_hypoglycaemia",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The regimen minimises hypoglycaemia status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.driving_relevant_end_organ_effects",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The driving relevant end organ effects status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.initial_specialist_information_available",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The initial specialist information available status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.gestational",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The gestational status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.severe_hypoglycaemic_event.occurred",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The severe hypoglycaemic event occurred status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The weeks since last severe hypoglycaemic event status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.glucose_monitoring_records_months",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The glucose monitoring records months status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.specialist_information_available",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The specialist information available status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.acutely_unwell",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The acutely unwell status for diabetes is not documented."
+          },
+          {
+            "field": "diabetes.metabolically_unstable",
+            "value": null,
+            "status": "not_documented",
+            "quote": "",
+            "explanation": "The metabolically unstable status for diabetes is not documented."
+          }
+        ],
+        "output_facts_sha256": "cdf88327be1f2e23dfc7915286939e2ee7cb921d79da467039ece229d30e689a",
+        "facts_quarantined": false
+      }
+    },
+    {
+      "case_id": "SR-CLEAN-02",
+      "module": "hypertension",
+      "expected_issue_fields": [],
+      "flagged_fields": [],
+      "expected_fields_detected": [],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 2.479,
+      "input_case_sha256": "4073f0817ecd0da70cfc063ac44462bb853c46ae3f1d385c43c07de76cbc8ab2",
+      "reviewed_case_sha256": "1b7b26e4b7e257ad1971df49e5b50abb1d9a680e0f05cf2a516ed5cedf77457d",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "independent_source_review_v4",
+        "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+        "source_text_sha256": "5ac89b3282154c4525bd758a2772a07e4a738322a5fb7458c5695d0fe1a267c4",
+        "input_facts_sha256": "72ebfda58b19e3f26c54a07b0ec350e6f9cd1aedd388b4ce45104132af272b62",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 611,
+            "eval_count": 131,
+            "total_duration": 2420666000
+          }
+        ],
+        "attempts": [
+          {
+            "attempt": 1,
+            "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+            "status": "valid"
+          }
+        ],
+        "issues": [],
+        "quarantined_fields": [],
+        "checked_fields": [
+          "cardiovascular.blood_pressure.observed_diastolic",
+          "cardiovascular.blood_pressure.observed_systolic"
+        ],
+        "manual_review_required": false,
+        "review_modules": [],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "de4879d50dba9d25f5e495bae6cdb3af08b9abd73e8e5f8cb59da19ee181b824",
+        "status": "completed_no_issues",
+        "original_facts": {},
+        "source_observations": [
+          {
+            "field": "cardiovascular.blood_pressure.observed_systolic",
+            "value": 172.0,
+            "status": "documented",
+            "quote": "BP 172/102 mmHg was measured once today.",
+            "explanation": "The systolic blood pressure was measured once today."
+          },
+          {
+            "field": "cardiovascular.blood_pressure.observed_diastolic",
+            "value": 102.0,
+            "status": "documented",
+            "quote": "BP 172/102 mmHg was measured once today.",
+            "explanation": "The diastolic blood pressure was measured once today."
+          }
+        ],
+        "output_facts_sha256": "72ebfda58b19e3f26c54a07b0ec350e6f9cd1aedd388b4ce45104132af272b62",
+        "facts_quarantined": false
+      }
+    }
+  ]
+}

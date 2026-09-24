@@ -1,0 +1,95 @@
+{
+  "model": "llama3:8b",
+  "proposals": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "quote": "The driver has a history of diabetes",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "history",
+      "status": "requires_confirmation",
+      "source_start": 0,
+      "source_end": 36
+    },
+    {
+      "field": "blackout.occurred",
+      "value": true,
+      "quote": "he became unresponsive for about half a minute",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "history",
+      "status": "requires_confirmation",
+      "source_start": 109,
+      "source_end": 155
+    },
+    {
+      "field": "blackout.mechanism_status",
+      "value": "under_investigation",
+      "quote": "the mechanism remains under investigation",
+      "subject": "other",
+      "certainty": "uncertain",
+      "temporality": "history",
+      "status": "requires_confirmation",
+      "source_start": 605,
+      "source_end": 646
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "insulin",
+      "quote": "Diabetes is treated with insulin",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "history",
+      "status": "requires_confirmation",
+      "source_start": 46,
+      "source_end": 78
+    }
+  ],
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "rejected": [],
+  "authoritative_facts_modified": true,
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 919,
+      "eval_count": 215,
+      "total_duration": 3913154700
+    }
+  ],
+  "input_format": "utf-8 text",
+  "output_format": "field_dictionary_grounded_proposals_v1",
+  "accepted_fields": [
+    "diabetes.present",
+    "diabetes.treatment_category"
+  ],
+  "withheld": [
+    {
+      "field": "blackout.occurred",
+      "value": true,
+      "quote": "he became unresponsive for about half a minute",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "history",
+      "status": "requires_confirmation",
+      "source_start": 109,
+      "source_end": 155,
+      "reason": "value_not_supported_by_quote"
+    },
+    {
+      "field": "blackout.mechanism_status",
+      "value": "under_investigation",
+      "quote": "the mechanism remains under investigation",
+      "subject": "other",
+      "certainty": "uncertain",
+      "temporality": "history",
+      "status": "requires_confirmation",
+      "source_start": 605,
+      "source_end": 646,
+      "reason": "subject_is_not_patient"
+    }
+  ],
+  "grounding_policy": "exact_quote_type_range_and_field_semantics_v1",
+  "status": "completed"
+}

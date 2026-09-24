@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v4",
+  "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+  "source_text_sha256": "38094015d33619734a74e02b82927dc6f6f9c126b5d793cd4be126aefa1ab6dd",
+  "input_facts_sha256": "35fab0b3c3b4e7cc69fa1dd40b8aafde84a614a8f3ac3caa05871c8fdfb3f5f3",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 1918,
+      "eval_count": 418,
+      "total_duration": 8052461600
+    }
+  ],
+  "attempts": [
+    {
+      "attempt": 1,
+      "system_prompt_sha256": "7c1ffbe5b892247a15c214f18f2615dd609ca55e1b234eb27c30c85e11c05718",
+      "status": "invalid",
+      "error_type": "ValueError",
+      "validation_error": "Model output was incomplete; no partial facts will be accepted"
+    },
+    {
+      "attempt": 2,
+      "system_prompt_sha256": "3a4aead7fa0cd876b821522a8f4ad0c9a5cfe2c0c684b2689f05c84c708754b4",
+      "status": "valid"
+    }
+  ],
+  "issues": [
+    {
+      "field": "vision.visual_field.binocular_horizontal_extent_degrees",
+      "kind": "omission",
+      "quote": "A field printout shows a binocular horizontal extent of 135 degrees",
+      "explanation": "Independent source reading differs from the extraction. The driver's visual field was recorded as 135 degrees.",
+      "evidence": [
+        {
+          "start": 359,
+          "end": 426,
+          "quote": "A field printout shows a binocular horizontal extent of 135 degrees",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "vision.monocular",
+      "kind": "omission",
+      "quote": "He recalls being told that an old injury left one eye less useful",
+      "explanation": "Independent source reading differs from the extraction. The driver's monocular status was explicitly stated.",
+      "evidence": [
+        {
+          "start": 580,
+          "end": 645,
+          "quote": "He recalls being told that an old injury left one eye less useful",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "vision.monocular",
+    "vision.visual_field.binocular_horizontal_extent_degrees"
+  ],
+  "checked_fields": [
+    "cardiovascular.blood_pressure.observed_diastolic",
+    "cardiovascular.blood_pressure.observed_systolic"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "vision"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "prompt_payload_sha256": "c1df43f2042600449287c6a30efbf75ed8651b0e9232be264d98e4bac44ea8bb",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "vision.monocular": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "vision.visual_field.binocular_horizontal_extent_degrees": {
+      "value": null,
+      "status": "unknown",
+      "unit": "degrees",
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "source_observations": [
+    {
+      "field": "cardiovascular.blood_pressure.observed_systolic",
+      "value": 162.0,
+      "status": "documented",
+      "quote": "Today's BP 162/96 mmHg",
+      "explanation": "The driver's blood pressure was recorded as 162 mmHg."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.observed_diastolic",
+      "value": 96.0,
+      "status": "documented",
+      "quote": "Today's BP 162/96 mmHg",
+      "explanation": "The driver's blood pressure was recorded as 96 mmHg."
+    },
+    {
+      "field": "vision.normal_statement",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The driver's visual acuity was not explicitly stated."
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The driver's visual field was not explicitly stated."
+    },
+    {
+      "field": "vision.visual_field.binocular_horizontal_extent_degrees",
+      "value": 135.0,
+      "status": "documented",
+      "quote": "A field printout shows a binocular horizontal extent of 135 degrees",
+      "explanation": "The driver's visual field was recorded as 135 degrees."
+    },
+    {
+      "field": "vision.monocular",
+      "value": false,
+      "status": "documented",
+      "quote": "He recalls being told that an old injury left one eye less useful",
+      "explanation": "The driver's monocular status was explicitly stated."
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The driver's hearing assessment was not explicitly stated."
+    },
+    {
+      "field": "diabetes.present",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The driver's diabetes status was not explicitly stated."
+    }
+  ],
+  "output_facts_sha256": "c4bbc1a61487f6fa752f97e29f631f5ce3e9ad478a313dae41d0f81975adab77",
+  "facts_quarantined": true
+}

@@ -130,7 +130,10 @@ def demo(args):
 
 
 def export_schemas(args):
+    from occupational_fitness_rag.case_intake.semantic_review import SourceReviewResponse
     from occupational_fitness_rag.rules.engine import RuleBook
+    from occupational_fitness_rag.rules.team_contract import export_team_contract
+    from occupational_fitness_rag.schemas.indicator import IndicatorEvidence, IndicatorRequest
     from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
     from occupational_fitness_rag.schemas.workflow import (
         Citation,
@@ -147,10 +150,32 @@ def export_schemas(args):
         "rag_input": RAGInput,
         "evidence_pack": WorkflowEvidencePack,
         "gp_review_note": ReviewNote,
+        "indicator_request": IndicatorRequest,
+        "indicator_evidence": IndicatorEvidence,
+        "semantic_review_response": SourceReviewResponse,
     }.items():
         write_json(root / "schemas" / (name + ".schema.json"), model.model_json_schema())
     write_json(root / "schemas/field_dictionary.json", RuleBook(root / config.rules).field_specs)
-    return {"directory": str(root / "schemas"), "schemas": 6}
+    export_team_contract(root, RuleBook(root / config.rules))
+    return {"directory": str(root / "schemas"), "schemas": 9}
+
+
+def retrieval_study(args):
+    from occupational_fitness_rag.evaluation.retrieval_study import run_retrieval_study
+
+    return run_retrieval_study(_workflow(args), Path(args.gold), Path(args.output), args.backend)
+
+
+def judgment_study(args):
+    from occupational_fitness_rag.evaluation.model_judgment import run_judgment_study
+
+    return run_judgment_study(_workflow(args), Path(args.gold), Path(args.output), args.limit)
+
+
+def semantic_review_study(args):
+    from occupational_fitness_rag.evaluation.semantic_review import run_semantic_review_study
+
+    return run_semantic_review_study(_workflow(args), Path(args.gold), Path(args.output))
 
 
 def verify_run(args):
@@ -190,6 +215,17 @@ def main():
         ("export-schemas", "Export strict JSON schemas and fact dictionary", export_schemas),
         ("verify-run", "Replay rules and verify an existing artifact bundle", verify_run),
         ("benchmark", "Run curated synthetic regression evaluation", benchmark),
+        (
+            "retrieval-study",
+            "Compare indicator retrieval methods, grouping and Top K",
+            retrieval_study,
+        ),
+        ("judgment-study", "Run an isolated local model versus rule experiment", judgment_study),
+        (
+            "semantic-review-study",
+            "Test source review against seeded extraction errors",
+            semantic_review_study,
+        ),
     ]:
         command = sub.add_parser(name, help=help_text)
         command.add_argument("--config", default="configs/workflow.yaml")
@@ -213,6 +249,17 @@ def main():
         if name == "benchmark":
             command.add_argument("--gold", default="data/cases/gold/workflow_expectations.json")
             command.add_argument("--output", default="outputs/evaluation/workflow_metrics.json")
+        if name == "retrieval-study":
+            command.add_argument("--gold", default="data/cases/gold/indicator_queries.json")
+            command.add_argument("--output", default="outputs/evaluation/indicator_retrieval.json")
+            command.add_argument("--backend", choices=["offline", "chroma"], default="offline")
+        if name == "judgment-study":
+            command.add_argument("--gold", default="data/cases/gold/workflow_expectations.json")
+            command.add_argument("--output", default="outputs/evaluation/model_judgment.json")
+            command.add_argument("--limit", type=int, choices=range(1, 101), default=5)
+        if name == "semantic-review-study":
+            command.add_argument("--gold", default="data/cases/gold/semantic_review_cases.json")
+            command.add_argument("--output", default="outputs/evaluation/semantic_review.json")
     from occupational_fitness_rag.cli import (
         cmd_evaluate_extraction,
         cmd_prepare_cases,

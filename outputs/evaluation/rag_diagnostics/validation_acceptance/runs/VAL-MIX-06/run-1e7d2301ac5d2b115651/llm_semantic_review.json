@@ -1,0 +1,234 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v9",
+  "system_prompt_sha256": "e5f90f3ee79bddcb0dce06c9f155d8eac5229c24c58b83090948f5ce6ae5c4de",
+  "source_text_sha256": "2acf6d137bd99a1b119afe7621804d1e81bef3af6c811b66a3197f5297edb276",
+  "input_facts_sha256": "3b2eeaff13378bf8c7484fb4b249c8513e534b24aadf3d3a10264c2ae0ac0bfa",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 536,
+      "eval_count": 42,
+      "total_duration": 1291921000
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 497,
+      "eval_count": 35,
+      "total_duration": 1031114000
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 413,
+      "eval_count": 37,
+      "total_duration": 1113258800
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 521,
+      "eval_count": 38,
+      "total_duration": 1150002500
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 470,
+      "eval_count": 45,
+      "total_duration": 1216914000
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 473,
+      "eval_count": 74,
+      "total_duration": 1701986900
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "Synthetic validation nurse note. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. not_documented",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 54,
+          "quote": "Synthetic validation nurse note. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "vision.diplopia.present",
+      "kind": "omission",
+      "quote": "The optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.",
+      "explanation": "Independent source reading differs from the extraction. The patient explicitly has diplopia (double vision).",
+      "evidence": [
+        {
+          "start": 463,
+          "end": 818,
+          "quote": "The optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.treatment_category",
+    "vision.diplopia.present"
+  ],
+  "checked_fields": [
+    "blackout.mechanism_status",
+    "blackout.occurred",
+    "vision.visual_field.confirmed_defect"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes",
+    "vision"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "cd1e21f9d5b57f47929b4db93af4c1fec868dab23ec2c437a752155ff9a29b96",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "vision.diplopia.present": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status"
+      ],
+      "status": "valid",
+      "request_sha256": "830105eb8c5c7390a84014820c08fc2c6098efbbd0cdae87798b704515cf744f",
+      "response_schema_sha256": "070c17eeda72afbadc37d5d1a48a873fc42a15cc68e7ffee33556e8d3cd6b497"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "blackout.occurred"
+      ],
+      "status": "valid",
+      "request_sha256": "a88158b934697d96bcf9a9c6c0bf166f9d3a55c215f7ea0f9770dacc671c0f3f",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "cb2bda735de9f1b5f116a8f664a5886c50e6348c6cfa62187db854b112eb5edc",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    },
+    {
+      "batch": 4,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "6b8e3c9619f977f693c2fb84d5caacb7c9f9b49dc15e6f7254da7c0d88decafb",
+      "response_schema_sha256": "fcfc16c5a189ad3642a528b7f19075826c6ae96146665516dc6667a9cf57b37d"
+    },
+    {
+      "batch": 5,
+      "attempt": 1,
+      "fields": [
+        "vision.diplopia.present"
+      ],
+      "status": "valid",
+      "request_sha256": "d838c8f28f2d4a541c2d07e7a365f28f25de2499fa81fce629bee80d8ccea100",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    },
+    {
+      "batch": 6,
+      "attempt": 1,
+      "fields": [
+        "vision.visual_field.confirmed_defect"
+      ],
+      "status": "valid",
+      "request_sha256": "727ed3d729bc7cc194a575f147c4669c49abdd3ad4ec03df42c33c6787b9349d",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": "under_investigation",
+      "status": "documented",
+      "quote": "The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.",
+      "explanation": "under_investigation"
+    },
+    {
+      "field": "blackout.occurred",
+      "value": true,
+      "status": "documented",
+      "quote": "The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.",
+      "explanation": "Yes"
+    },
+    {
+      "field": "diabetes.present",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "not_documented"
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "none",
+      "status": "documented",
+      "quote": "Synthetic validation nurse note. No real patient data.",
+      "explanation": "not_documented"
+    },
+    {
+      "field": "vision.diplopia.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.",
+      "explanation": "The patient explicitly has diplopia (double vision)."
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "value": true,
+      "status": "documented",
+      "quote": "The optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.",
+      "explanation": "The question is about the confirmation of a visual field defect, not the presence of diplopia, reduced visual acuity, or blur. The answer is based on the information provided in the source passages."
+    }
+  ],
+  "output_facts_sha256": "f0aa4413345c7a572c4f4b5c81dad32393fd042b0b02959df837ab7a613bed13",
+  "facts_quarantined": true
+}

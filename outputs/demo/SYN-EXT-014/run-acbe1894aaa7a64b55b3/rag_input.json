@@ -1,0 +1,518 @@
+{
+  "schema_version": "1.1.0",
+  "result_id": "RR-03fc517317a1797c5806",
+  "case_id": "SYN-EXT-014",
+  "red_flag_result_sha256": "75f01408cc674310997ffe2c307de7d389c039ba2c69c77160b4045c775aaffc",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "guideline_version": "AP-G56-22",
+  "route": "rag_review",
+  "rag_requests": [
+    {
+      "request_id": "RAG-4d19fcff9f570d1f",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "DM-COM-INSULIN-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-007"
+      ],
+      "category": "diabetes",
+      "subcondition": "insulin_treated_diabetes",
+      "licence_context": "commercial",
+      "rag_query_key": "diabetes_insulin_commercial",
+      "ambiguity_reasons": [
+        "cross_chapter_condition"
+      ],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-acd2614e4ba4ac8a",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "DM-COM-INSULIN-CONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-DM-COM-009"
+      ],
+      "category": "diabetes",
+      "subcondition": "insulin_conditional",
+      "licence_context": "commercial",
+      "rag_query_key": "diabetes_insulin_conditional_commercial",
+      "ambiguity_reasons": [
+        "cross_chapter_condition"
+      ],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-4d70a48331d6c0ed",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "HTN-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "htn_com_screen_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-ccd159112c6e2299",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "VIS-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-VIS-COM-002",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-007"
+      ],
+      "category": "vision",
+      "subcondition": "vision_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "vis_com_screen_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-2007ec1da7256598",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "HEAR-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "hear_com_screen_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-151fc5022d06ec42",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "BLK-COM-NO-HISTORY-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "blk_com_no_history_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    }
+  ],
+  "indicator_context": {
+    "RAG-4d19fcff9f570d1f": {
+      "diabetes.gestational": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 697,
+            "end": 725,
+            "quote": "diabetes.gestational = false",
+            "line_start": 16,
+            "line_end": 16,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 672,
+            "end": 695,
+            "quote": "diabetes.present = true",
+            "line_start": 15,
+            "line_end": 15,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.treatment_category": {
+        "value": "insulin",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 1049,
+            "end": 1088,
+            "quote": "diabetes.treatment_category = \"insulin\"",
+            "line_start": 24,
+            "line_end": 24,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    },
+    "RAG-acd2614e4ba4ac8a": {
+      "diabetes.driving_relevant_end_organ_effects": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 996,
+            "end": 1047,
+            "quote": "diabetes.driving_relevant_end_organ_effects = false",
+            "line_start": 23,
+            "line_end": 23,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.glucose_monitoring_records_months": {
+        "value": 3,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 1090,
+            "end": 1136,
+            "quote": "diabetes.glucose_monitoring_records_months = 3",
+            "line_start": 25,
+            "line_end": 25,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.hypoglycaemia_awareness": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 906,
+            "end": 945,
+            "quote": "diabetes.hypoglycaemia_awareness = true",
+            "line_start": 21,
+            "line_end": 21,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 672,
+            "end": 695,
+            "quote": "diabetes.present = true",
+            "line_start": 15,
+            "line_end": 15,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.recent_severe_hypoglycaemic_event": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 854,
+            "end": 904,
+            "quote": "diabetes.recent_severe_hypoglycaemic_event = false",
+            "line_start": 20,
+            "line_end": 20,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.regimen_minimises_hypoglycaemia": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 947,
+            "end": 994,
+            "quote": "diabetes.regimen_minimises_hypoglycaemia = true",
+            "line_start": 22,
+            "line_end": 22,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.severe_hypoglycaemic_event.occurred": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 801,
+            "end": 852,
+            "quote": "diabetes.severe_hypoglycaemic_event.occurred = true",
+            "line_start": 19,
+            "line_end": 19,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.severe_hypoglycaemic_event.weeks_since_last": {
+        "value": 6,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 1188,
+            "end": 1244,
+            "quote": "diabetes.severe_hypoglycaemic_event.weeks_since_last = 6",
+            "line_start": 27,
+            "line_end": 27,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "diabetes.specialist_information_available": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 1138,
+            "end": 1186,
+            "quote": "diabetes.specialist_information_available = true",
+            "line_start": 26,
+            "line_end": 26,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    },
+    "RAG-4d70a48331d6c0ed": {
+      "cardiovascular.blood_pressure.persistent_diastolic": {
+        "value": 80,
+        "status": "present",
+        "unit": "mmHg",
+        "evidence": [
+          {
+            "start": 351,
+            "end": 406,
+            "quote": "cardiovascular.blood_pressure.persistent_diastolic = 80",
+            "line_start": 7,
+            "line_end": 7,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "cardiovascular.blood_pressure.persistent_systolic": {
+        "value": 120,
+        "status": "present",
+        "unit": "mmHg",
+        "evidence": [
+          {
+            "start": 294,
+            "end": 349,
+            "quote": "cardiovascular.blood_pressure.persistent_systolic = 120",
+            "line_start": 6,
+            "line_end": 6,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    },
+    "RAG-ccd159112c6e2299": {
+      "vision.diplopia.present": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 537,
+            "end": 568,
+            "quote": "vision.diplopia.present = false",
+            "line_start": 11,
+            "line_end": 11,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "vision.monocular": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 570,
+            "end": 594,
+            "quote": "vision.monocular = false",
+            "line_start": 12,
+            "line_end": 12,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "vision.uncorrected.better_eye": {
+        "value": "6/6",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 408,
+            "end": 448,
+            "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+            "line_start": 8,
+            "line_end": 8,
+            "pdf_page": null
+          },
+          {
+            "start": 450,
+            "end": 489,
+            "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          }
+        ],
+        "method": "snellen_better_eye",
+        "derived_from": [
+          "vision.uncorrected.right.snellen",
+          "vision.uncorrected.left.snellen"
+        ]
+      },
+      "vision.uncorrected.left.snellen": {
+        "value": "6/6",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 450,
+            "end": 489,
+            "quote": "vision.uncorrected.left.snellen = \"6/6\"",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "vision.uncorrected.right.snellen": {
+        "value": "6/6",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 408,
+            "end": 448,
+            "quote": "vision.uncorrected.right.snellen = \"6/6\"",
+            "line_start": 8,
+            "line_end": 8,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "vision.visual_field.confirmed_defect": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 491,
+            "end": 535,
+            "quote": "vision.visual_field.confirmed_defect = false",
+            "line_start": 10,
+            "line_end": 10,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    },
+    "RAG-2007ec1da7256598": {
+      "hearing.average_frequencies_khz": {
+        "value": null,
+        "status": "unknown",
+        "unit": "kHz",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "hearing.clinical_assessment": {
+        "value": "no_hearing_loss",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 596,
+            "end": 643,
+            "quote": "hearing.clinical_assessment = \"no_hearing_loss\"",
+            "line_start": 13,
+            "line_end": 13,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      },
+      "hearing.unaided_better_ear_average_db": {
+        "value": null,
+        "status": "unknown",
+        "unit": "dB",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-151fc5022d06ec42": {
+      "blackout.occurred": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 645,
+            "end": 670,
+            "quote": "blackout.occurred = false",
+            "line_start": 14,
+            "line_end": 14,
+            "pdf_page": null
+          }
+        ],
+        "method": "structured_addendum",
+        "derived_from": []
+      }
+    }
+  }
+}

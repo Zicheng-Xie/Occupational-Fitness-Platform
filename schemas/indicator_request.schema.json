@@ -1,0 +1,78 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "case_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$",
+      "title": "Case Id",
+      "type": "string"
+    },
+    "indicator_id": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Indicator Id",
+      "type": "string"
+    },
+    "module": {
+      "enum": [
+        "hypertension",
+        "vision",
+        "hearing",
+        "blackout",
+        "diabetes"
+      ],
+      "title": "Module",
+      "type": "string"
+    },
+    "source_document": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Source Document",
+      "type": "string"
+    },
+    "source_text": {
+      "maxLength": 100000,
+      "minLength": 1,
+      "title": "Source Text",
+      "type": "string"
+    },
+    "start": {
+      "minimum": 0,
+      "title": "Start",
+      "type": "integer"
+    },
+    "end": {
+      "exclusiveMinimum": 0,
+      "title": "End",
+      "type": "integer"
+    },
+    "top_k": {
+      "default": 5,
+      "maximum": 20,
+      "minimum": 1,
+      "title": "Top K",
+      "type": "integer"
+    },
+    "expand_references": {
+      "default": true,
+      "title": "Expand References",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "case_id",
+    "indicator_id",
+    "module",
+    "source_document",
+    "source_text",
+    "start",
+    "end"
+  ],
+  "title": "IndicatorRequest",
+  "type": "object"
+}

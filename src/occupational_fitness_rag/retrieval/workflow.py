@@ -5,6 +5,7 @@ from __future__ import annotations
 from occupational_fitness_rag.ingestion.models import GuidelineChunk
 from occupational_fitness_rag.ingestion.source_catalogue import SourceCatalogue
 from occupational_fitness_rag.provenance import digest
+from occupational_fitness_rag.retrieval.query_builder import build_indicator_query
 from occupational_fitness_rag.rules.engine import RuleBook
 from occupational_fitness_rag.schemas.red_flag_result import RAGInput
 from occupational_fitness_rag.schemas.workflow import (
@@ -49,9 +50,12 @@ class WorkflowRetriever:
         engine=None,
         mode="exact",
         embedding_model="none",
+        discovery_factory=None,
     ):
         self.catalogue, self.book, self.engine, self.mode = catalogue, book, engine, mode
         self.embedding_model = embedding_model if mode == "chroma" else "none"
+        self.discovery_factory = discovery_factory
+        self.discovery_retriever = None
         self.rules = {r["rule_id"]: r for r in book.rules}
         for rule in book.rules:
             for source_id in rule["source_ids"]:
@@ -73,6 +77,10 @@ class WorkflowRetriever:
                 for key in ("category", "subcondition", "rag_query_key", "source_ids")
             ):
                 raise ValueError("RAG request does not match the authoritative rule catalogue")
+            if not set(result.indicator_context.get(request.request_id, {})) <= set(
+                rule["required_facts"]
+            ):
+                raise ValueError("Indicator context exceeds the requested rule's required facts")
             citations, unresolved = [], []
             for source_id in request.source_ids:
                 citation = self.catalogue.citation(source_id)
@@ -91,17 +99,8 @@ class WorkflowRetriever:
             query = None
             ranked_candidates = []
             # Required exact citations are never displaced by top-k ranking.
-            if (
-                self.engine
-                and result.route != WorkflowRoute.FAST
-                and request.request_type == "missing_information_guidance"
-            ):
-                ambiguity = " ".join(request.ambiguity_reasons)
-                fields = " ".join(sorted(request.fact_context))
-                query = (
-                    f"{request.category} {request.subcondition} "
-                    f"{rule['reason_template']} {ambiguity} {fields}"
-                ).strip()
+            if self.engine and result.route != WorkflowRoute.FAST:
+                query = build_indicator_query(result, request, rule)
                 hits = self.engine.retrieve(query, filters)
                 semantic_calls += 1
                 scores = {}
@@ -145,6 +144,17 @@ class WorkflowRetriever:
                     ranked_candidates=ranked_candidates,
                 )
             )
+        discovery = []
+        if (
+            self.discovery_factory
+            and result.narrative_context
+            and result.route != WorkflowRoute.FAST
+        ):
+            from occupational_fitness_rag.retrieval.discovery import discover_symptoms
+
+            if self.discovery_retriever is None:
+                self.discovery_retriever = self.discovery_factory()
+            discovery = discover_symptoms(self.discovery_retriever, result, self.rules)
         unchanged = digest(result) == before
         if not unchanged:
             raise RuntimeError("Rule result was mutated during retrieval")
@@ -154,10 +164,15 @@ class WorkflowRetriever:
             rule_result_sha256=result.red_flag_result_sha256,
             index_sha256=self.catalogue.index_sha256,
             retrieval={
-                "query_mode": "per_request",
+                "query_mode": "per_rule_indicator_facts_and_scoped_narrative"
+                if result.narrative_context
+                else "per_rule_indicator_facts_and_quotes",
+                "narrative_context_requests": len(result.narrative_context),
                 "backend": self.mode,
                 "required_evidence": "exact_source_id_binding",
                 "ranking_calls": semantic_calls,
+                "symptom_discovery_calls": len(discovery),
+                "symptom_discovery": discovery,
                 "embedding_model": self.embedding_model,
                 "score_note": "Exact source identity score is not clinical confidence; optional ranking never replaces required evidence.",
             },

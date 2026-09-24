@@ -1,0 +1,744 @@
+{
+  "schema_version": "1.3.0",
+  "result_id": "RR-517c676afbf8dee63192",
+  "case_id": "CX-HEAR-01",
+  "case_sha256": "09fe2c1f94bd8e7fe6f12e9314365ffbcd354e76f0b47b1b63bf7dceddf6a663",
+  "source": {
+    "type": "nurse_note",
+    "source_file": "CX-HEAR-01.txt"
+  },
+  "assessment_context": {
+    "framework": "Austroads",
+    "licence_context": "commercial",
+    "job_title": null,
+    "modules_requested": [
+      "hearing"
+    ]
+  },
+  "ruleset": {
+    "ruleset_id": "austroads-commercial",
+    "ruleset_version": "1.2.0",
+    "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+    "guideline_version": "AP-G56-22",
+    "status": "pending_clinical_review"
+  },
+  "route": "missing_information",
+  "assessment_outcome": "insufficient_information",
+  "outcome_label": "Insufficient information / Human review required",
+  "has_red_flag": false,
+  "red_flags": [],
+  "triggered_rules": [],
+  "missing_information": [
+    {
+      "field": "hearing.clinical_assessment",
+      "status": "unknown",
+      "category": "hearing",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HEAR-COM-AUDIOMETRY-MISSING-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hearing_audiometry_required_commercial"
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "status": "unknown",
+      "category": "hearing",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HEAR-COM-UNCONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hearing_loss_commercial"
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "status": "unknown",
+      "category": "hearing",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HEAR-COM-CONDITIONAL-AID-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-003"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hearing_aid_conditional_commercial"
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "status": "unknown",
+      "category": "hearing",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HEAR-COM-INDIVIDUAL-ASSESSMENT-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-004"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hearing_individual_assessment_commercial"
+    },
+    {
+      "field": "hearing.average_frequencies_khz",
+      "status": "unknown",
+      "category": "hearing",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HEAR-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hear_com_screen_001"
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "status": "unknown",
+      "category": "hearing",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HEAR-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hear_com_screen_001"
+    },
+    {
+      "field": "hearing.unaided_better_ear_average_db",
+      "status": "unknown",
+      "category": "hearing",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "HEAR-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "source_evidence": [],
+      "rag_query_key": "hear_com_screen_001"
+    }
+  ],
+  "modules": [
+    {
+      "module": "hearing",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "hearing.average_frequencies_khz",
+        "hearing.clinical_assessment",
+        "hearing.unaided_better_ear_average_db"
+      ],
+      "warnings": []
+    }
+  ],
+  "rules_evaluated": [
+    {
+      "rule_id": "HEAR-COM-AUDIOMETRY-MISSING-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "possible_hearing_loss",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001"
+      ],
+      "rag_query_key": "hearing_audiometry_required_commercial",
+      "observed_facts": {
+        "hearing.audiometry.available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.clinical_assessment": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "hearing.clinical_assessment"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "hearing.clinical_assessment",
+              "operator": "==",
+              "expected": "possible_hearing_loss",
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "hearing.clinical_assessment",
+                  "operator": "==",
+                  "expected": "possible_hearing_loss",
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            },
+            {
+              "all": [
+                {
+                  "field": "hearing.clinical_assessment",
+                  "operator": "==",
+                  "expected": "possible_hearing_loss",
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "hearing.audiometry.available",
+                  "operator": "==",
+                  "expected": false,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "HEAR-COM-UNCONDITIONAL-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "better_ear_hearing_loss",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "rag_query_key": "hearing_loss_commercial",
+      "observed_facts": {
+        "hearing.average_frequencies_khz": {
+          "value": null,
+          "status": "unknown",
+          "unit": "kHz",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.clinical_assessment": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.unaided_better_ear_average_db": {
+          "value": null,
+          "status": "unknown",
+          "unit": "dB",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "hearing.clinical_assessment"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "hearing.clinical_assessment",
+              "operator": "==",
+              "expected": "possible_hearing_loss",
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "hearing.clinical_assessment",
+                  "operator": "==",
+                  "expected": "possible_hearing_loss",
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            },
+            {
+              "all": [
+                {
+                  "field": "hearing.average_frequencies_khz",
+                  "operator": "set_equals",
+                  "expected": [
+                    0.5,
+                    1,
+                    2,
+                    3
+                  ],
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "hearing.unaided_better_ear_average_db",
+                  "operator": ">=",
+                  "expected": 40,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "HEAR-COM-CONDITIONAL-AID-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_met",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-003"
+      ],
+      "rag_query_key": "hearing_aid_conditional_commercial",
+      "observed_facts": {
+        "hearing.aided_standard_met": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.ent_or_audiologist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "hearing.clinical_assessment"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "dependency": "HEAR-COM-UNCONDITIONAL-001",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "all": [
+                {
+                  "dependency": "HEAR-COM-UNCONDITIONAL-001",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            },
+            {
+              "all": [
+                {
+                  "field": "hearing.aided_standard_met",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "hearing.ent_or_audiologist_information_available",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "HEAR-COM-INDIVIDUAL-ASSESSMENT-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_not_met",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-004"
+      ],
+      "rag_query_key": "hearing_individual_assessment_commercial",
+      "observed_facts": {
+        "hearing.aided_standard_met": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "hearing.clinical_assessment"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "dependency": "HEAR-COM-UNCONDITIONAL-001",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "all": [
+                {
+                  "dependency": "HEAR-COM-UNCONDITIONAL-001",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            },
+            {
+              "field": "hearing.aided_standard_met",
+              "operator": "==",
+              "expected": false,
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "HEAR-COM-SCREEN-001",
+      "module": "hearing",
+      "category": "hearing",
+      "subcondition": "hearing_screen",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "rag_query_key": "hear_com_screen_001",
+      "observed_facts": {
+        "hearing.average_frequencies_khz": {
+          "value": null,
+          "status": "unknown",
+          "unit": "kHz",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.clinical_assessment": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "hearing.unaided_better_ear_average_db": {
+          "value": null,
+          "status": "unknown",
+          "unit": "dB",
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "hearing.average_frequencies_khz",
+        "hearing.clinical_assessment",
+        "hearing.unaided_better_ear_average_db"
+      ],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "any": [
+            {
+              "field": "hearing.clinical_assessment",
+              "operator": "==",
+              "expected": "no_hearing_loss",
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            },
+            {
+              "all": [
+                {
+                  "field": "hearing.average_frequencies_khz",
+                  "operator": "set_equals",
+                  "expected": [
+                    0.5,
+                    1,
+                    2,
+                    3
+                  ],
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "hearing.unaided_better_ear_average_db",
+                  "operator": "<",
+                  "expected": 40,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    }
+  ],
+  "processing_warnings": [],
+  "requires_human_review": true,
+  "rag_requests": [
+    {
+      "request_id": "RAG-82fa2f088c4d522b",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-AUDIOMETRY-MISSING-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001"
+      ],
+      "category": "hearing",
+      "subcondition": "possible_hearing_loss",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_audiometry_required_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-a4cf85f4a64f0d54",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-UNCONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "subcondition": "better_ear_hearing_loss",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_loss_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-bdaa3e181339dad4",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-CONDITIONAL-AID-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-003"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_met",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_aid_conditional_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-885adf289a891619",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-INDIVIDUAL-ASSESSMENT-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-004"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_not_met",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_individual_assessment_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-52c0bd0ab3120efe",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "hear_com_screen_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "hearing.average_frequencies_khz": "unknown",
+        "hearing.clinical_assessment": "unknown",
+        "hearing.unaided_better_ear_average_db": "unknown"
+      }
+    }
+  ],
+  "internal_metadata": {
+    "rule_engine_contract": "internal",
+    "narrative_context": {
+      "RAG-82fa2f088c4d522b": [
+        {
+          "start": 0,
+          "end": 393,
+          "quote": "The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 397,
+          "end": 746,
+          "quote": "A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist's signed report has been requested.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ],
+      "RAG-a4cf85f4a64f0d54": [
+        {
+          "start": 0,
+          "end": 393,
+          "quote": "The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 397,
+          "end": 746,
+          "quote": "A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist's signed report has been requested.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ],
+      "RAG-bdaa3e181339dad4": [
+        {
+          "start": 0,
+          "end": 393,
+          "quote": "The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 397,
+          "end": 746,
+          "quote": "A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist's signed report has been requested.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ],
+      "RAG-885adf289a891619": [
+        {
+          "start": 0,
+          "end": 393,
+          "quote": "The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 397,
+          "end": 746,
+          "quote": "A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist's signed report has been requested.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ],
+      "RAG-52c0bd0ab3120efe": [
+        {
+          "start": 0,
+          "end": 393,
+          "quote": "The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        },
+        {
+          "start": 397,
+          "end": 746,
+          "quote": "A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist's signed report has been requested.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    },
+    "narrative_source_text_sha256": "3d34ea9896edc0c207f877385e10cdaf8eb24c3bafa9e32b1079fd29f86f8831"
+  }
+}

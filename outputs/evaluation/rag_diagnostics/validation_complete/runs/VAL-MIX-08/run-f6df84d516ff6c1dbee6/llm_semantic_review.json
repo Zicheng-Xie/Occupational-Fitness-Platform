@@ -1,0 +1,234 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v9",
+  "system_prompt_sha256": "e5f90f3ee79bddcb0dce06c9f155d8eac5229c24c58b83090948f5ce6ae5c4de",
+  "source_text_sha256": "cb16f8135ad4fae525de7f269f48f6e79cbc9b55c702819a7056617bebcb1438",
+  "input_facts_sha256": "8110732da1fcca5f0f897cc795f6a6273d4c7dfabcd02e1959a01e73c205c0ec",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 547,
+      "eval_count": 40,
+      "total_duration": 1282009300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 508,
+      "eval_count": 36,
+      "total_duration": 1196543100
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 424,
+      "eval_count": 49,
+      "total_duration": 1359977000
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 532,
+      "eval_count": 71,
+      "total_duration": 1655848200
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 497,
+      "eval_count": 81,
+      "total_duration": 1873315700
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 491,
+      "eval_count": 42,
+      "total_duration": 1214186400
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "blackout.mechanism_status",
+      "kind": "omission",
+      "quote": "Synthetic validation nurse note. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. not documented",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 54,
+          "quote": "Synthetic validation nurse note. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "blackout.occurred",
+      "kind": "omission",
+      "quote": "The driver brings an audiology appointment confirmation and an endocrinology referral, with both visits still pending. The nurse records the documented diabetes treatment and current screening concern while leaving specialist advice, monitoring completeness and quantified hearing performance open for review.",
+      "explanation": "Independent source reading differs from the extraction. Not documented",
+      "evidence": [
+        {
+          "start": 926,
+          "end": 1235,
+          "quote": "The driver brings an audiology appointment confirmation and an endocrinology referral, with both visits still pending. The nurse records the documented diabetes treatment and current screening concern while leaving specialist advice, monitoring completeness and quantified hearing performance open for review.",
+          "line_start": 7,
+          "line_end": 7,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "blackout.mechanism_status",
+    "blackout.occurred"
+  ],
+  "checked_fields": [
+    "diabetes.present",
+    "diabetes.treatment_category",
+    "hearing.audiometry.available",
+    "hearing.clinical_assessment"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "blackout"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "28690223149e844f8b904e5c487a21f9fc7da069a25dc059d04ee47dd815cbac",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "blackout.mechanism_status": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "blackout.occurred": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status"
+      ],
+      "status": "valid",
+      "request_sha256": "f5d85da8ab978ea367e8607c63aad2badd4346d267a65bfb0c217ee1409d47c6",
+      "response_schema_sha256": "070c17eeda72afbadc37d5d1a48a873fc42a15cc68e7ffee33556e8d3cd6b497"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "blackout.occurred"
+      ],
+      "status": "valid",
+      "request_sha256": "c11a554d71fd58f8b7ec1b6f4331801cc210cf61705281a9b9722e0328bdcc5d",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "601ddfc9b4d7aa9a5f4b2eae5d06e9e56dd3dcad31da25facc9bf62f88fd943f",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    },
+    {
+      "batch": 4,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "8a5f1b28544143b762524165112607b0a2c30e7ad029c4071a125b53376b2058",
+      "response_schema_sha256": "fcfc16c5a189ad3642a528b7f19075826c6ae96146665516dc6667a9cf57b37d"
+    },
+    {
+      "batch": 5,
+      "attempt": 1,
+      "fields": [
+        "hearing.audiometry.available"
+      ],
+      "status": "valid",
+      "request_sha256": "35ce21ea492a6e48bf64278b019a6246ce77d6aae672a4b67d8c0bfb220e7a93",
+      "response_schema_sha256": "23418a39effe6ea4e05e95ea95bbc152623ea79ecc5066bbd50f2e4ade7a2e6b"
+    },
+    {
+      "batch": 6,
+      "attempt": 1,
+      "fields": [
+        "hearing.clinical_assessment"
+      ],
+      "status": "valid",
+      "request_sha256": "8b89177ce8dc7115981aa6e780845a0224d9de4b446463a7bbeac09f2fa55dde",
+      "response_schema_sha256": "2f4a2257f287f7b726fad5f7096724cb008aa5de8fc17dedf8a39cc073464d2d"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": "not_investigated",
+      "status": "documented",
+      "quote": "Synthetic validation nurse note. No real patient data.",
+      "explanation": "not documented"
+    },
+    {
+      "field": "blackout.occurred",
+      "value": false,
+      "status": "documented",
+      "quote": "The driver brings an audiology appointment confirmation and an endocrinology referral, with both visits still pending. The nurse records the documented diabetes treatment and current screening concern while leaving specialist advice, monitoring completeness and quantified hearing performance open for review.",
+      "explanation": "Not documented"
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The driver reports established type 2 diabetes. At today's medication review the GP records that diabetes is managed with tablets, with no current insulin prescription. The driver sometimes feels tired after a missed meal but has no contemporaneous glucose measurement from those periods, so the nurse does not classify the tiredness as a confirmed hypoglycaemic episode or assume that hypoglycaemia awareness has been assessed.",
+      "explanation": "The patient has diabetes, which is managed with tablets and no current insulin prescription."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "glucose_lowering_agent_non_insulin",
+      "status": "documented",
+      "quote": "The driver reports established type 2 diabetes. At today's medication review the GP records that diabetes is managed with tablets, with no current insulin prescription. The driver sometimes feels tired after a missed meal but has no contemporaneous glucose measurement from those periods, so the nurse does not classify the tiredness as a confirmed hypoglycaemic episode or assume that hypoglycaemia awareness has been assessed.",
+      "explanation": "The driver reports established type 2 diabetes. At today's medication review the GP records that diabetes is managed with tablets, with no current insulin prescription."
+    },
+    {
+      "field": "hearing.audiometry.available",
+      "value": false,
+      "status": "documented",
+      "quote": "The driver brings an audiology appointment confirmation and an endocrinology referral, with both visits still pending. The nurse records the documented diabetes treatment and current screening concern while leaving specialist advice, monitoring completeness and quantified hearing performance open for review.",
+      "explanation": "The driver brings an audiology appointment confirmation and an endocrinology referral, with both visits still pending. The nurse records the documented diabetes treatment and current screening concern while leaving specialist advice, monitoring completeness and quantified hearing performance open for review."
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": "possible_hearing_loss",
+      "status": "documented",
+      "quote": "Clinical assessment suggests possible hearing impairment after the driver repeatedly missed spoken instructions, and audiometry has not been performed. He can follow conversation better when facing the speaker, but neither an unaided better-ear threshold nor an aided standard is documented. His employer's earlier form marked hearing satisfactory without describing a test; that form does not supply the missing audiometric measurements.",
+      "explanation": "possible_hearing_loss"
+    }
+  ],
+  "output_facts_sha256": "2b4790f054e834174fde4e6543ee1a7c5369cc3a9fc5778349329ce2b0ff9d5f",
+  "facts_quarantined": true
+}

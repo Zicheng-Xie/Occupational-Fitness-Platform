@@ -1,6 +1,34 @@
 # Engineering verification
 
-Software 0.4.0 / schema 1.2.0 uses the supplied AP-G56-22 guideline. Current machine-readable results are in `outputs/evaluation/`; open the [assessment records](../outputs/index.html) to inspect reports.
+Software 0.6.0 / assessment schema 1.2.0 uses the supplied AP-G56-22 guideline. Current machine-readable results are in `outputs/evaluation/`; open the [assessment records](../outputs/index.html) to inspect fixed demonstration reports. New indicator studies are described in [Retrieval experiments](retrieval_experiments.md); previous validation results below retain their original scope.
+
+## Semantic review integration
+
+The 0.6.0 update passed 131 automated tests, including 15 second-pass review checks. See
+`outputs/evaluation/semantic_review_tests.xml`. Source observations are validated before
+comparison; flagged and derived facts are withheld, invalid responses cannot modify facts,
+and failures route to human review. Saved review audits are checked against the final case.
+
+Actual local Llama 3 8B completed 7 of 8 deliberately seeded review scenarios; all seven
+completed cases matched their expected issue fields. Both clean controls had no flags.
+One vision omission case failed validation after two attempts. Overall, 6 of 7 seeded
+issue fields were detected when that failure is counted. See
+`outputs/evaluation/semantic_review.json` and [Extraction semantic review](semantic_review.md).
+These are development observations, not clinical accuracy or holdout estimates. Earlier
+prompt trials, including their false flags and invalid responses, are retained separately.
+
+The normal hearing intake was also run through actual Llama extraction, semantic review,
+Chroma retrieval, narrative generation and report verification. The resulting provisional
+outcome remained insufficient information; an extraction discrepancy was routed for human
+confirmation. This run does not establish that the model's concern is clinically correct.
+
+Browser checks passed for the seven-stage progress display, a live text submission, the review
+audit download and source-line navigation. The final review panel was visually inspected at
+1440-pixel desktop and 390-pixel mobile widths, with no page overflow or JavaScript errors.
+See `outputs/evaluation/semantic_review_browser.json`.
+
+The fixed 30-report demonstration collection preserves its original runs. New browser or CLI
+assessments contain the new review stage and audit; no model results are backfilled into old runs.
 
 | Check | Scope | Record |
 |---|---|---|

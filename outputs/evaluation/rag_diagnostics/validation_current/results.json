@@ -1,0 +1,644 @@
+{
+  "config": {
+    "schema_version": "1.2.0",
+    "project_root": "..",
+    "rules": "configs/rules/austroads_commercial_v1.yaml",
+    "anchors": "configs/source_anchors.json",
+    "catalogue": "data/knowledge/processed/source_catalogue.json",
+    "output_directory": "outputs/runs",
+    "retrieval": {
+      "mode": "chroma",
+      "top_k": 5,
+      "candidate_k": 20,
+      "collection_name": "aftd_commercial_v1_1",
+      "persist_directory": "data/knowledge/indexes/chroma",
+      "embedding_model": "nomic-embed-text",
+      "ollama_url": "http://127.0.0.1:11434"
+    },
+    "llm": {
+      "enabled": true,
+      "provider": "ollama",
+      "base_url": "http://127.0.0.1:11434",
+      "model": "llama3:8b",
+      "timeout_seconds": 120,
+      "extraction_enabled": true,
+      "semantic_review_enabled": true,
+      "route_classification_enabled": false,
+      "narrative_enabled": false,
+      "context_length": 8192,
+      "max_output_tokens": 2048,
+      "max_input_chars": 10000,
+      "extraction_chunk_chars": 6000,
+      "extraction_chunk_overlap": 400,
+      "think": null,
+      "model_digest": null
+    }
+  },
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "index_sha256": "61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f",
+  "expectations_sha256": "d7655501bb9606f2b864a19841135ae64f9136c56cd1484e87790305cf739637",
+  "independent_clinical_gold": false,
+  "rows": [
+    {
+      "case_id": "VAL-MIX-01",
+      "input_sha256": "f555d3b95eba79ade954a319ea1f3f4912182bdc5a4faa13a651c60525b9d2d5",
+      "report": "runs/VAL-MIX-01/run-f5f1bee87a928b1a6cb6/draft_report.html",
+      "outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rules": [
+        "HEAR-COM-AUDIOMETRY-MISSING-001",
+        "HTN-COM-UNCONDITIONAL-001"
+      ],
+      "present_fields": [
+        "cardiovascular.chest_pain",
+        "hearing.clinical_assessment",
+        "cardiovascular.blood_pressure.persistent_systolic",
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "hearing.audiometry.available"
+      ],
+      "review_status": "requires_confirmation",
+      "ranking_calls": 32,
+      "ranked_candidates": 37,
+      "discovery_modules": [
+        "blackout",
+        "hearing",
+        "hypertension"
+      ],
+      "discovery_sources": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-BLK-COM-002",
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005",
+        "AFTD2022-BLK-COM-006",
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002",
+        "AFTD2022-HEAR-COM-003",
+        "AFTD2022-HEAR-COM-004",
+        "AFTD2022-HTN-COM-001",
+        "AFTD2022-HTN-COM-002"
+      ],
+      "expected": {
+        "required_rules": [
+          "HTN-COM-UNCONDITIONAL-001",
+          "HEAR-COM-AUDIOMETRY-MISSING-001"
+        ],
+        "source_ids": [
+          "AFTD2022-HTN-COM-001",
+          "AFTD2022-HEAR-COM-001"
+        ]
+      },
+      "expected_rules_found": [
+        "HEAR-COM-AUDIOMETRY-MISSING-001",
+        "HTN-COM-UNCONDITIONAL-001"
+      ],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HTN-COM-001"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HTN-COM-001"
+      ]
+    },
+    {
+      "case_id": "VAL-MIX-02",
+      "input_sha256": "f076b169a9cee75c4c9f9c3cdac5d459cc6e5089fd6589996d7f24a04044f3f8",
+      "report": "runs/VAL-MIX-02/run-e7a2ca57fe27e283d8c4/draft_report.html",
+      "outcome": "temporarily_unfit",
+      "route": "human_review",
+      "triggered_rules": [
+        "BLK-COM-UNDIAGNOSED-001",
+        "VIS-COM-ACUITY-UNCONDITIONAL-001"
+      ],
+      "present_fields": [
+        "blackout.occurred",
+        "blackout.mechanism_status",
+        "vision.uncorrected.right.snellen",
+        "vision.uncorrected.left.snellen",
+        "vision.uncorrected.better_eye"
+      ],
+      "review_status": "requires_confirmation",
+      "ranking_calls": 27,
+      "ranked_candidates": 29,
+      "discovery_modules": [
+        "blackout",
+        "diabetes",
+        "vision"
+      ],
+      "discovery_sources": [
+        "AFTD2022-BLK-COM-002",
+        "AFTD2022-BLK-COM-003",
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005",
+        "AFTD2022-BLK-COM-006",
+        "AFTD2022-DM-COM-002",
+        "AFTD2022-DM-COM-003",
+        "AFTD2022-DM-COM-005",
+        "AFTD2022-DM-COM-006",
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-VIS-COM-002",
+        "AFTD2022-VIS-COM-003",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-005",
+        "AFTD2022-VIS-COM-006"
+      ],
+      "expected": {
+        "required_rules": [
+          "VIS-COM-ACUITY-UNCONDITIONAL-001",
+          "BLK-COM-UNDIAGNOSED-001"
+        ],
+        "source_ids": [
+          "AFTD2022-VIS-COM-002",
+          "AFTD2022-BLK-COM-001"
+        ]
+      },
+      "expected_rules_found": [
+        "BLK-COM-UNDIAGNOSED-001",
+        "VIS-COM-ACUITY-UNCONDITIONAL-001"
+      ],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-VIS-COM-002"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-VIS-COM-002"
+      ]
+    },
+    {
+      "case_id": "VAL-MIX-03",
+      "input_sha256": "15c7f87d226f1ca3968ebcf6f81af902fe4cc9c75be891981fc358fac3e5ff28",
+      "report": "runs/VAL-MIX-03/run-78739510725b6593f5b6/draft_report.html",
+      "outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rules": [
+        "DM-COM-NONINSULIN-001"
+      ],
+      "present_fields": [
+        "diabetes.present",
+        "diabetes.treatment_category"
+      ],
+      "review_status": "requires_confirmation",
+      "ranking_calls": 29,
+      "ranked_candidates": 33,
+      "discovery_modules": [
+        "diabetes",
+        "hearing"
+      ],
+      "discovery_sources": [
+        "AFTD2022-DM-COM-002",
+        "AFTD2022-DM-COM-004",
+        "AFTD2022-DM-COM-005",
+        "AFTD2022-DM-COM-006",
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002",
+        "AFTD2022-HEAR-COM-003",
+        "AFTD2022-HEAR-COM-004"
+      ],
+      "expected": {
+        "required_rules": [
+          "DM-COM-NONINSULIN-001"
+        ],
+        "source_ids": [
+          "AFTD2022-DM-COM-005"
+        ]
+      },
+      "expected_rules_found": [
+        "DM-COM-NONINSULIN-001"
+      ],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-DM-COM-005"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-DM-COM-005"
+      ]
+    },
+    {
+      "case_id": "VAL-MIX-04",
+      "input_sha256": "43c91490fd5a48302fc376d3d4f25bcf121755d1240f947319bcdf0da41a3a34",
+      "report": "runs/VAL-MIX-04/run-68dfb9f1efd16065afa2/draft_report.html",
+      "outcome": "does_not_meet_standard",
+      "route": "human_review",
+      "triggered_rules": [
+        "DM-COM-INSULIN-001",
+        "VIS-COM-DIPLOPIA-001"
+      ],
+      "present_fields": [
+        "diabetes.present",
+        "diabetes.treatment_category",
+        "diabetes.gestational",
+        "vision.diplopia.present",
+        "vision.diplopia.physiological",
+        "vision.diplopia.within_20_degrees"
+      ],
+      "review_status": "requires_confirmation",
+      "ranking_calls": 27,
+      "ranked_candidates": 30,
+      "discovery_modules": [
+        "blackout",
+        "diabetes",
+        "vision"
+      ],
+      "discovery_sources": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-BLK-COM-002",
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005",
+        "AFTD2022-BLK-COM-006",
+        "AFTD2022-DM-COM-002",
+        "AFTD2022-DM-COM-004",
+        "AFTD2022-DM-COM-006",
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-DM-COM-009",
+        "AFTD2022-VIS-COM-003",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-005",
+        "AFTD2022-VIS-COM-006",
+        "AFTD2022-VIS-COM-007"
+      ],
+      "expected": {
+        "required_rules": [
+          "DM-COM-INSULIN-001",
+          "VIS-COM-DIPLOPIA-001"
+        ],
+        "source_ids": [
+          "AFTD2022-DM-COM-007",
+          "AFTD2022-VIS-COM-007"
+        ]
+      },
+      "expected_rules_found": [
+        "DM-COM-INSULIN-001",
+        "VIS-COM-DIPLOPIA-001"
+      ],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-VIS-COM-007"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-DM-COM-007",
+        "AFTD2022-VIS-COM-007"
+      ]
+    },
+    {
+      "case_id": "VAL-MIX-05",
+      "input_sha256": "f9b4c225ebe2acd1dfac3da6824f422604c7728ac0daf6681acd50755a81a557",
+      "report": "runs/VAL-MIX-05/run-0fa169e360e66815f1a5/draft_report.html",
+      "outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rules": [
+        "HEAR-COM-UNCONDITIONAL-001"
+      ],
+      "present_fields": [
+        "cardiovascular.blood_pressure.observed_systolic",
+        "cardiovascular.blood_pressure.observed_diastolic",
+        "hearing.clinical_assessment",
+        "hearing.audiometry.available",
+        "hearing.unaided_better_ear_average_db",
+        "hearing.average_frequencies_khz"
+      ],
+      "review_status": "completed_no_issues",
+      "ranking_calls": 31,
+      "ranked_candidates": 35,
+      "discovery_modules": [
+        "hearing",
+        "hypertension"
+      ],
+      "discovery_sources": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002",
+        "AFTD2022-HEAR-COM-003",
+        "AFTD2022-HEAR-COM-004",
+        "AFTD2022-HTN-COM-001",
+        "AFTD2022-HTN-COM-002"
+      ],
+      "expected": {
+        "required_rules": [
+          "HEAR-COM-UNCONDITIONAL-001"
+        ],
+        "source_ids": [
+          "AFTD2022-HEAR-COM-002"
+        ]
+      },
+      "expected_rules_found": [
+        "HEAR-COM-UNCONDITIONAL-001"
+      ],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-HEAR-COM-002"
+      ]
+    },
+    {
+      "case_id": "VAL-MIX-06",
+      "input_sha256": "2acf6d137bd99a1b119afe7621804d1e81bef3af6c811b66a3197f5297edb276",
+      "report": "runs/VAL-MIX-06/run-746fe43da85b137d9644/draft_report.html",
+      "outcome": "temporarily_unfit",
+      "route": "human_review",
+      "triggered_rules": [
+        "BLK-COM-UNDIAGNOSED-001",
+        "VIS-COM-FIELD-UNCONDITIONAL-001"
+      ],
+      "present_fields": [
+        "blackout.mechanism_status",
+        "blackout.occurred",
+        "vision.visual_field.confirmed_defect"
+      ],
+      "review_status": "unavailable_or_invalid",
+      "ranking_calls": 27,
+      "ranked_candidates": 29,
+      "discovery_modules": [
+        "blackout",
+        "diabetes",
+        "vision"
+      ],
+      "discovery_sources": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-BLK-COM-002",
+        "AFTD2022-BLK-COM-003",
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-006",
+        "AFTD2022-DM-COM-001",
+        "AFTD2022-DM-COM-002",
+        "AFTD2022-DM-COM-003",
+        "AFTD2022-DM-COM-004",
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-VIS-COM-003",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-005",
+        "AFTD2022-VIS-COM-006",
+        "AFTD2022-VIS-COM-007"
+      ],
+      "expected": {
+        "required_rules": [
+          "BLK-COM-UNDIAGNOSED-001",
+          "VIS-COM-FIELD-UNCONDITIONAL-001"
+        ],
+        "source_ids": [
+          "AFTD2022-BLK-COM-001",
+          "AFTD2022-VIS-COM-004"
+        ]
+      },
+      "expected_rules_found": [
+        "BLK-COM-UNDIAGNOSED-001",
+        "VIS-COM-FIELD-UNCONDITIONAL-001"
+      ],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-VIS-COM-004"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-VIS-COM-004"
+      ]
+    },
+    {
+      "case_id": "VAL-MIX-07",
+      "input_sha256": "4362c9a0c560290ca28f7dd53a0d8593cc8f7cce50a04b90a6c94358b314ed16",
+      "report": "runs/VAL-MIX-07/run-83aa862e6eeeb6862a12/draft_report.html",
+      "outcome": "temporarily_unfit",
+      "route": "human_review",
+      "triggered_rules": [
+        "DM-COM-ACUTE-UNSTABLE-001",
+        "HTN-COM-UNCONDITIONAL-001"
+      ],
+      "present_fields": [
+        "diabetes.present",
+        "diabetes.acutely_unwell",
+        "diabetes.metabolically_unstable",
+        "cardiovascular.blood_pressure.persistent_systolic",
+        "cardiovascular.blood_pressure.persistent_diastolic"
+      ],
+      "review_status": "requires_confirmation",
+      "ranking_calls": 31,
+      "ranked_candidates": 36,
+      "discovery_modules": [
+        "diabetes",
+        "hypertension",
+        "vision"
+      ],
+      "discovery_sources": [
+        "AFTD2022-DM-COM-001",
+        "AFTD2022-DM-COM-002",
+        "AFTD2022-DM-COM-003",
+        "AFTD2022-DM-COM-006",
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-HTN-COM-001",
+        "AFTD2022-HTN-COM-002",
+        "AFTD2022-VIS-COM-003",
+        "AFTD2022-VIS-COM-004",
+        "AFTD2022-VIS-COM-005",
+        "AFTD2022-VIS-COM-006",
+        "AFTD2022-VIS-COM-007"
+      ],
+      "expected": {
+        "required_rules": [
+          "HTN-COM-UNCONDITIONAL-001",
+          "DM-COM-ACUTE-UNSTABLE-001"
+        ],
+        "source_ids": [
+          "AFTD2022-HTN-COM-001",
+          "AFTD2022-DM-COM-003"
+        ]
+      },
+      "expected_rules_found": [
+        "DM-COM-ACUTE-UNSTABLE-001",
+        "HTN-COM-UNCONDITIONAL-001"
+      ],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-DM-COM-003",
+        "AFTD2022-HTN-COM-001"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-DM-COM-003",
+        "AFTD2022-HTN-COM-001"
+      ]
+    },
+    {
+      "case_id": "VAL-MIX-08",
+      "input_sha256": "cb16f8135ad4fae525de7f269f48f6e79cbc9b55c702819a7056617bebcb1438",
+      "report": "runs/VAL-MIX-08/run-8b2a990eff99120f1891/draft_report.html",
+      "outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rules": [
+        "DM-COM-NONINSULIN-001",
+        "HEAR-COM-AUDIOMETRY-MISSING-001"
+      ],
+      "present_fields": [
+        "diabetes.present",
+        "diabetes.treatment_category",
+        "hearing.clinical_assessment",
+        "hearing.audiometry.available"
+      ],
+      "review_status": "requires_confirmation",
+      "ranking_calls": 29,
+      "ranked_candidates": 33,
+      "discovery_modules": [
+        "blackout",
+        "diabetes",
+        "hearing"
+      ],
+      "discovery_sources": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-BLK-COM-002",
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005",
+        "AFTD2022-BLK-COM-006",
+        "AFTD2022-DM-COM-001",
+        "AFTD2022-DM-COM-002",
+        "AFTD2022-DM-COM-006",
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-DM-COM-009",
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002",
+        "AFTD2022-HEAR-COM-003",
+        "AFTD2022-HEAR-COM-004"
+      ],
+      "expected": {
+        "required_rules": [
+          "DM-COM-NONINSULIN-001",
+          "HEAR-COM-AUDIOMETRY-MISSING-001"
+        ],
+        "source_ids": [
+          "AFTD2022-DM-COM-005",
+          "AFTD2022-HEAR-COM-001"
+        ]
+      },
+      "expected_rules_found": [
+        "DM-COM-NONINSULIN-001",
+        "HEAR-COM-AUDIOMETRY-MISSING-001"
+      ],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-HEAR-COM-001"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-DM-COM-005",
+        "AFTD2022-HEAR-COM-001"
+      ]
+    },
+    {
+      "case_id": "VAL-MIX-09",
+      "input_sha256": "312f6a2706c421691397a6e1cc98661ee6d10f16e1b8097a5ab7539d37810e03",
+      "report": "runs/VAL-MIX-09/run-aaf498efb5304609df7e/draft_report.html",
+      "outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rules": [],
+      "present_fields": [],
+      "review_status": "requires_confirmation",
+      "ranking_calls": 33,
+      "ranked_candidates": 38,
+      "discovery_modules": [
+        "blackout",
+        "hearing",
+        "hypertension"
+      ],
+      "discovery_sources": [
+        "AFTD2022-BLK-COM-002",
+        "AFTD2022-BLK-COM-003",
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005",
+        "AFTD2022-BLK-COM-006",
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002",
+        "AFTD2022-HEAR-COM-003",
+        "AFTD2022-HEAR-COM-004",
+        "AFTD2022-HTN-COM-001",
+        "AFTD2022-HTN-COM-002"
+      ],
+      "expected": {
+        "required_rules": [],
+        "forbidden_rules": [
+          "HTN-COM-UNCONDITIONAL-001",
+          "HEAR-COM-UNCONDITIONAL-001"
+        ],
+        "source_ids": [
+          "AFTD2022-HTN-COM-001",
+          "AFTD2022-HEAR-COM-002"
+        ]
+      },
+      "expected_rules_found": [],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-HEAR-COM-002",
+        "AFTD2022-HTN-COM-001"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-HEAR-COM-002",
+        "AFTD2022-HTN-COM-001"
+      ]
+    },
+    {
+      "case_id": "VAL-MIX-10",
+      "input_sha256": "0de26f7d27f462ba7b5dc0b565961381c770026952cc7f324c865d54fd4a872b",
+      "report": "runs/VAL-MIX-10/run-050c3d3bb4ab2995b5f3/draft_report.html",
+      "outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rules": [],
+      "present_fields": [],
+      "review_status": "requires_confirmation",
+      "ranking_calls": 33,
+      "ranked_candidates": 38,
+      "discovery_modules": [
+        "blackout",
+        "diabetes",
+        "vision"
+      ],
+      "discovery_sources": [
+        "AFTD2022-BLK-COM-002",
+        "AFTD2022-BLK-COM-003",
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005",
+        "AFTD2022-BLK-COM-006",
+        "AFTD2022-DM-COM-004",
+        "AFTD2022-DM-COM-005",
+        "AFTD2022-DM-COM-006",
+        "AFTD2022-DM-COM-007",
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-VIS-COM-002",
+        "AFTD2022-VIS-COM-003",
+        "AFTD2022-VIS-COM-005",
+        "AFTD2022-VIS-COM-006",
+        "AFTD2022-VIS-COM-007"
+      ],
+      "expected": {
+        "required_rules": [],
+        "forbidden_rules": [
+          "DM-COM-INSULIN-001",
+          "DM-COM-NONINSULIN-001",
+          "BLK-COM-UNDIAGNOSED-001",
+          "VIS-COM-ACUITY-UNCONDITIONAL-001"
+        ],
+        "source_ids": [
+          "AFTD2022-BLK-COM-001",
+          "AFTD2022-VIS-COM-002"
+        ]
+      },
+      "expected_rules_found": [],
+      "missing_expected_rules": [],
+      "forbidden_rules_found": [],
+      "expected_sources_found": [
+        "AFTD2022-VIS-COM-002"
+      ],
+      "expected_sources_found_in_rule_citations": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-VIS-COM-002"
+      ]
+    }
+  ]
+}

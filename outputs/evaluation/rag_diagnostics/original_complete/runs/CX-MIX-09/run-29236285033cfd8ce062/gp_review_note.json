@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.2.0",
+  "case_id": "CX-MIX-09",
+  "status": "DRAFT",
+  "assessment_outcome": "insufficient_information",
+  "modules": [
+    {
+      "module": "hypertension",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    },
+    {
+      "module": "vision",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "vision.diplopia.present",
+        "vision.monocular",
+        "vision.uncorrected.better_eye",
+        "vision.uncorrected.left.snellen",
+        "vision.uncorrected.right.snellen",
+        "vision.visual_field.confirmed_defect"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    },
+    {
+      "module": "hearing",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "hearing.average_frequencies_khz",
+        "hearing.clinical_assessment",
+        "hearing.unaided_better_ear_average_db"
+      ],
+      "warnings": []
+    },
+    {
+      "module": "blackout",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "blackout.mechanism_status",
+        "blackout.occurred"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    },
+    {
+      "module": "diabetes",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "diabetes.gestational",
+        "diabetes.present"
+      ],
+      "warnings": []
+    }
+  ],
+  "rule_result_sha256": "f4bb92be0b550f8aa62753116a740bbca7f58daedea79f7be4ce6cd3b92775f9",
+  "evidence_pack_sha256": "60c919d1062f81f0fefc37ea5d2468b11134d8933ec9c8995bd8c8b6ce1dac95",
+  "summary": "CX-MIX-09: Insufficient information. 5 requested modules; 15 unresolved fact fields. This draft is occupational fitness decision support. The result is limited to the implemented criteria and is not a licensing or employment decision.",
+  "review_checklist": [
+    "Clinician: review source facts, rule applicability and every provisional conclusion.",
+    "Confirm the commercial driving task and assess conditions outside the five-module scope.",
+    "Confirm missing/unverified case fact: blackout.mechanism_status",
+    "Confirm missing/unverified case fact: blackout.occurred",
+    "Confirm missing/unverified case fact: cardiovascular.blood_pressure.persistent_diastolic",
+    "Confirm missing/unverified case fact: cardiovascular.blood_pressure.persistent_systolic",
+    "Confirm missing/unverified case fact: diabetes.gestational",
+    "Confirm missing/unverified case fact: diabetes.present",
+    "Confirm missing/unverified case fact: hearing.average_frequencies_khz",
+    "Confirm missing/unverified case fact: hearing.clinical_assessment",
+    "Confirm missing/unverified case fact: hearing.unaided_better_ear_average_db",
+    "Confirm missing/unverified case fact: vision.diplopia.present",
+    "Confirm missing/unverified case fact: vision.monocular",
+    "Confirm missing/unverified case fact: vision.uncorrected.better_eye",
+    "Confirm missing/unverified case fact: vision.uncorrected.left.snellen",
+    "Confirm missing/unverified case fact: vision.uncorrected.right.snellen",
+    "Confirm missing/unverified case fact: vision.visual_field.confirmed_defect",
+    "requires_confirmation",
+    "Extraction semantic review: Possible extraction issues require confirmation",
+    "This second-pass model review does not establish clinical accuracy. A clinician must verify the original record and any flagged information.",
+    "Confirm blackout.mechanism_status (omission): Independent source reading differs from the extraction. The driver reports brief light-headedness when standing without a definite blackout.",
+    "Confirm blackout.occurred (omission): Independent source reading differs from the extraction. false",
+    "Confirm cardiovascular.blood_pressure.persistent_diastolic (omission): Independent source reading differs from the extraction. The patient's blood pressure is 162/96 mmHg, which is a single seated observation. The nurse has not attributed the visual complaints to blood pressure, established persistent hypertension from the available entries or treated the unreliable field result as a confirmed measurement.",
+    "Confirm cardiovascular.blood_pressure.persistent_systolic (uncertainty): Independent source reading differs from the extraction. uncertain",
+    "Confirm vision.diplopia.present (omission): Independent source reading differs from the extraction. The patient explicitly has diplopia (double vision) as described in the field printout, which shows a binocular horizontal extent of 135 degrees, indicating non-physiological diplopia.",
+    "Confirm vision.visual_field.confirmed_defect (omission): Independent source reading differs from the extraction. The driver reports that vehicles approaching from the left sometimes appear suddenly, although he can read the central letters on a chart and denies constant double vision; he also describes occasional overlapping headlights after long night shifts, which were absent during the consultation. A field printout shows a binocular horizontal extent of 135 degrees, but carries a poor-fixation warning and does not clearly document the vertical test extent, central defects or whether the result is stable over time.",
+    "Fields withheld from rule inputs: blackout.mechanism_status, blackout.occurred, cardiovascular.blood_pressure.persistent_diastolic, cardiovascular.blood_pressure.persistent_systolic, vision.diplopia.present, vision.visual_field.confirmed_defect"
+  ],
+  "llm_commentary": null,
+  "clinician_name": null,
+  "signed_at": null,
+  "final_clinical_authorization_required": true
+}

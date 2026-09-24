@@ -259,4 +259,9 @@ summary:hover .summary-main strong { color: var(--accent); }
   .technical pre { font-size: 8pt; }
   .page-end, .editor-note { font-size: 8pt; }
 }
+.semantic-review-panel { display: block; padding: 4px 0 22px; border-bottom: 1px solid var(--line); margin-bottom: 22px; overflow-wrap: anywhere; }
+.semantic-review-panel h3 { margin: 0 0 12px; }
+.semantic-review-panel p { margin: 10px 0; }
+.semantic-concern { padding: 14px 0 4px; }
+.semantic-concern h4 { margin: 0 0 8px; font-size: 14px; }
 """

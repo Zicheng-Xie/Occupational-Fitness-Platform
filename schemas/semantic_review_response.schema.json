@@ -1,0 +1,77 @@
+{
+  "$defs": {
+    "SourceObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "status": {
+          "enum": [
+            "documented",
+            "uncertain",
+            "not_documented"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "explanation": {
+          "title": "Explanation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "value",
+        "status",
+        "quote",
+        "explanation"
+      ],
+      "title": "SourceObservation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/SourceObservation"
+      },
+      "title": "Observations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "observations"
+  ],
+  "title": "SourceReviewResponse",
+  "type": "object"
+}

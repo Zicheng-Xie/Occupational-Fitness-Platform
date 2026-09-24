@@ -6,7 +6,7 @@ Red Flag findings are first-class structured result fields: `has_red_flag`, `red
 
 The superseded `WorkflowRuleResult` v1.2.0 model and its flat top-level ruleset fields have been removed from the active code path. The rule engine now emits an unversioned internal `RuleEngineResult`, which `red_flag.py` converts to the canonical public result before RAG runs.
 
-API/Swagger, runtime verification, rule-result schema export, demo generation, delivery building, delivery validation, report reissue, and tests all import or validate the same v1.3.0 model. RAG receives only the immutable `RAGInput` projection containing `rag_requests` and integrity identifiers.
+API/Swagger, runtime verification, rule-result schema export, demo generation, delivery building, delivery validation, report reissue, and tests all import or validate the same v1.3.0 model. RAG receives the immutable `RAGInput` projection containing requests, integrity identifiers and request-scoped indicator context. See `docs/collaboration_integration.md` for contract integration and the 0.7.1 restoration of the original framework.
 
 API regression tests pin the OpenAPI component name and version, reject the removed flat ruleset fields, and verify through `/assess` that an insufficient-information result can contain `missing_information` while `has_red_flag` remains false and `red_flags` remains empty.
 
@@ -14,4 +14,4 @@ API regression tests pin the OpenAPI component name and version, reject the remo
 
 `POST /red-flag/evaluate` exposes that boundary directly. It returns the structured case, canonical `WorkflowRuleResult`, and immutable `RAGInput` without invoking retrieval or producing an evidence pack or review note. The existing `POST /assess` endpoint remains the complete end-to-end workflow.
 
-When enabled, the local Ollama model now proposes both grounded fact candidates and a constrained pre-RAG route (`local_result`, `needs_more_information`, or `rag_fusion`). Route advice must quote the nurse note verbatim, may only escalate deterministic handling, and cannot revise rule outcomes or Red Flag status. The basic Red Flag API returns the route category and concise relevant-section locators; it returns a structured `RAGInput` only for `rag_fusion`.
+The local Ollama model proposes source-grounded facts and independently reviews extracted meaning. The separate route-model experiment (`local_result`, `needs_more_information`, or `rag_fusion`) is disabled by default in every shipped configuration. Route advice must quote the nurse note verbatim, may only escalate deterministic handling, and cannot revise rule outcomes or Red Flag status. The basic Red Flag API returns the route category and concise relevant-section locators; it returns a structured `RAGInput` for every route, preserving required source binding and non-fast retrieval.

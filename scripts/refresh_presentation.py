@@ -11,11 +11,11 @@ from pathlib import Path
 from occupational_fitness_rag.pipeline.workflow import OccupationalFitnessWorkflow
 from occupational_fitness_rag.provenance import digest, sha256_bytes, write_json
 from occupational_fitness_rag.reporting.presentation import render_case_html, render_library
+from occupational_fitness_rag.schemas.red_flag_result import WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     ReviewNote,
     WorkflowEvidencePack,
-    WorkflowRuleResult,
 )
 
 ROOT = Path(__file__).resolve().parents[1]

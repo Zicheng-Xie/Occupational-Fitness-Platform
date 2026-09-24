@@ -1,0 +1,3598 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Complex Notes | Occupational Fitness Platform</title>
+<style>body{font:16px/1.6 system-ui;color:#193344;background:#f3f6f8;margin:0}
+main{max-width:1120px;margin:auto;padding:36px 24px}h1{font-size:32px;letter-spacing:-1px}
+section,details{background:white;border:1px solid #dce4e8;border-radius:8px;padding:20px;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{text-align:left;padding:12px;border-bottom:1px solid #e1e7ec}
+a{color:#11617d}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.scroll{overflow-x:auto}
+summary{cursor:pointer;font-weight:600}.muted{color:#536975}</style><main>
+<p class="muted">OCCUPATIONAL FITNESS PLATFORM / ENGINEERING VALIDATION</p>
+<h1>Complex nurse-note stress test</h1><p>Profile: offline. Generated: 2026-09-23T18:40:53.365765+00:00</p><p>Synthetic development cases; source labels await independent review.
+Recall measures labelled guideline retrieval, not clinical accuracy. An abstention check
+passing means that an unsupported fact was withheld, not that extraction succeeded.</p>
+<p><a href="results.json">Full results and provenance</a></p>
+<section><h2>Raw-note workflow</h2><p>Open a case to inspect its note, model audits,
+rules, ranked candidates and original guideline citations. Controls should use the fast
+path unless a recorded model failure requires human review.</p><div class="scroll"><table>
+<tr><th>Case</th><th>Route</th><th>Ranking calls</th><th>Semantic review</th><th>Fact checks</th><th>Routing check</th></tr><tr><td><a href="runs/CX-HTN-01/run-054a8dbc44f3d2c9181b/draft_report.html">CX-HTN-01</a></td><td>missing_information</td><td>3</td><td>disabled</td><td>1/1</td><td>passed</td></tr><tr><td><a href="runs/CX-HTN-02/run-3f6018a386c3f2aa965a/draft_report.html">CX-HTN-02</a></td><td>missing_information</td><td>3</td><td>disabled</td><td>3/3</td><td>passed</td></tr><tr><td><a href="runs/CX-VIS-01/run-6ea5d8b0347a10a893a8/draft_report.html">CX-VIS-01</a></td><td>missing_information</td><td>8</td><td>disabled</td><td>2/2</td><td>passed</td></tr><tr><td><a href="runs/CX-VIS-02/run-b02d6b09a99a271b5a9b/draft_report.html">CX-VIS-02</a></td><td>missing_information</td><td>8</td><td>disabled</td><td>1/1</td><td>passed</td></tr><tr><td><a href="runs/CX-HEAR-01/run-d7110b043874ba3c91bc/draft_report.html">CX-HEAR-01</a></td><td>missing_information</td><td>5</td><td>disabled</td><td>1/1</td><td>passed</td></tr><tr><td><a href="runs/CX-HEAR-02/run-73b13640f80df5f09ff1/draft_report.html">CX-HEAR-02</a></td><td>missing_information</td><td>5</td><td>disabled</td><td>1/1</td><td>passed</td></tr><tr><td><a href="runs/CX-BLK-01/run-1106b415e572e1b70957/draft_report.html">CX-BLK-01</a></td><td>missing_information</td><td>8</td><td>disabled</td><td>1/1</td><td>passed</td></tr><tr><td><a href="runs/CX-BLK-02/run-d062f512bc095acab300/draft_report.html">CX-BLK-02</a></td><td>missing_information</td><td>8</td><td>disabled</td><td>2/2</td><td>passed</td></tr><tr><td><a href="runs/CX-DM-01/run-0f302fd682c5666c0107/draft_report.html">CX-DM-01</a></td><td>missing_information</td><td>8</td><td>disabled</td><td>1/1</td><td>passed</td></tr><tr><td><a href="runs/CX-DM-02/run-e74f3d29425cedce0f12/draft_report.html">CX-DM-02</a></td><td>missing_information</td><td>9</td><td>disabled</td><td>1/1</td><td>passed</td></tr><tr><td><a href="runs/CX-MIX-01/run-d14bfdd3779626aa5819/draft_report.html">CX-MIX-01</a></td><td>rag_review</td><td>8</td><td>disabled</td><td>1/1</td><td>passed</td></tr><tr><td><a href="runs/CX-MIX-02/run-bc9d76f7f90b08a631c0/draft_report.html">CX-MIX-02</a></td><td>missing_information</td><td>16</td><td>disabled</td><td>2/2</td><td>passed</td></tr><tr><td><a href="runs/CX-CTRL-01/run-7bdf0cf8b71639332cf5/draft_report.html">CX-CTRL-01</a></td><td>fast_path</td><td>0</td><td>disabled</td><td>1/1</td><td>passed</td></tr><tr><td><a href="runs/CX-CTRL-02/run-1f08abd4098925a93d8b/draft_report.html">CX-CTRL-02</a></td><td>fast_path</td><td>0</td><td>disabled</td><td>1/1</td><td>passed</td></tr></table></div></section><section><h2>Indicator discovery comparison</h2><p>Each query is a manually
+annotated, exact paragraph from the note, searched within its module. This isolates
+retrieval performance and does not measure automatic passage-selection accuracy.
+Expected source IDs are supplied only to scoring. Rule-bound exact citations are excluded.</p>
+<table><tr><th>Method</th><th>Top K</th><th>Queries</th><th>Mean source recall</th><th>MRR</th></tr><tr><td>vector</td><td>1</td><td>18</td><td>11.1%</td><td>0.167</td></tr><tr><td>vector</td><td>3</td><td>18</td><td>47.2%</td><td>0.370</td></tr><tr><td>vector</td><td>5</td><td>18</td><td>77.8%</td><td>0.423</td></tr><tr><td>bm25</td><td>1</td><td>18</td><td>22.2%</td><td>0.333</td></tr><tr><td>bm25</td><td>3</td><td>18</td><td>63.9%</td><td>0.537</td></tr><tr><td>bm25</td><td>5</td><td>18</td><td>91.7%</td><td>0.576</td></tr><tr><td>hybrid</td><td>1</td><td>18</td><td>13.9%</td><td>0.222</td></tr><tr><td>hybrid</td><td>3</td><td>18</td><td>52.8%</td><td>0.426</td></tr><tr><td>hybrid</td><td>5</td><td>18</td><td>88.9%</td><td>0.490</td></tr></table></section><h2>Inspectable ranked results</h2><details><summary>CX-HTN-01-Q1 / vector / Recall@5 100%</summary><p>At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today&#x27;s seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HTN-01&quot;,
+  &quot;query_id&quot;: &quot;CX-HTN-01-Q1&quot;,
+  &quot;module&quot;: &quot;hypertension&quot;,
+  &quot;query&quot;: &quot;At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today&#x27;s seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hypertension&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HTN-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4fce4b9e43f185a3081eea57&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.43037009275160926,
+      &quot;vector_score&quot;: 0.43037009275160926,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5a919909740d28c3756bae7b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.1063990353197863,
+      &quot;vector_score&quot;: 0.1063990353197863,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 2,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HTN-01-Q1 / bm25 / Recall@5 100%</summary><p>At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today&#x27;s seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HTN-01&quot;,
+  &quot;query_id&quot;: &quot;CX-HTN-01-Q1&quot;,
+  &quot;module&quot;: &quot;hypertension&quot;,
+  &quot;query&quot;: &quot;At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today&#x27;s seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hypertension&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HTN-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4fce4b9e43f185a3081eea57&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 10.729604854292969
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5a919909740d28c3756bae7b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 2.292507092185312
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 2,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HTN-01-Q1 / hybrid / Recall@5 100%</summary><p>At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today&#x27;s seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HTN-01&quot;,
+  &quot;query_id&quot;: &quot;CX-HTN-01-Q1&quot;,
+  &quot;module&quot;: &quot;hypertension&quot;,
+  &quot;query&quot;: &quot;At the commercial-driver review, the driver says the depot machine displayed 178/104 after unloading and two coffees, whereas the handwritten home sheet contains readings of 138/86 and 142/88 from an unverified cuff; today&#x27;s seated BP 166/96 mmHg was taken once, and although he describes headaches after late shifts, he denies current chest pain and cannot say whether the headaches coincide with higher readings.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hypertension&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HTN-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4fce4b9e43f185a3081eea57&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.03278688524590164,
+      &quot;vector_score&quot;: 0.43037009275160926,
+      &quot;bm25_score&quot;: 10.729604854292969
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5a919909740d28c3756bae7b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.03225806451612903,
+      &quot;vector_score&quot;: 0.1063990353197863,
+      &quot;bm25_score&quot;: 2.292507092185312
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 2,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HTN-02-Q1 / vector / Recall@5 100%</summary><p>Medication was changed three weeks ago because of ankle swelling, and he says that he would stop a long trip if dizziness returned, rather than reporting an actual episode today; a review of treatment tolerance, current persistent pressure and any relevant target-organ effects is still outstanding.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HTN-02&quot;,
+  &quot;query_id&quot;: &quot;CX-HTN-02-Q1&quot;,
+  &quot;module&quot;: &quot;hypertension&quot;,
+  &quot;query&quot;: &quot;Medication was changed three weeks ago because of ankle swelling, and he says that he would stop a long trip if dizziness returned, rather than reporting an actual episode today; a review of treatment tolerance, current persistent pressure and any relevant target-organ effects is still outstanding.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hypertension&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HTN-COM-002&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4fce4b9e43f185a3081eea57&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.2340955459586559,
+      &quot;vector_score&quot;: 0.2340955459586559,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5a919909740d28c3756bae7b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.14907119849998599,
+      &quot;vector_score&quot;: 0.14907119849998599,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 2,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HTN-02-Q1 / bm25 / Recall@5 100%</summary><p>Medication was changed three weeks ago because of ankle swelling, and he says that he would stop a long trip if dizziness returned, rather than reporting an actual episode today; a review of treatment tolerance, current persistent pressure and any relevant target-organ effects is still outstanding.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HTN-02&quot;,
+  &quot;query_id&quot;: &quot;CX-HTN-02-Q1&quot;,
+  &quot;module&quot;: &quot;hypertension&quot;,
+  &quot;query&quot;: &quot;Medication was changed three weeks ago because of ankle swelling, and he says that he would stop a long trip if dizziness returned, rather than reporting an actual episode today; a review of treatment tolerance, current persistent pressure and any relevant target-organ effects is still outstanding.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hypertension&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HTN-COM-002&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4fce4b9e43f185a3081eea57&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.086817588406513
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5a919909740d28c3756bae7b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 3.752008874373857
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 2,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HTN-02-Q1 / hybrid / Recall@5 100%</summary><p>Medication was changed three weeks ago because of ankle swelling, and he says that he would stop a long trip if dizziness returned, rather than reporting an actual episode today; a review of treatment tolerance, current persistent pressure and any relevant target-organ effects is still outstanding.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HTN-02&quot;,
+  &quot;query_id&quot;: &quot;CX-HTN-02-Q1&quot;,
+  &quot;module&quot;: &quot;hypertension&quot;,
+  &quot;query&quot;: &quot;Medication was changed three weeks ago because of ankle swelling, and he says that he would stop a long trip if dizziness returned, rather than reporting an actual episode today; a review of treatment tolerance, current persistent pressure and any relevant target-organ effects is still outstanding.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hypertension&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HTN-COM-002&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4fce4b9e43f185a3081eea57&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.03278688524590164,
+      &quot;vector_score&quot;: 0.2340955459586559,
+      &quot;bm25_score&quot;: 8.086817588406513
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5a919909740d28c3756bae7b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.03225806451612903,
+      &quot;vector_score&quot;: 0.14907119849998599,
+      &quot;bm25_score&quot;: 3.752008874373857
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 2,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-VIS-01-Q1 / vector / Recall@5 0%</summary><p>During the evening-shift interview the driver explains that road signs sometimes appear as two overlapping images after several hours, improving when either eye is covered, although this did not occur during the short consultation; he reports no diplopia at rest, and the nurse has not established the angle from central fixation or whether the symptom persists with the updated lenses.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-VIS-01&quot;,
+  &quot;query_id&quot;: &quot;CX-VIS-01-Q1&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;During the evening-shift interview the driver explains that road signs sometimes appear as two overlapping images after several hours, improving when either eye is covered, although this did not occur during the short consultation; he reports no diplopia at rest, and the nurse has not established the angle from central fixation or whether the symptom persists with the updated lenses.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-007&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.5589758987457184,
+      &quot;vector_score&quot;: 0.5589758987457184,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.5474096943878592,
+      &quot;vector_score&quot;: 0.5474096943878592,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.513832685906295,
+      &quot;vector_score&quot;: 0.513832685906295,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.3189317559055731,
+      &quot;vector_score&quot;: 0.3189317559055731,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-ae5343190c68653699791de9&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.23890473351968813,
+      &quot;vector_score&quot;: 0.23890473351968813,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.0,
+  &quot;mrr&quot;: 0.0,
+  &quot;label_precision&quot;: 0.0,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-VIS-01-Q1 / bm25 / Recall@5 100%</summary><p>During the evening-shift interview the driver explains that road signs sometimes appear as two overlapping images after several hours, improving when either eye is covered, although this did not occur during the short consultation; he reports no diplopia at rest, and the nurse has not established the angle from central fixation or whether the symptom persists with the updated lenses.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-VIS-01&quot;,
+  &quot;query_id&quot;: &quot;CX-VIS-01-Q1&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;During the evening-shift interview the driver explains that road signs sometimes appear as two overlapping images after several hours, improving when either eye is covered, although this did not occur during the short consultation; he reports no diplopia at rest, and the nurse has not established the angle from central fixation or whether the symptom persists with the updated lenses.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-007&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 10.070222935487397
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-06121bf34e62b53459320673&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-007&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 9.15032242994869
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.616868535298616
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 5.310409415146637
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 5.189877227518002
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-VIS-01-Q1 / hybrid / Recall@5 100%</summary><p>During the evening-shift interview the driver explains that road signs sometimes appear as two overlapping images after several hours, improving when either eye is covered, although this did not occur during the short consultation; he reports no diplopia at rest, and the nurse has not established the angle from central fixation or whether the symptom persists with the updated lenses.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-VIS-01&quot;,
+  &quot;query_id&quot;: &quot;CX-VIS-01-Q1&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;During the evening-shift interview the driver explains that road signs sometimes appear as two overlapping images after several hours, improving when either eye is covered, although this did not occur during the short consultation; he reports no diplopia at rest, and the nurse has not established the angle from central fixation or whether the symptom persists with the updated lenses.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-007&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.03278688524590164,
+      &quot;vector_score&quot;: 0.5589758987457184,
+      &quot;bm25_score&quot;: 10.070222935487397
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.031754032258064516,
+      &quot;vector_score&quot;: 0.5474096943878592,
+      &quot;bm25_score&quot;: 5.310409415146637
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.031746031746031744,
+      &quot;vector_score&quot;: 0.513832685906295,
+      &quot;bm25_score&quot;: 8.616868535298616
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-06121bf34e62b53459320673&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-007&quot;
+      ],
+      &quot;score&quot;: 0.03128054740957967,
+      &quot;vector_score&quot;: 0.2363450593737204,
+      &quot;bm25_score&quot;: 9.15032242994869
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.031009615384615385,
+      &quot;vector_score&quot;: 0.3189317559055731,
+      &quot;bm25_score&quot;: 5.189877227518002
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.25,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-VIS-01-Q2 / vector / Recall@5 100%</summary><p>A loose optometry slip lists right 6/12 and left 6/18 beside an earlier date and right 6/6 and left 6/9 beside a later date, but it does not identify which measurements were corrected; the driver describes a blurred patch off to one side, has no formal binocular field result, and has not supplied the specialist assessment.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-VIS-01&quot;,
+  &quot;query_id&quot;: &quot;CX-VIS-01-Q2&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;A loose optometry slip lists right 6/12 and left 6/18 beside an earlier date and right 6/6 and left 6/9 beside a later date, but it does not identify which measurements were corrected; the driver describes a blurred patch off to one side, has no formal binocular field result, and has not supplied the specialist assessment.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-002&quot;,
+    &quot;AFTD2022-VIS-COM-004&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.3553526561095071,
+      &quot;vector_score&quot;: 0.3553526561095071,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.3543452244867876,
+      &quot;vector_score&quot;: 0.3543452244867876,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.2874801065395755,
+      &quot;vector_score&quot;: 0.2874801065395755,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.2674753078193205,
+      &quot;vector_score&quot;: 0.2674753078193205,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-ae5343190c68653699791de9&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.25354627641855493,
+      &quot;vector_score&quot;: 0.25354627641855493,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.25,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-VIS-01-Q2 / bm25 / Recall@5 100%</summary><p>A loose optometry slip lists right 6/12 and left 6/18 beside an earlier date and right 6/6 and left 6/9 beside a later date, but it does not identify which measurements were corrected; the driver describes a blurred patch off to one side, has no formal binocular field result, and has not supplied the specialist assessment.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-VIS-01&quot;,
+  &quot;query_id&quot;: &quot;CX-VIS-01-Q2&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;A loose optometry slip lists right 6/12 and left 6/18 beside an earlier date and right 6/6 and left 6/9 beside a later date, but it does not identify which measurements were corrected; the driver describes a blurred patch off to one side, has no formal binocular field result, and has not supplied the specialist assessment.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-002&quot;,
+    &quot;AFTD2022-VIS-COM-004&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 12.567660130527925
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 11.574258104702896
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 10.139612302314235
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 9.784067169713516
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-ae5343190c68653699791de9&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 5.478932794031245
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.25,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-VIS-01-Q2 / hybrid / Recall@5 100%</summary><p>A loose optometry slip lists right 6/12 and left 6/18 beside an earlier date and right 6/6 and left 6/9 beside a later date, but it does not identify which measurements were corrected; the driver describes a blurred patch off to one side, has no formal binocular field result, and has not supplied the specialist assessment.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-VIS-01&quot;,
+  &quot;query_id&quot;: &quot;CX-VIS-01-Q2&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;A loose optometry slip lists right 6/12 and left 6/18 beside an earlier date and right 6/6 and left 6/9 beside a later date, but it does not identify which measurements were corrected; the driver describes a blurred patch off to one side, has no formal binocular field result, and has not supplied the specialist assessment.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-002&quot;,
+    &quot;AFTD2022-VIS-COM-004&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.03278688524590164,
+      &quot;vector_score&quot;: 0.3553526561095071,
+      &quot;bm25_score&quot;: 12.567660130527925
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.03225806451612903,
+      &quot;vector_score&quot;: 0.3543452244867876,
+      &quot;bm25_score&quot;: 11.574258104702896
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.031746031746031744,
+      &quot;vector_score&quot;: 0.2874801065395755,
+      &quot;bm25_score&quot;: 10.139612302314235
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.03125,
+      &quot;vector_score&quot;: 0.2674753078193205,
+      &quot;bm25_score&quot;: 9.784067169713516
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-ae5343190c68653699791de9&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.03076923076923077,
+      &quot;vector_score&quot;: 0.25354627641855493,
+      &quot;bm25_score&quot;: 5.478932794031245
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.25,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-VIS-02-Q1 / vector / Recall@5 50%</summary><p>The driver says he repeatedly misses a vehicle approaching from the left even though straight-ahead letters look sharp, and brings a binocular field printout labelled 140 degrees whose reliability flag is poor; no one has confirmed whether testing covered the required vertical extent, whether a central scotoma exists, or whether the apparent loss is stable rather than progressing.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-VIS-02&quot;,
+  &quot;query_id&quot;: &quot;CX-VIS-02-Q1&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;The driver says he repeatedly misses a vehicle approaching from the left even though straight-ahead letters look sharp, and brings a binocular field printout labelled 140 degrees whose reliability flag is poor; no one has confirmed whether testing covered the required vertical extent, whether a central scotoma exists, or whether the apparent loss is stable rather than progressing.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-004&quot;,
+    &quot;AFTD2022-VIS-COM-005&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.5160159087258186,
+      &quot;vector_score&quot;: 0.5160159087258186,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.4895338507076732,
+      &quot;vector_score&quot;: 0.4895338507076732,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.4190231869210177,
+      &quot;vector_score&quot;: 0.4190231869210177,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-06121bf34e62b53459320673&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-007&quot;
+      ],
+      &quot;score&quot;: 0.3008967382970352,
+      &quot;vector_score&quot;: 0.3008967382970352,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.29649972666444047,
+      &quot;vector_score&quot;: 0.29649972666444047,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.5,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-VIS-02-Q1 / bm25 / Recall@5 100%</summary><p>The driver says he repeatedly misses a vehicle approaching from the left even though straight-ahead letters look sharp, and brings a binocular field printout labelled 140 degrees whose reliability flag is poor; no one has confirmed whether testing covered the required vertical extent, whether a central scotoma exists, or whether the apparent loss is stable rather than progressing.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-VIS-02&quot;,
+  &quot;query_id&quot;: &quot;CX-VIS-02-Q1&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;The driver says he repeatedly misses a vehicle approaching from the left even though straight-ahead letters look sharp, and brings a binocular field printout labelled 140 degrees whose reliability flag is poor; no one has confirmed whether testing covered the required vertical extent, whether a central scotoma exists, or whether the apparent loss is stable rather than progressing.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-004&quot;,
+    &quot;AFTD2022-VIS-COM-005&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 15.313232049055785
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 10.992393583949546
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-06121bf34e62b53459320673&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-007&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.321337980928176
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 3.7285812379282213
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-ae5343190c68653699791de9&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 3.083026340444075
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-VIS-02-Q1 / hybrid / Recall@5 50%</summary><p>The driver says he repeatedly misses a vehicle approaching from the left even though straight-ahead letters look sharp, and brings a binocular field printout labelled 140 degrees whose reliability flag is poor; no one has confirmed whether testing covered the required vertical extent, whether a central scotoma exists, or whether the apparent loss is stable rather than progressing.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-VIS-02&quot;,
+  &quot;query_id&quot;: &quot;CX-VIS-02-Q1&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;The driver says he repeatedly misses a vehicle approaching from the left even though straight-ahead letters look sharp, and brings a binocular field printout labelled 140 degrees whose reliability flag is poor; no one has confirmed whether testing covered the required vertical extent, whether a central scotoma exists, or whether the apparent loss is stable rather than progressing.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-004&quot;,
+    &quot;AFTD2022-VIS-COM-005&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.5160159087258186,
+      &quot;bm25_score&quot;: 10.992393583949546
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.4895338507076732,
+      &quot;bm25_score&quot;: 15.313232049055785
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.03149801587301587,
+      &quot;vector_score&quot;: 0.4190231869210177,
+      &quot;bm25_score&quot;: 3.7285812379282213
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-06121bf34e62b53459320673&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-007&quot;
+      ],
+      &quot;score&quot;: 0.03149801587301587,
+      &quot;vector_score&quot;: 0.3008967382970352,
+      &quot;bm25_score&quot;: 7.321337980928176
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.030536130536130537,
+      &quot;vector_score&quot;: 0.29649972666444047,
+      &quot;bm25_score&quot;: 2.5235844589878886
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.5,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-HEAR-01-Q1 / vector / Recall@5 100%</summary><p>The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HEAR-01&quot;,
+  &quot;query_id&quot;: &quot;CX-HEAR-01-Q1&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-001&quot;,
+    &quot;AFTD2022-HEAR-COM-003&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.4505081645949352,
+      &quot;vector_score&quot;: 0.4505081645949352,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.42766860172384985,
+      &quot;vector_score&quot;: 0.42766860172384985,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.41991312039042306,
+      &quot;vector_score&quot;: 0.41991312039042306,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.30631873731649006,
+      &quot;vector_score&quot;: 0.30631873731649006,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HEAR-01-Q1 / bm25 / Recall@5 100%</summary><p>The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HEAR-01&quot;,
+  &quot;query_id&quot;: &quot;CX-HEAR-01-Q1&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-001&quot;,
+    &quot;AFTD2022-HEAR-COM-003&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.056540520699743
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.524374992978807
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.269825430411055
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 1.3763214044056131
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HEAR-01-Q1 / hybrid / Recall@5 100%</summary><p>The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HEAR-01&quot;,
+  &quot;query_id&quot;: &quot;CX-HEAR-01-Q1&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;The driver can follow a quiet face-to-face conversation but repeatedly asks dispatch to repeat radio instructions when the engine is running, turns his left ear toward the nurse and says the reversing alarm seems much quieter than last month; he uses hearing aids inconsistently because one whistles, although being able to hear the nurse today does not establish an unaided hearing threshold.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-001&quot;,
+    &quot;AFTD2022-HEAR-COM-003&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.4505081645949352,
+      &quot;bm25_score&quot;: 7.524374992978807
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.42766860172384985,
+      &quot;bm25_score&quot;: 8.056540520699743
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.031746031746031744,
+      &quot;vector_score&quot;: 0.41991312039042306,
+      &quot;bm25_score&quot;: 7.269825430411055
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.03125,
+      &quot;vector_score&quot;: 0.30631873731649006,
+      &quot;bm25_score&quot;: 1.3763214044056131
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HEAR-01-Q2 / vector / Recall@5 100%</summary><p>A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist&#x27;s signed report has been requested.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HEAR-01&quot;,
+  &quot;query_id&quot;: &quot;CX-HEAR-01-Q2&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist&#x27;s signed report has been requested.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-002&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.36335914692440596,
+      &quot;vector_score&quot;: 0.36335914692440596,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.3531364151084177,
+      &quot;vector_score&quot;: 0.3531364151084177,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.34008164502670835,
+      &quot;vector_score&quot;: 0.34008164502670835,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.1681919829838161,
+      &quot;vector_score&quot;: 0.1681919829838161,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.25,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HEAR-01-Q2 / bm25 / Recall@5 100%</summary><p>A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist&#x27;s signed report has been requested.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HEAR-01&quot;,
+  &quot;query_id&quot;: &quot;CX-HEAR-01-Q2&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist&#x27;s signed report has been requested.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-002&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 13.291484418941332
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 11.56214207868578
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 9.909570482000955
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 1.1637903497104507
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.25,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HEAR-01-Q2 / hybrid / Recall@5 100%</summary><p>A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist&#x27;s signed report has been requested.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HEAR-01&quot;,
+  &quot;query_id&quot;: &quot;CX-HEAR-01-Q2&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;A phone photograph shows 35 dB at 500 Hz and 50 dB at 1000 Hz without an identified ear, with the 2000 and 3000 Hz values cut off and no indication of whether an aid was worn; the nurse therefore cannot calculate an unaided better-ear average or regard this photograph as a complete audiogram, and the audiologist&#x27;s signed report has been requested.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-002&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.36335914692440596,
+      &quot;bm25_score&quot;: 11.56214207868578
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.3531364151084177,
+      &quot;bm25_score&quot;: 13.291484418941332
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.031746031746031744,
+      &quot;vector_score&quot;: 0.34008164502670835,
+      &quot;bm25_score&quot;: 9.909570482000955
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.03125,
+      &quot;vector_score&quot;: 0.1681919829838161,
+      &quot;bm25_score&quot;: 1.1637903497104507
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.25,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HEAR-02-Q1 / vector / Recall@5 100%</summary><p>An unsigned worksheet records unaided better ear average 42 dB averaged over 0.5, 1, 2 and 3 kHz, but the driver remembers wearing both aids during that test and the worksheet&#x27;s date is missing; the number should remain unconfirmed until the testing conditions and an audiologist&#x27;s assessment are checked.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HEAR-02&quot;,
+  &quot;query_id&quot;: &quot;CX-HEAR-02-Q1&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;An unsigned worksheet records unaided better ear average 42 dB averaged over 0.5, 1, 2 and 3 kHz, but the driver remembers wearing both aids during that test and the worksheet&#x27;s date is missing; the number should remain unconfirmed until the testing conditions and an audiologist&#x27;s assessment are checked.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-002&quot;,
+    &quot;AFTD2022-HEAR-COM-003&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.5167050676973538,
+      &quot;vector_score&quot;: 0.5167050676973538,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.374285702046516,
+      &quot;vector_score&quot;: 0.374285702046516,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.3678950341498581,
+      &quot;vector_score&quot;: 0.3678950341498581,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.2927700218845599,
+      &quot;vector_score&quot;: 0.2927700218845599,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HEAR-02-Q1 / bm25 / Recall@5 100%</summary><p>An unsigned worksheet records unaided better ear average 42 dB averaged over 0.5, 1, 2 and 3 kHz, but the driver remembers wearing both aids during that test and the worksheet&#x27;s date is missing; the number should remain unconfirmed until the testing conditions and an audiologist&#x27;s assessment are checked.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HEAR-02&quot;,
+  &quot;query_id&quot;: &quot;CX-HEAR-02-Q1&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;An unsigned worksheet records unaided better ear average 42 dB averaged over 0.5, 1, 2 and 3 kHz, but the driver remembers wearing both aids during that test and the worksheet&#x27;s date is missing; the number should remain unconfirmed until the testing conditions and an audiologist&#x27;s assessment are checked.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-002&quot;,
+    &quot;AFTD2022-HEAR-COM-003&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 21.946385376427962
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.021270895604397
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.014572993416325
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 2.0369655285906783
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-HEAR-02-Q1 / hybrid / Recall@5 100%</summary><p>An unsigned worksheet records unaided better ear average 42 dB averaged over 0.5, 1, 2 and 3 kHz, but the driver remembers wearing both aids during that test and the worksheet&#x27;s date is missing; the number should remain unconfirmed until the testing conditions and an audiologist&#x27;s assessment are checked.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-HEAR-02&quot;,
+  &quot;query_id&quot;: &quot;CX-HEAR-02-Q1&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;An unsigned worksheet records unaided better ear average 42 dB averaged over 0.5, 1, 2 and 3 kHz, but the driver remembers wearing both aids during that test and the worksheet&#x27;s date is missing; the number should remain unconfirmed until the testing conditions and an audiologist&#x27;s assessment are checked.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-002&quot;,
+    &quot;AFTD2022-HEAR-COM-003&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.03278688524590164,
+      &quot;vector_score&quot;: 0.5167050676973538,
+      &quot;bm25_score&quot;: 21.946385376427962
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.03200204813108039,
+      &quot;vector_score&quot;: 0.374285702046516,
+      &quot;bm25_score&quot;: 8.014572993416325
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.03200204813108039,
+      &quot;vector_score&quot;: 0.3678950341498581,
+      &quot;bm25_score&quot;: 8.021270895604397
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.03125,
+      &quot;vector_score&quot;: 0.2927700218845599,
+      &quot;bm25_score&quot;: 2.0369655285906783
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-BLK-01-Q1 / vector / Recall@5 100%</summary><p>A similar episode may have occurred ten days earlier, but dates and duration are unclear; the referral mentions a possible rhythm disturbance, seizure or sleep-related event without a confirmed diagnosis, and both ambulatory cardiac monitoring and neurological review are pending, so neither a benign cause nor a recurrence-free interval has been established.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-BLK-01&quot;,
+  &quot;query_id&quot;: &quot;CX-BLK-01-Q1&quot;,
+  &quot;module&quot;: &quot;blackout&quot;,
+  &quot;query&quot;: &quot;A similar episode may have occurred ten days earlier, but dates and duration are unclear; the referral mentions a possible rhythm disturbance, seizure or sleep-related event without a confirmed diagnosis, and both ambulatory cardiac monitoring and neurological review are pending, so neither a benign cause nor a recurrence-free interval has been established.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-BLK-COM-001&quot;,
+    &quot;AFTD2022-BLK-COM-006&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a824821c2616cc5fc00f1bd2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.3582528023931358,
+      &quot;vector_score&quot;: 0.3582528023931358,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-34f1b6daae96600d6514d717&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.2905817458203733,
+      &quot;vector_score&quot;: 0.2905817458203733,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-1d0bf6185414f3b23f085a0a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.2422406975624772,
+      &quot;vector_score&quot;: 0.2422406975624772,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-7428ffbf1312f87a4404ccbd&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.20218402107579714,
+      &quot;vector_score&quot;: 0.20218402107579714,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-5c9f01491a6e2b563e9633ec&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.19364916731037082,
+      &quot;vector_score&quot;: 0.19364916731037082,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.3333333333333333,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-BLK-01-Q1 / bm25 / Recall@5 100%</summary><p>A similar episode may have occurred ten days earlier, but dates and duration are unclear; the referral mentions a possible rhythm disturbance, seizure or sleep-related event without a confirmed diagnosis, and both ambulatory cardiac monitoring and neurological review are pending, so neither a benign cause nor a recurrence-free interval has been established.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-BLK-01&quot;,
+  &quot;query_id&quot;: &quot;CX-BLK-01-Q1&quot;,
+  &quot;module&quot;: &quot;blackout&quot;,
+  &quot;query&quot;: &quot;A similar episode may have occurred ten days earlier, but dates and duration are unclear; the referral mentions a possible rhythm disturbance, seizure or sleep-related event without a confirmed diagnosis, and both ambulatory cardiac monitoring and neurological review are pending, so neither a benign cause nor a recurrence-free interval has been established.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-BLK-COM-001&quot;,
+    &quot;AFTD2022-BLK-COM-006&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-1d0bf6185414f3b23f085a0a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 10.934446350023883
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5c9f01491a6e2b563e9633ec&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 10.059693604699595
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-7428ffbf1312f87a4404ccbd&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 9.644733055937245
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-34f1b6daae96600d6514d717&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.8296959733754665
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-a824821c2616cc5fc00f1bd2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.039852232473039
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-BLK-01-Q1 / hybrid / Recall@5 100%</summary><p>A similar episode may have occurred ten days earlier, but dates and duration are unclear; the referral mentions a possible rhythm disturbance, seizure or sleep-related event without a confirmed diagnosis, and both ambulatory cardiac monitoring and neurological review are pending, so neither a benign cause nor a recurrence-free interval has been established.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-BLK-01&quot;,
+  &quot;query_id&quot;: &quot;CX-BLK-01-Q1&quot;,
+  &quot;module&quot;: &quot;blackout&quot;,
+  &quot;query&quot;: &quot;A similar episode may have occurred ten days earlier, but dates and duration are unclear; the referral mentions a possible rhythm disturbance, seizure or sleep-related event without a confirmed diagnosis, and both ambulatory cardiac monitoring and neurological review are pending, so neither a benign cause nor a recurrence-free interval has been established.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-BLK-COM-001&quot;,
+    &quot;AFTD2022-BLK-COM-006&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-1d0bf6185414f3b23f085a0a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.032266458495966696,
+      &quot;vector_score&quot;: 0.2422406975624772,
+      &quot;bm25_score&quot;: 10.934446350023883
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a824821c2616cc5fc00f1bd2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.03177805800756621,
+      &quot;vector_score&quot;: 0.3582528023931358,
+      &quot;bm25_score&quot;: 7.039852232473039
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-34f1b6daae96600d6514d717&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.031754032258064516,
+      &quot;vector_score&quot;: 0.2905817458203733,
+      &quot;bm25_score&quot;: 7.8296959733754665
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-5c9f01491a6e2b563e9633ec&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.0315136476426799,
+      &quot;vector_score&quot;: 0.19364916731037082,
+      &quot;bm25_score&quot;: 10.059693604699595
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-7428ffbf1312f87a4404ccbd&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.03149801587301587,
+      &quot;vector_score&quot;: 0.20218402107579714,
+      &quot;bm25_score&quot;: 9.644733055937245
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-BLK-02-Q1 / vector / Recall@5 100%</summary><p>He asks whether heat would count as a provoking factor, yet one episode apparently occurred indoors and the witness is unavailable; investigations have started but no final mechanism, specialist opinion or reliable long-term event-free interval is documented, and the two different dates must not be merged into a single event.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-BLK-02&quot;,
+  &quot;query_id&quot;: &quot;CX-BLK-02-Q1&quot;,
+  &quot;module&quot;: &quot;blackout&quot;,
+  &quot;query&quot;: &quot;He asks whether heat would count as a provoking factor, yet one episode apparently occurred indoors and the witness is unavailable; investigations have started but no final mechanism, specialist opinion or reliable long-term event-free interval is documented, and the two different dates must not be merged into a single event.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-BLK-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a824821c2616cc5fc00f1bd2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.3506221487717581,
+      &quot;vector_score&quot;: 0.3506221487717581,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-1d0bf6185414f3b23f085a0a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.3501504876259268,
+      &quot;vector_score&quot;: 0.3501504876259268,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-34f1b6daae96600d6514d717&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.33538697118460375,
+      &quot;vector_score&quot;: 0.33538697118460375,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-117c52a8aeacb95308d452bb&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.24814583349273256,
+      &quot;vector_score&quot;: 0.24814583349273256,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-7428ffbf1312f87a4404ccbd&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.2302575422807176,
+      &quot;vector_score&quot;: 0.2302575422807176,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-BLK-02-Q1 / bm25 / Recall@5 100%</summary><p>He asks whether heat would count as a provoking factor, yet one episode apparently occurred indoors and the witness is unavailable; investigations have started but no final mechanism, specialist opinion or reliable long-term event-free interval is documented, and the two different dates must not be merged into a single event.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-BLK-02&quot;,
+  &quot;query_id&quot;: &quot;CX-BLK-02-Q1&quot;,
+  &quot;module&quot;: &quot;blackout&quot;,
+  &quot;query&quot;: &quot;He asks whether heat would count as a provoking factor, yet one episode apparently occurred indoors and the witness is unavailable; investigations have started but no final mechanism, specialist opinion or reliable long-term event-free interval is documented, and the two different dates must not be merged into a single event.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-BLK-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-34f1b6daae96600d6514d717&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 11.578301932858407
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a824821c2616cc5fc00f1bd2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 10.35055725707431
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-1d0bf6185414f3b23f085a0a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 9.420238234245156
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-5c9f01491a6e2b563e9633ec&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 5.069672507597353
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-7428ffbf1312f87a4404ccbd&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 4.764370212263396
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.3333333333333333,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-BLK-02-Q1 / hybrid / Recall@5 100%</summary><p>He asks whether heat would count as a provoking factor, yet one episode apparently occurred indoors and the witness is unavailable; investigations have started but no final mechanism, specialist opinion or reliable long-term event-free interval is documented, and the two different dates must not be merged into a single event.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-BLK-02&quot;,
+  &quot;query_id&quot;: &quot;CX-BLK-02-Q1&quot;,
+  &quot;module&quot;: &quot;blackout&quot;,
+  &quot;query&quot;: &quot;He asks whether heat would count as a provoking factor, yet one episode apparently occurred indoors and the witness is unavailable; investigations have started but no final mechanism, specialist opinion or reliable long-term event-free interval is documented, and the two different dates must not be merged into a single event.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-BLK-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a824821c2616cc5fc00f1bd2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.3506221487717581,
+      &quot;bm25_score&quot;: 10.35055725707431
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-34f1b6daae96600d6514d717&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.032266458495966696,
+      &quot;vector_score&quot;: 0.33538697118460375,
+      &quot;bm25_score&quot;: 11.578301932858407
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-1d0bf6185414f3b23f085a0a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.03200204813108039,
+      &quot;vector_score&quot;: 0.3501504876259268,
+      &quot;bm25_score&quot;: 9.420238234245156
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-117c52a8aeacb95308d452bb&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.030776515151515152,
+      &quot;vector_score&quot;: 0.24814583349273256,
+      &quot;bm25_score&quot;: 3.034422803779907
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-5c9f01491a6e2b563e9633ec&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.030776515151515152,
+      &quot;vector_score&quot;: 0.227429413073671,
+      &quot;bm25_score&quot;: 5.069672507597353
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.3333333333333333,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-DM-01-Q1 / vector / Recall@5 50%</summary><p>The driver was diagnosed with type 2 diabetes several years ago and says the old diet-only label is no longer correct because he now injects insulin each evening, although he cannot name the preparation or dose; after skipping lunch last week he became sweaty and confused in the depot, and a colleague had to bring a sweet drink because he could not organise it himself.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-DM-01&quot;,
+  &quot;query_id&quot;: &quot;CX-DM-01-Q1&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;The driver was diagnosed with type 2 diabetes several years ago and says the old diet-only label is no longer correct because he now injects insulin each evening, although he cannot name the preparation or dose; after skipping lunch last week he became sweaty and confused in the depot, and a colleague had to bring a sweet drink because he could not organise it himself.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-007&quot;,
+    &quot;AFTD2022-DM-COM-002&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.42916993083820165,
+      &quot;vector_score&quot;: 0.42916993083820165,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-57486f52c34fff6af3f9a0e8&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.4214906958190658,
+      &quot;vector_score&quot;: 0.4214906958190658,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.4002402162162271,
+      &quot;vector_score&quot;: 0.4002402162162271,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-afffa40229511334648ac34c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.3767052874784089,
+      &quot;vector_score&quot;: 0.3767052874784089,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-ae620ee5e5bf20cd3aea96d6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.2718118354334003,
+      &quot;vector_score&quot;: 0.2718118354334003,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.5,
+  &quot;mrr&quot;: 0.25,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-DM-01-Q1 / bm25 / Recall@5 50%</summary><p>The driver was diagnosed with type 2 diabetes several years ago and says the old diet-only label is no longer correct because he now injects insulin each evening, although he cannot name the preparation or dose; after skipping lunch last week he became sweaty and confused in the depot, and a colleague had to bring a sweet drink because he could not organise it himself.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-DM-01&quot;,
+  &quot;query_id&quot;: &quot;CX-DM-01-Q1&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;The driver was diagnosed with type 2 diabetes several years ago and says the old diet-only label is no longer correct because he now injects insulin each evening, although he cannot name the preparation or dose; after skipping lunch last week he became sweaty and confused in the depot, and a colleague had to bring a sweet drink because he could not organise it himself.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-007&quot;,
+    &quot;AFTD2022-DM-COM-002&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-8622cd805341715b7871b45a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 13.385388272186628
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-afffa40229511334648ac34c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 9.207790584529347
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.240116673947751
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-1682767924ecf3571b06e56b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-010&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.624096158634396
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-57486f52c34fff6af3f9a0e8&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.476045959025233
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.5,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-DM-01-Q1 / hybrid / Recall@5 50%</summary><p>The driver was diagnosed with type 2 diabetes several years ago and says the old diet-only label is no longer correct because he now injects insulin each evening, although he cannot name the preparation or dose; after skipping lunch last week he became sweaty and confused in the depot, and a colleague had to bring a sweet drink because he could not organise it himself.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-DM-01&quot;,
+  &quot;query_id&quot;: &quot;CX-DM-01-Q1&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;The driver was diagnosed with type 2 diabetes several years ago and says the old diet-only label is no longer correct because he now injects insulin each evening, although he cannot name the preparation or dose; after skipping lunch last week he became sweaty and confused in the depot, and a colleague had to bring a sweet drink because he could not organise it himself.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-007&quot;,
+    &quot;AFTD2022-DM-COM-002&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.032266458495966696,
+      &quot;vector_score&quot;: 0.42916993083820165,
+      &quot;bm25_score&quot;: 8.240116673947751
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-afffa40229511334648ac34c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.031754032258064516,
+      &quot;vector_score&quot;: 0.3767052874784089,
+      &quot;bm25_score&quot;: 9.207790584529347
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-57486f52c34fff6af3f9a0e8&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.0315136476426799,
+      &quot;vector_score&quot;: 0.4214906958190658,
+      &quot;bm25_score&quot;: 7.476045959025233
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-8622cd805341715b7871b45a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.03131881575727918,
+      &quot;vector_score&quot;: 0.25854384499750954,
+      &quot;bm25_score&quot;: 13.385388272186628
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.030798389007344232,
+      &quot;vector_score&quot;: 0.4002402162162271,
+      &quot;bm25_score&quot;: 6.255115840654641
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.5,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-DM-01-Q2 / vector / Recall@5 0%</summary><p>A glucose value of 3.1 mmol/L was recorded only after he started drinking, he denies having passed out, and there is no contemporaneous clinical assessment confirming how severe the episode was; he also describes occasions when the sensor alarm sounded before he noticed symptoms, has not brought three months of monitoring records, and is waiting for endocrinology review.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-DM-01&quot;,
+  &quot;query_id&quot;: &quot;CX-DM-01-Q2&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;A glucose value of 3.1 mmol/L was recorded only after he started drinking, he denies having passed out, and there is no contemporaneous clinical assessment confirming how severe the episode was; he also describes occasions when the sensor alarm sounded before he noticed symptoms, has not brought three months of monitoring records, and is waiting for endocrinology review.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-009&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.3472889686062183,
+      &quot;vector_score&quot;: 0.3472889686062183,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.331861655799986,
+      &quot;vector_score&quot;: 0.331861655799986,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-afffa40229511334648ac34c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.32970016398705726,
+      &quot;vector_score&quot;: 0.32970016398705726,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-57486f52c34fff6af3f9a0e8&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.27181903985010064,
+      &quot;vector_score&quot;: 0.27181903985010064,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-8622cd805341715b7871b45a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.20960938184084413,
+      &quot;vector_score&quot;: 0.20960938184084413,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.0,
+  &quot;mrr&quot;: 0.0,
+  &quot;label_precision&quot;: 0.0,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-DM-01-Q2 / bm25 / Recall@5 100%</summary><p>A glucose value of 3.1 mmol/L was recorded only after he started drinking, he denies having passed out, and there is no contemporaneous clinical assessment confirming how severe the episode was; he also describes occasions when the sensor alarm sounded before he noticed symptoms, has not brought three months of monitoring records, and is waiting for endocrinology review.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-DM-01&quot;,
+  &quot;query_id&quot;: &quot;CX-DM-01-Q2&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;A glucose value of 3.1 mmol/L was recorded only after he started drinking, he denies having passed out, and there is no contemporaneous clinical assessment confirming how severe the episode was; he also describes occasions when the sensor alarm sounded before he noticed symptoms, has not brought three months of monitoring records, and is waiting for endocrinology review.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-009&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-8622cd805341715b7871b45a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 12.826067054656919
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-589cbe18e924c83408fc7344&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-009&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 12.491503882439224
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-afffa40229511334648ac34c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 11.794678191320816
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.509075662060438
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.454006026345356
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-DM-01-Q2 / hybrid / Recall@5 100%</summary><p>A glucose value of 3.1 mmol/L was recorded only after he started drinking, he denies having passed out, and there is no contemporaneous clinical assessment confirming how severe the episode was; he also describes occasions when the sensor alarm sounded before he noticed symptoms, has not brought three months of monitoring records, and is waiting for endocrinology review.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-DM-01&quot;,
+  &quot;query_id&quot;: &quot;CX-DM-01-Q2&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;A glucose value of 3.1 mmol/L was recorded only after he started drinking, he denies having passed out, and there is no contemporaneous clinical assessment confirming how severe the episode was; he also describes occasions when the sensor alarm sounded before he noticed symptoms, has not brought three months of monitoring records, and is waiting for endocrinology review.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-009&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.03177805800756621,
+      &quot;vector_score&quot;: 0.3472889686062183,
+      &quot;bm25_score&quot;: 7.454006026345356
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-8622cd805341715b7871b45a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.03177805800756621,
+      &quot;vector_score&quot;: 0.20960938184084413,
+      &quot;bm25_score&quot;: 12.826067054656919
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.031754032258064516,
+      &quot;vector_score&quot;: 0.331861655799986,
+      &quot;bm25_score&quot;: 7.509075662060438
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-afffa40229511334648ac34c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.031746031746031744,
+      &quot;vector_score&quot;: 0.32970016398705726,
+      &quot;bm25_score&quot;: 11.794678191320816
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-589cbe18e924c83408fc7344&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-009&quot;
+      ],
+      &quot;score&quot;: 0.03128054740957967,
+      &quot;vector_score&quot;: 0.20697347352168874,
+      &quot;bm25_score&quot;: 12.491503882439224
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.2,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-DM-02-Q1 / vector / Recall@5 0%</summary><p>He felt nauseated this morning and asks whether the reading means diabetes, but medication history is empty and the nurse records suspected metabolic disturbance requiring clinical assessment rather than a confirmed diagnosis, insulin treatment or an established complication; a normal reading remembered from last year does not resolve today&#x27;s symptoms.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-DM-02&quot;,
+  &quot;query_id&quot;: &quot;CX-DM-02-Q1&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;He felt nauseated this morning and asks whether the reading means diabetes, but medication history is empty and the nurse records suspected metabolic disturbance requiring clinical assessment rather than a confirmed diagnosis, insulin treatment or an established complication; a normal reading remembered from last year does not resolve today&#x27;s symptoms.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-003&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.35533732846649824,
+      &quot;vector_score&quot;: 0.35533732846649824,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.3369967190061669,
+      &quot;vector_score&quot;: 0.3369967190061669,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-57486f52c34fff6af3f9a0e8&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.31849042303744,
+      &quot;vector_score&quot;: 0.31849042303744,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-ae620ee5e5bf20cd3aea96d6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.28607725128818,
+      &quot;vector_score&quot;: 0.28607725128818,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-afffa40229511334648ac34c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.28464928777678566,
+      &quot;vector_score&quot;: 0.28464928777678566,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.0,
+  &quot;mrr&quot;: 0.0,
+  &quot;label_precision&quot;: 0.0,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-DM-02-Q1 / bm25 / Recall@5 0%</summary><p>He felt nauseated this morning and asks whether the reading means diabetes, but medication history is empty and the nurse records suspected metabolic disturbance requiring clinical assessment rather than a confirmed diagnosis, insulin treatment or an established complication; a normal reading remembered from last year does not resolve today&#x27;s symptoms.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-DM-02&quot;,
+  &quot;query_id&quot;: &quot;CX-DM-02-Q1&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;He felt nauseated this morning and asks whether the reading means diabetes, but medication history is empty and the nurse records suspected metabolic disturbance requiring clinical assessment rather than a confirmed diagnosis, insulin treatment or an established complication; a normal reading remembered from last year does not resolve today&#x27;s symptoms.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-003&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-589cbe18e924c83408fc7344&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-009&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.020768594243378
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-ae620ee5e5bf20cd3aea96d6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.88045295698057
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.4073133093768115
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.371876236104038
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-1682767924ecf3571b06e56b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-010&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.061524576637879
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.0,
+  &quot;mrr&quot;: 0.0,
+  &quot;label_precision&quot;: 0.0,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-DM-02-Q1 / hybrid / Recall@5 0%</summary><p>He felt nauseated this morning and asks whether the reading means diabetes, but medication history is empty and the nurse records suspected metabolic disturbance requiring clinical assessment rather than a confirmed diagnosis, insulin treatment or an established complication; a normal reading remembered from last year does not resolve today&#x27;s symptoms.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-DM-02&quot;,
+  &quot;query_id&quot;: &quot;CX-DM-02-Q1&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;He felt nauseated this morning and asks whether the reading means diabetes, but medication history is empty and the nurse records suspected metabolic disturbance requiring clinical assessment rather than a confirmed diagnosis, insulin treatment or an established complication; a normal reading remembered from last year does not resolve today&#x27;s symptoms.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-003&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.032018442622950824,
+      &quot;vector_score&quot;: 0.35533732846649824,
+      &quot;bm25_score&quot;: 7.371876236104038
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.03200204813108039,
+      &quot;vector_score&quot;: 0.3369967190061669,
+      &quot;bm25_score&quot;: 7.4073133093768115
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-ae620ee5e5bf20cd3aea96d6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.031754032258064516,
+      &quot;vector_score&quot;: 0.28607725128818,
+      &quot;bm25_score&quot;: 7.88045295698057
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-589cbe18e924c83408fc7344&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-009&quot;
+      ],
+      &quot;score&quot;: 0.03131881575727918,
+      &quot;vector_score&quot;: 0.20209238339780283,
+      &quot;bm25_score&quot;: 8.020768594243378
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-57486f52c34fff6af3f9a0e8&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.031024531024531024,
+      &quot;vector_score&quot;: 0.31849042303744,
+      &quot;bm25_score&quot;: 5.324123569854643
+    }
+  ],
+  &quot;recall_at_k&quot;: 0.0,
+  &quot;mrr&quot;: 0.0,
+  &quot;label_precision&quot;: 0.0,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 0.0
+}</pre></details><details><summary>CX-MIX-01-Q1 / vector / Recall@5 100%</summary><p>The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-01&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-01-Q1&quot;,
+  &quot;module&quot;: &quot;blackout&quot;,
+  &quot;query&quot;: &quot;The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-BLK-COM-001&quot;,
+    &quot;AFTD2022-BLK-COM-006&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a824821c2616cc5fc00f1bd2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.4276777529554806,
+      &quot;vector_score&quot;: 0.4276777529554806,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-34f1b6daae96600d6514d717&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.37506105006145457,
+      &quot;vector_score&quot;: 0.37506105006145457,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-7428ffbf1312f87a4404ccbd&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.3312572308261304,
+      &quot;vector_score&quot;: 0.3312572308261304,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-117c52a8aeacb95308d452bb&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.2855936038564354,
+      &quot;vector_score&quot;: 0.2855936038564354,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-1d0bf6185414f3b23f085a0a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.25186988394494175,
+      &quot;vector_score&quot;: 0.25186988394494175,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.3333333333333333,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-01-Q1 / bm25 / Recall@5 100%</summary><p>The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-01&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-01-Q1&quot;,
+  &quot;module&quot;: &quot;blackout&quot;,
+  &quot;query&quot;: &quot;The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-BLK-COM-001&quot;,
+    &quot;AFTD2022-BLK-COM-006&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-34f1b6daae96600d6514d717&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 10.026817503604436
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a824821c2616cc5fc00f1bd2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 9.802477809051924
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-7428ffbf1312f87a4404ccbd&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 9.779640780569249
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-1d0bf6185414f3b23f085a0a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.170854106574772
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-5c9f01491a6e2b563e9633ec&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 6.055949992626687
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.3333333333333333,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-01-Q1 / hybrid / Recall@5 100%</summary><p>The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-01&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-01-Q1&quot;,
+  &quot;module&quot;: &quot;blackout&quot;,
+  &quot;query&quot;: &quot;The referral describes possible hypoglycaemia, cardiac syncope or a seizure without choosing a diagnosis; the driver reports a blackout but his recollection differs from the witness, a heart monitor has been ordered and the mechanism remains under investigation, with no confirmed specialist explanation or reliable recurrence risk assessment.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-BLK-COM-001&quot;,
+    &quot;AFTD2022-BLK-COM-006&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a824821c2616cc5fc00f1bd2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.4276777529554806,
+      &quot;bm25_score&quot;: 9.802477809051924
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-34f1b6daae96600d6514d717&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.37506105006145457,
+      &quot;bm25_score&quot;: 10.026817503604436
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-7428ffbf1312f87a4404ccbd&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.031746031746031744,
+      &quot;vector_score&quot;: 0.3312572308261304,
+      &quot;bm25_score&quot;: 9.779640780569249
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-1d0bf6185414f3b23f085a0a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.031009615384615385,
+      &quot;vector_score&quot;: 0.25186988394494175,
+      &quot;bm25_score&quot;: 7.170854106574772
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-117c52a8aeacb95308d452bb&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-BLK-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.030776515151515152,
+      &quot;vector_score&quot;: 0.2855936038564354,
+      &quot;bm25_score&quot;: 5.181431128624066
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.3333333333333333,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-01-Q2 / vector / Recall@5 100%</summary><p>His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-01&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-01-Q2&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-008&quot;,
+    &quot;AFTD2022-DM-COM-009&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.3451057175812343,
+      &quot;vector_score&quot;: 0.3451057175812343,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.33019817837838733,
+      &quot;vector_score&quot;: 0.33019817837838733,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-afffa40229511334648ac34c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.3296171265436078,
+      &quot;vector_score&quot;: 0.3296171265436078,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-57486f52c34fff6af3f9a0e8&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.2897748533756077,
+      &quot;vector_score&quot;: 0.2897748533756077,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-589cbe18e924c83408fc7344&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-009&quot;
+      ],
+      &quot;score&quot;: 0.2691209168905227,
+      &quot;vector_score&quot;: 0.2691209168905227,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-01-Q2 / bm25 / Recall@5 100%</summary><p>His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-01&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-01-Q2&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-008&quot;,
+    &quot;AFTD2022-DM-COM-009&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-589cbe18e924c83408fc7344&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-009&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 10.41923307176572
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.711158284847091
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-9d0ec3b9181e5d5de9ad2780&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.735797080337903
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 6.267233274638805
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-8622cd805341715b7871b45a&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 6.228742846607787
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 1.0,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-01-Q2 / hybrid / Recall@5 100%</summary><p>His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-01&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-01-Q2&quot;,
+  &quot;module&quot;: &quot;diabetes&quot;,
+  &quot;query&quot;: &quot;His insulin doses were recently changed and he is missing several days of glucose records; specialist diabetes review must address monitoring and possible hypoglycaemic impairment, while the loss-of-awareness history requires its own assessment instead of automatically being attributed to diabetes.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;diabetes&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-DM-COM-008&quot;,
+    &quot;AFTD2022-DM-COM-009&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4d520595d2132cce6e7dd5ea&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.03252247488101534,
+      &quot;vector_score&quot;: 0.3451057175812343,
+      &quot;bm25_score&quot;: 8.711158284847091
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-589cbe18e924c83408fc7344&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-009&quot;
+      ],
+      &quot;score&quot;: 0.03177805800756621,
+      &quot;vector_score&quot;: 0.2691209168905227,
+      &quot;bm25_score&quot;: 10.41923307176572
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-84f49d4865e6cf13c7c3a2e6&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-008&quot;
+      ],
+      &quot;score&quot;: 0.031754032258064516,
+      &quot;vector_score&quot;: 0.33019817837838733,
+      &quot;bm25_score&quot;: 6.267233274638805
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-afffa40229511334648ac34c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.031024531024531024,
+      &quot;vector_score&quot;: 0.3296171265436078,
+      &quot;bm25_score&quot;: 6.206663248878408
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-9d0ec3b9181e5d5de9ad2780&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-DM-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.031024531024531024,
+      &quot;vector_score&quot;: 0.24244056893821345,
+      &quot;bm25_score&quot;: 7.735797080337903
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.4,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-02-Q1 / vector / Recall@5 100%</summary><p>At today&#x27;s assessment BP 172/98 mmHg was recorded after the driver hurried up the stairs, but he recalls lower readings at home and no repeat has been taken; he recently changed tablets and feels briefly light-headed when rising, so persistent pressure, treatment stability and driving-impairing side effects remain to be clarified.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-02&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-02-Q1&quot;,
+  &quot;module&quot;: &quot;hypertension&quot;,
+  &quot;query&quot;: &quot;At today&#x27;s assessment BP 172/98 mmHg was recorded after the driver hurried up the stairs, but he recalls lower readings at home and no repeat has been taken; he recently changed tablets and feels briefly light-headed when rising, so persistent pressure, treatment stability and driving-impairing side effects remain to be clarified.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hypertension&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HTN-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4fce4b9e43f185a3081eea57&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.3297536325713183,
+      &quot;vector_score&quot;: 0.3297536325713183,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5a919909740d28c3756bae7b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.11322770341445958,
+      &quot;vector_score&quot;: 0.11322770341445958,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 2,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-02-Q1 / bm25 / Recall@5 100%</summary><p>At today&#x27;s assessment BP 172/98 mmHg was recorded after the driver hurried up the stairs, but he recalls lower readings at home and no repeat has been taken; he recently changed tablets and feels briefly light-headed when rising, so persistent pressure, treatment stability and driving-impairing side effects remain to be clarified.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-02&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-02-Q1&quot;,
+  &quot;module&quot;: &quot;hypertension&quot;,
+  &quot;query&quot;: &quot;At today&#x27;s assessment BP 172/98 mmHg was recorded after the driver hurried up the stairs, but he recalls lower readings at home and no repeat has been taken; he recently changed tablets and feels briefly light-headed when rising, so persistent pressure, treatment stability and driving-impairing side effects remain to be clarified.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hypertension&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HTN-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4fce4b9e43f185a3081eea57&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.343923089477627
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5a919909740d28c3756bae7b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 2.761798616431078
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 2,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-02-Q1 / hybrid / Recall@5 100%</summary><p>At today&#x27;s assessment BP 172/98 mmHg was recorded after the driver hurried up the stairs, but he recalls lower readings at home and no repeat has been taken; he recently changed tablets and feels briefly light-headed when rising, so persistent pressure, treatment stability and driving-impairing side effects remain to be clarified.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-02&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-02-Q1&quot;,
+  &quot;module&quot;: &quot;hypertension&quot;,
+  &quot;query&quot;: &quot;At today&#x27;s assessment BP 172/98 mmHg was recorded after the driver hurried up the stairs, but he recalls lower readings at home and no repeat has been taken; he recently changed tablets and feels briefly light-headed when rising, so persistent pressure, treatment stability and driving-impairing side effects remain to be clarified.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hypertension&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HTN-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-4fce4b9e43f185a3081eea57&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.03278688524590164,
+      &quot;vector_score&quot;: 0.3297536325713183,
+      &quot;bm25_score&quot;: 8.343923089477627
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-5a919909740d28c3756bae7b&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HTN-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.03225806451612903,
+      &quot;vector_score&quot;: 0.11322770341445958,
+      &quot;bm25_score&quot;: 2.761798616431078
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.5,
+  &quot;label_precision&quot;: 0.5,
+  &quot;returned_source_count&quot;: 2,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-02-Q2 / vector / Recall@5 100%</summary><p>He also says headlights split into two after several hours at night, although the effect disappeared before examination and he cannot say whether covering one eye changes it; a six-month-old slip with 6/9 and 6/12 does not identify correction status, and no current acuity or specialist report is available.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-02&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-02-Q2&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;He also says headlights split into two after several hours at night, although the effect disappeared before examination and he cannot say whether covering one eye changes it; a six-month-old slip with 6/9 and 6/12 does not identify correction status, and no current acuity or specialist report is available.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-007&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.3428921811632875,
+      &quot;vector_score&quot;: 0.3428921811632875,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.27436747677787954,
+      &quot;vector_score&quot;: 0.27436747677787954,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.24905006704335372,
+      &quot;vector_score&quot;: 0.24905006704335372,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.24645447174163015,
+      &quot;vector_score&quot;: 0.24645447174163015,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-06121bf34e62b53459320673&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-007&quot;
+      ],
+      &quot;score&quot;: 0.1246219477191792,
+      &quot;vector_score&quot;: 0.1246219477191792,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.2,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-02-Q2 / bm25 / Recall@5 100%</summary><p>He also says headlights split into two after several hours at night, although the effect disappeared before examination and he cannot say whether covering one eye changes it; a six-month-old slip with 6/9 and 6/12 does not identify correction status, and no current acuity or specialist report is available.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-02&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-02-Q2&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;He also says headlights split into two after several hours at night, although the effect disappeared before examination and he cannot say whether covering one eye changes it; a six-month-old slip with 6/9 and 6/12 does not identify correction status, and no current acuity or specialist report is available.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-007&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 12.354084495162514
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 8.220146459658356
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 7.5958747309634145
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 6.293332242554363
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-06121bf34e62b53459320673&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-007&quot;
+      ],
+      &quot;score&quot;: 0.015384615384615385,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 1.2478814210568197
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.2,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-02-Q2 / hybrid / Recall@5 100%</summary><p>He also says headlights split into two after several hours at night, although the effect disappeared before examination and he cannot say whether covering one eye changes it; a six-month-old slip with 6/9 and 6/12 does not identify correction status, and no current acuity or specialist report is available.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-02&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-02-Q2&quot;,
+  &quot;module&quot;: &quot;vision&quot;,
+  &quot;query&quot;: &quot;He also says headlights split into two after several hours at night, although the effect disappeared before examination and he cannot say whether covering one eye changes it; a six-month-old slip with 6/9 and 6/12 does not identify correction status, and no current acuity or specialist report is available.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;vision&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-VIS-COM-007&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-054dcc4d170526498b8d30f0&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-006&quot;
+      ],
+      &quot;score&quot;: 0.03278688524590164,
+      &quot;vector_score&quot;: 0.3428921811632875,
+      &quot;bm25_score&quot;: 12.354084495162514
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-a5fdb01d17468e88e47fbfc2&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-005&quot;
+      ],
+      &quot;score&quot;: 0.03200204813108039,
+      &quot;vector_score&quot;: 0.27436747677787954,
+      &quot;bm25_score&quot;: 7.5958747309634145
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-a701a3ed9f309d9dfaf6668c&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.03200204813108039,
+      &quot;vector_score&quot;: 0.24905006704335372,
+      &quot;bm25_score&quot;: 8.220146459658356
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-590b910dca5f78ec50648186&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.03125,
+      &quot;vector_score&quot;: 0.24645447174163015,
+      &quot;bm25_score&quot;: 6.293332242554363
+    },
+    {
+      &quot;rank&quot;: 5,
+      &quot;chunk_id&quot;: &quot;IND-06121bf34e62b53459320673&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-VIS-COM-007&quot;
+      ],
+      &quot;score&quot;: 0.03076923076923077,
+      &quot;vector_score&quot;: 0.1246219477191792,
+      &quot;bm25_score&quot;: 1.2478814210568197
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.2,
+  &quot;label_precision&quot;: 0.2,
+  &quot;returned_source_count&quot;: 5,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-02-Q3 / vector / Recall@5 100%</summary><p>In the noisy depot he misses spoken dispatch instructions despite using an aid, while a screening sheet marked 45 dB does not identify the ear or test frequencies; the nurse cannot use that number as an unaided better-ear average and has requested formal audiometry.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-02&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-02-Q3&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;In the noisy depot he misses spoken dispatch instructions despite using an aid, while a screening sheet marked 45 dB does not identify the ear or test frequencies; the nurse cannot use that number as an unaided better-ear average and has requested formal audiometry.&quot;,
+  &quot;method&quot;: &quot;vector&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.42796049251091295,
+      &quot;vector_score&quot;: 0.42796049251091295,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.31863474626616217,
+      &quot;vector_score&quot;: 0.31863474626616217,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.2891962764612471,
+      &quot;vector_score&quot;: 0.2891962764612471,
+      &quot;bm25_score&quot;: null
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.2344036154692477,
+      &quot;vector_score&quot;: 0.2344036154692477,
+      &quot;bm25_score&quot;: null
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.25,
+  &quot;label_precision&quot;: 0.25,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-02-Q3 / bm25 / Recall@5 100%</summary><p>In the noisy depot he misses spoken dispatch instructions despite using an aid, while a screening sheet marked 45 dB does not identify the ear or test frequencies; the nurse cannot use that number as an unaided better-ear average and has requested formal audiometry.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-02&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-02-Q3&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;In the noisy depot he misses spoken dispatch instructions despite using an aid, while a screening sheet marked 45 dB does not identify the ear or test frequencies; the nurse cannot use that number as an unaided better-ear average and has requested formal audiometry.&quot;,
+  &quot;method&quot;: &quot;bm25&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.01639344262295082,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 11.822528976424
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.016129032258064516,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 5.765328064374113
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.015873015873015872,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 5.283352332329886
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.015625,
+      &quot;vector_score&quot;: null,
+      &quot;bm25_score&quot;: 2.4076301361979784
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.25,
+  &quot;label_precision&quot;: 0.25,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details><details><summary>CX-MIX-02-Q3 / hybrid / Recall@5 100%</summary><p>In the noisy depot he misses spoken dispatch instructions despite using an aid, while a screening sheet marked 45 dB does not identify the ear or test frequencies; the nurse cannot use that number as an unaided better-ear average and has requested formal audiometry.</p><pre>{
+  &quot;case_id&quot;: &quot;CX-MIX-02&quot;,
+  &quot;query_id&quot;: &quot;CX-MIX-02-Q3&quot;,
+  &quot;module&quot;: &quot;hearing&quot;,
+  &quot;query&quot;: &quot;In the noisy depot he misses spoken dispatch instructions despite using an aid, while a screening sheet marked 45 dB does not identify the ear or test frequencies; the nurse cannot use that number as an unaided better-ear average and has requested formal audiometry.&quot;,
+  &quot;method&quot;: &quot;hybrid&quot;,
+  &quot;top_k&quot;: 5,
+  &quot;filters&quot;: {
+    &quot;module&quot;: &quot;hearing&quot;,
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;source_version&quot;: &quot;AP-G56-22&quot;,
+    &quot;index_sha256&quot;: &quot;61cdc1c260ed8267ab4cf7fbc71adc84ff900dc76e5fba1bc26ef93244afcb3f&quot;
+  },
+  &quot;expected_source_ids&quot;: [
+    &quot;AFTD2022-HEAR-COM-001&quot;
+  ],
+  &quot;ranked_candidates&quot;: [
+    {
+      &quot;rank&quot;: 1,
+      &quot;chunk_id&quot;: &quot;IND-a5168304a542756ac0a3a450&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-002&quot;
+      ],
+      &quot;score&quot;: 0.03278688524590164,
+      &quot;vector_score&quot;: 0.42796049251091295,
+      &quot;bm25_score&quot;: 11.822528976424
+    },
+    {
+      &quot;rank&quot;: 2,
+      &quot;chunk_id&quot;: &quot;IND-92adfed38094861556bb9805&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-003&quot;
+      ],
+      &quot;score&quot;: 0.03225806451612903,
+      &quot;vector_score&quot;: 0.31863474626616217,
+      &quot;bm25_score&quot;: 5.765328064374113
+    },
+    {
+      &quot;rank&quot;: 3,
+      &quot;chunk_id&quot;: &quot;IND-e2cbd9294f7f8c0b4bc7d3da&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-004&quot;
+      ],
+      &quot;score&quot;: 0.031746031746031744,
+      &quot;vector_score&quot;: 0.2891962764612471,
+      &quot;bm25_score&quot;: 5.283352332329886
+    },
+    {
+      &quot;rank&quot;: 4,
+      &quot;chunk_id&quot;: &quot;IND-93f16c5723d88710baf23c44&quot;,
+      &quot;source_ids&quot;: [
+        &quot;AFTD2022-HEAR-COM-001&quot;
+      ],
+      &quot;score&quot;: 0.03125,
+      &quot;vector_score&quot;: 0.2344036154692477,
+      &quot;bm25_score&quot;: 2.4076301361979784
+    }
+  ],
+  &quot;recall_at_k&quot;: 1.0,
+  &quot;mrr&quot;: 0.25,
+  &quot;label_precision&quot;: 0.25,
+  &quot;returned_source_count&quot;: 4,
+  &quot;complete_source_coverage&quot;: 1.0
+}</pre></details></main></html>

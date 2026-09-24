@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "label_origin": "engineering_seeded_extraction_errors",
+  "clinical_review_status": "pending",
+  "cases": [
+    {
+      "id": "SR-NEG-01", "module": "diabetes", "text": "No diabetes.",
+      "overrides": [{"field": "diabetes.present", "value": true, "quote": "No diabetes."}],
+      "expected_issue_fields": ["diabetes.present"]
+    },
+    {
+      "id": "SR-SUB-01", "module": "diabetes",
+      "text": "The patient's mother has diabetes. The patient's own diabetes status is not recorded.",
+      "overrides": [{"field": "diabetes.present", "value": true, "quote": "The patient's mother has diabetes."}],
+      "expected_issue_fields": ["diabetes.present"]
+    },
+    {
+      "id": "SR-TIME-01", "module": "hypertension",
+      "text": "BP 172/102 mmHg was measured once today. No repeat measurements are available.",
+      "overrides": [{"field": "cardiovascular.blood_pressure.persistent_systolic", "value": 172, "quote": "BP 172/102 mmHg was measured once today."}],
+      "expected_issue_fields": ["cardiovascular.blood_pressure.persistent_systolic"]
+    },
+    {
+      "id": "SR-UNC-01", "module": "blackout",
+      "text": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+      "overrides": [
+        {"field": "blackout.diagnosis", "value": "cardiac_syncope", "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established."},
+        {"field": "blackout.mechanism_status", "value": "diagnosed", "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established."}
+      ],
+      "expected_issue_fields": ["blackout.diagnosis", "blackout.mechanism_status"]
+    },
+    {
+      "id": "SR-MISSING-01", "module": "hearing",
+      "text": "The hearing screen average was 45 dB. The tested frequencies were not documented.",
+      "overrides": [{"field": "hearing.average_frequencies_khz", "value": [0.5, 1, 2, 3], "quote": "The tested frequencies were not documented."}],
+      "expected_issue_fields": ["hearing.average_frequencies_khz"]
+    },
+    {
+      "id": "SR-OMIT-01", "module": "vision",
+      "text": "Uncorrected visual acuity in the right eye is 6/6. No left eye measurement is available.",
+      "overrides": [{"field": "vision.uncorrected.right.snellen", "status": "unknown"}],
+      "expected_issue_fields": ["vision.uncorrected.right.snellen"]
+    },
+    {
+      "id": "SR-CLEAN-01", "module": "diabetes", "text": "No diabetes.",
+      "overrides": [{"field": "diabetes.present", "value": false, "quote": "No diabetes."}],
+      "expected_issue_fields": []
+    },
+    {
+      "id": "SR-CLEAN-02", "module": "hypertension",
+      "text": "BP 172/102 mmHg was measured once today. No repeat measurements are available.",
+      "overrides": [], "expected_issue_fields": []
+    }
+  ]
+}

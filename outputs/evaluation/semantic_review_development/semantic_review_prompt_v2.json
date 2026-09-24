@@ -1,0 +1,679 @@
+{
+  "schema_version": "1.0.0",
+  "cases": 8,
+  "completed": 5,
+  "fixture_sha256": "db0cf3d6765e9e4bb3a41d0a9f50894782689e53b10400438595b08c932ff208",
+  "model": "llama3:8b",
+  "label_origin": "engineering_seeded_extraction_errors",
+  "clinical_validation": false,
+  "exact_field_matches": 4,
+  "seeded_issue_recall_completed": 1.0,
+  "label_precision_completed": 0.8333333333333334,
+  "limitations": [
+    "Small synthetic development set with deliberately seeded extraction errors.",
+    "Measures extraction review, not clinical outcomes or end-to-end extraction accuracy.",
+    "Expected fields are not sent to the model; additional flags require human adjudication.",
+    "Using the same model for extraction and review can preserve correlated errors.",
+    "Failed or skipped reviews are counted separately, never as successful checks."
+  ],
+  "rows": [
+    {
+      "case_id": "SR-NEG-01",
+      "module": "diabetes",
+      "expected_issue_fields": [
+        "diabetes.present"
+      ],
+      "flagged_fields": [
+        "diabetes.present"
+      ],
+      "expected_fields_detected": [
+        "diabetes.present"
+      ],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 1.626,
+      "input_case_sha256": "cf3e0d943ef9cfecf9bb9257e86309f09f66f128dde2e2e5ded7c80ad18a805d",
+      "reviewed_case_sha256": "1f8ab4d1304ed55d2f30cc6089dd9bff1c566f4eb1c36a7711241ee8ed4405ea",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "source_semantic_review_v2",
+        "system_prompt_sha256": "8040d23e22bb2afd7ba5312ed3a03ad96664cb6d91cfd0ede56893137ae61439",
+        "source_text_sha256": "f81f90d314ba38b135d1fdf512afaf1dcf6ffa3fddc6d78f991e53e21aa45b7e",
+        "input_facts_sha256": "b1a6668529b13049662c18b5d48e002656390137770579ada2654c000ed91426",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 499,
+            "eval_count": 64,
+            "total_duration": 1592803700
+          }
+        ],
+        "issues": [
+          {
+            "field": "diabetes.present",
+            "kind": "unsupported",
+            "quote": "No diabetes.",
+            "explanation": "The note explicitly states that there is no diabetes, which contradicts the extracted fact that diabetes is present.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 12,
+                "quote": "No diabetes.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "diabetes.present"
+        ],
+        "checked_fields": [
+          "diabetes.present"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "diabetes"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "4f0141ca58b3462f7bfe05e1e8729cb969594f116f44d42d65785d7fac4e1a81",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "diabetes.present": {
+            "value": true,
+            "status": "present",
+            "unit": null,
+            "evidence": [
+              {
+                "start": 0,
+                "end": 12,
+                "quote": "No diabetes.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "output_facts_sha256": "7b8d9a50ef504a8c7cc31ba36f40066af445b7fb1582ab5aa30c3b89a2486891",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-SUB-01",
+      "module": "diabetes",
+      "expected_issue_fields": [
+        "diabetes.present"
+      ],
+      "flagged_fields": [
+        "diabetes.present"
+      ],
+      "expected_fields_detected": [
+        "diabetes.present"
+      ],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 1.411,
+      "input_case_sha256": "b5cd38acad99faf2695bca78ca821d714732f73ef56c80d115a8f822b1cb4ba3",
+      "reviewed_case_sha256": "80273d8411e57d5482065fdef3c9ab00573367e7768744dc91dd866970140c90",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "source_semantic_review_v2",
+        "system_prompt_sha256": "8040d23e22bb2afd7ba5312ed3a03ad96664cb6d91cfd0ede56893137ae61439",
+        "source_text_sha256": "f00edad6ffdf0774d77e89d39ce52b29bd5489eb0bdfaae17b15f049828022e6",
+        "input_facts_sha256": "1d0bb2a106a93b76910d7733412fbb948b6074bccf468ef2276dfa36bddea8b1",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 517,
+            "eval_count": 77,
+            "total_duration": 1369414500
+          }
+        ],
+        "issues": [
+          {
+            "field": "diabetes.present",
+            "kind": "unsupported",
+            "quote": "The patient's mother has diabetes. The patient's own diabetes status is not recorded.",
+            "explanation": "The note does not record the patient's own diabetes status, but only mentions the mother's diabetes.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 85,
+                "quote": "The patient's mother has diabetes. The patient's own diabetes status is not recorded.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "diabetes.present"
+        ],
+        "checked_fields": [
+          "diabetes.present"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "diabetes"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "0531ae0824c61d58f844ac1d0bd9696702720d7fba617b0e768115f3772c94e1",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "diabetes.present": {
+            "value": true,
+            "status": "present",
+            "unit": null,
+            "evidence": [
+              {
+                "start": 0,
+                "end": 34,
+                "quote": "The patient's mother has diabetes.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "output_facts_sha256": "0d83fab2c074eccc09c35780a3690ede696fecc69ac0ef0a207b8bd9b7b722c6",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-TIME-01",
+      "module": "hypertension",
+      "expected_issue_fields": [
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "flagged_fields": [],
+      "expected_fields_detected": [],
+      "expected_fields_missed": [
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "additional_flagged_fields": [],
+      "exact_field_match": false,
+      "completed": false,
+      "seconds": 2.893,
+      "input_case_sha256": "fd240d8d3eb62d6f7a9922824755611f9614cb9f0c11478f75ae9b7ae3d68615",
+      "reviewed_case_sha256": "a34d5bd768b07ba645ce65c9fcc43ca1cec8223a0cabfa398b9f5b758e711257",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "source_semantic_review_v2",
+        "system_prompt_sha256": "8040d23e22bb2afd7ba5312ed3a03ad96664cb6d91cfd0ede56893137ae61439",
+        "source_text_sha256": "5ac89b3282154c4525bd758a2772a07e4a738322a5fb7458c5695d0fe1a267c4",
+        "input_facts_sha256": "2c684c00c59e52e893bdae794be4e88354bd7e099e6b13c6491524d07c91d8b8",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 683,
+            "eval_count": 187,
+            "total_duration": 2859552900
+          }
+        ],
+        "issues": [],
+        "quarantined_fields": [],
+        "checked_fields": [],
+        "manual_review_required": true,
+        "review_modules": [
+          "hypertension"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "71647955b50849d70cdcef8085c92178b7b09b622b4a182caadafe5e98d8c476",
+        "status": "unavailable_or_invalid",
+        "error_type": "ValueError",
+        "output_facts_sha256": "2c684c00c59e52e893bdae794be4e88354bd7e099e6b13c6491524d07c91d8b8",
+        "facts_quarantined": false
+      }
+    },
+    {
+      "case_id": "SR-UNC-01",
+      "module": "blackout",
+      "expected_issue_fields": [
+        "blackout.diagnosis",
+        "blackout.mechanism_status"
+      ],
+      "flagged_fields": [
+        "blackout.diagnosis",
+        "blackout.mechanism_status"
+      ],
+      "expected_fields_detected": [
+        "blackout.diagnosis",
+        "blackout.mechanism_status"
+      ],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 2.638,
+      "input_case_sha256": "52afbc8e1c8be48e734d8246853c0f49ab7537368780e52ab6eb87becf4f9d52",
+      "reviewed_case_sha256": "ac814b6d10ee3135c2af12539122cda3b3be49a3655f26573266f9818d07de7f",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "source_semantic_review_v2",
+        "system_prompt_sha256": "8040d23e22bb2afd7ba5312ed3a03ad96664cb6d91cfd0ede56893137ae61439",
+        "source_text_sha256": "44d9c01bf3468a3099181fef1fde331be202018b7894fd9fedcf99d4267ccebb",
+        "input_facts_sha256": "4bb2ccd43fd7206da23eb94902f63981ce01f254a27716702cc7bdcf8b0fbc73",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 496,
+            "eval_count": 170,
+            "total_duration": 2601765800
+          }
+        ],
+        "issues": [
+          {
+            "field": "blackout.mechanism_status",
+            "kind": "unsupported",
+            "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+            "explanation": "The note states that a diagnosis has not been established, but the extracted fact claims that the mechanism status is diagnosed.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 85,
+                "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          },
+          {
+            "field": "blackout.diagnosis",
+            "kind": "unsupported",
+            "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+            "explanation": "The note states that a diagnosis has not been established, but the extracted fact claims that the diagnosis is cardiac syncope.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 85,
+                "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "blackout.diagnosis",
+          "blackout.mechanism_status"
+        ],
+        "checked_fields": [
+          "blackout.diagnosis",
+          "blackout.mechanism_status"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "blackout"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "205e84d009882e572edb7077b1282288a0ac15bab2e47bc3ab1df3458ba38bbd",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "blackout.diagnosis": {
+            "value": "cardiac_syncope",
+            "status": "present",
+            "unit": null,
+            "evidence": [
+              {
+                "start": 0,
+                "end": 85,
+                "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          },
+          "blackout.mechanism_status": {
+            "value": "diagnosed",
+            "status": "present",
+            "unit": null,
+            "evidence": [
+              {
+                "start": 0,
+                "end": 85,
+                "quote": "Possible cardiac syncope is being investigated; a diagnosis has not been established.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "output_facts_sha256": "9c284f39ac2d3831db65f6bcc02b4bb8c16766172e638f63d15033d1d937eb2b",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-MISSING-01",
+      "module": "hearing",
+      "expected_issue_fields": [
+        "hearing.average_frequencies_khz"
+      ],
+      "flagged_fields": [
+        "hearing.average_frequencies_khz"
+      ],
+      "expected_fields_detected": [
+        "hearing.average_frequencies_khz"
+      ],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": true,
+      "completed": true,
+      "seconds": 2.299,
+      "input_case_sha256": "c48c86981808e3564ab611e3ff65ecefad78378da2a1fd7d996a570975c13d52",
+      "reviewed_case_sha256": "86b1a880368d4cc42218585cd15260b1519d4dc95691e83fabb8a53f19964788",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "source_semantic_review_v2",
+        "system_prompt_sha256": "8040d23e22bb2afd7ba5312ed3a03ad96664cb6d91cfd0ede56893137ae61439",
+        "source_text_sha256": "55f7adb4ea1d5239fc09dc92ae6e0385ee92f73b15664c9b26b6e5774df5066a",
+        "input_facts_sha256": "e8457bd6cc9e1923a69f15b21c7badf04a0a3c73517959097c9517e2c50398db",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 442,
+            "eval_count": 147,
+            "total_duration": 2258521200
+          }
+        ],
+        "issues": [
+          {
+            "field": "hearing.average_frequencies_khz",
+            "kind": "unsupported",
+            "quote": "The tested frequencies were not documented.",
+            "explanation": "The note explicitly states that the tested frequencies were not documented, but the extraction claims that the frequencies are [0.5, 1, 2, 3] kHz.",
+            "evidence": [
+              {
+                "start": 38,
+                "end": 81,
+                "quote": "The tested frequencies were not documented.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          },
+          {
+            "field": "hearing.average_frequencies_khz",
+            "kind": "omission",
+            "quote": "The tested frequencies were not documented.",
+            "explanation": "The note does not provide the actual frequencies, but the extraction attempts to fill in the missing information.",
+            "evidence": [
+              {
+                "start": 38,
+                "end": 81,
+                "quote": "The tested frequencies were not documented.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "hearing.average_frequencies_khz"
+        ],
+        "checked_fields": [
+          "hearing.average_frequencies_khz"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "hearing"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "be5fb864306912fee756fba5487a08db4398ff7ab36ce6d2aa0cdf5eb6c218d7",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "hearing.average_frequencies_khz": {
+            "value": [
+              0.5,
+              1,
+              2,
+              3
+            ],
+            "status": "present",
+            "unit": "kHz",
+            "evidence": [
+              {
+                "start": 38,
+                "end": 81,
+                "quote": "The tested frequencies were not documented.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "output_facts_sha256": "e24123b7063dd92fd5525f282e0892d009d8deea07459a066b114df4051a6093",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-OMIT-01",
+      "module": "vision",
+      "expected_issue_fields": [
+        "vision.uncorrected.right.snellen"
+      ],
+      "flagged_fields": [],
+      "expected_fields_detected": [],
+      "expected_fields_missed": [
+        "vision.uncorrected.right.snellen"
+      ],
+      "additional_flagged_fields": [],
+      "exact_field_match": false,
+      "completed": false,
+      "seconds": 14.19,
+      "input_case_sha256": "b5f15f8908d51a02d9c9d8e91bf880aad721e1656119dbe32c6a1024db3f245f",
+      "reviewed_case_sha256": "a71ee8d6c4d8b2a0ba93a74f758e2456b9d24b1094cb008c175946c72d5742b9",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "source_semantic_review_v2",
+        "system_prompt_sha256": "8040d23e22bb2afd7ba5312ed3a03ad96664cb6d91cfd0ede56893137ae61439",
+        "source_text_sha256": "85689399f445950b2eebbd5733f56e677d2a86a5a2245a468c6c7abf0f95e6a8",
+        "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 537,
+            "eval_count": 1037,
+            "total_duration": 14148744500
+          }
+        ],
+        "issues": [],
+        "quarantined_fields": [],
+        "checked_fields": [],
+        "manual_review_required": true,
+        "review_modules": [
+          "vision"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "fd3ae111d2b44f1bd7942ac87874744664ba4715877c74823593eb733c9b28ed",
+        "status": "unavailable_or_invalid",
+        "error_type": "ValueError",
+        "output_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+        "facts_quarantined": false
+      }
+    },
+    {
+      "case_id": "SR-CLEAN-01",
+      "module": "diabetes",
+      "expected_issue_fields": [],
+      "flagged_fields": [
+        "diabetes.present"
+      ],
+      "expected_fields_detected": [],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [
+        "diabetes.present"
+      ],
+      "exact_field_match": false,
+      "completed": true,
+      "seconds": 1.323,
+      "input_case_sha256": "d47cbee56b95c3d856f4863ad2f64cf367b0b3e23a7146d3439554f42dae0dff",
+      "reviewed_case_sha256": "5b541d27705a245962c081d8e5196cebf2b23a09f4b386e62528bb1801d458bf",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "source_semantic_review_v2",
+        "system_prompt_sha256": "8040d23e22bb2afd7ba5312ed3a03ad96664cb6d91cfd0ede56893137ae61439",
+        "source_text_sha256": "f81f90d314ba38b135d1fdf512afaf1dcf6ffa3fddc6d78f991e53e21aa45b7e",
+        "input_facts_sha256": "cdf88327be1f2e23dfc7915286939e2ee7cb921d79da467039ece229d30e689a",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 499,
+            "eval_count": 67,
+            "total_duration": 1272220500
+          }
+        ],
+        "issues": [
+          {
+            "field": "diabetes.present",
+            "kind": "unsupported",
+            "quote": "No diabetes.",
+            "explanation": "The note explicitly states that there is no diabetes, which contradicts the extracted fact's value of false.",
+            "evidence": [
+              {
+                "start": 0,
+                "end": 12,
+                "quote": "No diabetes.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ]
+          }
+        ],
+        "quarantined_fields": [
+          "diabetes.present"
+        ],
+        "checked_fields": [
+          "diabetes.present"
+        ],
+        "manual_review_required": true,
+        "review_modules": [
+          "diabetes"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "151595e0035405c06c8ac133e6f95306b6b2ac004a24788b9c43c0b74a934e4a",
+        "status": "requires_confirmation",
+        "original_facts": {
+          "diabetes.present": {
+            "value": false,
+            "status": "present",
+            "unit": null,
+            "evidence": [
+              {
+                "start": 0,
+                "end": 12,
+                "quote": "No diabetes.",
+                "line_start": 1,
+                "line_end": 1,
+                "pdf_page": null
+              }
+            ],
+            "method": "synthetic_review_test_seed",
+            "derived_from": []
+          }
+        },
+        "output_facts_sha256": "7b8d9a50ef504a8c7cc31ba36f40066af445b7fb1582ab5aa30c3b89a2486891",
+        "facts_quarantined": true
+      }
+    },
+    {
+      "case_id": "SR-CLEAN-02",
+      "module": "hypertension",
+      "expected_issue_fields": [],
+      "flagged_fields": [],
+      "expected_fields_detected": [],
+      "expected_fields_missed": [],
+      "additional_flagged_fields": [],
+      "exact_field_match": false,
+      "completed": false,
+      "seconds": 10.741,
+      "input_case_sha256": "4073f0817ecd0da70cfc063ac44462bb853c46ae3f1d385c43c07de76cbc8ab2",
+      "reviewed_case_sha256": "c311f3a74559051d07c58c7a712ed5f82a8abad7aafdf67b0dd7c1c1699e3339",
+      "audit": {
+        "schema_version": "1.0.0",
+        "prompt_version": "source_semantic_review_v2",
+        "system_prompt_sha256": "8040d23e22bb2afd7ba5312ed3a03ad96664cb6d91cfd0ede56893137ae61439",
+        "source_text_sha256": "5ac89b3282154c4525bd758a2772a07e4a738322a5fb7458c5695d0fe1a267c4",
+        "input_facts_sha256": "72ebfda58b19e3f26c54a07b0ec350e6f9cd1aedd388b4ce45104132af272b62",
+        "model": "llama3:8b",
+        "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "calls": [
+          {
+            "model": "llama3:8b",
+            "done_reason": "stop",
+            "prompt_eval_count": 620,
+            "eval_count": 771,
+            "total_duration": 10681633500
+          }
+        ],
+        "issues": [],
+        "quarantined_fields": [],
+        "checked_fields": [],
+        "manual_review_required": true,
+        "review_modules": [
+          "hypertension"
+        ],
+        "accuracy_verified": false,
+        "replacement_values_allowed": false,
+        "prompt_payload_sha256": "09f418b40370bdae67add32b91f395b3434454838aed0932e8b2eca61b0cd6bb",
+        "status": "unavailable_or_invalid",
+        "error_type": "ValidationError",
+        "output_facts_sha256": "72ebfda58b19e3f26c54a07b0ec350e6f9cd1aedd388b4ce45104132af272b62",
+        "facts_quarantined": false
+      }
+    }
+  ]
+}

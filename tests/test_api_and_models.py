@@ -49,8 +49,8 @@ def test_browser_ui_accepts_txt_and_presents_quotes():
     assert response.headers["content-type"].startswith("text/html")
     assert 'type="file"' in response.text
     assert 'accept=".txt,text/plain"' in response.text
-    assert "病例原文引用" in response.text
-    assert "指南原文引用" in response.text
+    assert "Case source quotes" in response.text
+    assert "Guideline source quotes" in response.text
     assert "fetch('/assess'" in response.text
 
 

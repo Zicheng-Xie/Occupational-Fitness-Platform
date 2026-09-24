@@ -79,7 +79,11 @@ def test_openapi_exposes_experiment_cases_and_three_way_summary():
         "red_flag_classification",
         "triggered_rule_ids",
         "missing_fields",
+        "extracted_facts",
+        "processing_steps",
+        "rag_execution",
         "guideline_references",
+        "final_output",
     } <= set(summary["properties"])
     reference = openapi["components"]["schemas"]["GuidelineReference"]
     assert {"source_text", "printed_page", "pdf_page", "verified_against_source"} <= set(
@@ -90,6 +94,7 @@ def test_openapi_exposes_experiment_cases_and_three_way_summary():
 def test_blackout_experiment_case_matches_expected_red_flag_offline():
     with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
         response = client.post("/experiment/cases/BLK-REDFLAG-EDNOTE/evaluate")
+        text_response = client.post("/experiment/cases/BLK-REDFLAG-EDNOTE/evaluate.txt")
 
     assert response.status_code == 200
     payload = response.json()
@@ -103,6 +108,53 @@ def test_blackout_experiment_case_matches_expected_red_flag_offline():
     assert payload["matches_expected_outcome"] is True
     assert payload["guideline_references"]
     assert all(item["verified_against_source"] for item in payload["guideline_references"])
+    assert [step["step"] for step in payload["processing_steps"]] == list(range(1, 9))
+    assert payload["rag_execution"]["invoked"] is True
+    assert payload["rag_execution"]["evidence_item_count"] > 0
+    assert payload["rag_execution"]["unresolved_request_count"] == 0
+    assert payload["rag_execution"]["rule_result_fields_modified_by_rag"] is False
+    facts = {item["field"]: item for item in payload["extracted_facts"]}
+    assert facts["blackout.occurred"]["value"] is True
+    assert facts["blackout.mechanism_status"]["value"] == "under_investigation"
+    assert payload["final_output"]["mode"] == "RAG_INPUT"
+    assert (
+        "Classification: Red flag: an explicit driving-safety risk is present"
+        in payload["final_output"]["text"]
+    )
+    assert "Fitness outcome: Temporarily unfit to drive" in payload["final_output"]["text"]
+    assert "[4. Primary RAG tasks]" in payload["final_output"]["text"]
+    assert "[5. Supplementary RAG tasks]" in payload["final_output"]["text"]
+    assert "CLASSIFICATION=RED_FLAG" in payload["final_output"]["text"]
+    assert text_response.status_code == 200
+    assert text_response.headers["content-type"].startswith("text/plain")
+    assert text_response.headers["content-disposition"].startswith("inline;")
+    assert text_response.headers["x-result-mode"] == "RAG_INPUT"
+    assert "BLK-COM-UNDIAGNOSED-001" in text_response.text
+
+
+def test_existing_synthetic_case_can_run_through_experiment_endpoint():
+    with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+        response = client.post("/experiment/cases/SYN-EXT-008/evaluate")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["case_id"] == "SYN-EXT-008"
+    assert payload["module"] == "all"
+    assert payload["rag_execution"]["invoked"] is True
+    assert payload["rag_execution"]["evidence_item_count"] > 0
+    assert payload["expected_red_flag_classification"] is None
+    assert payload["matches_expected_classification"] is None
+
+
+def test_experiment_missing_information_reports_rag_work(tmp_path):
+    with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+        response = client.post("/experiment/cases/HEAR-INCOMPLETE-CHECKLIST/evaluate")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["assessment_outcome"] == "insufficient_information"
+    assert payload["rag_execution"]["ranking_calls"] > 0
+    assert payload["final_output"]["mode"] == "RAG_INPUT"
 
 
 def test_api_missing_information_does_not_create_red_flag():

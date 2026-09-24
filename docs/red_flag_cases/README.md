@@ -17,3 +17,5 @@ Request types retain their original meanings: a triggered rule emits `triggered_
 Implementation: `src/occupational_fitness_rag/rules/engine.py` preserves routing; `red_flag.py` converts the internal result; `retrieval/workflow.py` binds and ranks sources. `tests/test_red_flag.py` and `tests/test_framework_preservation.py` protect these boundaries.
 
 See [framework preservation](../framework_preservation.md) for the fixed sequence and [contracts](../contracts.md) for API schemas.
+
+The experiment API also exposes `/experiment/cases/{case_id}/evaluate` and its `.txt` companion. They report the deterministic classification, extracted facts, missing information, RAG execution metadata, and source-linked evidence. They do not change rule outcomes. The complete workflow retains semantic review, evidence retrieval, optional model commentary, and clinician review.

@@ -17,6 +17,7 @@ from occupational_fitness_rag.case_intake.traceable import (
 from occupational_fitness_rag.indexing.memory_store import InMemoryVectorStore
 from occupational_fitness_rag.ingestion.source_catalogue import SourceCatalogue, build_catalogue
 from occupational_fitness_rag.llm import OllamaClient
+from occupational_fitness_rag.pipeline.austroads_rag import AustroadsRAGPipeline
 from occupational_fitness_rag.pipeline.config import load_workflow_config
 from occupational_fitness_rag.provenance import digest, sha256_bytes, write_json
 from occupational_fitness_rag.red_flag import RedFlagEvaluator
@@ -34,7 +35,7 @@ from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     WorkflowEvidencePack,
 )
-from occupational_fitness_rag.settings import RetrievalSettings
+from occupational_fitness_rag.settings import RetrievalSettings, load_settings
 
 
 class OccupationalFitnessWorkflow:
@@ -67,6 +68,11 @@ class OccupationalFitnessWorkflow:
             engine = RetrievalEngine(
                 store, RetrievalSettings(candidate_k=ret.candidate_k, top_k=ret.top_k)
             )
+        original_rag = (
+            AustroadsRAGPipeline(engine, load_settings(self.root / "configs/rag.yaml"))
+            if engine is not None
+            else None
+        )
         self.retriever = WorkflowRetriever(
             self.catalogue,
             self.book,
@@ -74,6 +80,7 @@ class OccupationalFitnessWorkflow:
             ret.mode,
             ret.embedding_model,
             discovery_factory=(lambda: IndicatorRetriever(self)) if engine else None,
+            original_rag=original_rag,
         )
 
     def assess(self, case: ClinicalCase, progress=None):

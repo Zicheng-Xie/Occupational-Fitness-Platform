@@ -4,10 +4,12 @@ from __future__ import annotations
 
 from occupational_fitness_rag.ingestion.models import GuidelineChunk
 from occupational_fitness_rag.ingestion.source_catalogue import SourceCatalogue
+from occupational_fitness_rag.pipeline.austroads_rag import AustroadsRAGPipeline
 from occupational_fitness_rag.provenance import digest
 from occupational_fitness_rag.retrieval.query_builder import build_indicator_query
 from occupational_fitness_rag.rules.engine import RuleBook
 from occupational_fitness_rag.schemas.red_flag_result import RAGInput
+from occupational_fitness_rag.schemas.rule_result import Route, RuleResult, RuleTrace
 from occupational_fitness_rag.schemas.workflow import (
     RequestEvidence,
     WorkflowEvidencePack,
@@ -51,8 +53,10 @@ class WorkflowRetriever:
         mode="exact",
         embedding_model="none",
         discovery_factory=None,
+        original_rag: AustroadsRAGPipeline | None = None,
     ):
         self.catalogue, self.book, self.engine, self.mode = catalogue, book, engine, mode
+        self.original_rag = original_rag
         self.embedding_model = embedding_model if mode == "chroma" else "none"
         self.discovery_factory = discovery_factory
         self.discovery_retriever = None
@@ -98,34 +102,52 @@ class WorkflowRetriever:
             }
             query = None
             ranked_candidates = []
-            # Required exact citations are never displaced by top-k ranking.
-            if self.engine and result.route != WorkflowRoute.FAST:
-                query = build_indicator_query(result, request, rule)
-                hits = self.engine.retrieve(query, filters)
-                semantic_calls += 1
+            # Route searches through the repository's original Austroads RAG pipeline.
+            # Exact citations remain authoritative and cannot be displaced by ranking.
+            if self.original_rag is not None:
+                indicator_query = build_indicator_query(result, request, rule)
+                legacy_route = (
+                    Route.FAST_PATH
+                    if result.route == WorkflowRoute.FAST
+                    else Route.MISSING_INFORMATION
+                    if request.request_type == "missing_information_guidance"
+                    else Route.HUMAN_REVIEW
+                    if result.route == WorkflowRoute.HUMAN
+                    else Route.RAG_REVIEW
+                )
+                legacy_result = RuleResult(
+                    case_id=result.case_id,
+                    category=request.category,
+                    subcondition=request.subcondition,
+                    rules=[RuleTrace(rule_id=request.rule_id, result=True)],
+                    flags=[indicator_query, *request.ambiguity_reasons],
+                    missing=sorted(request.fact_context),
+                    route=legacy_route,
+                    upstream_metadata={"request_id": request.request_id},
+                )
+                legacy_pack = self.original_rag.run(legacy_result)
+                query = legacy_pack.semantic_query
+                if query is not None:
+                    semantic_calls += 1
                 scores = {}
-                for rank, hit in enumerate(hits, 1):
-                    if not all(str(hit.doc.metadata.get(k)) == str(v) for k, v in filters.items()):
-                        raise ValueError("Retriever violated the strict metadata boundary")
-                    source_id = hit.doc.metadata.get("source_id")
+                for rank, item in enumerate(legacy_pack.evidence, 1):
+                    source_id = item.metadata.get("source_id")
                     ranked_candidates.append(
                         {
                             "rank": rank,
                             "source_id": source_id,
-                            "chunk_id": hit.doc.chunk_id,
-                            "fusion_score": hit.score,
-                            "vector_score": hit.vector_score,
-                            "bm25_score": hit.bm25_score,
-                            "rerank_score": hit.rerank_score,
+                            "chunk_id": item.chunk_id,
+                            "fusion_score": item.score,
+                            "vector_score": item.vector_score,
+                            "bm25_score": item.bm25_score,
+                            "rerank_score": item.rerank_score,
                             "score_type": "dense_bm25_rrf"
                             if self.mode == "chroma"
                             else "lexical_cosine_bm25_rrf",
                         }
                     )
                     if source_id in request.source_ids:
-                        scores[source_id] = (
-                            hit.rerank_score if hit.rerank_score is not None else hit.score
-                        )
+                        scores[source_id] = item.score
                 citations.sort(key=lambda c: scores.get(c.source_id, float("-inf")), reverse=True)
             items.append(
                 RequestEvidence(

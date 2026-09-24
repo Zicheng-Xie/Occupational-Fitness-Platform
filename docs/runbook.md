@@ -41,6 +41,11 @@ Extraction runs before rules. Model output and runtime metadata can produce a ne
 .\.venv\Scripts\python.exe -m uvicorn occupational_fitness_rag.api:app --host 127.0.0.1 --port 8000
 ```
 
+Open `http://127.0.0.1:8000/simple` for the compact TXT upload interface. The browser reads the selected
+file locally and sends its text to `POST /assess`; the result page highlights the conclusion,
+decision basis, exact case quotations and exact guideline quotations. JSON remains available
+in a collapsed technical-data section.
+
 `GET /health` reports source identity. `POST /assess` accepts `case_id` and `text`, then runs configured extraction and assessment. `POST /rag/retrieve` processes rule evidence requests. Select a configuration through `FITNESS_WORKFLOW_CONFIG`. The CLI persists HTML reports and model commentary; the API returns structured assessment and review data.
 
 The field dictionary is in `schemas/field_dictionary.json`. Explicitly reviewed additions can use one `field = JSON` entry per line. Missing history remains unknown. Text-free scanned PDFs require an OCR integration.

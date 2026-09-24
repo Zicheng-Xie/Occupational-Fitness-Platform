@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from occupational_fitness_rag import __version__
@@ -19,6 +19,7 @@ from occupational_fitness_rag.schemas.workflow import (
     ReviewNote,
     WorkflowEvidencePack,
 )
+from occupational_fitness_rag.web_ui import ASSESSMENT_UI
 
 
 class AssessmentInput(BaseModel):
@@ -337,6 +338,10 @@ def create_app(config_path: str | None = None, *, output_root=None) -> FastAPI:
         docs_url=None,
         redoc_url=None,
     )
+
+    @app.get("/simple", response_class=HTMLResponse, include_in_schema=False)
+    def assessment_ui():
+        return HTMLResponse(ASSESSMENT_UI)
 
     @app.get("/health")
     def health():

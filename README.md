@@ -24,6 +24,10 @@ Run `powershell -ExecutionPolicy Bypass -File scripts/bootstrap.ps1 -Chroma`, or
 .\.venv\Scripts\python.exe scripts/build_delivery.py
 ```
 
+For the full browser workspace, start the local API and open `http://127.0.0.1:8000`.
+The compact TXT interface remains available at `http://127.0.0.1:8000/simple` and presents
+a concise conclusion with exact case and guideline quotations.
+
 The default configuration enables Llama extraction, semantic review and separate model commentary. See [Extraction semantic review](docs/semantic_review.md) for the review policy and its limitations. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
 
 ## Assessment workflow

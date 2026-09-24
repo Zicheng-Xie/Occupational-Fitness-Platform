@@ -44,9 +44,21 @@ Case: input fingerprint → extracted text → quotation offsets, line numbers a
 
 Guideline: PDF fingerprint → source ID → section, printed/PDF pages, table row and bounding box → verified text → rule request → evidence pack → report.
 
-Fast paths still bind required sources. Risk, complex conditions, missing information and conflicts route to appropriate evidence or human review. Retrieval cannot invent patient history. A rule that does not trigger is not itself proof of compliance.
+Fast paths bypass RAG. Risk, complex conditions, missing information and conflicts are adapted
+to the repository's original `AustroadsRAGPipeline`, which applies its configured route policy,
+metadata filters, vector search, BM25 and reciprocal-rank fusion. Retrieval cannot invent patient
+history. A rule that does not trigger is not itself proof of compliance.
 
-Every request binds its required source IDs. Fast-path cases use exact binding without ranking. For non-fast cases, all requests use indicator-scoped hybrid ranking when a ranking backend is configured; an explicit `exact` backend remains available. Triggered rules retain `triggered_rule_evidence`; unresolved rules retain `missing_information_guidance`. Retrieval never changes facts, rule outcomes or routes.
+Exact local source-ID binding remains authoritative alongside ranked results. Unresolved
+gate/predicate evaluations are emitted as `missing_information_guidance`; with
+`missing_info_policy: retrieve_requirements`, they enter the original RAG pipeline to retrieve
+the relevant guideline requirements. RAG supplies guidance evidence only; it never changes
+patient facts or deterministic rule outcomes.
+
+Every request binds its required source IDs. Non-fast requests are adapted to the original
+`AustroadsRAGPipeline`; indicator-scoped symptom discovery from the current workflow runs
+alongside it when narrative context is available. Triggered rules retain
+`triggered_rule_evidence`; unresolved rules retain `missing_information_guidance`.
 
 The additional route-model experiment is disabled in every shipped configuration. Independent semantic review remains enabled in the normal local-model workflow. See [Framework preservation](framework_preservation.md).
 

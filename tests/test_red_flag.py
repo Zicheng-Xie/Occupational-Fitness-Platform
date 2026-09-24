@@ -109,6 +109,28 @@ def test_non_fast_red_flag_binds_sources_and_ranks_every_request(workflow):
     assert all(item.semantic_query for item in evidence.evidence_items)
 
 
+def test_workflow_routes_searches_through_original_rag_pipeline(workflow, monkeypatch):
+    calls = []
+    original_run = workflow.retriever.original_rag.run
+
+    def record_call(result):
+        calls.append(result)
+        return original_run(result)
+
+    monkeypatch.setattr(workflow.retriever.original_rag, "run", record_call)
+    _, result = workflow.red_flag_from_text(
+        "Reports reduced hearing. No audiometry or audiogram is available.",
+        "ORIGINAL-RAG-ROUTE-001",
+        ["hearing"],
+    )
+    workflow.retriever.run(result.rag_input())
+
+    assert calls
+    assert any(call.route == "missing_information" for call in calls)
+    assert all(call.route in {"missing_information", "rag_review"} for call in calls)
+    assert any(call.missing for call in calls)
+
+
 def test_red_flag_contract_round_trip_and_rag_boundary(workflow):
     source = workflow.root / "data/cases/synthetic_expansion/SYN-EXT-003.txt"
     case = extract_traceable_file(source, workflow.book.field_specs)

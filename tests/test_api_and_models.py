@@ -41,6 +41,19 @@ def test_api_text_to_evidence_round_trip():
         )
 
 
+def test_browser_ui_accepts_txt_and_presents_quotes():
+    with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
+        response = client.get("/simple")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/html")
+    assert 'type="file"' in response.text
+    assert 'accept=".txt,text/plain"' in response.text
+    assert "病例原文引用" in response.text
+    assert "指南原文引用" in response.text
+    assert "fetch('/assess'" in response.text
+
+
 def test_openapi_exposes_only_workflow_rule_result_v1_3():
     with TestClient(create_app(str(ROOT / "configs/workflow.offline.yaml"))) as client:
         schemas = client.get("/openapi.json").json()["components"]["schemas"]

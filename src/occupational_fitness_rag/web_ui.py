@@ -1,6 +1,6 @@
 """Small browser client for text-file assessments."""
 
-ASSESSMENT_UI = r'''<!doctype html>
+ASSESSMENT_UI = r"""<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -46,4 +46,4 @@ function render(data){const r=data.rule_result,[verdict,pill,kind]=classificatio
   $('raw').textContent=JSON.stringify(data,null,2);$('results').classList.remove('hidden');$('results').scrollIntoView({behavior:'smooth',block:'start'});
 }
 run.addEventListener('click',async()=>{if(!selectedFile)return;run.disabled=true;$('status').className='status';$('status').textContent='正在分析文本并核对原文依据…';$('results').classList.add('hidden');try{const text=await selectedFile.text();if(!text.trim())throw new Error('TXT 文件为空。');const response=await fetch('/assess',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({case_id:$('case-id').value.trim()||'CASE-001',text})});const data=await response.json();if(!response.ok)throw new Error(typeof data.detail==='string'?data.detail:'评估请求失败。');render(data);$('status').textContent='评估完成。'}catch(error){fail(error.message||'无法完成评估。')}finally{run.disabled=false}});
-</script></body></html>'''
+</script></body></html>"""

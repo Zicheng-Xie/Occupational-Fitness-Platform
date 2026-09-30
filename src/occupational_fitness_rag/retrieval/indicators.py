@@ -5,6 +5,7 @@ from occupational_fitness_rag.ingestion.models import GuidelineChunk
 from occupational_fitness_rag.provenance import digest, sha256_bytes
 from occupational_fitness_rag.retrieval.engine import RetrievalEngine
 from occupational_fitness_rag.retrieval.graph import expand_graph
+from occupational_fitness_rag.retrieval.graph_local import expand_local_graph
 from occupational_fitness_rag.schemas.indicator import IndicatorEvidence
 from occupational_fitness_rag.settings import RetrievalSettings
 
@@ -73,7 +74,7 @@ class IndicatorRetriever:
         self.store = make_store(workflow, self.chunks, self.backend)
 
     def retrieve(self, request, method="hybrid"):
-        if method not in {"vector", "bm25", "hybrid", "graph"}:
+        if method not in {"vector", "bm25", "hybrid", "graph", "graph_local"}:
             raise ValueError("Unknown retrieval method")
         filters = {
             "module": request.module,
@@ -102,6 +103,16 @@ class IndicatorRetriever:
                 request.module,
                 request.top_k,
             )
+        elif method == "graph_local":
+            hits = expand_local_graph(
+                hits,
+                self.store.get_filtered(filters),
+                self.workflow.book,
+                self.workflow.catalogue,
+                request.module,
+                request.indicator_text,
+                request.top_k,
+            )
         citations, ranked, seen = [], [], set()
         for rank, hit in enumerate(hits, 1):
             if any(str(hit.doc.metadata.get(k)) != v for k, v in filters.items()):
@@ -113,7 +124,8 @@ class IndicatorRetriever:
                     "chunk_id": hit.doc.chunk_id,
                     "source_ids": source_ids,
                     "score": hit.score,
-                    "graph_score": hit.score if method == "graph" else None,
+                    "graph_score": hit.score if method in {"graph", "graph_local"} else None,
+                    "graph_paths": hit.graph_paths,
                     "vector_score": hit.vector_score,
                     "bm25_score": hit.bm25_score,
                 }

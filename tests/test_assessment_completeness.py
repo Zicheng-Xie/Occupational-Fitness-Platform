@@ -57,6 +57,9 @@ def test_hypoglycaemia_awareness_is_not_a_blackout_symptom(workflow):
 def test_source_review_excludes_only_standalone_administrative_header():
     text = "Synthetic validation nurse note. No real patient data.\n\nNo diabetes."
     assert clinical_passages(text) == ["No diabetes."]
+    assert clinical_passages("Case ID: HOLD-DM-01\n\nThe driver has diabetes.") == [
+        "The driver has diabetes."
+    ]
     assert clinical_passages("No real patient data. The driver fainted.") == [
         "No real patient data. The driver fainted."
     ]

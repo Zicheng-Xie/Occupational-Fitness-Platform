@@ -67,6 +67,39 @@ def concern(quote="No diabetes.", field="diabetes.present", kind="negation"):
     }
 
 
+def test_medium_length_note_uses_passage_ids_for_source_review(workflow, monkeypatch):
+    import occupational_fitness_rag.case_intake.indexed_review as indexed
+
+    text = (ROOT / "data/cases/holdout/notes/HOLD-DM-01.txt").read_text(encoding="utf-8")
+    assert 300 < len(text) < 500
+    case = make_case(workflow, text)
+    assert case.facts["diabetes.treatment_category"].value == "insulin"
+
+    def read_with_passage_ids(client, reviewed_case, payload, max_chars):
+        assert indexed.clinical_passages(reviewed_case.source_text) == [
+            text.split("\n\n", 1)[1].strip()
+        ]
+        return SourceReviewResponse(
+            observations=[
+                {
+                    "field": field,
+                    "value": fact.value,
+                    "status": "documented",
+                    "quote": indexed.clinical_passages(text)[0],
+                    "explanation": "The current patient statement supports this fact.",
+                }
+                for field, fact in case.facts.items()
+                if field in payload["extracted_facts"]
+            ]
+        ), [{"request_sha256": "synthetic-request"}]
+
+    monkeypatch.setattr(indexed, "indexed_source_review", read_with_passage_ids)
+    updated, audit = semantic_review(case, workflow.book.field_specs, LLMConfig(enabled=True))
+    assert audit["review_mode"] == "fixed_keys_and_source_passage_ids"
+    assert audit["status"] == "completed_no_issues"
+    assert updated.facts["diabetes.treatment_category"].value == "insulin"
+
+
 def test_second_pass_precedes_rules_and_preserves_original_values(workflow, monkeypatch):
     workflow.config.llm.enabled = True
     monkeypatch.setattr(OllamaClient, "extract", lambda *a: {"proposals": []})

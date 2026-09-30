@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from occupational_fitness_rag.indexing.base import StoredDocument
 
@@ -12,6 +12,7 @@ class FusedResult:
     vector_score: float | None = None
     bm25_score: float | None = None
     rerank_score: float | None = None
+    graph_paths: list[str] = field(default_factory=list)
 
 
 def reciprocal_rank_fusion(

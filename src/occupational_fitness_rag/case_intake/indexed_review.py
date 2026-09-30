@@ -109,6 +109,7 @@ def clinical_passages(text):
         and not re.fullmatch(
             r"Synthetic[^.]*nurse note\.\s*No real patient data\.", m[0].strip(), re.I
         )
+        and not re.fullmatch(r"Case ID:\s*[A-Za-z0-9_-]+", m[0].strip(), re.I)
     ]
 
 

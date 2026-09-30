@@ -1,0 +1,383 @@
+{
+  "schema_version": "1.2.0",
+  "result_id": "RR-51db890d3f2d2eab30aa",
+  "case_id": "HOLD-DM-01",
+  "red_flag_result_sha256": "ad973d004efa56167d41557e93053ceac9922a1a2e81a9446a48ff6d7c8d5703",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "guideline_version": "AP-G56-22",
+  "route": "missing_information",
+  "rag_requests": [
+    {
+      "request_id": "RAG-71664a2897b258e1",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-INSULIN-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-007"
+      ],
+      "category": "diabetes",
+      "subcondition": "insulin_treated_diabetes",
+      "licence_context": "commercial",
+      "rag_query_key": "diabetes_insulin_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.gestational": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-ca7efccf1e1d1bfa",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-SEVERE-HYPO-WAIT-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-002"
+      ],
+      "category": "diabetes",
+      "subcondition": "recent_severe_hypoglycaemic_event",
+      "licence_context": "commercial",
+      "rag_query_key": "severe_hypoglycaemia_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.severe_hypoglycaemic_event.occurred": "unknown",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-50e14f5b867d2dc5",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-INSULIN-CONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-008",
+        "AFTD2022-DM-COM-009"
+      ],
+      "category": "diabetes",
+      "subcondition": "insulin_conditional",
+      "licence_context": "commercial",
+      "rag_query_key": "diabetes_insulin_conditional_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.gestational": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-1186e6f9f7b1b955",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-ACUTE-UNSTABLE-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-003"
+      ],
+      "category": "diabetes",
+      "subcondition": "acute_metabolic_instability",
+      "licence_context": "commercial",
+      "rag_query_key": "acute_hyperglycaemia_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.acutely_unwell": "unknown",
+        "diabetes.metabolically_unstable": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-0cbd889cf0a26c8c",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-GESTATIONAL-REVIEW-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-010"
+      ],
+      "category": "diabetes",
+      "subcondition": "diabetes_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "dm_com_gestational_review_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.gestational": "unknown"
+      }
+    }
+  ],
+  "indicator_context": {
+    "RAG-71664a2897b258e1": {
+      "diabetes.gestational": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 23,
+            "end": 157,
+            "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection. ",
+            "line_start": 3,
+            "line_end": 3,
+            "pdf_page": null
+          }
+        ],
+        "method": "prose_explicit",
+        "derived_from": []
+      },
+      "diabetes.treatment_category": {
+        "value": "insulin",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 23,
+            "end": 157,
+            "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection. ",
+            "line_start": 3,
+            "line_end": 3,
+            "pdf_page": null
+          }
+        ],
+        "method": "prose_explicit",
+        "derived_from": []
+      }
+    },
+    "RAG-ca7efccf1e1d1bfa": {
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 23,
+            "end": 157,
+            "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection. ",
+            "line_start": 3,
+            "line_end": 3,
+            "pdf_page": null
+          }
+        ],
+        "method": "prose_explicit",
+        "derived_from": []
+      },
+      "diabetes.severe_hypoglycaemic_event.occurred": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.severe_hypoglycaemic_event.weeks_since_last": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-50e14f5b867d2dc5": {
+      "diabetes.driving_relevant_end_organ_effects": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.glucose_monitoring_records_months": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.hypoglycaemia_awareness": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 23,
+            "end": 157,
+            "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection. ",
+            "line_start": 3,
+            "line_end": 3,
+            "pdf_page": null
+          }
+        ],
+        "method": "prose_explicit",
+        "derived_from": []
+      },
+      "diabetes.recent_severe_hypoglycaemic_event": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.regimen_minimises_hypoglycaemia": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.severe_hypoglycaemic_event.occurred": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.severe_hypoglycaemic_event.weeks_since_last": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.specialist_information_available": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-1186e6f9f7b1b955": {
+      "diabetes.acutely_unwell": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.metabolically_unstable": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 23,
+            "end": 157,
+            "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection. ",
+            "line_start": 3,
+            "line_end": 3,
+            "pdf_page": null
+          }
+        ],
+        "method": "prose_explicit",
+        "derived_from": []
+      }
+    },
+    "RAG-0cbd889cf0a26c8c": {
+      "diabetes.gestational": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 23,
+            "end": 157,
+            "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection. ",
+            "line_start": 3,
+            "line_end": 3,
+            "pdf_page": null
+          }
+        ],
+        "method": "prose_explicit",
+        "derived_from": []
+      }
+    }
+  },
+  "narrative_context": {
+    "RAG-71664a2897b258e1": [
+      {
+        "start": 23,
+        "end": 156,
+        "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection.",
+        "line_start": 3,
+        "line_end": 3,
+        "pdf_page": null
+      }
+    ],
+    "RAG-ca7efccf1e1d1bfa": [
+      {
+        "start": 23,
+        "end": 156,
+        "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection.",
+        "line_start": 3,
+        "line_end": 3,
+        "pdf_page": null
+      }
+    ],
+    "RAG-50e14f5b867d2dc5": [
+      {
+        "start": 23,
+        "end": 156,
+        "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection.",
+        "line_start": 3,
+        "line_end": 3,
+        "pdf_page": null
+      }
+    ],
+    "RAG-1186e6f9f7b1b955": [
+      {
+        "start": 23,
+        "end": 156,
+        "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection.",
+        "line_start": 3,
+        "line_end": 3,
+        "pdf_page": null
+      }
+    ],
+    "RAG-0cbd889cf0a26c8c": [
+      {
+        "start": 23,
+        "end": 156,
+        "quote": "The driver used to manage diabetes with food choices alone, but a current prescription list now includes a nightly insulin injection.",
+        "line_start": 3,
+        "line_end": 3,
+        "pdf_page": null
+      }
+    ]
+  },
+  "narrative_source_text_sha256": "e9c58be2cd8864e3ed2a606ad763079c3c7be22e9c7b44d2c8486bb6ef26896f"
+}

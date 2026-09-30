@@ -283,7 +283,9 @@ def semantic_review(case, specs, config, page_ranges=()):
         audit["prompt_payload_sha256"] = digest(model_payload)
         client = OllamaClient(config)
         try:
-            if len(case.source_text) > 500 and len(case.source_text) <= config.max_input_chars:
+            # Long clinical clauses can occur in notes shorter than 500 characters.
+            # Passage IDs avoid asking the model to retype an exact quotation.
+            if len(case.source_text) > 300 and len(case.source_text) <= config.max_input_chars:
                 from occupational_fitness_rag.case_intake.indexed_review import (
                     PROMPT,
                     indexed_source_review,

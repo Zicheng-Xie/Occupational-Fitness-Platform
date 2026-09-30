@@ -91,8 +91,8 @@ def test_four_method_comparison_uses_same_module_boundary(tmp_path):
     )
     report = json.loads((tmp_path / "comparison/results.json").read_text(encoding="utf-8"))
     assert summary["queries"] == 40
-    assert summary["rows"] == 40 * 4 * 4
-    assert set(report["methods"]) == {"vector", "bm25", "hybrid", "graph"}
+    assert summary["rows"] == 40 * 5 * 4
+    assert set(report["methods"]) == {"vector", "bm25", "hybrid", "graph", "graph_local"}
     source_modules = {
         source_id: {
             rule["module"] for rule in workflow.book.rules if source_id in rule["source_ids"]
@@ -108,7 +108,35 @@ def test_four_method_comparison_uses_same_module_boundary(tmp_path):
         )
     assert report["clinical_validation"] is False
     errors = json.loads((tmp_path / "comparison/error_analysis.json").read_text(encoding="utf-8"))
-    assert set(errors["misses_by_method"]) == {"vector", "bm25", "hybrid", "graph"}
+    assert set(errors["misses_by_method"]) == {
+        "vector", "bm25", "hybrid", "graph", "graph_local"
+    }
+    assert {item["failure_stage"] for item in errors["misses"]} <= {
+        "ranking_cutoff",
+        "candidate_retrieval",
+    }
+    sweep = json.loads((tmp_path / "comparison/fusion_sensitivity.json").read_text(encoding="utf-8"))
+    assert len(sweep["summary"]) == 28
+    baseline = next(
+        row for row in sweep["summary"] if row["rrf_k"] == 60 and row["vector_weight"] == 1
+    )
+    actual = next(
+        row for row in report["summary"]
+        if row["cohort"] == "all" and row["method"] == "hybrid" and row["top_k"] == 5
+    )
+    assert baseline["source_recall_at_5"] == actual["source_recall"]
+    graph = json.loads((tmp_path / "comparison/graph_manifest.json").read_text(encoding="utf-8"))
+    assert graph["full_graphrag"] is False
+    assert len([node for node in graph["nodes"] if node["type"] == "verified_source"]) == 28
+    assert {edge["kind"] for edge in graph["edges"]} >= {
+        "contains_source", "cites_source", "catalogue_reference"
+    }
+    assert all(
+        candidate["graph_paths"]
+        for row in report["rows"]
+        if row["method"] == "graph_local" and row["top_k"] == 5
+        for candidate in row["ranked_candidates"]
+    )
     with (tmp_path / "comparison/review_queue.csv").open(
         encoding="utf-8-sig", newline=""
     ) as stream:

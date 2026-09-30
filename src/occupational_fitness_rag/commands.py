@@ -248,7 +248,7 @@ def main():
         ),
         (
             "rag-comparison",
-            "Compare vector, BM25, hybrid and graph-assisted retrieval",
+            "Compare vector, BM25, hybrid and two graph-assisted retrieval methods",
             rag_comparison,
         ),
         (

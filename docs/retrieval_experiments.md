@@ -21,11 +21,11 @@ Three grouping strategies use the same verified anchors: individual units, group
 
 Reports include source Recall@K, MRR, complete expected-source coverage, label precision, section/page hits, source counts and character counts, by query and module. Unlabelled sources are not necessarily irrelevant. Label precision is limited by draft labels. High page hit rates do not establish correct rule interpretation.
 
-Blackout queries cover undiagnosed mechanisms, provoked syncope, single and recurrent events and referral to a diagnosed condition. Diabetes includes severe hypoglycaemia with multiple sections. The corpus has 28 configured units and does not cover every cardiovascular, seizure or sleep-related referral destination. New destinations require reviewed source anchors. GraphRAG and learned reranking remain future comparisons after a measurable baseline.
+Blackout queries cover undiagnosed mechanisms, provoked syncope, single and recurrent events and referral to a diagnosed condition. Diabetes includes severe hypoglycaemia with multiple sections. The corpus has 28 configured units and does not cover every cardiovascular, seizure or sleep-related referral destination. New destinations require reviewed source anchors. A limited graph-assisted expansion baseline is now available; full GraphRAG and learned reranking remain future comparisons. See [evidence-linked reasoning and RAG comparison](reasoning_and_rag_comparison.md).
 
 ## Isolated LLM judgment
 
-Llama 3 8B receives clinical facts and retrieved evidence, without the rule outcome or development label. Its structured answer contains an outcome, explanation and supplied-source IDs. It is saved only in the experiment report and never changes production assessments.
+Llama 3 8B receives clinical facts and retrieved evidence, without the rule outcome or development label. Its structured answer contains an outcome, explanation, supplied-source IDs and verified patient fact-field IDs. It is saved only in the experiment report and never changes production assessments.
 
 The report includes valid completions, failures, context-budget skips, model fingerprints, timing and rule agreement. Oversized prompts are skipped explicitly. Agreement is not clinical accuracy. Citation identity is checked automatically; whether the evidence supports the explanation remains a human review task.
 

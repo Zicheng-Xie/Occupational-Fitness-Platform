@@ -92,6 +92,31 @@ def test_model_cannot_map_unrelated_positive_sentence_to_dictionary_field(workfl
     assert updated.facts["diabetes.present"] == original.facts["diabetes.present"]
 
 
+def test_current_insulin_transition_keeps_history_separate_from_current_treatment(workflow):
+    note = (
+        "The driver used to manage diabetes with food choices alone, but a current "
+        "prescription list now includes a nightly insulin injection."
+    )
+    case = extract_traceable_text(note, "TRANSITION", "input.txt", workflow.book.field_specs)
+    assert case.facts["diabetes.present"].value is True
+    assert case.facts["diabetes.treatment_category"].value == "insulin"
+    assert all(
+        note[span.start : span.end] == span.quote
+        for field in ("diabetes.present", "diabetes.treatment_category")
+        for span in case.facts[field].evidence
+    )
+    negatives = [
+        note.replace("The driver", "The driver's mother"),
+        note.replace("a current prescription", "an old prescription"),
+        note.replace("includes a nightly insulin", "includes no insulin"),
+    ]
+    for negative in negatives:
+        parsed = extract_traceable_text(
+            negative, "TRANSITION-NEG", "input.txt", workflow.book.field_specs
+        )
+        assert parsed.facts["diabetes.treatment_category"].status != "present"
+
+
 def test_model_source_start_selects_the_intended_repeated_quote(workflow):
     quote = "No diabetes."
     text = f"{quote}\nReview repeated: {quote}"

@@ -234,9 +234,10 @@ def test_judgment_prompt_withholds_outcomes_and_rejects_fabricated_citations(
     run_judgment_study(
         app.state.workflow, ROOT / "data/cases/gold/workflow_expectations.json", path, 1
     )
-    result = json.loads(path.read_text())
+    result = json.loads(path.read_text(encoding="utf-8"))
     assert result["completed"] == 0
-    assert result["rows"][0]["status"] == "failed"
+    assert result["rows"][0]["status"] == "rejected_unsupported_citation"
+    assert result["rows"][0]["invalid_source_ids"] == ["FABRICATED"]
     assert result["authoritative_results_modified"] is False
 
 

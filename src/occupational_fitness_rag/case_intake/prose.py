@@ -57,6 +57,18 @@ def extract_supported_prose(collector):
         True,
     )
     record("diabetes.present", r"\b(?:confirmed|established) (?:type [12] )?diabetes\b", True)
+    # A current insulin prescription can supersede an explicitly historical
+    # diet-only description. Match the whole patient clause, not the bare word
+    # "insulin", so a family member's or old medication is not promoted.
+    current_insulin_transition = (
+        r"\b(?:the driver|the patient|he|she) (?:used to|previously) manage "
+        r"(?:type [12] )?diabetes\b[^.;\n]{0,120}\bbut\b[^.;\n]{0,100}"
+        r"\b(?:a |the )?(?:current|today's) prescription (?:list|record) "
+        r"(?:now )?(?:includes|lists|shows) (?:a |an )?"
+        r"(?:(?:nightly|daily|morning|evening) )?insulin\b"
+    )
+    record("diabetes.present", current_insulin_transition, True)
+    record("diabetes.treatment_category", current_insulin_transition, "insulin")
     record(
         "diabetes.treatment_category",
         r"\bdiabetes (?:is )?(?:managed|treated) with (?:oral (?:medication|tablets)|tablets)\b",

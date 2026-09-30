@@ -169,7 +169,27 @@ def retrieval_study(args):
 def judgment_study(args):
     from occupational_fitness_rag.evaluation.model_judgment import run_judgment_study
 
-    return run_judgment_study(_workflow(args), Path(args.gold), Path(args.output), args.limit)
+    return run_judgment_study(
+        _workflow(args), Path(args.gold), Path(args.output), args.limit, args.case_ids
+    )
+
+
+def reasoning_study(args):
+    from occupational_fitness_rag.evaluation.reasoning import run_reasoning_study
+
+    return run_reasoning_study(_workflow(args), Path(args.gold), Path(args.output), args.limit)
+
+
+def rag_comparison(args):
+    from occupational_fitness_rag.evaluation.rag_comparison import run_rag_comparison
+
+    return run_rag_comparison(
+        _workflow(args),
+        Path(args.indicators),
+        Path(args.complex_notes),
+        Path(args.output),
+        args.backend,
+    )
 
 
 def semantic_review_study(args):
@@ -222,6 +242,16 @@ def main():
         ),
         ("judgment-study", "Run an isolated local model versus rule experiment", judgment_study),
         (
+            "reasoning-study",
+            "Audit case facts, rule traces and original PDF evidence",
+            reasoning_study,
+        ),
+        (
+            "rag-comparison",
+            "Compare vector, BM25, hybrid and graph-assisted retrieval",
+            rag_comparison,
+        ),
+        (
             "semantic-review-study",
             "Test source review against seeded extraction errors",
             semantic_review_study,
@@ -257,6 +287,16 @@ def main():
             command.add_argument("--gold", default="data/cases/gold/workflow_expectations.json")
             command.add_argument("--output", default="outputs/evaluation/model_judgment.json")
             command.add_argument("--limit", type=int, choices=range(1, 101), default=5)
+            command.add_argument("--case-ids", nargs="+", default=None)
+        if name == "reasoning-study":
+            command.add_argument("--gold", default="data/cases/gold/workflow_expectations.json")
+            command.add_argument("--output", default="outputs/evaluation/reasoning_study")
+            command.add_argument("--limit", type=int, default=None)
+        if name == "rag-comparison":
+            command.add_argument("--indicators", default="data/cases/gold/indicator_queries.json")
+            command.add_argument("--complex-notes", default="data/cases/gold/complex_notes.json")
+            command.add_argument("--output", default="outputs/evaluation/rag_comparison")
+            command.add_argument("--backend", choices=["offline", "chroma"], default="offline")
         if name == "semantic-review-study":
             command.add_argument("--gold", default="data/cases/gold/semantic_review_cases.json")
             command.add_argument("--output", default="outputs/evaluation/semantic_review.json")

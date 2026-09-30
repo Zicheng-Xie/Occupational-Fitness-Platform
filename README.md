@@ -4,6 +4,8 @@ Start the local browser workspace with `scripts/start_workspace.ps1`, then open 
 
 A traceable assessment platform for occupational health teams and commercial-driver reviews. Software **0.7.1**, rule-result schema **1.3.0**, RAG-input schema **1.2.0** with legacy 1.0/1.1 compatibility, indicator schema **1.0.0**, guideline baseline **AP-G56-22**.
 
+See [Evidence-linked reasoning and RAG comparison](docs/reasoning_and_rag_comparison.md) for the new patient-fact-to-guideline audit, local-model reasoning test, and four-method retrieval experiment.
+
 See [Complex nurse-note validation](docs/complex_notes.md) for 12 long-form synthetic cases, two negative controls, reproducible live/offline tests and an inspectable retrieval report.
 
 See [Complex-note RAG diagnostics](docs/rag_diagnostics.md) for the mixed-note investigation, source-bound symptom retrieval and ten additional positive/uncertain regression cases. Open [the diagnostic comparison](outputs/evaluation/rag_diagnostics/index.html) for saved live results.

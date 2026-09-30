@@ -1,0 +1,580 @@
+{
+  "schema_version": "1.1.0",
+  "evaluation_type": "experimental_model_reasoning",
+  "prompt_version": "outcome_priority_v2",
+  "cases": 5,
+  "completed": 5,
+  "citation_rejections": 0,
+  "rule_agreement": 0.4,
+  "clinical_validation": false,
+  "authoritative_results_modified": false,
+  "explanation_and_citation_entailment_review": "pending_human_review",
+  "fixture_sha256": "29fb5d61274392a4262f5240313768e50ce99e053611ed0faaa0f2fe5544da7b",
+  "rows": [
+    {
+      "case_id": "SYN-EXT-002",
+      "rule_outcome": "insufficient_information",
+      "expected_development_outcome": "insufficient_information",
+      "module": "hypertension",
+      "status": "completed",
+      "case_sha256": "c42b33f84b69929aba77fb118b397885cefad794286bf394953337f3b82e75fc",
+      "prompt_payload_sha256": "7b3ff38bd5765eede64e5990f26b447bd0449d06780318fb8cdfdf71e04b84c4",
+      "input_snapshot": {
+        "licence_context": "commercial",
+        "modules": [
+          "hypertension"
+        ],
+        "nurse_note": "SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\r\nCommercial driver assessment.\r\nPersistent systolic pressure just above the commercial boundary; conditional follow-up is not documented.\r\n\r\nStructured assessment addendum (explicit documented facts; no inferred values):\r\ncardiovascular.blood_pressure.persistent_systolic = 171\r\ncardiovascular.blood_pressure.persistent_diastolic = 100\r\nvision.uncorrected.right.snellen = \"6/6\"\r\nvision.uncorrected.left.snellen = \"6/6\"\r\nvision.visual_field.confirmed_defect = false\r\nvision.diplopia.present = false\r\nvision.monocular = false\r\nhearing.clinical_assessment = \"no_hearing_loss\"\r\nblackout.occurred = false\r\ndiabetes.present = false\r\n",
+        "verified_patient_facts": {
+          "cardiovascular.blood_pressure.persistent_systolic": {
+            "value": 171,
+            "status": "present",
+            "patient_quotes": [
+              "cardiovascular.blood_pressure.persistent_systolic = 171"
+            ]
+          },
+          "cardiovascular.blood_pressure.persistent_diastolic": {
+            "value": 100,
+            "status": "present",
+            "patient_quotes": [
+              "cardiovascular.blood_pressure.persistent_diastolic = 100"
+            ]
+          }
+        },
+        "guideline_evidence": [
+          {
+            "source_id": "AFTD2022-HTN-COM-001",
+            "section": "2.3.1",
+            "pdf_page": 99,
+            "source_text": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          {
+            "source_id": "AFTD2022-HTN-COM-002",
+            "section": "2.3.1",
+            "pdf_page": 99,
+            "source_text": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          }
+        ]
+      },
+      "available_fact_fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "available_source_ids": [
+        "AFTD2022-HTN-COM-001",
+        "AFTD2022-HTN-COM-002"
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient's persistent systolic blood pressure is above the commercial boundary of 170, which is a documented criterion for unconditional exclusion. However, the patient's condition is not explicitly excluded from the conditional pathway, so the assessment outcome is temporarily unfit pending further investigation or treatment.",
+        "source_ids": [
+          "AFTD2022-HTN-COM-001"
+        ],
+        "fact_fields": [
+          "cardiovascular.blood_pressure.persistent_systolic"
+        ]
+      },
+      "agrees_with_rules": false,
+      "agrees_with_development_label": false,
+      "source_ids_in_supplied_evidence": true,
+      "fact_fields_in_verified_case": true,
+      "seconds": 1.884,
+      "model": "llama3:8b",
+      "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+      "calls": [
+        {
+          "model": "llama3:8b",
+          "done_reason": "stop",
+          "prompt_eval_count": 869,
+          "eval_count": 105,
+          "total_duration": 1862080500
+        }
+      ]
+    },
+    {
+      "case_id": "SYN-EXT-003",
+      "rule_outcome": "temporarily_unfit",
+      "expected_development_outcome": "temporarily_unfit",
+      "module": "blackout",
+      "status": "completed",
+      "case_sha256": "840bfdaeaaf9f92971dbee81174bdee783a7b8fc3957aa8e5f8f5721c51a1827",
+      "prompt_payload_sha256": "a38acda2fd4765d0e1b68fcb7971530cf84943a39ef593a4a2afb9dafabc5ee9",
+      "input_snapshot": {
+        "licence_context": "commercial",
+        "modules": [
+          "blackout"
+        ],
+        "nurse_note": "SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\r\nCommercial driver assessment.\r\nA reported blackout is still being investigated.\r\n\r\nStructured assessment addendum (explicit documented facts; no inferred values):\r\ncardiovascular.blood_pressure.persistent_systolic = 120\r\ncardiovascular.blood_pressure.persistent_diastolic = 80\r\nvision.uncorrected.right.snellen = \"6/6\"\r\nvision.uncorrected.left.snellen = \"6/6\"\r\nvision.visual_field.confirmed_defect = false\r\nvision.diplopia.present = false\r\nvision.monocular = false\r\nhearing.clinical_assessment = \"no_hearing_loss\"\r\nblackout.occurred = true\r\ndiabetes.present = false\r\nblackout.mechanism_status = \"under_investigation\"\r\n",
+        "verified_patient_facts": {
+          "blackout.occurred": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "blackout.occurred = true"
+            ]
+          },
+          "blackout.mechanism_status": {
+            "value": "under_investigation",
+            "status": "present",
+            "patient_quotes": [
+              "blackout.mechanism_status = \"under_investigation\""
+            ]
+          }
+        },
+        "guideline_evidence": [
+          {
+            "source_id": "AFTD2022-BLK-COM-001",
+            "section": "1.2.1",
+            "pdf_page": 68,
+            "source_text": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+          },
+          {
+            "source_id": "AFTD2022-BLK-COM-002",
+            "section": "1.2.2",
+            "pdf_page": 68,
+            "source_text": "1.2.2. Vasovagal syncope5\nThe most common cause of transient loss of \nconsciousness is vasovagal syncope (‘fainting’). \nWhere this has been triggered by a well-defined \nprovoking factor or a situation that is unlikely \nto recur while driving (e.g. prolonged standing, \nvenepuncture or emotional situation), it is not \nnecessary to restrict driving. However, vasovagal \nsyncope may also result from other causes \nthat are not so benign. In such cases, fitness \nto drive should be assessed according to the \ncardiovascular conditions standards for syncope \n(refer to section 2. Cardiovascular conditions)."
+          },
+          {
+            "source_id": "AFTD2022-BLK-COM-006",
+            "section": "1.3",
+            "pdf_page": 69,
+            "source_text": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+          }
+        ]
+      },
+      "available_fact_fields": [
+        "blackout.mechanism_status",
+        "blackout.occurred"
+      ],
+      "available_source_ids": [
+        "AFTD2022-BLK-COM-001",
+        "AFTD2022-BLK-COM-002",
+        "AFTD2022-BLK-COM-006"
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient has reported a blackout, which is still being investigated. The guideline evidence suggests that the patient should not drive until the mechanism of the blackout is ascertained and the corresponding standard met.",
+        "source_ids": [
+          "AFTD2022-BLK-COM-001"
+        ],
+        "fact_fields": [
+          "blackout.occurred",
+          "blackout.mechanism_status"
+        ]
+      },
+      "agrees_with_rules": true,
+      "agrees_with_development_label": true,
+      "source_ids_in_supplied_evidence": true,
+      "fact_fields_in_verified_case": true,
+      "seconds": 1.623,
+      "model": "llama3:8b",
+      "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+      "calls": [
+        {
+          "model": "llama3:8b",
+          "done_reason": "stop",
+          "prompt_eval_count": 1004,
+          "eval_count": 93,
+          "total_duration": 1603321300
+        }
+      ]
+    },
+    {
+      "case_id": "SYN-EXT-013",
+      "rule_outcome": "temporarily_unfit",
+      "expected_development_outcome": "temporarily_unfit",
+      "module": "diabetes",
+      "status": "completed",
+      "case_sha256": "1275033cdf730b8831706bb83df920e5028ae718827eafde8cfdec1e3e5aab72",
+      "prompt_payload_sha256": "b4112674737bcfa9924b7eea3a9ff9806722fe684b3cf365a81695260e378b0e",
+      "input_snapshot": {
+        "licence_context": "commercial",
+        "modules": [
+          "diabetes"
+        ],
+        "nurse_note": "SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\r\nCommercial driver assessment.\r\nInsulin-treated diabetes with a severe hypoglycaemic event two weeks ago.\r\n\r\nStructured assessment addendum (explicit documented facts; no inferred values):\r\ncardiovascular.blood_pressure.persistent_systolic = 120\r\ncardiovascular.blood_pressure.persistent_diastolic = 80\r\nvision.uncorrected.right.snellen = \"6/6\"\r\nvision.uncorrected.left.snellen = \"6/6\"\r\nvision.visual_field.confirmed_defect = false\r\nvision.diplopia.present = false\r\nvision.monocular = false\r\nhearing.clinical_assessment = \"no_hearing_loss\"\r\nblackout.occurred = false\r\ndiabetes.present = true\r\ndiabetes.gestational = false\r\ndiabetes.acutely_unwell = false\r\ndiabetes.metabolically_unstable = false\r\ndiabetes.severe_hypoglycaemic_event.occurred = true\r\ndiabetes.recent_severe_hypoglycaemic_event = true\r\ndiabetes.hypoglycaemia_awareness = true\r\ndiabetes.regimen_minimises_hypoglycaemia = true\r\ndiabetes.driving_relevant_end_organ_effects = false\r\ndiabetes.treatment_category = \"insulin\"\r\ndiabetes.glucose_monitoring_records_months = 3\r\ndiabetes.specialist_information_available = true\r\ndiabetes.severe_hypoglycaemic_event.weeks_since_last = 2\r\n",
+        "verified_patient_facts": {
+          "diabetes.present": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.present = true"
+            ]
+          },
+          "diabetes.gestational": {
+            "value": false,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.gestational = false"
+            ]
+          },
+          "diabetes.acutely_unwell": {
+            "value": false,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.acutely_unwell = false"
+            ]
+          },
+          "diabetes.metabolically_unstable": {
+            "value": false,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.metabolically_unstable = false"
+            ]
+          },
+          "diabetes.severe_hypoglycaemic_event.occurred": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.severe_hypoglycaemic_event.occurred = true"
+            ]
+          },
+          "diabetes.recent_severe_hypoglycaemic_event": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.recent_severe_hypoglycaemic_event = true"
+            ]
+          },
+          "diabetes.hypoglycaemia_awareness": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.hypoglycaemia_awareness = true"
+            ]
+          },
+          "diabetes.regimen_minimises_hypoglycaemia": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.regimen_minimises_hypoglycaemia = true"
+            ]
+          },
+          "diabetes.driving_relevant_end_organ_effects": {
+            "value": false,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.driving_relevant_end_organ_effects = false"
+            ]
+          },
+          "diabetes.treatment_category": {
+            "value": "insulin",
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.treatment_category = \"insulin\""
+            ]
+          },
+          "diabetes.glucose_monitoring_records_months": {
+            "value": 3,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.glucose_monitoring_records_months = 3"
+            ]
+          },
+          "diabetes.specialist_information_available": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.specialist_information_available = true"
+            ]
+          },
+          "diabetes.severe_hypoglycaemic_event.weeks_since_last": {
+            "value": 2,
+            "status": "present",
+            "patient_quotes": [
+              "diabetes.severe_hypoglycaemic_event.weeks_since_last = 2"
+            ]
+          }
+        },
+        "guideline_evidence": [
+          {
+            "source_id": "AFTD2022-DM-COM-007",
+            "section": "3.3",
+            "pdf_page": 113,
+            "source_text": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has insulin-treated diabetes."
+          },
+          {
+            "source_id": "AFTD2022-DM-COM-002",
+            "section": "3.2.1",
+            "pdf_page": 105,
+            "source_text": "Non-driving period after a ‘severe \nhypoglycaemic event’\nIf a severe hypoglycaemic event occurs (as \ndefined in section 3.2.1. Hypoglycaemia), the \nperson should not drive for a significant period \nof time and will need to be urgently assessed. \nThe minimum period of time before returning \nto drive is generally six weeks because it often \ntakes many weeks for patterns of glucose \ncontrol and behaviour to be re-established and \nfor any temporary ‘impaired hypoglycaemia \nawareness’ to resolve (see below). The non-\ndriving period will depend on factors such \nas identifying the reason for the episode, the \nspecialist’s opinion and the type of motor vehicle \nlicence. The specialist’s recommendation for \nreturning to driving should be based on the \npatient’s behaviour and objective measures of \nglycaemic control (documented blood glucose) \nover a reasonable interval. \nImpaired hypoglycaemic awareness 10–14"
+          }
+        ]
+      },
+      "available_fact_fields": [
+        "diabetes.acutely_unwell",
+        "diabetes.driving_relevant_end_organ_effects",
+        "diabetes.gestational",
+        "diabetes.glucose_monitoring_records_months",
+        "diabetes.hypoglycaemia_awareness",
+        "diabetes.metabolically_unstable",
+        "diabetes.present",
+        "diabetes.recent_severe_hypoglycaemic_event",
+        "diabetes.regimen_minimises_hypoglycaemia",
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+        "diabetes.specialist_information_available",
+        "diabetes.treatment_category"
+      ],
+      "available_source_ids": [
+        "AFTD2022-DM-COM-002",
+        "AFTD2022-DM-COM-007"
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient has insulin-treated diabetes with a recent severe hypoglycaemic event, which meets the unconditional standard exclusion criterion (AFTD2022-DM-COM-007, section 3.3). Additionally, the patient has not yet completed the minimum six-week non-driving period after the event (AFTD2022-DM-COM-002, section 3.2.1).",
+        "source_ids": [
+          "AFTD2022-DM-COM-007",
+          "AFTD2022-DM-COM-002"
+        ],
+        "fact_fields": [
+          "diabetes.present",
+          "diabetes.severe_hypoglycaemic_event.occurred",
+          "diabetes.recent_severe_hypoglycaemic_event",
+          "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+        ]
+      },
+      "agrees_with_rules": true,
+      "agrees_with_development_label": true,
+      "source_ids_in_supplied_evidence": true,
+      "fact_fields_in_verified_case": true,
+      "seconds": 2.691,
+      "model": "llama3:8b",
+      "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+      "calls": [
+        {
+          "model": "llama3:8b",
+          "done_reason": "stop",
+          "prompt_eval_count": 1492,
+          "eval_count": 188,
+          "total_duration": 2654245600
+        }
+      ]
+    },
+    {
+      "case_id": "SYN-EXT-018",
+      "rule_outcome": "does_not_meet_standard",
+      "expected_development_outcome": "does_not_meet_standard",
+      "module": "vision",
+      "status": "completed",
+      "case_sha256": "38d5254bf0eba5e1944df9182ffd67e6bf3397006dc9f8eaabb74fc6e0783aa0",
+      "prompt_payload_sha256": "df27541739b7a4dff2cecf404cc0e9b5b4b825381db598a2f4da8f3f072fa1d6",
+      "input_snapshot": {
+        "licence_context": "commercial",
+        "modules": [
+          "vision"
+        ],
+        "nurse_note": "SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\r\nCommercial driver assessment.\r\nNon-physiological diplopia within twenty degrees of central fixation is documented.\r\n\r\nStructured assessment addendum (explicit documented facts; no inferred values):\r\ncardiovascular.blood_pressure.persistent_systolic = 120\r\ncardiovascular.blood_pressure.persistent_diastolic = 80\r\nvision.uncorrected.right.snellen = \"6/6\"\r\nvision.uncorrected.left.snellen = \"6/6\"\r\nvision.visual_field.confirmed_defect = false\r\nvision.diplopia.present = true\r\nvision.monocular = false\r\nhearing.clinical_assessment = \"no_hearing_loss\"\r\nblackout.occurred = false\r\ndiabetes.present = false\r\nvision.diplopia.physiological = false\r\nvision.diplopia.within_20_degrees = true\r\n",
+        "verified_patient_facts": {
+          "vision.diplopia.physiological": {
+            "value": false,
+            "status": "present",
+            "patient_quotes": [
+              "Non-physiological diplopia within twenty degrees of central fixation is documented.\r\n\r\n",
+              "vision.diplopia.physiological = false"
+            ]
+          },
+          "vision.uncorrected.right.snellen": {
+            "value": "6/6",
+            "status": "present",
+            "patient_quotes": [
+              "vision.uncorrected.right.snellen = \"6/6\""
+            ]
+          },
+          "vision.uncorrected.left.snellen": {
+            "value": "6/6",
+            "status": "present",
+            "patient_quotes": [
+              "vision.uncorrected.left.snellen = \"6/6\""
+            ]
+          },
+          "vision.visual_field.confirmed_defect": {
+            "value": false,
+            "status": "present",
+            "patient_quotes": [
+              "vision.visual_field.confirmed_defect = false"
+            ]
+          },
+          "vision.diplopia.present": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "vision.diplopia.present = true"
+            ]
+          },
+          "vision.monocular": {
+            "value": false,
+            "status": "present",
+            "patient_quotes": [
+              "vision.monocular = false"
+            ]
+          },
+          "vision.diplopia.within_20_degrees": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "vision.diplopia.within_20_degrees = true"
+            ]
+          },
+          "vision.uncorrected.better_eye": {
+            "value": "6/6",
+            "status": "present",
+            "patient_quotes": [
+              "vision.uncorrected.right.snellen = \"6/6\"",
+              "vision.uncorrected.left.snellen = \"6/6\""
+            ]
+          }
+        },
+        "guideline_evidence": [
+          {
+            "source_id": "AFTD2022-VIS-COM-007",
+            "section": "10.3",
+            "pdf_page": 222,
+            "source_text": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+          }
+        ]
+      },
+      "available_fact_fields": [
+        "vision.diplopia.physiological",
+        "vision.diplopia.present",
+        "vision.diplopia.within_20_degrees",
+        "vision.monocular",
+        "vision.uncorrected.better_eye",
+        "vision.uncorrected.left.snellen",
+        "vision.uncorrected.right.snellen",
+        "vision.visual_field.confirmed_defect"
+      ],
+      "available_source_ids": [
+        "AFTD2022-VIS-COM-007"
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient's non-physiological diplopia within twenty degrees of central fixation meets the guideline criterion (AFTD2022-VIS-COM-007, section 10.3, page 222) for temporary exclusion from holding an unconditional or conditional licence.",
+        "source_ids": [
+          "AFTD2022-VIS-COM-007"
+        ],
+        "fact_fields": [
+          "vision.diplopia.physiological",
+          "vision.diplopia.within_20_degrees"
+        ]
+      },
+      "agrees_with_rules": false,
+      "agrees_with_development_label": false,
+      "source_ids_in_supplied_evidence": true,
+      "fact_fields_in_verified_case": true,
+      "seconds": 1.738,
+      "model": "llama3:8b",
+      "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+      "calls": [
+        {
+          "model": "llama3:8b",
+          "done_reason": "stop",
+          "prompt_eval_count": 917,
+          "eval_count": 116,
+          "total_duration": 1693112900
+        }
+      ]
+    },
+    {
+      "case_id": "SYN-EXT-020",
+      "rule_outcome": "meets_unconditional_standard",
+      "expected_development_outcome": "meets_unconditional_standard",
+      "module": "hearing",
+      "status": "completed",
+      "case_sha256": "60fd583b05eae7d66ac7e2fd713f878d62534a8f237d346c315c5aa816e9acd0",
+      "prompt_payload_sha256": "ed0d341d782569bafb49e970c3f4a65b581594ae50a07160a4d3551a8d781f94",
+      "input_snapshot": {
+        "licence_context": "commercial",
+        "modules": [
+          "hearing"
+        ],
+        "nurse_note": "SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\r\nCommercial driver assessment.\r\nConfirmed four-frequency unaided hearing below the 40 dB boundary.\r\n\r\nStructured assessment addendum (explicit documented facts; no inferred values):\r\ncardiovascular.blood_pressure.persistent_systolic = 120\r\ncardiovascular.blood_pressure.persistent_diastolic = 80\r\nvision.uncorrected.right.snellen = \"6/6\"\r\nvision.uncorrected.left.snellen = \"6/6\"\r\nvision.visual_field.confirmed_defect = false\r\nvision.diplopia.present = false\r\nvision.monocular = false\r\nhearing.clinical_assessment = \"possible_hearing_loss\"\r\nblackout.occurred = false\r\ndiabetes.present = false\r\nhearing.audiometry.available = true\r\nhearing.unaided_better_ear_average_db = 39.9\r\nhearing.average_frequencies_khz = [0.5, 1, 2, 3]\r\n",
+        "verified_patient_facts": {
+          "hearing.clinical_assessment": {
+            "value": "possible_hearing_loss",
+            "status": "present",
+            "patient_quotes": [
+              "hearing.clinical_assessment = \"possible_hearing_loss\""
+            ]
+          },
+          "hearing.audiometry.available": {
+            "value": true,
+            "status": "present",
+            "patient_quotes": [
+              "hearing.audiometry.available = true"
+            ]
+          },
+          "hearing.unaided_better_ear_average_db": {
+            "value": 39.9,
+            "status": "present",
+            "patient_quotes": [
+              "hearing.unaided_better_ear_average_db = 39.9"
+            ]
+          },
+          "hearing.average_frequencies_khz": {
+            "value": [
+              0.5,
+              1,
+              2,
+              3
+            ],
+            "status": "present",
+            "patient_quotes": [
+              "hearing.average_frequencies_khz = [0.5, 1, 2, 3]"
+            ]
+          }
+        },
+        "guideline_evidence": [
+          {
+            "source_id": "AFTD2022-HEAR-COM-001",
+            "section": "4.3",
+            "pdf_page": 120,
+            "source_text": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+          },
+          {
+            "source_id": "AFTD2022-HEAR-COM-002",
+            "section": "4.3",
+            "pdf_page": 120,
+            "source_text": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+          }
+        ]
+      },
+      "available_fact_fields": [
+        "hearing.audiometry.available",
+        "hearing.average_frequencies_khz",
+        "hearing.clinical_assessment",
+        "hearing.unaided_better_ear_average_db"
+      ],
+      "available_source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient's unaided hearing in the better ear is below the 40 dB boundary, which explicitly excludes them from holding an unconditional licence. The patient's clinical assessment indicates possible hearing loss, which is a criterion for referral for audiometry. The patient's audiometry is available, but the results are not provided. Therefore, the patient is temporarily unfit to hold a commercial driver's licence.",
+        "source_ids": [
+          "AFTD2022-HEAR-COM-002"
+        ],
+        "fact_fields": [
+          "hearing.unaided_better_ear_average_db"
+        ]
+      },
+      "agrees_with_rules": false,
+      "agrees_with_development_label": false,
+      "source_ids_in_supplied_evidence": true,
+      "fact_fields_in_verified_case": true,
+      "seconds": 2.088,
+      "model": "llama3:8b",
+      "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+      "calls": [
+        {
+          "model": "llama3:8b",
+          "done_reason": "stop",
+          "prompt_eval_count": 866,
+          "eval_count": 132,
+          "total_duration": 2044413700
+        }
+      ]
+    }
+  ]
+}

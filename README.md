@@ -4,13 +4,59 @@ A traceable local assessment workspace for occupational-health teams and commerc
 
 ## Engineering architecture
 
-![Two-module architecture: grounded case intake and Red Flag rules feed exact guideline binding or hybrid RAG, then traceable draft reports and clinician review. Isolated research retains separate artifacts.](docs/assets/platform-architecture.svg)
+![Two-module architecture: grounded case intake and Red Flag rules feed exact guideline binding or hybrid RAG, then traceable draft reports and clinician review. ](docs/assets/platform-architecture.svg)
 
 [Open the full-size architecture](docs/assets/platform-architecture.svg). Blue shows grounded case intake, semantic review and deterministic Red Flag rules. Green shows versioned guideline knowledge, exact-source / hybrid-RAG evidence paths, and auditable draft reports. Each stage names its technologies and implementation directories; arrows show the request contract and review handoff.
 
 **Software 0.7.1** · **Austroads AP-G56-22** · **Local Ollama / Qwen3 14B** · **DRAFT / clinical review pending**
 
-[Quick start](#getting-started) · [Modules & technology](#modules-and-technology) · [Measured progress](#measured-progress) · [Runbook](docs/runbook.md) · [Assessment records](outputs/index.html)
+[Branches](#branch-guide) · [Quick start](#getting-started) · [Modules & technology](#modules-and-technology) · [Measured progress](#measured-progress) · [Runbook](docs/runbook.md) · [Assessment records](outputs/index.html)
+
+## Branch guide
+
+Use **[main](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/main)** for the integrated application. The repository has five branch histories; branch names describe past work, not separate runtime modules. [Detailed relationship diagram, code matrix and pinned audit](docs/branches.md).
+
+| Branch | Purpose and relation at the 2026-11-05 pre-sync audit | Recommended use |
+|---|---|---|
+| [main](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/main) | Combines Red Flag, clinical PDF forms, hybrid evidence and retrieval/judgment research | Start here |
+| [red-flag](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/red-flag) | Historical v0.4.0 head already in main's ancestry | Inspect the earlier Red Flag boundary |
+| [feature/evidence-validation-graph-comparison](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/feature/evidence-validation-graph-comparison) | Research head already in main's ancestry; Llama3 baseline, ten-route studies; no clinical PDF form writers | Reproduce that research snapshot |
+| [codex/sync-local-fccbd60](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/codex/sync-local-fccbd60) | Earlier Qwen/clinical-form integration on an older base; 87 source files versus main's 131 | Compare historical clinical integration |
+| [codex/sync-local-integrated](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/codex/sync-local-integrated) | Sibling integration commit; all root entries except README/docs matched main exactly | Inspect the integration replay |
+
+<details>
+<summary>Show branch history and code-content relationships</summary>
+
+```mermaid
+flowchart TB
+  R["red-flag · 4080c420<br/>historical Red Flag boundary"]
+  B["shared ancestor · 5e0c3a79"]
+  E["feature/evidence-validation-graph-comparison<br/>219cc9d3 · research snapshot"]
+  F["codex/sync-local-fccbd60<br/>5c7b9e18 · earlier clinical forms"]
+  I["codex/sync-local-integrated<br/>8b52ef91 · integration replay"]
+  P["main integration · 33ad6e37<br/>research + clinical workflow"]
+  M["main · b8e74d5b<br/>recommended entry + architecture docs"]
+  R -->|"ancestor; intermediate commits omitted"| B
+  B -->|"research development"| E
+  B -->|"one commit"| F
+  E -->|"one commit"| I
+  E -->|"one commit"| P
+  P -->|"two documentation commits"| M
+  F -.->|"clinical changes carried forward; not a merge-parent edge"| P
+  I -.->|"same src / tests / configs trees"| M
+  classDef main fill:#e6f5ee,stroke:#159677,color:#124d3e
+  classDef historical fill:#eef2f7,stroke:#889bb0,color:#263c51
+  classDef research fill:#ede9fb,stroke:#8466c4,color:#46316d
+  classDef integration fill:#e8f0ff,stroke:#487dcc,color:#234b86
+  class M,P main
+  class R,B historical
+  class E research
+  class F,I integration
+```
+
+Solid arrows are commit ancestry; dotted arrows indicate code-content relationships, not Git merge edges. The graph pins the pre-sync heads; the current change adds documentation commits to each branch. [Exact SHAs, tree identities and reproducible checks](docs/branches.md).
+
+</details>
 
 ## Modules and technology
 
@@ -117,6 +163,16 @@ Reports remain **DRAFT / clinical review pending**. Rules retain `pending_clinic
 
 See [Red Flag routing examples](docs/red_flag_cases/README.md) for the missing-evidence,
 local fast-path and cross-chapter RAG-review flows.
+
+### Clinical PDF workflow on main
+
+The browser workflow also supports the supplied **five-page AFTD Clinical Assessment Record** and an editable **Fitness to Drive report**. These form adapters are present on main and the two clinical-integration branches; they are absent from the pinned research and red-flag snapshots.
+
+| Capability | Implementation | Output / boundary |
+|---|---|---|
+| Read completed clinical-record fields | [clinical_record.py](src/occupational_fitness_rag/web/clinical_record.py) · PyMuPDF widgets | Basic information, clinical observations, missing/suspect fields and five requested modules; validates the five-page template |
+| Populate an editable fitness report | [fitness_form.py](src/occupational_fitness_rag/web/fitness_form.py) · PyMuPDF widgets | PDF fields and outcome options; saves submitted form JSON and PDF hashes in the run manifest |
+| Queue and serve the workflow | [web/jobs.py](src/occupational_fitness_rag/web/jobs.py), [web/routes.py](src/occupational_fitness_rag/web/routes.py) | Local browser orchestration and report access; filled forms still require practitioner review and external sign-off |
 
 ## Project structure
 

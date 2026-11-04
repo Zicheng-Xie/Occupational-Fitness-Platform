@@ -1,5 +1,11 @@
 # Occupational Fitness Platform
 
+> **Branch identity — `codex/sync-local-fccbd60` (audit: 2026-11-05).** Earlier clinical-form integration on an older base; lacks 44 source files present in main.
+>
+> Audited implementation: [`5c7b9e18`](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/5c7b9e18982b1f08125fe9cbb916393d32ce82f4). This README keeps that branch's own setup and implementation details. For the current integrated application, use [main](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/main); see the [branch relationship diagram and code matrix](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/blob/main/docs/branches.md). History counts in that guide are pinned before these documentation-only updates.
+>
+> This branch includes Qwen3 and clinical forms but predates 44 additional source files now on main.
+
 Start the local browser workspace with `scripts/start_workspace.ps1`, then open `http://127.0.0.1:8000` to upload a clinical record or paste notes. Use `-Offline` for an assessment without model services. See [Team integration](docs/team_integration.md) and [Retrieval experiments](docs/retrieval_experiments.md) for indicator exchange and repeatable comparisons.
 
 A traceable assessment platform for occupational health teams and commercial-driver reviews. Software **0.7.1**, rule-result schema **1.3.0**, RAG-input schema **1.2.0** with legacy 1.0/1.1 compatibility, indicator schema **1.0.0**, guideline baseline **AP-G56-22**.
@@ -28,7 +34,7 @@ For the full browser workspace, start the local API and open `http://127.0.0.1:8
 The compact TXT interface remains available at `http://127.0.0.1:8000/simple` and presents
 a concise conclusion with exact case and guideline quotations.
 
-The default configuration enables Llama extraction, semantic review and separate model commentary. See [Extraction semantic review](docs/semantic_review.md) for the review policy and its limitations. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
+The default configuration enables Qwen3 extraction, semantic review, evidence-mode selection and separate model commentary. See [Extraction semantic review](docs/semantic_review.md) for the review policy and its limitations. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
 
 ## Assessment workflow
 
@@ -36,7 +42,7 @@ The default configuration enables Llama extraction, semantic review and separate
 2. Extract and validate facts; retain source locations, conflicts and unknown values.
 3. Review extracted meaning against the original note; withhold flagged values for confirmation and map facts to the five modules.
 4. Execute deterministic rules and the Red Flag contract adapter using the established outcome-based routing. No additional model route judgment runs by default.
-5. Bind required source IDs. Non-fast cases rank every request using indicator-scoped hybrid retrieval, filtered by category, condition, commercial standard and version.
+5. Bind required source IDs. Fast cases use exact binding; other cases select exact binding or semantic RAG after deterministic routing. Semantic RAG uses request-scoped facts and metadata filters.
 6. Produce an English review report with case quotations, guideline pages, sections and coordinates.
 
 Reports remain **DRAFT / clinical review pending**. Rules retain `pending_clinical_review`; the system does not issue driving licences or employment decisions.

@@ -1,5 +1,11 @@
 # Occupational Fitness Platform
 
+> **Branch identity — `feature/evidence-validation-graph-comparison` (audit: 2026-11-05).** Research snapshot: ten-route retrieval, paired judgment audits and prospective-review preparation; its audited head is an ancestor of main.
+>
+> Audited implementation: [`219cc9d3`](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/219cc9d3797d888cde9a6716d37b129b2556adeb). This README keeps that branch's own setup and implementation details. For the current integrated application, use [main](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/main); see the [branch relationship diagram and code matrix](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/blob/main/docs/branches.md). History counts in that guide are pinned before these documentation-only updates.
+>
+> This research snapshot uses Llama3 8B and does not include the clinical PDF form writers added to main.
+
 The isolated [case-evidence allocation comparison](docs/case_evidence_allocation.md)
 tests whether seventh- and ninth-route retrieval gains survive the five-original
 patient budget and improve actual local-model judgments. It preserves the old

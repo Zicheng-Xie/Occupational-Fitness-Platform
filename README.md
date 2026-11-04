@@ -1,5 +1,11 @@
 # Occupational Fitness Platform
 
+> **Branch identity — `codex/sync-local-integrated` (audit: 2026-11-05).** Integration replay on the research base; audited application source, tests, configs and every other root entry except README/docs match main exactly.
+>
+> Audited implementation: [`8b52ef91`](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/8b52ef910e3fe05982178969c565359f077b55b7). This README keeps that branch's own setup and implementation details. For the current integrated application, use [main](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/main); see the [branch relationship diagram and code matrix](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/blob/main/docs/branches.md). History counts in that guide are pinned before these documentation-only updates.
+>
+> At the pinned audit, src/, tests/, configs/ and all other root entries except README/docs were byte-identical by Git tree/blob SHA to main. A unique commit does not imply missing functionality on main.
+
 The isolated [case-evidence allocation comparison](docs/case_evidence_allocation.md)
 tests whether seventh- and ninth-route retrieval gains survive the five-original
 patient budget and improve actual local-model judgments. It preserves the old
@@ -48,7 +54,7 @@ For the full browser workspace, start the local API and open `http://127.0.0.1:8
 The compact TXT interface remains available at `http://127.0.0.1:8000/simple` and presents
 a concise conclusion with exact case and guideline quotations.
 
-The default configuration enables Llama extraction, semantic review and separate model commentary. See [Extraction semantic review](docs/semantic_review.md) for the review policy and its limitations. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
+The default configuration enables Qwen3 extraction, semantic review, evidence-mode selection and separate model commentary. See [Extraction semantic review](docs/semantic_review.md) for the review policy and its limitations. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
 
 ## Assessment workflow
 
@@ -56,7 +62,7 @@ The default configuration enables Llama extraction, semantic review and separate
 2. Extract and validate facts; retain source locations, conflicts and unknown values.
 3. Review extracted meaning against the original note; withhold flagged values for confirmation and map facts to the five modules.
 4. Execute deterministic rules and the Red Flag contract adapter using the established outcome-based routing. No additional model route judgment runs by default.
-5. Bind required source IDs. Non-fast cases rank every request using indicator-scoped hybrid retrieval, filtered by category, condition, commercial standard and version.
+5. Bind required source IDs. Fast cases use exact binding; other cases select exact binding or semantic RAG after deterministic routing. Semantic RAG uses request-scoped facts and metadata filters.
 6. Produce an English review report with case quotations, guideline pages, sections and coordinates.
 
 Reports remain **DRAFT / clinical review pending**. Rules retain `pending_clinical_review`; the system does not issue driving licences or employment decisions.

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.2.0",
+  "case_id": "CX-LONG-177",
+  "status": "DRAFT",
+  "assessment_outcome": "temporarily_unfit",
+  "modules": [
+    {
+      "module": "vision",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "vision.diplopia.present",
+        "vision.monocular",
+        "vision.uncorrected.better_eye",
+        "vision.uncorrected.left.snellen",
+        "vision.uncorrected.right.snellen",
+        "vision.visual_field.confirmed_defect"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    },
+    {
+      "module": "diabetes",
+      "assessment_outcome": "temporarily_unfit",
+      "route": "human_review",
+      "triggered_rule_ids": [
+        "DM-COM-ACUTE-UNSTABLE-001"
+      ],
+      "missing_fields": [
+        "diabetes.driving_relevant_comorbidity_status",
+        "diabetes.gestational",
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+        "diabetes.treatment_category"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    }
+  ],
+  "rule_result_sha256": "fc857f2b34e6a61039a1870c9b94b4652928961af66b163a7a3ebb3dc3de7e7b",
+  "evidence_pack_sha256": "0a3fd1491071614bd73fdc5284c591f9e61e4f476904916090d0d6ee3020188b",
+  "summary": "CX-LONG-177: Temporarily unfit. 2 requested modules; 11 unresolved fact fields. This draft is occupational fitness decision support. The result is limited to the implemented criteria and is not a licensing or employment decision.",
+  "review_checklist": [
+    "Clinician: review source facts, rule applicability and every provisional conclusion.",
+    "Confirm the commercial driving task and assess conditions outside the five-module scope.",
+    "Confirm missing/unverified case fact: diabetes.driving_relevant_comorbidity_status",
+    "Confirm missing/unverified case fact: diabetes.gestational",
+    "Confirm missing/unverified case fact: diabetes.severe_hypoglycaemic_event.occurred",
+    "Confirm missing/unverified case fact: diabetes.severe_hypoglycaemic_event.weeks_since_last",
+    "Confirm missing/unverified case fact: diabetes.treatment_category",
+    "Confirm missing/unverified case fact: vision.diplopia.present",
+    "Confirm missing/unverified case fact: vision.monocular",
+    "Confirm missing/unverified case fact: vision.uncorrected.better_eye",
+    "Confirm missing/unverified case fact: vision.uncorrected.left.snellen",
+    "Confirm missing/unverified case fact: vision.uncorrected.right.snellen",
+    "Confirm missing/unverified case fact: vision.visual_field.confirmed_defect",
+    "requires_confirmation",
+    "Extraction semantic review: Possible extraction issues require confirmation",
+    "This second-pass model review does not establish clinical accuracy. A clinician must verify the original record and any flagged information.",
+    "Confirm diabetes.treatment_category (omission): Independent source reading differs from the extraction. The driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment.",
+    "Confirm vision.diplopia.physiological (unsupported): Independent source reading differs from the extraction. The source passages do not explicitly state whether the diplopia is physiological or non-physiological. While passage 2 mentions that the diplopia is reproduced during the assessment, it does not provide a clear indication of whether it is physiological or not.",
+    "Confirm vision.diplopia.present (omission): Independent source reading differs from the extraction. The patient explicitly has diplopia (double vision) as confirmed by the current ophthalmologist's signed examination, which reports non-physiological diplopia within 19 degrees of central fixation.",
+    "Fields withheld from rule inputs: diabetes.treatment_category, vision.diplopia.physiological, vision.diplopia.present"
+  ],
+  "llm_commentary": null,
+  "clinician_name": null,
+  "signed_at": null,
+  "final_clinical_authorization_required": true
+}

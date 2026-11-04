@@ -1,0 +1,14 @@
+--- v1_worker
++++ v2_worker
+@@ -325,9 +325,10 @@
+         "properties": {
+             field: {
+                 "type": "array",
+-                "items": {"type": "string"},
++                "items": {"type": "string", "enum": sorted(allowed)},
+                 "minItems": 1,
+                 "maxItems": min(limit, len(allowed)),
++                "uniqueItems": True,
+             }
+         },
+         "required": [field],

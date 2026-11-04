@@ -1,0 +1,1662 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "VAL-MIX-07",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 1
+  },
+  "results_sha256": "a51fd8c9ef6e8ed312842d7be9c34859b2f8f625dd25755a5a928de2e1512d68",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "ApplicabilityCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-3ed1a5aed97719c969e95bb9",
+                        "PASS-0c4e5d1885b1be7db1a56f0a",
+                        "PASS-205eea15cc36b50dfbb2b9b1",
+                        "PASS-71485241c8be43cc12422a04",
+                        "PASS-2bdf4233f7b3fe60974d8b87"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.acutely_unwell",
+                          "diabetes.metabolically_unstable",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityCheck",
+                  "type": "object"
+                },
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.acutely_unwell",
+                          "diabetes.metabolically_unstable",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "passage_checks": {
+                  "items": {
+                    "$ref": "#/$defs/ApplicabilityCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "title": "Passage Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "passage_checks"
+              ],
+              "title": "ApplicabilityReview",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once in supplied order.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied passage IDs and fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; this is a documented clinical assessment rather than a diagnosis inferred by the nurse from thirst alone. The patient describes nausea and fluctuating blur, and the planned work assessment has been interrupted for clinical care.\\n\\nThe GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. A measurement copied from an older employment form is lower, but the clinician identifies the repeated current values as persistent, and the nurse keeps the older form separate rather than averaging different time periods.\\n\\nThe driver cannot provide a reliable account of the latest diabetes medication change or a complete glucose log, and the visual symptoms have not received an independent specialist assessment. Those missing details remain unresolved even though current metabolic instability and persistent blood pressure are explicitly documented by the treating clinicians.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes\"]}, \"diabetes.acutely_unwell\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \"]}, \"diabetes.metabolically_unstable\": {\"value\": true, \"patient_quotes\": [\"The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; \", \"metabolically unstable diabetes\"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 182.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 108.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}, {\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632}, {\"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"text_sha256\": \"63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876\", \"char_start\": 0, \"char_end\": 1176}, {\"source_id\": \"AFTD2022-DM-COM-003\", \"section\": \"3.2.2\", \"pdf_page\": 106, \"printed_page\": 95, \"source_text\": \"3.2.2. Acute hyperglycaemia\\nWhile acute hyperglycaemia may affect some \\naspects of brain function, there is not enough \\nevidence to determine the regular effects on \\ndriving performance and related crash risk. Each \\nperson with diabetes should be counselled \\nabout managing their diabetes during days \\nwhen they are unwell and should be advised \\nnot to drive if they are acutely unwell with \\nmetabolically unstable diabetes.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"text_sha256\": \"0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda\", \"char_start\": 0, \"char_end\": 424}, {\"source_id\": \"AFTD2022-EXP-7de596b87146a1f5\", \"section\": \"2.2.3\", \"pdf_page\": 77, \"printed_page\": 66, \"source_text\": \"2.2.3. High blood pressure\\nThe cut-off blood pressure values at which \\na person is considered unfit to hold an \\nunconditional licence do not reflect usual goals \\nfor managing hypertension. Rather, they reflect \\nlevels that are likely to be associated with \\nsudden incapacity due to neurological events \\n(e.g. stroke). The cut-off points are based on \\nexpert opinion.\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based \\non the advice of an appropriate medical \\nspecialist and that these drivers are reviewed \\nperiodically by the specialist to determine \\ntheir ongoing fitness to drive (refer to Part A \\nsection 4.4. Conditional licences). In the case \\nof high blood pressure, ongoing fitness to \\ndrive may be assessed by the treating general \\npractitioner, provided this is mutually agreed by \\nthe specialist and the general practitioner. The \\ninitial recommendation of a conditional licence \\nmust, however, be based on the opinion of \\nthe specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"text_sha256\": \"3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734\", \"char_start\": 0, \"char_end\": 1037}]}"
+              }
+            ]
+          },
+          "request_sha256": "5cb1bbe123526af5c13ad4d45beed4c5567b01aead21448f24803c242b8cbe86",
+          "request_bytes": 14806,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T05:43:49.6001401Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passage_checks\": [\n{\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"cardiovascular.blood_pressure.persistent_systolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"cardiovascular.blood_pressure.persistent_diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"persistent blood pressure consistently > 170 systolic or > 100 diastolic (treated or untreated)\",\"finding\": \"established_restriction\", \"conclusion\": \"The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic.\"},\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.present\", \"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"diabetes.metabolically_unstable\", \"status\": \"met\", \"fact_fields\": [\"diabetes.metabolically_unstable\"]}, {\"requirement\": \"diabetes.acutely_unwell\", \"status\": \"met\", \"fact_fields\": [\"diabetes.acutely_unwell\"]}, {\"requirement\": \"diabetes.present\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\"]}, {\"requirement\": \"severe_hypoglycaemic_event\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.present\"]}, {\"requirement\": \"awareness_of_hypoglycaemia\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.present\"]}], \"numeric_application\": \"no recent history of a ‘severe hypoglycaemic event’ as assessed by the specialist; and the person experiences early warning symptoms (awareness) of hypoglycaemia; and the person is following a treatment regimen that minimises the risk ofhyp\",\"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.\"},\n{\"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"cardiovascular.blood_pressure.persistent_systolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"cardiovascular.blood_pressure.persistent_diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_diastolic\"]}, {\"requirement\": \"effective_control_of_hypertension\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"no_side_effects_from_medication\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"no_evidence_of_damage_to_target_organs\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}], \"numeric_application\": \"the person is treated with antihypertensive therapy and effective control of hypertension is achieved over a 4-week follow-up period; and there are no side effects from the medication that will impair safe driving; and there is no evidence\",\"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist.\"},\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"fact_fields\": [\"diabetes.present\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"diabetes.present\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\"]}, {\"requirement\": \"acute_hyperglycaemia\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.present\"]}], \"numeric_application\": \"While acute hyperglycaemia may affect some aspects of brain function, there is not enough evidence to determine the regular effects on driving performance and related crash risk.\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.\"},\n{\"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"cardiovascular.blood_pressure.persistent_systolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"cardiovascular.blood_pressure.persistent_diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_diastolic\"]}, {\"requirement\": \"ongoing_fitness_to_drive\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}], \"numeric_application\": \"The cut-off blood pressure values at which a person is considered unfit to hold an unconditional licence do not reflect usual goals for managing hypertension. Rather, they reflect levels that are likely to be associated with sudden incapaci\",\"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.\"}\n]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 23518215100,
+            "load_duration": 4114300,
+            "prompt_eval_count": 2751,
+            "prompt_eval_cached_count": 2750,
+            "prompt_eval_duration": 44472000,
+            "eval_count": 1477,
+            "eval_duration": 23442462000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2751,
+            "eval_count": 1477,
+            "prompt_eval_cached_count": 2750
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "cardiovascular.blood_pressure.persistent_systolic",
+                    "status": "met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic"
+                    ]
+                  },
+                  {
+                    "requirement": "cardiovascular.blood_pressure.persistent_diastolic",
+                    "status": "met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_diastolic"
+                    ]
+                  }
+                ],
+                "numeric_application": "persistent blood pressure consistently > 170 systolic or > 100 diastolic (treated or untreated)",
+                "finding": "established_restriction",
+                "conclusion": "The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.acutely_unwell",
+                  "diabetes.metabolically_unstable"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "diabetes.metabolically_unstable",
+                    "status": "met",
+                    "fact_fields": [
+                      "diabetes.metabolically_unstable"
+                    ]
+                  },
+                  {
+                    "requirement": "diabetes.acutely_unwell",
+                    "status": "met",
+                    "fact_fields": [
+                      "diabetes.acutely_unwell"
+                    ]
+                  },
+                  {
+                    "requirement": "diabetes.present",
+                    "status": "met",
+                    "fact_fields": [
+                      "diabetes.present"
+                    ]
+                  },
+                  {
+                    "requirement": "severe_hypoglycaemic_event",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "diabetes.present"
+                    ]
+                  },
+                  {
+                    "requirement": "awareness_of_hypoglycaemia",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "diabetes.present"
+                    ]
+                  }
+                ],
+                "numeric_application": "no recent history of a ‘severe hypoglycaemic event’ as assessed by the specialist; and the person experiences early warning symptoms (awareness) of hypoglycaemia; and the person is following a treatment regimen that minimises the risk ofhyp",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "cardiovascular.blood_pressure.persistent_systolic",
+                    "status": "met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic"
+                    ]
+                  },
+                  {
+                    "requirement": "cardiovascular.blood_pressure.persistent_diastolic",
+                    "status": "met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_diastolic"
+                    ]
+                  },
+                  {
+                    "requirement": "effective_control_of_hypertension",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic"
+                    ]
+                  },
+                  {
+                    "requirement": "no_side_effects_from_medication",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic"
+                    ]
+                  },
+                  {
+                    "requirement": "no_evidence_of_damage_to_target_organs",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic"
+                    ]
+                  }
+                ],
+                "numeric_application": "the person is treated with antihypertensive therapy and effective control of hypertension is achieved over a 4-week follow-up period; and there are no side effects from the medication that will impair safe driving; and there is no evidence",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-71485241c8be43cc12422a04",
+                "fact_fields": [
+                  "diabetes.present"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "diabetes.present",
+                    "status": "met",
+                    "fact_fields": [
+                      "diabetes.present"
+                    ]
+                  },
+                  {
+                    "requirement": "acute_hyperglycaemia",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "diabetes.present"
+                    ]
+                  }
+                ],
+                "numeric_application": "While acute hyperglycaemia may affect some aspects of brain function, there is not enough evidence to determine the regular effects on driving performance and related crash risk.",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "cardiovascular.blood_pressure.persistent_systolic",
+                    "status": "met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic"
+                    ]
+                  },
+                  {
+                    "requirement": "cardiovascular.blood_pressure.persistent_diastolic",
+                    "status": "met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_diastolic"
+                    ]
+                  },
+                  {
+                    "requirement": "ongoing_fitness_to_drive",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic"
+                    ]
+                  }
+                ],
+                "numeric_application": "The cut-off blood pressure values at which a person is considered unfit to hold an unconditional licence do not reflect usual goals for managing hypertension. Rather, they reflect levels that are likely to be associated with sudden incapaci",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+              "source_id": "AFTD2022-HTN-COM-001",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 163,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.acutely_unwell",
+                  "diabetes.metabolically_unstable"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+              "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1176,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist.",
+                "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-71485241c8be43cc12422a04",
+              "source_id": "AFTD2022-DM-COM-003",
+              "pdf_page": 106,
+              "printed_page": 95,
+              "section": "3.2.2",
+              "text_sha256": "0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 424,
+                  "original_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-71485241c8be43cc12422a04",
+                "fact_fields": [
+                  "diabetes.present"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+                "source_id": "AFTD2022-DM-COM-003",
+                "guideline_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+              "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+              "pdf_page": 77,
+              "printed_page": 66,
+              "section": "2.2.3",
+              "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1037,
+                  "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+                "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+                "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-0c4e5d1885b1be7db1a56f0a:conditional_permission_with_unestablished_prerequisite",
+            "PASS-205eea15cc36b50dfbb2b9b1:conditional_permission_with_unestablished_prerequisite",
+            "PASS-71485241c8be43cc12422a04:conditional_permission_with_unestablished_prerequisite",
+            "PASS-2bdf4233f7b3fe60974d8b87:conditional_permission_with_unestablished_prerequisite"
+          ],
+          "seconds": 23.563102099999924
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "cardiovascular.blood_pressure.persistent_systolic",
+                "status": "met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ]
+              },
+              {
+                "requirement": "cardiovascular.blood_pressure.persistent_diastolic",
+                "status": "met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ]
+              }
+            ],
+            "numeric_application": "persistent blood pressure consistently > 170 systolic or > 100 diastolic (treated or untreated)",
+            "finding": "established_restriction",
+            "conclusion": "The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.acutely_unwell",
+              "diabetes.metabolically_unstable"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "diabetes.metabolically_unstable",
+                "status": "met",
+                "fact_fields": [
+                  "diabetes.metabolically_unstable"
+                ]
+              },
+              {
+                "requirement": "diabetes.acutely_unwell",
+                "status": "met",
+                "fact_fields": [
+                  "diabetes.acutely_unwell"
+                ]
+              },
+              {
+                "requirement": "diabetes.present",
+                "status": "met",
+                "fact_fields": [
+                  "diabetes.present"
+                ]
+              },
+              {
+                "requirement": "severe_hypoglycaemic_event",
+                "status": "unknown",
+                "fact_fields": [
+                  "diabetes.present"
+                ]
+              },
+              {
+                "requirement": "awareness_of_hypoglycaemia",
+                "status": "unknown",
+                "fact_fields": [
+                  "diabetes.present"
+                ]
+              }
+            ],
+            "numeric_application": "no recent history of a ‘severe hypoglycaemic event’ as assessed by the specialist; and the person experiences early warning symptoms (awareness) of hypoglycaemia; and the person is following a treatment regimen that minimises the risk ofhyp",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "cardiovascular.blood_pressure.persistent_systolic",
+                "status": "met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ]
+              },
+              {
+                "requirement": "cardiovascular.blood_pressure.persistent_diastolic",
+                "status": "met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ]
+              },
+              {
+                "requirement": "effective_control_of_hypertension",
+                "status": "unknown",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ]
+              },
+              {
+                "requirement": "no_side_effects_from_medication",
+                "status": "unknown",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ]
+              },
+              {
+                "requirement": "no_evidence_of_damage_to_target_organs",
+                "status": "unknown",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ]
+              }
+            ],
+            "numeric_application": "the person is treated with antihypertensive therapy and effective control of hypertension is achieved over a 4-week follow-up period; and there are no side effects from the medication that will impair safe driving; and there is no evidence",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-71485241c8be43cc12422a04",
+            "fact_fields": [
+              "diabetes.present"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "diabetes.present",
+                "status": "met",
+                "fact_fields": [
+                  "diabetes.present"
+                ]
+              },
+              {
+                "requirement": "acute_hyperglycaemia",
+                "status": "unknown",
+                "fact_fields": [
+                  "diabetes.present"
+                ]
+              }
+            ],
+            "numeric_application": "While acute hyperglycaemia may affect some aspects of brain function, there is not enough evidence to determine the regular effects on driving performance and related crash risk.",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "cardiovascular.blood_pressure.persistent_systolic",
+                "status": "met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ]
+              },
+              {
+                "requirement": "cardiovascular.blood_pressure.persistent_diastolic",
+                "status": "met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ]
+              },
+              {
+                "requirement": "ongoing_fitness_to_drive",
+                "status": "unknown",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ]
+              }
+            ],
+            "numeric_application": "The cut-off blood pressure values at which a person is considered unfit to hold an unconditional licence do not reflect usual goals for managing hypertension. Rather, they reflect levels that are likely to be associated with sudden incapaci",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+          "source_id": "AFTD2022-HTN-COM-001",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 163,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+          "source_id": "AFTD2022-EXP-42507db0424f7a27",
+          "pdf_page": 112,
+          "printed_page": 101,
+          "section": "3.3",
+          "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1632,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.acutely_unwell",
+              "diabetes.metabolically_unstable"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+          "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1176,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist.",
+            "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-71485241c8be43cc12422a04",
+          "source_id": "AFTD2022-DM-COM-003",
+          "pdf_page": 106,
+          "printed_page": 95,
+          "section": "3.2.2",
+          "text_sha256": "0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 424,
+              "original_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-71485241c8be43cc12422a04",
+            "fact_fields": [
+              "diabetes.present"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+            "source_id": "AFTD2022-DM-COM-003",
+            "guideline_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+          "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+          "pdf_page": 77,
+          "printed_page": 66,
+          "section": "2.2.3",
+          "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1037,
+              "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+            "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+            "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-0c4e5d1885b1be7db1a56f0a:conditional_permission_with_unestablished_prerequisite",
+        "PASS-205eea15cc36b50dfbb2b9b1:conditional_permission_with_unestablished_prerequisite",
+        "PASS-71485241c8be43cc12422a04:conditional_permission_with_unestablished_prerequisite",
+        "PASS-2bdf4233f7b3fe60974d8b87:conditional_permission_with_unestablished_prerequisite"
+      ],
+      "seconds": 23.563106300000072
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-3ed1a5aed97719c969e95bb9",
+                        "PASS-0c4e5d1885b1be7db1a56f0a",
+                        "PASS-205eea15cc36b50dfbb2b9b1",
+                        "PASS-71485241c8be43cc12422a04",
+                        "PASS-2bdf4233f7b3fe60974d8b87"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.acutely_unwell",
+                          "diabetes.metabolically_unstable",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; this is a documented clinical assessment rather than a diagnosis inferred by the nurse from thirst alone. The patient describes nausea and fluctuating blur, and the planned work assessment has been interrupted for clinical care.\\n\\nThe GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. A measurement copied from an older employment form is lower, but the clinician identifies the repeated current values as persistent, and the nurse keeps the older form separate rather than averaging different time periods.\\n\\nThe driver cannot provide a reliable account of the latest diabetes medication change or a complete glucose log, and the visual symptoms have not received an independent specialist assessment. Those missing details remain unresolved even though current metabolic instability and persistent blood pressure are explicitly documented by the treating clinicians.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes\"]}, \"diabetes.acutely_unwell\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \"]}, \"diabetes.metabolically_unstable\": {\"value\": true, \"patient_quotes\": [\"The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; \", \"metabolically unstable diabetes\"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 182.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 108.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}, {\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632}, {\"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"text_sha256\": \"63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876\", \"char_start\": 0, \"char_end\": 1176}, {\"source_id\": \"AFTD2022-DM-COM-003\", \"section\": \"3.2.2\", \"pdf_page\": 106, \"printed_page\": 95, \"source_text\": \"3.2.2. Acute hyperglycaemia\\nWhile acute hyperglycaemia may affect some \\naspects of brain function, there is not enough \\nevidence to determine the regular effects on \\ndriving performance and related crash risk. Each \\nperson with diabetes should be counselled \\nabout managing their diabetes during days \\nwhen they are unwell and should be advised \\nnot to drive if they are acutely unwell with \\nmetabolically unstable diabetes.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"text_sha256\": \"0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda\", \"char_start\": 0, \"char_end\": 424}, {\"source_id\": \"AFTD2022-EXP-7de596b87146a1f5\", \"section\": \"2.2.3\", \"pdf_page\": 77, \"printed_page\": 66, \"source_text\": \"2.2.3. High blood pressure\\nThe cut-off blood pressure values at which \\na person is considered unfit to hold an \\nunconditional licence do not reflect usual goals \\nfor managing hypertension. Rather, they reflect \\nlevels that are likely to be associated with \\nsudden incapacity due to neurological events \\n(e.g. stroke). The cut-off points are based on \\nexpert opinion.\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based \\non the advice of an appropriate medical \\nspecialist and that these drivers are reviewed \\nperiodically by the specialist to determine \\ntheir ongoing fitness to drive (refer to Part A \\nsection 4.4. Conditional licences). In the case \\nof high blood pressure, ongoing fitness to \\ndrive may be assessed by the treating general \\npractitioner, provided this is mutually agreed by \\nthe specialist and the general practitioner. The \\ninitial recommendation of a conditional licence \\nmust, however, be based on the opinion of \\nthe specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"text_sha256\": \"3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734\", \"char_start\": 0, \"char_end\": 1037}], \"proposed_applicability_ledger\": [{\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"cardiovascular.blood_pressure.persistent_systolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"cardiovascular.blood_pressure.persistent_diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"persistent blood pressure consistently > 170 systolic or > 100 diastolic (treated or untreated)\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic.\", \"source_id\": \"AFTD2022-HTN-COM-001\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 182.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 108.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.present\", \"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"diabetes.metabolically_unstable\", \"status\": \"met\", \"fact_fields\": [\"diabetes.metabolically_unstable\"]}, {\"requirement\": \"diabetes.acutely_unwell\", \"status\": \"met\", \"fact_fields\": [\"diabetes.acutely_unwell\"]}, {\"requirement\": \"diabetes.present\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\"]}, {\"requirement\": \"severe_hypoglycaemic_event\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.present\"]}, {\"requirement\": \"awareness_of_hypoglycaemia\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.present\"]}], \"numeric_application\": \"no recent history of a ‘severe hypoglycaemic event’ as assessed by the specialist; and the person experiences early warning symptoms (awareness) of hypoglycaemia; and the person is following a treatment regimen that minimises the risk ofhyp\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.\", \"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"referenced_patient_values\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes\"]}, \"diabetes.acutely_unwell\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \"]}, \"diabetes.metabolically_unstable\": {\"value\": true, \"patient_quotes\": [\"The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; \", \"metabolically unstable diabetes\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"cardiovascular.blood_pressure.persistent_systolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"cardiovascular.blood_pressure.persistent_diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_diastolic\"]}, {\"requirement\": \"effective_control_of_hypertension\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"no_side_effects_from_medication\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"no_evidence_of_damage_to_target_organs\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}], \"numeric_application\": \"the person is treated with antihypertensive therapy and effective control of hypertension is achieved over a 4-week follow-up period; and there are no side effects from the medication that will impair safe driving; and there is no evidence\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist.\", \"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 182.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 108.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"fact_fields\": [\"diabetes.present\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"diabetes.present\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\"]}, {\"requirement\": \"acute_hyperglycaemia\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.present\"]}], \"numeric_application\": \"While acute hyperglycaemia may affect some aspects of brain function, there is not enough evidence to determine the regular effects on driving performance and related crash risk.\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.\", \"source_id\": \"AFTD2022-DM-COM-003\", \"referenced_patient_values\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"cardiovascular.blood_pressure.persistent_systolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}, {\"requirement\": \"cardiovascular.blood_pressure.persistent_diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_diastolic\"]}, {\"requirement\": \"ongoing_fitness_to_drive\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"]}], \"numeric_application\": \"The cut-off blood pressure values at which a person is considered unfit to hold an unconditional licence do not reflect usual goals for managing hypertension. Rather, they reflect levels that are likely to be associated with sudden incapaci\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.\", \"source_id\": \"AFTD2022-EXP-7de596b87146a1f5\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 182.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 108.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"c3e08d7748afe6ecf20ff2ff962a2b3aee9ab1ecda6efdffda1ee77426c76383\"}"
+              }
+            ]
+          },
+          "request_sha256": "31a800b58cfc08050e45325834496ab410c3bf7a3e5b845103a32b3d9a1b1569",
+          "request_bytes": 24304,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T05:44:02.4849696Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"temporarily_unfit\", \"explanation\": \"The patient has persistent blood pressure consistently > 170 systolic or > 100 diastolic, which meets the unconditional standard for not being fit to hold an unconditional licence. Additionally, the patient has metabolically unstable diabetes, which meets the conditional standard for a conditional licence. However, the patient's current condition is acutely unwell, which requires immediate attention and treatment. Therefore, the patient is temporarily unfit to drive and should not be allowed to drive until their condition is stabilized and their blood pressure is controlled.\", \"criterion_checks\": [\n{\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic.\"},\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.present\", \"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"], \"licence_pathway\": \"conditional\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.\"},\n{\"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"licence_pathway\": \"conditional\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist.\"},\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"fact_fields\": [\"diabetes.present\"], \"licence_pathway\": \"conditional\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.\"},\n{\"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"licence_pathway\": \"conditional\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.\"}\n]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 12834081100,
+            "load_duration": 4053200,
+            "prompt_eval_count": 5115,
+            "prompt_eval_cached_count": 594,
+            "prompt_eval_duration": 2198913000,
+            "eval_count": 649,
+            "eval_duration": 10154220000
+          },
+          "token_counts": {
+            "prompt_eval_count": 5115,
+            "eval_count": 649,
+            "prompt_eval_cached_count": 594
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "temporarily_unfit",
+            "explanation": "The patient has persistent blood pressure consistently > 170 systolic or > 100 diastolic, which meets the unconditional standard for not being fit to hold an unconditional licence. Additionally, the patient has metabolically unstable diabetes, which meets the conditional standard for a conditional licence. However, the patient's current condition is acutely unwell, which requires immediate attention and treatment. Therefore, the patient is temporarily unfit to drive and should not be allowed to drive until their condition is stabilized and their blood pressure is controlled.",
+            "source_ids": [
+              "AFTD2022-HTN-COM-001",
+              "AFTD2022-EXP-42507db0424f7a27",
+              "AFTD2022-EXP-f57fef6c660a1e6d",
+              "AFTD2022-DM-COM-003",
+              "AFTD2022-EXP-7de596b87146a1f5"
+            ],
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.acutely_unwell",
+              "diabetes.metabolically_unstable",
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "criterion_checks": [
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.acutely_unwell",
+                  "diabetes.metabolically_unstable"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist.",
+                "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-71485241c8be43cc12422a04",
+                "fact_fields": [
+                  "diabetes.present"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+                "source_id": "AFTD2022-DM-COM-003",
+                "guideline_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+                "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+                "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+              "source_id": "AFTD2022-HTN-COM-001",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 163,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.acutely_unwell",
+                  "diabetes.metabolically_unstable"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+              "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1176,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist.",
+                "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-71485241c8be43cc12422a04",
+              "source_id": "AFTD2022-DM-COM-003",
+              "pdf_page": 106,
+              "printed_page": 95,
+              "section": "3.2.2",
+              "text_sha256": "0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 424,
+                  "original_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-71485241c8be43cc12422a04",
+                "fact_fields": [
+                  "diabetes.present"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+                "source_id": "AFTD2022-DM-COM-003",
+                "guideline_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+              "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+              "pdf_page": 77,
+              "printed_page": 66,
+              "section": "2.2.3",
+              "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1037,
+                  "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+                "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+                "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "temporary_restriction_not_established_in_checks"
+          ],
+          "seconds": 12.879956499999935
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient has persistent blood pressure consistently > 170 systolic or > 100 diastolic, which meets the unconditional standard for not being fit to hold an unconditional licence. Additionally, the patient has metabolically unstable diabetes, which meets the conditional standard for a conditional licence. However, the patient's current condition is acutely unwell, which requires immediate attention and treatment. Therefore, the patient is temporarily unfit to drive and should not be allowed to drive until their condition is stabilized and their blood pressure is controlled.",
+        "source_ids": [
+          "AFTD2022-HTN-COM-001",
+          "AFTD2022-EXP-42507db0424f7a27",
+          "AFTD2022-EXP-f57fef6c660a1e6d",
+          "AFTD2022-DM-COM-003",
+          "AFTD2022-EXP-7de596b87146a1f5"
+        ],
+        "fact_fields": [
+          "diabetes.present",
+          "diabetes.acutely_unwell",
+          "diabetes.metabolically_unstable",
+          "cardiovascular.blood_pressure.persistent_systolic",
+          "cardiovascular.blood_pressure.persistent_diastolic"
+        ],
+        "criterion_checks": [
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.acutely_unwell",
+              "diabetes.metabolically_unstable"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist.",
+            "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-71485241c8be43cc12422a04",
+            "fact_fields": [
+              "diabetes.present"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+            "source_id": "AFTD2022-DM-COM-003",
+            "guideline_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+            "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+            "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+          "source_id": "AFTD2022-HTN-COM-001",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 163,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient is not fit to hold an unconditional licence due to persistent blood pressure consistently > 170 systolic or > 100 diastolic.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+          "source_id": "AFTD2022-EXP-42507db0424f7a27",
+          "pdf_page": 112,
+          "printed_page": 101,
+          "section": "3.3",
+          "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1632,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.acutely_unwell",
+              "diabetes.metabolically_unstable"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to at least annual review, taking into consideration the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+          "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1176,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to annual review, taking into account the nature of the driving task and information provided by the treating specialist.",
+            "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-71485241c8be43cc12422a04",
+          "source_id": "AFTD2022-DM-COM-003",
+          "pdf_page": 106,
+          "printed_page": 95,
+          "section": "3.2.2",
+          "text_sha256": "0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 424,
+              "original_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-71485241c8be43cc12422a04",
+            "fact_fields": [
+              "diabetes.present"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+            "source_id": "AFTD2022-DM-COM-003",
+            "guideline_quote": "3.2.2. Acute hyperglycaemia\nWhile acute hyperglycaemia may affect some \naspects of brain function, there is not enough \nevidence to determine the regular effects on \ndriving performance and related crash risk. Each \nperson with diabetes should be counselled \nabout managing their diabetes during days \nwhen they are unwell and should be advised \nnot to drive if they are acutely unwell with \nmetabolically unstable diabetes."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+          "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+          "pdf_page": 77,
+          "printed_page": 66,
+          "section": "2.2.3",
+          "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1037,
+              "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient may be considered for a conditional licence, subject to ongoing assessment by the treating specialist.",
+            "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+            "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [
+        "temporary_restriction_not_established_in_checks"
+      ],
+      "seconds": 12.879961300000105
+    }
+  },
+  "support_review": "pending_independent_review"
+}

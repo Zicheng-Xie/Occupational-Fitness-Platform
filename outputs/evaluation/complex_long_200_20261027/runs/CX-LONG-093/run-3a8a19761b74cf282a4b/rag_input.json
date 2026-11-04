@@ -1,0 +1,303 @@
+{
+  "schema_version": "1.2.0",
+  "result_id": "RR-1d6eaa2441684b0a857d",
+  "case_id": "CX-LONG-093",
+  "red_flag_result_sha256": "e31e1dfa7966d8acd3f355b1021c63c1fe5686592a49fb823dafc64d7c1a140d",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "guideline_version": "AP-G56-22",
+  "route": "missing_information",
+  "rag_requests": [
+    {
+      "request_id": "RAG-4c81848d3a2e7035",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-DIET-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-004"
+      ],
+      "category": "diabetes",
+      "subcondition": "diet_and_exercise_only",
+      "licence_context": "commercial",
+      "rag_query_key": "diabetes_diet_exercise_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.driving_relevant_comorbidity_status": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-aaa90e2c69cce0ff",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-SEVERE-HYPO-WAIT-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-002"
+      ],
+      "category": "diabetes",
+      "subcondition": "recent_severe_hypoglycaemic_event",
+      "licence_context": "commercial",
+      "rag_query_key": "severe_hypoglycaemia_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.severe_hypoglycaemic_event.occurred": "unknown",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-353ba70b751aafc8",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-ACUTE-UNSTABLE-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-003"
+      ],
+      "category": "diabetes",
+      "subcondition": "acute_metabolic_instability",
+      "licence_context": "commercial",
+      "rag_query_key": "acute_hyperglycaemia_commercial",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.acutely_unwell": "unknown",
+        "diabetes.metabolically_unstable": "unknown"
+      }
+    },
+    {
+      "request_id": "RAG-a748c95ac80d5f99",
+      "request_type": "missing_information_guidance",
+      "rule_id": "DM-COM-GESTATIONAL-REVIEW-001",
+      "source_ids": [
+        "AFTD2022-DM-COM-010"
+      ],
+      "category": "diabetes",
+      "subcondition": "diabetes_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "dm_com_gestational_review_001",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "diabetes.gestational": "unknown"
+      }
+    }
+  ],
+  "indicator_context": {
+    "RAG-4c81848d3a2e7035": {
+      "diabetes.driving_relevant_comorbidity_status": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 442,
+            "end": 706,
+            "quote": "The current GP and medication review confirm established type 2 diabetes managed by diet and exercise alone, with no glucose-lowering medicine or insulin prescribed, and document that driving-relevant comorbidities have been assessed with no disqualifying effect; ",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          },
+          {
+            "start": 442,
+            "end": 514,
+            "quote": "The current GP and medication review confirm established type 2 diabetes",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "llm_grounded",
+        "derived_from": []
+      },
+      "diabetes.treatment_category": {
+        "value": "diet_and_exercise_only",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 506,
+            "end": 549,
+            "quote": "diabetes managed by diet and exercise alone",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "regex",
+        "derived_from": []
+      }
+    },
+    "RAG-aaa90e2c69cce0ff": {
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 442,
+            "end": 706,
+            "quote": "The current GP and medication review confirm established type 2 diabetes managed by diet and exercise alone, with no glucose-lowering medicine or insulin prescribed, and document that driving-relevant comorbidities have been assessed with no disqualifying effect; ",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          },
+          {
+            "start": 442,
+            "end": 514,
+            "quote": "The current GP and medication review confirm established type 2 diabetes",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "llm_grounded",
+        "derived_from": []
+      },
+      "diabetes.severe_hypoglycaemic_event.occurred": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.severe_hypoglycaemic_event.weeks_since_last": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-353ba70b751aafc8": {
+      "diabetes.acutely_unwell": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.metabolically_unstable": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 442,
+            "end": 706,
+            "quote": "The current GP and medication review confirm established type 2 diabetes managed by diet and exercise alone, with no glucose-lowering medicine or insulin prescribed, and document that driving-relevant comorbidities have been assessed with no disqualifying effect; ",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          },
+          {
+            "start": 442,
+            "end": 514,
+            "quote": "The current GP and medication review confirm established type 2 diabetes",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "llm_grounded",
+        "derived_from": []
+      }
+    },
+    "RAG-a748c95ac80d5f99": {
+      "diabetes.gestational": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "diabetes.present": {
+        "value": true,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 442,
+            "end": 706,
+            "quote": "The current GP and medication review confirm established type 2 diabetes managed by diet and exercise alone, with no glucose-lowering medicine or insulin prescribed, and document that driving-relevant comorbidities have been assessed with no disqualifying effect; ",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          },
+          {
+            "start": 442,
+            "end": 514,
+            "quote": "The current GP and medication review confirm established type 2 diabetes",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "llm_grounded",
+        "derived_from": []
+      }
+    }
+  },
+  "narrative_context": {
+    "RAG-4c81848d3a2e7035": [
+      {
+        "start": 442,
+        "end": 892,
+        "quote": "The current GP and medication review confirm established type 2 diabetes managed by diet and exercise alone, with no glucose-lowering medicine or insulin prescribed, and document that driving-relevant comorbidities have been assessed with no disqualifying effect; the driver mentions that an uncle uses injections, but those medicines belong to the uncle, and a previous referral proposing tablets was never implemented as a current treatment change.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-aaa90e2c69cce0ff": [
+      {
+        "start": 442,
+        "end": 892,
+        "quote": "The current GP and medication review confirm established type 2 diabetes managed by diet and exercise alone, with no glucose-lowering medicine or insulin prescribed, and document that driving-relevant comorbidities have been assessed with no disqualifying effect; the driver mentions that an uncle uses injections, but those medicines belong to the uncle, and a previous referral proposing tablets was never implemented as a current treatment change.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-353ba70b751aafc8": [
+      {
+        "start": 442,
+        "end": 892,
+        "quote": "The current GP and medication review confirm established type 2 diabetes managed by diet and exercise alone, with no glucose-lowering medicine or insulin prescribed, and document that driving-relevant comorbidities have been assessed with no disqualifying effect; the driver mentions that an uncle uses injections, but those medicines belong to the uncle, and a previous referral proposing tablets was never implemented as a current treatment change.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-a748c95ac80d5f99": [
+      {
+        "start": 442,
+        "end": 892,
+        "quote": "The current GP and medication review confirm established type 2 diabetes managed by diet and exercise alone, with no glucose-lowering medicine or insulin prescribed, and document that driving-relevant comorbidities have been assessed with no disqualifying effect; the driver mentions that an uncle uses injections, but those medicines belong to the uncle, and a previous referral proposing tablets was never implemented as a current treatment change.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ]
+  },
+  "narrative_source_text_sha256": "f6f7d3f732b5aaaf8d370074e09cc9a15ad381989d092934752100100a03556d"
+}

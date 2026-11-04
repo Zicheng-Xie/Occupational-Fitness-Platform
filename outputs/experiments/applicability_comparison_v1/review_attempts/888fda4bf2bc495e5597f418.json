@@ -1,0 +1,333 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-02",
+    "evidence_policy": "reference_evidence",
+    "protocol": "passage_selection",
+    "repeat": 1
+  },
+  "results_sha256": "a51fd8c9ef6e8ed312842d7be9c34859b2f8f625dd25755a5a928de2e1512d68",
+  "status": "completed",
+  "stages": {
+    "outcome_first": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-17c4f5068f374f2597cb7e8e",
+                        "PASS-2dc3117e7c443462699ed5e0"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "blackout.occurred",
+                          "blackout.mechanism_status",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nAt today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. The optometrist's signed sheet confirms the measurements; the driver believes a newer pair of glasses improves road-sign reading, but no corrected measurement has yet been entered, and the nurse does not substitute that impression for a measured corrected acuity.\\n\\nThe driver experienced a witnessed blackout during a break four weeks earlier. The witness describes complete loss of responsiveness followed by recovery, and the current referral explicitly states that the cause remains under investigation. The driver recalls being hot and hungry before the event, yet neither vasovagal syncope nor hypoglycaemia has been confirmed, and cardiac monitoring is still pending.\\n\\nHe says there may have been an earlier episode of light-headedness without loss of awareness, which the nurse has not counted as a second blackout. Current visual measurements and the documented blackout are available, while the event mechanism, recurrence history and specialist advice remain incomplete.\\n\", \"verified_patient_facts\": {\"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"The driver experienced a witnessed blackout during a break four weeks earlier. \"]}, \"blackout.mechanism_status\": {\"value\": \"under_investigation\", \"patient_quotes\": [\"The witness describes complete loss of responsiveness followed by recovery, and the current referral explicitly states that the cause remains under investigation. \"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/12\", \"patient_quotes\": [\"At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. \"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/18\", \"patient_quotes\": [\"At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. \"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/12\", \"patient_quotes\": [\"At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. \", \"At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. \"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-VIS-COM-002\", \"section\": \"10.3\", \"pdf_page\": 220, \"printed_page\": 209, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person’s uncorrected visual acuity is \\nworse than 6/9 in the better eye; or\\n•\\t if the person’s uncorrected visual acuity is \\nworse than 6/18 in either eye.\", \"module\": \"vision\", \"passage_id\": \"PASS-17c4f5068f374f2597cb7e8e\", \"text_sha256\": \"598a3da216c03def0f6bcbdcd6bd036f57c5cf7a1e99d224b1fd08d5908bcc39\", \"char_start\": 0, \"char_end\": 220}, {\"source_id\": \"AFTD2022-BLK-COM-001\", \"section\": \"1.2.1\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"cardiovascular and neurological investigations \\nand referral to several specialists. People should \\nbe advised not to drive until the mechanism is \\nascertained and the corresponding standard met.\", \"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"text_sha256\": \"dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55\", \"char_start\": 0, \"char_end\": 195}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "fa0f23175d93750e34c09fe226deb2c5cbf024b0ec293bf2c8fc716e3a8fb8ca",
+          "request_bytes": 9858,
+          "status": "completed",
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T06:01:26.4488403Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"temporarily_unfit\",\n  \"explanation\": \"The patient is currently unfit to hold a commercial driving licence due to an established restriction regarding a witnessed blackout where the mechanism remains under investigation. According to the guidelines, individuals should not drive until the cause is ascertained and the corresponding standard is met. While the patient's uncorrected visual acuity (6/12 in the better eye) meets the unconditional standard for vision, the unresolved nature of the blackout event overrides this eligibility. The nurse note regarding potential hypoglycaemia or vasovagal syncope remains unverified as a specific diagnosis and cannot override the established restriction pending investigation.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\"],\n      \"licence_pathway\": \"temporary_no_driving\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient experienced a witnessed blackout four weeks ago, and the mechanism is explicitly under investigation. The guideline states that people should not drive until the mechanism is ascertained and the corresponding standard met.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-17c4f5068f374f2597cb7e8e\",\n      \"fact_fields\": [\"vision.uncorrected.better_eye\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The patient's uncorrected visual acuity in the better eye is 6/12, which meets the requirement of not being worse than 6/9. However, this does not establish overall fitness due to the established blackout restriction.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 6551107100,
+            "load_duration": 4156500,
+            "prompt_eval_count": 1787,
+            "prompt_eval_cached_count": 1783,
+            "prompt_eval_duration": 106421000,
+            "eval_count": 444,
+            "eval_duration": 6421500000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1787,
+            "eval_count": 444,
+            "prompt_eval_cached_count": 1783
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "temporarily_unfit",
+            "explanation": "The patient is currently unfit to hold a commercial driving licence due to an established restriction regarding a witnessed blackout where the mechanism remains under investigation. According to the guidelines, individuals should not drive until the cause is ascertained and the corresponding standard is met. While the patient's uncorrected visual acuity (6/12 in the better eye) meets the unconditional standard for vision, the unresolved nature of the blackout event overrides this eligibility. The nurse note regarding potential hypoglycaemia or vasovagal syncope remains unverified as a specific diagnosis and cannot override the established restriction pending investigation.",
+            "source_ids": [
+              "AFTD2022-VIS-COM-002",
+              "AFTD2022-BLK-COM-001"
+            ],
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "vision.uncorrected.better_eye"
+            ],
+            "criterion_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "temporary_no_driving",
+                "finding": "established_restriction",
+                "conclusion": "The patient experienced a witnessed blackout four weeks ago, and the mechanism is explicitly under investigation. The guideline states that people should not drive until the mechanism is ascertained and the corresponding standard met.",
+                "source_id": "AFTD2022-BLK-COM-001",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-17c4f5068f374f2597cb7e8e",
+                "fact_fields": [
+                  "vision.uncorrected.better_eye"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The patient's uncorrected visual acuity in the better eye is 6/12, which meets the requirement of not being worse than 6/9. However, this does not establish overall fitness due to the established blackout restriction.",
+                "source_id": "AFTD2022-VIS-COM-002",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person’s uncorrected visual acuity is \nworse than 6/9 in the better eye; or\n•\t if the person’s uncorrected visual acuity is \nworse than 6/18 in either eye."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+              "source_id": "AFTD2022-BLK-COM-001",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.1",
+              "text_sha256": "dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 195,
+                  "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "temporary_no_driving",
+                "finding": "established_restriction",
+                "conclusion": "The patient experienced a witnessed blackout four weeks ago, and the mechanism is explicitly under investigation. The guideline states that people should not drive until the mechanism is ascertained and the corresponding standard met.",
+                "source_id": "AFTD2022-BLK-COM-001",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-17c4f5068f374f2597cb7e8e",
+              "source_id": "AFTD2022-VIS-COM-002",
+              "pdf_page": 220,
+              "printed_page": 209,
+              "section": "10.3",
+              "text_sha256": "598a3da216c03def0f6bcbdcd6bd036f57c5cf7a1e99d224b1fd08d5908bcc39",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 220,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person’s uncorrected visual acuity is \nworse than 6/9 in the better eye; or\n•\t if the person’s uncorrected visual acuity is \nworse than 6/18 in either eye."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-17c4f5068f374f2597cb7e8e",
+                "fact_fields": [
+                  "vision.uncorrected.better_eye"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The patient's uncorrected visual acuity in the better eye is 6/12, which meets the requirement of not being worse than 6/9. However, this does not establish overall fitness due to the established blackout restriction.",
+                "source_id": "AFTD2022-VIS-COM-002",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person’s uncorrected visual acuity is \nworse than 6/9 in the better eye; or\n•\t if the person’s uncorrected visual acuity is \nworse than 6/18 in either eye."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [],
+          "seconds": 6.584782900000391,
+          "provider_called": true
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient is currently unfit to hold a commercial driving licence due to an established restriction regarding a witnessed blackout where the mechanism remains under investigation. According to the guidelines, individuals should not drive until the cause is ascertained and the corresponding standard is met. While the patient's uncorrected visual acuity (6/12 in the better eye) meets the unconditional standard for vision, the unresolved nature of the blackout event overrides this eligibility. The nurse note regarding potential hypoglycaemia or vasovagal syncope remains unverified as a specific diagnosis and cannot override the established restriction pending investigation.",
+        "source_ids": [
+          "AFTD2022-VIS-COM-002",
+          "AFTD2022-BLK-COM-001"
+        ],
+        "fact_fields": [
+          "blackout.occurred",
+          "blackout.mechanism_status",
+          "vision.uncorrected.better_eye"
+        ],
+        "criterion_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "temporary_no_driving",
+            "finding": "established_restriction",
+            "conclusion": "The patient experienced a witnessed blackout four weeks ago, and the mechanism is explicitly under investigation. The guideline states that people should not drive until the mechanism is ascertained and the corresponding standard met.",
+            "source_id": "AFTD2022-BLK-COM-001",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-17c4f5068f374f2597cb7e8e",
+            "fact_fields": [
+              "vision.uncorrected.better_eye"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The patient's uncorrected visual acuity in the better eye is 6/12, which meets the requirement of not being worse than 6/9. However, this does not establish overall fitness due to the established blackout restriction.",
+            "source_id": "AFTD2022-VIS-COM-002",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person’s uncorrected visual acuity is \nworse than 6/9 in the better eye; or\n•\t if the person’s uncorrected visual acuity is \nworse than 6/18 in either eye."
+          }
+        ]
+      },
+      "seconds": 6.586673899999369
+    }
+  },
+  "support_review": "pending_independent_review"
+}

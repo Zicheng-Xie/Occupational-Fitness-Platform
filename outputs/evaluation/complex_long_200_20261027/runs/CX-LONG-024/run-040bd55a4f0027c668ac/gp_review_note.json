@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.2.0",
+  "case_id": "CX-LONG-024",
+  "status": "DRAFT",
+  "assessment_outcome": "insufficient_information",
+  "modules": [
+    {
+      "module": "diabetes",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "diabetes.gestational",
+        "diabetes.present"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    },
+    {
+      "module": "hypertension",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic",
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "warnings": []
+    }
+  ],
+  "rule_result_sha256": "de216f7841b2b67f41f22e2e7535672c2201c90123907ae0299ac0374daf59c1",
+  "evidence_pack_sha256": "51208b1942e9688a9417b32e15958a8cf35bd502fe51d14846b891b0b6a9df1b",
+  "summary": "CX-LONG-024: Insufficient information. 2 requested modules; 4 unresolved fact fields. This draft is occupational fitness decision support. The result is limited to the implemented criteria and is not a licensing or employment decision.",
+  "review_checklist": [
+    "Clinician: review source facts, rule applicability and every provisional conclusion.",
+    "Confirm the commercial driving task and assess conditions outside the five-module scope.",
+    "Confirm missing/unverified case fact: cardiovascular.blood_pressure.persistent_diastolic",
+    "Confirm missing/unverified case fact: cardiovascular.blood_pressure.persistent_systolic",
+    "Confirm missing/unverified case fact: diabetes.gestational",
+    "Confirm missing/unverified case fact: diabetes.present",
+    "cardiovascular.blood_pressure.observed_diastolic",
+    "cardiovascular.blood_pressure.observed_systolic",
+    "requires_confirmation",
+    "cardiovascular.blood_pressure.observed_diastolic",
+    "cardiovascular.blood_pressure.observed_systolic",
+    "cardiovascular.blood_pressure.persistent_diastolic",
+    "cardiovascular.blood_pressure.persistent_systolic",
+    "Extraction semantic review: Possible extraction issues require confirmation",
+    "This second-pass model review does not establish clinical accuracy. A clinician must verify the original record and any flagged information.",
+    "Confirm diabetes.present (omission): Independent source reading differs from the extraction. The patient has diabetes, and the current referral identifies gestational diabetes during pregnancy and confirms that insulin has recently been introduced, rather than documenting pre-existing chronic diabetes.",
+    "Confirm diabetes.treatment_category (omission): Independent source reading differs from the extraction. The question is about the exact meaning of the diabetes treatment category, not whether the patient is fit to drive. The answer is based on the explicitly current diabetes treatment, which is insulin, as confirmed by the specialist's referral and the driver's report of variable appetite on early starts. The nurse distinguishes the self-limiting pregnancy-related condition from chronic insulin-treated diabetes while requesting advice about current symptoms and short-term driving fitness.",
+    "Fields withheld from rule inputs: diabetes.present, diabetes.treatment_category"
+  ],
+  "llm_commentary": null,
+  "clinician_name": null,
+  "signed_at": null,
+  "final_clinical_authorization_required": true
+}

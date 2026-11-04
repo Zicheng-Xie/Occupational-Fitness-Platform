@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "e80bfe93e21aa82d5202ebca0a50406df5dd348ea6842911f5c24edc48455153",
+  "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 614,
+      "eval_count": 51,
+      "total_duration": 1169140600
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 618,
+      "eval_count": 61,
+      "total_duration": 1328745100
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "hearing.audiometry.available",
+      "kind": "omission",
+      "quote": "The completed audiogram identifies unaided better-ear average hearing loss of 48 dB across 0.5, 1, 2 and 3 kHz, and the current clinical assessment records possible hearing loss; a hearing aid has been ordered rather than functionally assessed, the audiologist's advice about aided performance is not yet available, and the driver's belief that amplification will solve the difficulty is retained as an expectation rather than evidence that an aided standard has already been met.",
+      "explanation": "Independent source reading differs from the extraction. The audiogram is explicitly mentioned in the passage, indicating that a formal audiogram is available.",
+      "evidence": [
+        {
+          "start": 448,
+          "end": 928,
+          "quote": "The completed audiogram identifies unaided better-ear average hearing loss of 48 dB across 0.5, 1, 2 and 3 kHz, and the current clinical assessment records possible hearing loss; a hearing aid has been ordered rather than functionally assessed, the audiologist's advice about aided performance is not yet available, and the driver's belief that amplification will solve the difficulty is retained as an expectation rather than evidence that an aided standard has already been met.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "kind": "omission",
+      "quote": "The completed audiogram identifies unaided better-ear average hearing loss of 48 dB across 0.5, 1, 2 and 3 kHz, and the current clinical assessment records possible hearing loss; a hearing aid has been ordered rather than functionally assessed, the audiologist's advice about aided performance is not yet available, and the driver's belief that amplification will solve the difficulty is retained as an expectation rather than evidence that an aided standard has already been met.",
+      "explanation": "Independent source reading differs from the extraction. A screening impression of possible hearing_loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold.",
+      "evidence": [
+        {
+          "start": 448,
+          "end": 928,
+          "quote": "The completed audiogram identifies unaided better-ear average hearing loss of 48 dB across 0.5, 1, 2 and 3 kHz, and the current clinical assessment records possible hearing loss; a hearing aid has been ordered rather than functionally assessed, the audiologist's advice about aided performance is not yet available, and the driver's belief that amplification will solve the difficulty is retained as an expectation rather than evidence that an aided standard has already been met.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "hearing.audiometry.available",
+    "hearing.clinical_assessment"
+  ],
+  "checked_fields": [],
+  "manual_review_required": true,
+  "review_modules": [
+    "hearing"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "62b835e77d6b64c1b7ac7d1f84337eb84c2cda38b903ef19a0eaf08ffee1de2d",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "hearing.audiometry.available": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "hearing.clinical_assessment": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "hearing.audiometry.available"
+      ],
+      "status": "valid",
+      "request_sha256": "f3800b3e321040fa9db1c81a417c60b2f5bab2d6f26e402f31279e4978786a88",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "hearing.clinical_assessment"
+      ],
+      "status": "valid",
+      "request_sha256": "e140de2be15007d16bd59fc0ab875d708967aedee73c2c3ca807478bdde1ca13",
+      "response_schema_sha256": "c2050be29729ba8b9985ec2b67eb5ce72d1db509cc6b2a9a77317ef7aa9dfe44"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "hearing.audiometry.available",
+      "value": true,
+      "status": "documented",
+      "quote": "The completed audiogram identifies unaided better-ear average hearing loss of 48 dB across 0.5, 1, 2 and 3 kHz, and the current clinical assessment records possible hearing loss; a hearing aid has been ordered rather than functionally assessed, the audiologist's advice about aided performance is not yet available, and the driver's belief that amplification will solve the difficulty is retained as an expectation rather than evidence that an aided standard has already been met.",
+      "explanation": "The audiogram is explicitly mentioned in the passage, indicating that a formal audiogram is available."
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": "possible_hearing_loss",
+      "status": "documented",
+      "quote": "The completed audiogram identifies unaided better-ear average hearing loss of 48 dB across 0.5, 1, 2 and 3 kHz, and the current clinical assessment records possible hearing loss; a hearing aid has been ordered rather than functionally assessed, the audiologist's advice about aided performance is not yet available, and the driver's belief that amplification will solve the difficulty is retained as an expectation rather than evidence that an aided standard has already been met.",
+      "explanation": "A screening impression of possible hearing_loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold."
+    }
+  ],
+  "output_facts_sha256": "06cba38aec7be371924c1f6c7c3729756a598c40682b58dc209eb0333a8ca9e9",
+  "facts_quarantined": true
+}

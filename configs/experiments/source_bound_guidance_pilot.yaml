@@ -1,0 +1,32 @@
+# Known-error aggregation diagnostic; not a six-retriever or unseen-case comparison.
+retrieval_dir: outputs/experiments/source_literal_retrieval_v1
+output: outputs/experiments/source_bound_guidance_pilot_v1
+expected_retrieval_identity: 9bd58f0ffccf6b05d4148c830077a791a48ee277f64c4b0a6ff5e574bea1da93
+expected_corpus_sha256: f4c53ea86f9c6e87a7edfb953a9c5c3305d8a6255116072a30ddf43c001c40cc
+fact_snapshot: outputs/experiments/source_literal_facts_v1
+fact_snapshot_identity: b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568
+phase: known_error_development_set
+evidence_import: frozen_read_only
+case_ids: [SYN-EXT-002, SYN-EXT-006, SYN-EXT-010, SYN-EXT-017, SYN-EXT-018]
+models: [llama3:8b, qwen3.5:4b-q4_K_M]
+expected_model_digests:
+  llama3:8b: 365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1
+  qwen3.5:4b-q4_K_M: 91fa08b9fedfbbda924cd71febc5f6adbf31503cf7811df817dcf93bd56b08ff
+expected_runtime_version: 0.40.6
+embedding_model: nomic-embed-text:latest
+embedding_model_digest: 0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f
+embedding_dimensions: 768
+evidence_policies: [reference_evidence]
+protocols: [applicability_first]
+aggregation_ledger_mode: field_references
+repeats: 3
+endpoint: http://127.0.0.1:11434
+context_length: 8192
+output_tokens: 2048
+prompt_max_bytes: 24000
+request_max_bytes: 48000
+evidence_max_bytes: 9000
+top_k: 5
+sensitivity_k: 10
+max_validation_repairs: 1
+timeout_seconds: 180

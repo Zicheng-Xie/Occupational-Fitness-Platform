@@ -1,0 +1,61 @@
+# Prepared broader reference replay; not executed during the readiness audit.
+# Initial preparation command must include --retrieval-only.
+# The runner's execution mode is selected by CLI, not by this configuration.
+baseline_dir: outputs/experiments/judgment_comparison_v5
+output: outputs/experiments/passage_comparison_full_clean
+case_ids:
+  - SYN-EXT-001
+  - SYN-EXT-002
+  - SYN-EXT-003
+  - SYN-EXT-004
+  - SYN-EXT-005
+  - SYN-EXT-006
+  - SYN-EXT-007
+  - SYN-EXT-008
+  - SYN-EXT-009
+  - SYN-EXT-010
+  - SYN-EXT-011
+  - SYN-EXT-012
+  - SYN-EXT-013
+  - SYN-EXT-014
+  - SYN-EXT-015
+  - SYN-EXT-016
+  - SYN-EXT-017
+  - SYN-EXT-018
+  - SYN-EXT-019
+  - SYN-EXT-020
+  - SYN-M2-003
+  - SYN-M2-009
+  - SYN-M2-010
+  - VAL-MIX-01
+  - VAL-MIX-02
+  - VAL-MIX-03
+  - VAL-MIX-04
+  - VAL-MIX-05
+  - VAL-MIX-06
+  - VAL-MIX-07
+  - VAL-MIX-08
+  - VAL-MIX-09
+  - VAL-MIX-10
+models: [llama3:8b, qwen3.5:4b-q4_K_M]
+expected_model_digests:
+  llama3:8b: 365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1
+  qwen3.5:4b-q4_K_M: 91fa08b9fedfbbda924cd71febc5f6adbf31503cf7811df817dcf93bd56b08ff
+expected_runtime_version: 0.40.4
+embedding_model: nomic-embed-text:latest
+embedding_model_digest: 0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f
+embedding_dimensions: 768
+evidence_policies: [mixed_query, module_query, reference_evidence]
+protocols: [quote_contract, passage_selection]
+repeats: 1
+endpoint: http://127.0.0.1:11434
+context_length: 8192
+output_tokens: 2048
+prompt_max_bytes: 24000
+request_max_bytes: 48000
+evidence_max_bytes: 9000
+top_k: 5
+sensitivity_k: 10
+max_validation_repairs: 1
+timeout_seconds: 180
+corpus_override: outputs/experiments/corpus_quality_v1/corpus.json

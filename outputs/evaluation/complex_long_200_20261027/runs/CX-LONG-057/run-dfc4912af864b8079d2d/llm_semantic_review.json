@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "9de2e39a3cd9ca4520eb90b737b284dd2be9f6fc2331e9b0b21275afd6b6579d",
+  "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 548,
+      "eval_count": 46,
+      "total_duration": 1108682900
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 656,
+      "eval_count": 72,
+      "total_duration": 1526308500
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.present",
+      "kind": "omission",
+      "quote": "The signed current medication list confirms diabetes treated with glucose-lowering tablets other than insulin, and the initial diabetes specialist's information is available with an assessment of no recent severe hypoglycaemic event, retained early warning awareness, a regimen that minimises hypoglycaemia and no driving-relevant end-organ effects; the driver is not acutely unwell or metabolically unstable, while an older insulin prescription is explicitly marked discontinued and is not the current treatment.",
+      "explanation": "Independent source reading differs from the extraction. The patient has diabetes, which is documented in the clinical source.",
+      "evidence": [
+        {
+          "start": 442,
+          "end": 955,
+          "quote": "The signed current medication list confirms diabetes treated with glucose-lowering tablets other than insulin, and the initial diabetes specialist's information is available with an assessment of no recent severe hypoglycaemic event, retained early warning awareness, a regimen that minimises hypoglycaemia and no driving-relevant end-organ effects; the driver is not acutely unwell or metabolically unstable, while an older insulin prescription is explicitly marked discontinued and is not the current treatment.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The signed current medication list confirms diabetes treated with glucose-lowering tablets other than insulin, and the initial diabetes specialist's information is available with an assessment of no recent severe hypoglycaemic event, retained early warning awareness, a regimen that minimises hypoglycaemia and no driving-relevant end-organ effects; the driver is not acutely unwell or metabolically unstable, while an older insulin prescription is explicitly marked discontinued and is not the current treatment.",
+      "explanation": "Independent source reading differs from the extraction. The driver's diabetes is treated with glucose-lowering tablets other than insulin, as confirmed by the signed current medication list and the initial diabetes specialist's information.",
+      "evidence": [
+        {
+          "start": 442,
+          "end": 955,
+          "quote": "The signed current medication list confirms diabetes treated with glucose-lowering tablets other than insulin, and the initial diabetes specialist's information is available with an assessment of no recent severe hypoglycaemic event, retained early warning awareness, a regimen that minimises hypoglycaemia and no driving-relevant end-organ effects; the driver is not acutely unwell or metabolically unstable, while an older insulin prescription is explicitly marked discontinued and is not the current treatment.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.present",
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "b8ddcc8270310529c4aa3880af29838db1cef21dd71cbb83ba23ddba488955f7",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.present": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "94d0c4caea9dc66d45133c138b4aa321bd37b679a9d8072b9e54b7f450bec2e4",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "5d5e28da9a3c4b9a888b65e0b50931273735bfae82b8cfcc896523eacf7762da",
+      "response_schema_sha256": "2c49d6e3388209d3520ef1d0982c4a7748fd9c3eff7bc43bc1102e21ab5c797d"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The signed current medication list confirms diabetes treated with glucose-lowering tablets other than insulin, and the initial diabetes specialist's information is available with an assessment of no recent severe hypoglycaemic event, retained early warning awareness, a regimen that minimises hypoglycaemia and no driving-relevant end-organ effects; the driver is not acutely unwell or metabolically unstable, while an older insulin prescription is explicitly marked discontinued and is not the current treatment.",
+      "explanation": "The patient has diabetes, which is documented in the clinical source."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "glucose_lowering_agent_non_insulin",
+      "status": "documented",
+      "quote": "The signed current medication list confirms diabetes treated with glucose-lowering tablets other than insulin, and the initial diabetes specialist's information is available with an assessment of no recent severe hypoglycaemic event, retained early warning awareness, a regimen that minimises hypoglycaemia and no driving-relevant end-organ effects; the driver is not acutely unwell or metabolically unstable, while an older insulin prescription is explicitly marked discontinued and is not the current treatment.",
+      "explanation": "The driver's diabetes is treated with glucose-lowering tablets other than insulin, as confirmed by the signed current medication list and the initial diabetes specialist's information."
+    }
+  ],
+  "output_facts_sha256": "a69c78d289d9beca79c993abcd4ffb81c3365b6a4dde96727685387471c4bfd2",
+  "facts_quarantined": true
+}

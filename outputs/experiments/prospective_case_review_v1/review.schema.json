@@ -1,0 +1,284 @@
+{
+  "$defs": {
+    "Assessment": {
+      "additionalProperties": false,
+      "properties": {
+        "outcome": {
+          "anyOf": [
+            {
+              "enum": [
+                "meets_unconditional_standard",
+                "may_meet_conditional_standard",
+                "temporarily_unfit",
+                "does_not_meet_standard",
+                "insufficient_information"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outcome"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rationale"
+        },
+        "guideline_citations": {
+          "items": {
+            "$ref": "#/$defs/GuidelineCitation"
+          },
+          "title": "Guideline Citations",
+          "type": "array"
+        }
+      },
+      "title": "Assessment",
+      "type": "object"
+    },
+    "CaseAnnotation": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "title": "Case Id",
+          "type": "string"
+        },
+        "source_note_sha256": {
+          "title": "Source Note Sha256",
+          "type": "string"
+        },
+        "documented_facts": {
+          "items": {
+            "$ref": "#/$defs/DocumentedFact"
+          },
+          "title": "Documented Facts",
+          "type": "array"
+        },
+        "module_assessments": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Assessment"
+          },
+          "title": "Module Assessments",
+          "type": "object"
+        },
+        "overall": {
+          "$ref": "#/$defs/Assessment"
+        }
+      },
+      "required": [
+        "case_id",
+        "source_note_sha256",
+        "module_assessments",
+        "overall"
+      ],
+      "title": "CaseAnnotation",
+      "type": "object"
+    },
+    "DocumentedFact": {
+      "additionalProperties": false,
+      "properties": {
+        "module": {
+          "enum": [
+            "hypertension",
+            "vision",
+            "hearing",
+            "blackout",
+            "diabetes"
+          ],
+          "title": "Module",
+          "type": "string"
+        },
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        },
+        "note_quote": {
+          "title": "Note Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "module",
+        "field",
+        "value",
+        "note_quote"
+      ],
+      "title": "DocumentedFact",
+      "type": "object"
+    },
+    "GuidelineCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "pdf_page": {
+          "minimum": 1,
+          "title": "Pdf Page",
+          "type": "integer"
+        },
+        "section": {
+          "title": "Section",
+          "type": "string"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "licence_scope": {
+          "enum": [
+            "commercial",
+            "shared"
+          ],
+          "title": "Licence Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pdf_page",
+        "section",
+        "quote",
+        "licence_scope"
+      ],
+      "title": "GuidelineCitation",
+      "type": "object"
+    },
+    "Reviewer": {
+      "additionalProperties": false,
+      "properties": {
+        "reviewer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewer Id"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "enum": [
+                "clinician",
+                "domain_reviewer"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "completed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "independent_of_case_authoring": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Independent Of Case Authoring"
+        },
+        "independent_of_retrieval_development": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Independent Of Retrieval Development"
+        },
+        "did_not_view_model_outputs": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Did Not View Model Outputs"
+        },
+        "did_not_view_other_reviewer_answers": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Did Not View Other Reviewer Answers"
+        }
+      },
+      "title": "Reviewer",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "packet_identity": {
+      "title": "Packet Identity",
+      "type": "string"
+    },
+    "status": {
+      "default": "draft",
+      "enum": [
+        "draft",
+        "submitted"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "reviewer": {
+      "$ref": "#/$defs/Reviewer"
+    },
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/CaseAnnotation"
+      },
+      "title": "Cases",
+      "type": "array"
+    }
+  },
+  "required": [
+    "packet_identity",
+    "cases"
+  ],
+  "title": "ReviewSubmission",
+  "type": "object"
+}

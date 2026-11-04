@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "a609dcfd2a953bd687f69df7756a1459721c36c55966051ade43895d49dd9b80",
+  "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 597,
+      "eval_count": 78,
+      "total_duration": 1589144900
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 601,
+      "eval_count": 61,
+      "total_duration": 1372016100
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "hearing.audiometry.available",
+      "kind": "omission",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. The question is about the availability of a formal audiogram, not the quality or interpretation of the audiogram. The answer is based on the explicit statement in the source passage, not the uncertainty or ambiguity of the audiogram itself.",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 64,
+          "quote": "Synthetic nurse note for software testing. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "kind": "omission",
+      "quote": "An unsigned worksheet appears to show an unaided better-ear average of 40 dB, but its patient identifier and date are missing and the driver remembers wearing both aids for the test; the current nurse notes possible hearing loss after missed instructions, the original audiology report has been requested, and neither the worksheet nor the recollection establishes a verified unaided result or the complete set of averaging frequencies.",
+      "explanation": "Independent source reading differs from the extraction. A screening impression of possible hearing_loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold.",
+      "evidence": [
+        {
+          "start": 436,
+          "end": 872,
+          "quote": "An unsigned worksheet appears to show an unaided better-ear average of 40 dB, but its patient identifier and date are missing and the driver remembers wearing both aids for the test; the current nurse notes possible hearing loss after missed instructions, the original audiology report has been requested, and neither the worksheet nor the recollection establishes a verified unaided result or the complete set of averaging frequencies.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "hearing.audiometry.available",
+    "hearing.clinical_assessment"
+  ],
+  "checked_fields": [],
+  "manual_review_required": true,
+  "review_modules": [
+    "hearing"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "d338d6837328241f7960b01ed19723d716ca53d67cc4d735e21f2bdcf3394a87",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "hearing.audiometry.available": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "hearing.clinical_assessment": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "hearing.audiometry.available"
+      ],
+      "status": "valid",
+      "request_sha256": "9814a9515c9fa5c7fadec77792abcf3527a8e04751cf754f4c5ce39a18e03e60",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "hearing.clinical_assessment"
+      ],
+      "status": "valid",
+      "request_sha256": "857240d2796a3580a77f770d006f7a6be617461ee0f10c5ff6da683e4999a881",
+      "response_schema_sha256": "c2050be29729ba8b9985ec2b67eb5ce72d1db509cc6b2a9a77317ef7aa9dfe44"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "hearing.audiometry.available",
+      "value": true,
+      "status": "documented",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "The question is about the availability of a formal audiogram, not the quality or interpretation of the audiogram. The answer is based on the explicit statement in the source passage, not the uncertainty or ambiguity of the audiogram itself."
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": "possible_hearing_loss",
+      "status": "documented",
+      "quote": "An unsigned worksheet appears to show an unaided better-ear average of 40 dB, but its patient identifier and date are missing and the driver remembers wearing both aids for the test; the current nurse notes possible hearing loss after missed instructions, the original audiology report has been requested, and neither the worksheet nor the recollection establishes a verified unaided result or the complete set of averaging frequencies.",
+      "explanation": "A screening impression of possible hearing_loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold."
+    }
+  ],
+  "output_facts_sha256": "eeca597f74c78a6c943f3560490c7edaec3c1d2d4a035ab0c07a1cb2b376abd2",
+  "facts_quarantined": true
+}

@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.2.0",
+  "result_id": "RR-4f977d8c26d0a8652b4f",
+  "case_id": "CX-LONG-123",
+  "red_flag_result_sha256": "7c93055c87c18d37b50468293ad8c96357d421d265a04e66d1107a37de7ddc74",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "guideline_version": "AP-G56-22",
+  "route": "missing_information",
+  "rag_requests": [
+    {
+      "request_id": "RAG-61d8bf27468a48e0",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "HTN-COM-UNCONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension",
+      "licence_context": "commercial",
+      "rag_query_key": "hypertension_commercial_unconditional",
+      "ambiguity_reasons": [
+        "cross_chapter_condition"
+      ],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-53653b1951cb8c11",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HTN-COM-CONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-002"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension_conditional",
+      "licence_context": "commercial",
+      "rag_query_key": "hypertension_commercial_conditional",
+      "ambiguity_reasons": [
+        "missing_fact"
+      ],
+      "fact_context": {
+        "cardiovascular.hypertension.antihypertensive_therapy": "unknown",
+        "cardiovascular.hypertension.controlled_for_4_weeks": "unknown",
+        "cardiovascular.hypertension.driving_impairing_medication_side_effects": "unknown",
+        "cardiovascular.hypertension.initial_specialist_information_available": "unknown",
+        "cardiovascular.hypertension.target_organ_damage_relevant_to_driving": "unknown"
+      }
+    }
+  ],
+  "indicator_context": {
+    "RAG-61d8bf27468a48e0": {
+      "cardiovascular.blood_pressure.persistent_diastolic": {
+        "value": 106,
+        "status": "present",
+        "unit": "mmHg",
+        "evidence": [
+          {
+            "start": 492,
+            "end": 518,
+            "quote": "persistent BP 182/106 mmHg",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "regex",
+        "derived_from": []
+      },
+      "cardiovascular.blood_pressure.persistent_systolic": {
+        "value": 182,
+        "status": "present",
+        "unit": "mmHg",
+        "evidence": [
+          {
+            "start": 492,
+            "end": 518,
+            "quote": "persistent BP 182/106 mmHg",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "regex",
+        "derived_from": []
+      }
+    },
+    "RAG-53653b1951cb8c11": {
+      "cardiovascular.hypertension.antihypertensive_therapy": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "cardiovascular.hypertension.controlled_for_4_weeks": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "cardiovascular.hypertension.driving_impairing_medication_side_effects": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "cardiovascular.hypertension.initial_specialist_information_available": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "cardiovascular.hypertension.target_organ_damage_relevant_to_driving": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    }
+  },
+  "narrative_context": {
+    "RAG-61d8bf27468a48e0": [
+      {
+        "start": 448,
+        "end": 901,
+        "quote": "The current doctor-reviewed series confirms persistent BP 182/106 mmHg while the driver is taking antihypertensive therapy, but the medication review also documents dizziness that impairs safe vehicle operation after the morning dose; although the driver feels better when sitting still in the interview, the nurse has no evidence that the side effect has resolved, and a proposed future dose change is not recorded as an accomplished treatment outcome.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-53653b1951cb8c11": [
+      {
+        "start": 448,
+        "end": 901,
+        "quote": "The current doctor-reviewed series confirms persistent BP 182/106 mmHg while the driver is taking antihypertensive therapy, but the medication review also documents dizziness that impairs safe vehicle operation after the morning dose; although the driver feels better when sitting still in the interview, the nurse has no evidence that the side effect has resolved, and a proposed future dose change is not recorded as an accomplished treatment outcome.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ]
+  },
+  "narrative_source_text_sha256": "f009820becd336e8a7a474ce9ac12edce9bf5ace9b3e01c513ed3822555388a0"
+}

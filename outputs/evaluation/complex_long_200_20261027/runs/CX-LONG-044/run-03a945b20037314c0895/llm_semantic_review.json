@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "aef2459fc1f6dcefe8d07c8172378a0c3f555768a1532507f28fcb9aa43c5609",
+  "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 532,
+      "eval_count": 74,
+      "total_duration": 1403301700
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 640,
+      "eval_count": 70,
+      "total_duration": 1411516900
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The specialist's current referral identifies gestational diabetes during pregnancy and confirms that insulin has recently been introduced, rather than documenting pre-existing chronic diabetes; the driver reports variable appetite on early starts but no confirmed severe hypoglycaemic event is described, and the nurse distinguishes the self-limiting pregnancy-related condition from chronic insulin-treated diabetes while requesting advice about current symptoms and short-term driving fitness.",
+      "explanation": "Independent source reading differs from the extraction. The driver's current diabetes treatment is explicitly stated as insulin, which maps to insulin in the field map. There is no mention of oral glucose-lowering tablets or unspecified injections.",
+      "evidence": [
+        {
+          "start": 448,
+          "end": 943,
+          "quote": "The specialist's current referral identifies gestational diabetes during pregnancy and confirms that insulin has recently been introduced, rather than documenting pre-existing chronic diabetes; the driver reports variable appetite on early starts but no confirmed severe hypoglycaemic event is described, and the nurse distinguishes the self-limiting pregnancy-related condition from chronic insulin-treated diabetes while requesting advice about current symptoms and short-term driving fitness.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "10ceddb6c4cab15292f38369030a6fac86cac9d509e61592cb2b9cc5764cff5f",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "b5c9e6a4f1478fe4d81e660492060b670f96fe46d73a574ceed4d37bc5d75007",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "731f6989d94962e97e7f5b99d9db61cf1710d60750c226aecf9fd706d6f2e8f9",
+      "response_schema_sha256": "2c49d6e3388209d3520ef1d0982c4a7748fd9c3eff7bc43bc1102e21ab5c797d"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.present",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The patient fact 'diabetes.present' is not explicitly mentioned in the provided source passages. The passages discuss the patient's symptoms, medical history, and current condition, but do not provide a direct answer to this question."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "insulin",
+      "status": "documented",
+      "quote": "The specialist's current referral identifies gestational diabetes during pregnancy and confirms that insulin has recently been introduced, rather than documenting pre-existing chronic diabetes; the driver reports variable appetite on early starts but no confirmed severe hypoglycaemic event is described, and the nurse distinguishes the self-limiting pregnancy-related condition from chronic insulin-treated diabetes while requesting advice about current symptoms and short-term driving fitness.",
+      "explanation": "The driver's current diabetes treatment is explicitly stated as insulin, which maps to insulin in the field map. There is no mention of oral glucose-lowering tablets or unspecified injections."
+    }
+  ],
+  "output_facts_sha256": "81a1a61149f46608b568469dd065b2024bff848c5ec272ba51a3f3261a2075bd",
+  "facts_quarantined": true
+}

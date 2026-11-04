@@ -1,0 +1,1027 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "SYN-EXT-016",
+    "evidence_policy": "reference_evidence",
+    "protocol": "applicability_first",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.treatment_category",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "diabetes.gestational",
+                          "diabetes.hypoglycaemia_awareness",
+                          "diabetes.regimen_minimises_hypoglycaemia",
+                          "diabetes.glucose_monitoring_records_months",
+                          "diabetes.specialist_information_available",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.treatment_category",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "diabetes.gestational",
+                          "diabetes.hypoglycaemia_awareness",
+                          "diabetes.regimen_minimises_hypoglycaemia",
+                          "diabetes.glucose_monitoring_records_months",
+                          "diabetes.specialist_information_available",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"diabetes\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nGestational diabetes treated with insulin; chronic insulin licensing row must not be applied.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\nblackout.occurred = false\\r\\ndiabetes.present = true\\r\\ndiabetes.gestational = true\\r\\ndiabetes.acutely_unwell = false\\r\\ndiabetes.metabolically_unstable = false\\r\\ndiabetes.severe_hypoglycaemic_event.occurred = false\\r\\ndiabetes.recent_severe_hypoglycaemic_event = false\\r\\ndiabetes.hypoglycaemia_awareness = true\\r\\ndiabetes.regimen_minimises_hypoglycaemia = true\\r\\ndiabetes.driving_relevant_end_organ_effects = false\\r\\ndiabetes.treatment_category = \\\"insulin\\\"\\r\\ndiabetes.glucose_monitoring_records_months = 3\\r\\ndiabetes.specialist_information_available = true\\r\\n\", \"verified_patient_facts\": {\"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"diabetes treated with insulin\", \"Gestational diabetes treated with insulin; \", \"diabetes.treatment_category = \\\"insulin\\\"\"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": false, \"patient_quotes\": [\"blackout.occurred = false\"]}, \"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"diabetes.present = true\"]}, \"diabetes.gestational\": {\"value\": true, \"patient_quotes\": [\"diabetes.gestational = true\"]}, \"diabetes.hypoglycaemia_awareness\": {\"value\": true, \"patient_quotes\": [\"diabetes.hypoglycaemia_awareness = true\"]}, \"diabetes.regimen_minimises_hypoglycaemia\": {\"value\": true, \"patient_quotes\": [\"diabetes.regimen_minimises_hypoglycaemia = true\"]}, \"diabetes.glucose_monitoring_records_months\": {\"value\": 3, \"patient_quotes\": [\"diabetes.glucose_monitoring_records_months = 3\"]}, \"diabetes.specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"diabetes.specialist_information_available = true\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-DM-COM-010\", \"section\": \"3.2.4\", \"pdf_page\": 107, \"printed_page\": 96, \"source_text\": \"3.2.4. Gestational diabetes mellitus\\nThe standards in this chapter apply to diabetes \\nmellitus as a chronic condition. The self-limiting \\ncondition known as gestational diabetes \\nmellitus does not affect licensing. However, \\nconsideration should be given to short-term \\nfitness to drive in women with gestational \\ndiabetes mellitus treated with insulin, although \\nsevere hypoglycaemia in this condition is rare. \\nAffected women should be counselled to \\nrecognise symptoms and to restrict driving when \\nsymptoms occur.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\", \"text_sha256\": \"8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f\", \"char_start\": 0, \"char_end\": 517, \"applicability_slot\": \"P1\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "39d0e470171f126ce17392352456090519f444962e1aa73ec24ce5c4b5fb4a94",
+          "request_bytes": 10999,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:00:37.1381353Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [\"diabetes.gestational\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"gestational_diabetes_present\", \"status\": \"met\", \"fact_fields\": [\"diabetes.gestational\"]}, {\"requirement\": \"insulin_treatment\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a conditional restriction for women with gestational diabetes treated with insulin. The patient has gestational diabetes (verified), but the specific requirement regarding insulin treatment is not explicitly confirmed in the verified facts, though the nurse note suggests it.\"}}}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 4358948900,
+            "load_duration": 2752800,
+            "prompt_eval_count": 1817,
+            "prompt_eval_cached_count": 1813,
+            "prompt_eval_duration": 109322000,
+            "eval_count": 188,
+            "eval_duration": 4086676000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1817,
+            "eval_count": 188,
+            "prompt_eval_cached_count": 1813
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "gestational_diabetes_present",
+                    "status": "met",
+                    "fact_fields": [
+                      "diabetes.gestational"
+                    ]
+                  },
+                  {
+                    "requirement": "insulin_treatment",
+                    "status": "unknown",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The passage establishes a conditional restriction for women with gestational diabetes treated with insulin. The patient has gestational diabetes (verified), but the specific requirement regarding insulin treatment is not explicitly confirmed in the verified facts, though the nurse note suggests it."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-e888644b6aa4ff004889caaf",
+              "source_id": "AFTD2022-DM-COM-010",
+              "pdf_page": 107,
+              "printed_page": 96,
+              "section": "3.2.4",
+              "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 517,
+                  "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage establishes a conditional restriction for women with gestational diabetes treated with insulin. The patient has gestational diabetes (verified), but the specific requirement regarding insulin treatment is not explicitly confirmed in the verified facts, though the nurse note suggests it.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [],
+          "seconds": 4.388009400005103
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.gestational"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "gestational_diabetes_present",
+                "status": "met",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ]
+              },
+              {
+                "requirement": "insulin_treatment",
+                "status": "unknown",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The passage establishes a conditional restriction for women with gestational diabetes treated with insulin. The patient has gestational diabetes (verified), but the specific requirement regarding insulin treatment is not explicitly confirmed in the verified facts, though the nurse note suggests it."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-e888644b6aa4ff004889caaf",
+          "source_id": "AFTD2022-DM-COM-010",
+          "pdf_page": 107,
+          "printed_page": 96,
+          "section": "3.2.4",
+          "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 517,
+              "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.gestational"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage establishes a conditional restriction for women with gestational diabetes treated with insulin. The patient has gestational diabetes (verified), but the specific requirement regarding insulin treatment is not explicitly confirmed in the verified facts, though the nurse note suggests it.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [],
+      "seconds": 4.388011699993513
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-e888644b6aa4ff004889caaf"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.treatment_category",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "diabetes.gestational",
+                          "diabetes.hypoglycaemia_awareness",
+                          "diabetes.regimen_minimises_hypoglycaemia",
+                          "diabetes.glucose_monitoring_records_months",
+                          "diabetes.specialist_information_available",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"diabetes\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nGestational diabetes treated with insulin; chronic insulin licensing row must not be applied.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\nblackout.occurred = false\\r\\ndiabetes.present = true\\r\\ndiabetes.gestational = true\\r\\ndiabetes.acutely_unwell = false\\r\\ndiabetes.metabolically_unstable = false\\r\\ndiabetes.severe_hypoglycaemic_event.occurred = false\\r\\ndiabetes.recent_severe_hypoglycaemic_event = false\\r\\ndiabetes.hypoglycaemia_awareness = true\\r\\ndiabetes.regimen_minimises_hypoglycaemia = true\\r\\ndiabetes.driving_relevant_end_organ_effects = false\\r\\ndiabetes.treatment_category = \\\"insulin\\\"\\r\\ndiabetes.glucose_monitoring_records_months = 3\\r\\ndiabetes.specialist_information_available = true\\r\\n\", \"verified_patient_facts\": {\"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"diabetes treated with insulin\", \"Gestational diabetes treated with insulin; \", \"diabetes.treatment_category = \\\"insulin\\\"\"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": false, \"patient_quotes\": [\"blackout.occurred = false\"]}, \"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"diabetes.present = true\"]}, \"diabetes.gestational\": {\"value\": true, \"patient_quotes\": [\"diabetes.gestational = true\"]}, \"diabetes.hypoglycaemia_awareness\": {\"value\": true, \"patient_quotes\": [\"diabetes.hypoglycaemia_awareness = true\"]}, \"diabetes.regimen_minimises_hypoglycaemia\": {\"value\": true, \"patient_quotes\": [\"diabetes.regimen_minimises_hypoglycaemia = true\"]}, \"diabetes.glucose_monitoring_records_months\": {\"value\": 3, \"patient_quotes\": [\"diabetes.glucose_monitoring_records_months = 3\"]}, \"diabetes.specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"diabetes.specialist_information_available = true\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-DM-COM-010\", \"section\": \"3.2.4\", \"pdf_page\": 107, \"printed_page\": 96, \"source_text\": \"3.2.4. Gestational diabetes mellitus\\nThe standards in this chapter apply to diabetes \\nmellitus as a chronic condition. The self-limiting \\ncondition known as gestational diabetes \\nmellitus does not affect licensing. However, \\nconsideration should be given to short-term \\nfitness to drive in women with gestational \\ndiabetes mellitus treated with insulin, although \\nsevere hypoglycaemia in this condition is rare. \\nAffected women should be counselled to \\nrecognise symptoms and to restrict driving when \\nsymptoms occur.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\", \"text_sha256\": \"8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f\", \"char_start\": 0, \"char_end\": 517}], \"proposed_applicability_ledger\": [{\"module\": \"diabetes\", \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\", \"fact_fields\": [\"diabetes.gestational\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"gestational_diabetes_present\", \"status\": \"met\", \"fact_fields\": [\"diabetes.gestational\"]}, {\"requirement\": \"insulin_treatment\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a conditional restriction for women with gestational diabetes treated with insulin. The patient has gestational diabetes (verified), but the specific requirement regarding insulin treatment is not explicitly confirmed in the verified facts, though the nurse note suggests it.\", \"source_id\": \"AFTD2022-DM-COM-010\", \"referenced_patient_values\": {\"diabetes.gestational\": {\"value\": true, \"patient_quotes\": [\"diabetes.gestational = true\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"2e8e916ff78ffc0259b81efa3e15253c7fdcbc99968872376f85233a860f61f8\"}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "2140fcea1ac87dc2cdbc704053946daa075df517e5bc4e777db5ac4ad900e5ab",
+          "request_bytes": 11284,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:00:47.0800902Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"may_meet_conditional_standard\",\n  \"explanation\": \"The patient has gestational diabetes mellitus (GDM) treated with insulin. Guideline AFTD2022-DM-COM-010 states that while GDM itself does not affect licensing, consideration should be given to short-term fitness for women with GDM treated with insulin due to the risk of severe hypoglycaemia. The patient meets the prerequisite of having gestational diabetes and is confirmed to be on an insulin regimen (verified fact: `diabetes.treatment_category = \",\"criterion_checks\": [\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\",\n      \"fact_fields\": [\"diabetes.gestational\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"conditional_permission\",\n      \"conclusion\": \"The patient has gestational diabetes, which triggers the conditional assessment pathway per guideline AFTD2022-DM-COM-010 section 3.2.4.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\",\n      \"fact_fields\": [\"diabetes.treatment_category\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"conditional_permission\",\n      \"conclusion\": \"The patient is treated with insulin, which is the specific condition under AFTD2022-DM-COM-010 requiring consideration of short-term fitness.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\",\n      \"fact_fields\": [\"diabetes.hypoglycaemia_awareness\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"conditional_permission\",\n      \"conclusion\": \"The patient has hypoglycaemia awareness, a prerequisite for safe driving in the context of insulin-treated diabetes.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\",\n      \"fact_fields\": [\"diabetes.regimen_minimises_hypoglycaemia\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"conditional_permission\",\n      \"conclusion\": \"The patient's regimen minimizes hypoglycaemia, supporting the conditional standard.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\",\n      \"fact_fields\": [\"diabetes.glucose_monitoring_records_months\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"conditional_permission\",\n      \"conclusion\": \"The patient has 3 months of glucose monitoring records, satisfying the requirement for documented management history.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 9915052000,
+            "load_duration": 2826400,
+            "prompt_eval_count": 2169,
+            "prompt_eval_cached_count": 2165,
+            "prompt_eval_duration": 108040000,
+            "eval_count": 732,
+            "eval_duration": 9645533000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2169,
+            "eval_count": 732,
+            "prompt_eval_cached_count": 2165
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "may_meet_conditional_standard",
+            "explanation": "The patient has gestational diabetes mellitus (GDM) treated with insulin. Guideline AFTD2022-DM-COM-010 states that while GDM itself does not affect licensing, consideration should be given to short-term fitness for women with GDM treated with insulin due to the risk of severe hypoglycaemia. The patient meets the prerequisite of having gestational diabetes and is confirmed to be on an insulin regimen (verified fact: `diabetes.treatment_category = ",
+            "source_ids": [
+              "AFTD2022-DM-COM-010"
+            ],
+            "fact_fields": [
+              "diabetes.treatment_category",
+              "diabetes.gestational",
+              "diabetes.hypoglycaemia_awareness",
+              "diabetes.regimen_minimises_hypoglycaemia",
+              "diabetes.glucose_monitoring_records_months"
+            ],
+            "criterion_checks": [
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has gestational diabetes, which triggers the conditional assessment pathway per guideline AFTD2022-DM-COM-010 section 3.2.4.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient is treated with insulin, which is the specific condition under AFTD2022-DM-COM-010 requiring consideration of short-term fitness.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.hypoglycaemia_awareness"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has hypoglycaemia awareness, a prerequisite for safe driving in the context of insulin-treated diabetes.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.regimen_minimises_hypoglycaemia"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient's regimen minimizes hypoglycaemia, supporting the conditional standard.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.glucose_monitoring_records_months"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has 3 months of glucose monitoring records, satisfying the requirement for documented management history.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-e888644b6aa4ff004889caaf",
+              "source_id": "AFTD2022-DM-COM-010",
+              "pdf_page": 107,
+              "printed_page": 96,
+              "section": "3.2.4",
+              "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 517,
+                  "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has gestational diabetes, which triggers the conditional assessment pathway per guideline AFTD2022-DM-COM-010 section 3.2.4.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-e888644b6aa4ff004889caaf",
+              "source_id": "AFTD2022-DM-COM-010",
+              "pdf_page": 107,
+              "printed_page": 96,
+              "section": "3.2.4",
+              "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 517,
+                  "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient is treated with insulin, which is the specific condition under AFTD2022-DM-COM-010 requiring consideration of short-term fitness.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-e888644b6aa4ff004889caaf",
+              "source_id": "AFTD2022-DM-COM-010",
+              "pdf_page": 107,
+              "printed_page": 96,
+              "section": "3.2.4",
+              "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 517,
+                  "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.hypoglycaemia_awareness"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has hypoglycaemia awareness, a prerequisite for safe driving in the context of insulin-treated diabetes.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-e888644b6aa4ff004889caaf",
+              "source_id": "AFTD2022-DM-COM-010",
+              "pdf_page": 107,
+              "printed_page": 96,
+              "section": "3.2.4",
+              "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 517,
+                  "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.regimen_minimises_hypoglycaemia"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient's regimen minimizes hypoglycaemia, supporting the conditional standard.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-e888644b6aa4ff004889caaf",
+              "source_id": "AFTD2022-DM-COM-010",
+              "pdf_page": 107,
+              "printed_page": 96,
+              "section": "3.2.4",
+              "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 517,
+                  "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.glucose_monitoring_records_months"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has 3 months of glucose monitoring records, satisfying the requirement for documented management history.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [],
+          "seconds": 9.940007900004275
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "explanation": "The patient has gestational diabetes mellitus (GDM) treated with insulin. Guideline AFTD2022-DM-COM-010 states that while GDM itself does not affect licensing, consideration should be given to short-term fitness for women with GDM treated with insulin due to the risk of severe hypoglycaemia. The patient meets the prerequisite of having gestational diabetes and is confirmed to be on an insulin regimen (verified fact: `diabetes.treatment_category = ",
+        "source_ids": [
+          "AFTD2022-DM-COM-010"
+        ],
+        "fact_fields": [
+          "diabetes.treatment_category",
+          "diabetes.gestational",
+          "diabetes.hypoglycaemia_awareness",
+          "diabetes.regimen_minimises_hypoglycaemia",
+          "diabetes.glucose_monitoring_records_months"
+        ],
+        "criterion_checks": [
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.gestational"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has gestational diabetes, which triggers the conditional assessment pathway per guideline AFTD2022-DM-COM-010 section 3.2.4.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient is treated with insulin, which is the specific condition under AFTD2022-DM-COM-010 requiring consideration of short-term fitness.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.hypoglycaemia_awareness"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has hypoglycaemia awareness, a prerequisite for safe driving in the context of insulin-treated diabetes.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.regimen_minimises_hypoglycaemia"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient's regimen minimizes hypoglycaemia, supporting the conditional standard.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.glucose_monitoring_records_months"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has 3 months of glucose monitoring records, satisfying the requirement for documented management history.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-e888644b6aa4ff004889caaf",
+          "source_id": "AFTD2022-DM-COM-010",
+          "pdf_page": 107,
+          "printed_page": 96,
+          "section": "3.2.4",
+          "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 517,
+              "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.gestational"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has gestational diabetes, which triggers the conditional assessment pathway per guideline AFTD2022-DM-COM-010 section 3.2.4.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-e888644b6aa4ff004889caaf",
+          "source_id": "AFTD2022-DM-COM-010",
+          "pdf_page": 107,
+          "printed_page": 96,
+          "section": "3.2.4",
+          "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 517,
+              "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient is treated with insulin, which is the specific condition under AFTD2022-DM-COM-010 requiring consideration of short-term fitness.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-e888644b6aa4ff004889caaf",
+          "source_id": "AFTD2022-DM-COM-010",
+          "pdf_page": 107,
+          "printed_page": 96,
+          "section": "3.2.4",
+          "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 517,
+              "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.hypoglycaemia_awareness"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has hypoglycaemia awareness, a prerequisite for safe driving in the context of insulin-treated diabetes.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-e888644b6aa4ff004889caaf",
+          "source_id": "AFTD2022-DM-COM-010",
+          "pdf_page": 107,
+          "printed_page": 96,
+          "section": "3.2.4",
+          "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 517,
+              "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.regimen_minimises_hypoglycaemia"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient's regimen minimizes hypoglycaemia, supporting the conditional standard.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-e888644b6aa4ff004889caaf",
+          "source_id": "AFTD2022-DM-COM-010",
+          "pdf_page": 107,
+          "printed_page": 96,
+          "section": "3.2.4",
+          "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 517,
+              "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.glucose_monitoring_records_months"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has 3 months of glucose monitoring records, satisfying the requirement for documented management history.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [],
+      "seconds": 9.94000970000343
+    }
+  },
+  "support_review": "pending_independent_review"
+}

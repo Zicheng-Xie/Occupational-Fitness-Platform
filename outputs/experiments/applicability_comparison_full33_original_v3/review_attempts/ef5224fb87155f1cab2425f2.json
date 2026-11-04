@@ -1,0 +1,1516 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "SYN-M2-009",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 0
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.observed_systolic",
+                          "cardiovascular.blood_pressure.observed_diastolic",
+                          "cardiovascular.chest_pain",
+                          "vision.normal_statement",
+                          "hearing.clinical_assessment",
+                          "hearing.hearing_aid_used",
+                          "hearing.audiometry.available",
+                          "hearing.unaided_better_ear_average_db"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.observed_systolic",
+                          "cardiovascular.blood_pressure.observed_diastolic",
+                          "cardiovascular.chest_pain",
+                          "vision.normal_statement",
+                          "hearing.clinical_assessment",
+                          "hearing.hearing_aid_used",
+                          "hearing.audiometry.available",
+                          "hearing.unaided_better_ear_average_db"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hearing\"], \"nurse_note\": \"Commercial driver medical. 52-year-old male freight driver. BP 130/82 mmHg; HR 70 bpm. Nil cardiac symptoms. Vision meets commercial driving standards without correction. Bilateral hearing loss; uses hearing aids. Audiometry completed, with unaided better ear average 45 dB. No audiologist report is available.\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.observed_systolic\": {\"value\": 130, \"patient_quotes\": [\"BP 130/82 mmHg\"]}, \"cardiovascular.blood_pressure.observed_diastolic\": {\"value\": 82, \"patient_quotes\": [\"BP 130/82 mmHg\"]}, \"cardiovascular.chest_pain\": {\"value\": false, \"patient_quotes\": [\"Nil cardiac symptoms\"]}, \"vision.normal_statement\": {\"value\": true, \"patient_quotes\": [\"Vision meets commercial driving standards without correction\"]}, \"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"Bilateral hearing loss\"]}, \"hearing.hearing_aid_used\": {\"value\": true, \"patient_quotes\": [\"uses hearing aids\", \"uses hearing aids\"]}, \"hearing.audiometry.available\": {\"value\": true, \"patient_quotes\": [\"Audiometry completed\"]}, \"hearing.unaided_better_ear_average_db\": {\"value\": 45.0, \"patient_quotes\": [\"unaided better ear average 45 dB\", \"unaided better ear average 45 dB\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger vehicles \\nor requiring a dangerous goods driver licence – \\nrefer to definition in Table 3)\\nCompliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\\nA person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account the nature of the driving task \\nand information provided by an ENT specialist or \\naudiologist**, as to whether:\\n•\\t the standard is able to be met with a hearing \\naid***.\\nIf the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"text_sha256\": \"6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7\", \"char_start\": 0, \"char_end\": 1620, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-HEAR-COM-002\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"A person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\", \"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"text_sha256\": \"78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a\", \"char_start\": 0, \"char_end\": 176, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-HEAR-COM-001\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Compliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\", \"module\": \"hearing\", \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\", \"text_sha256\": \"658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb\", \"char_start\": 0, \"char_end\": 186, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-EXP-e3e1cd7604e64e7e\", \"section\": \"4.2.1\", \"pdf_page\": 117, \"printed_page\": 106, \"source_text\": \"•\\t\\nIf the standard is not able to be met with \\na hearing aid, this does not disqualify the \\nperson from driving. They should be offered \\nindividualised assessment to determine their \\neligibility for a conditional licence. This may \\ncomprise assessment by an ENT specialist \\nor audiologist* including consideration of:\\n\\t\\n−\\nthe person’s medical history – for \\nexample, childhood deafness may have \\nled to good adaptation\\n\\t\\n−\\nthe person’s driving record before and \\nsince the hearing loss \\n\\t\\n−\\nthe nature of the driving task – for \\nexample, the type of vehicle (e.g. truck, \\nbus), roads and distances to be travelled\\n\\t\\n−\\nthe ergonomics of the driving cab – for \\nexample, assistive devices such as \\nmirrors and a GPS \\n\\t\\n−\\nconcomitant medical conditions such as \\nvision impairment or cognitive impairment \\n\\t\\n−\\npractical driver assessment if required \\n(refer to Part A section 2.3.1. Practical \\ndriver assessments). The report may \\nadvise on assistive technologies as a \\nlicence condition. \\nThe driver licensing authority may consider a \\nconditional licence based on the information \\nreceived. Periodic review may include medical \\nreview and/or a practical driver assessment at \\nthe discretion of the driver licensing authority. \\nThe health professional should advise on the \\nfrequency of review as determined by the \\nnatural history of the condition. Stable conditions \\nmay not require periodic review.\\nIn some cases, noise amplification from wearing \\nhearing aids may lead to driver distraction \\nand may warrant individualised assessment as \\nabove to determine fitness to drive without the \\nhearing aid.\", \"module\": \"hearing\", \"passage_id\": \"PASS-64d93951ea0cfe724a5daf99\", \"text_sha256\": \"28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb\", \"char_start\": 0, \"char_end\": 1599, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-HEAR-COM-004\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"If the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-73c4980f4ac406388d8ae40e\", \"text_sha256\": \"2dc9b07eb871ca8d70fd21cc22b6c624418fe6268ac1684b14853dc91cbf2f18\", \"char_start\": 0, \"char_end\": 804, \"applicability_slot\": \"P5\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "f9925a8f59a2c712e051049d11c59c16d32539724d4d0bed1153fd38c3062385",
+          "request_bytes": 13997,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:20:06.1260884Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [\"hearing.unaided_better_ear_average_db\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"audiologist_report\", \"status\": \"not_met\", \"fact_fields\": [\"hearing.audiometry.available\"]}, {\"requirement\": \"unaided_hearing_threshold\", \"status\": \"met\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"]}], \"numeric_application\": \"45.0 dB < 40 dB threshold for disqualification; patient meets hearing aid standard requirement.\",\"finding\": \"conditional_permission\", \"conclusion\": \"Patient has unaided hearing loss (45 dB) but does not meet the ≥40 dB disqualification threshold. Audiometry is available, but an ENT specialist or audiologist report is missing to confirm if the standard can be met with a hearing aid. A conditional licence may be considered pending this report.\"}, \"P2\": {\"fact_fields\": [\"hearing.unaided_better_ear_average_db\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"unaided_hearing_threshold\", \"status\": \"not_met\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"]}], \"numeric_application\": \"45.0 dB < 40 dB threshold; patient does not meet the disqualification criterion.\",\"finding\": \"established_restriction\", \"conclusion\": \"Patient is not fit to hold an unconditional licence based on this passage alone, as they do not have unaided hearing loss ≥40 dB in the better ear. However, other factors (e.g., use of hearing aids) may affect fitness for a conditional licence.\"}, \"P3\": {\"fact_fields\": [\"hearing.clinical_assessment\", \"hearing.audiometry.available\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"clinical_assessment_indicates_possible_hearing_loss\", \"status\": \"met\", \"fact_fields\": [\"hearing.clinical_assessment\"]}, {\"requirement\": \"audiometry_available\", \"status\": \"met\", \"fact_fields\": [\"hearing.audiometry.available\"]}], \"numeric_application\": \"Not applicable.\",\"finding\": \"conditional_permission\", \"conclusion\": \"Patient has possible hearing loss and audiometry is available. The guideline recommends referral for audiometry, which has been completed. Further assessment by an ENT specialist or audiologist is required to determine fitness for a conditional licence.\"}, \"P4\": {\"fact_fields\": [\"hearing.hearing_aid_used\", \"hearing.unaided_better_ear_average_db\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"standard_not_met_with_hearing_aid\", \"status\": \"unknown\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"]}, {\"requirement\": \"individualised_assessment_offered\", \"status\": \"not_met\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable.\",\"finding\": \"information_missing\", \"conclusion\": \"Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence.\"}, \"P5\": {\"fact_fields\": [\"hearing.hearing_aid_used\", \"hearing.unaided_better_ear_average_db\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"standard_not_met_with_hearing_aid\", \"status\": \"unknown\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"]}, {\"requirement\": \"individualised_assessment_offered\", \"status\": \"not_met\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable.\",\"finding\": \"information_missing\", \"conclusion\": \"Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence.\"}}\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 16321428800,
+            "load_duration": 2862300,
+            "prompt_eval_count": 2882,
+            "prompt_eval_cached_count": 471,
+            "prompt_eval_duration": 1106194000,
+            "eval_count": 1037,
+            "eval_duration": 14802135000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2882,
+            "eval_count": 1037,
+            "prompt_eval_cached_count": 471
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db",
+                  "hearing.audiometry.available"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "audiologist_report",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "hearing.audiometry.available"
+                    ]
+                  },
+                  {
+                    "requirement": "unaided_hearing_threshold",
+                    "status": "met",
+                    "fact_fields": [
+                      "hearing.unaided_better_ear_average_db"
+                    ]
+                  }
+                ],
+                "numeric_application": "45.0 dB < 40 dB threshold for disqualification; patient meets hearing aid standard requirement.",
+                "finding": "conditional_permission",
+                "conclusion": "Patient has unaided hearing loss (45 dB) but does not meet the ≥40 dB disqualification threshold. Audiometry is available, but an ENT specialist or audiologist report is missing to confirm if the standard can be met with a hearing aid. A conditional licence may be considered pending this report."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "statement_type": "restriction",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "unaided_hearing_threshold",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "hearing.unaided_better_ear_average_db"
+                    ]
+                  }
+                ],
+                "numeric_application": "45.0 dB < 40 dB threshold; patient does not meet the disqualification criterion.",
+                "finding": "established_restriction",
+                "conclusion": "Patient is not fit to hold an unconditional licence based on this passage alone, as they do not have unaided hearing loss ≥40 dB in the better ear. However, other factors (e.g., use of hearing aids) may affect fitness for a conditional licence."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+                "fact_fields": [
+                  "hearing.clinical_assessment",
+                  "hearing.audiometry.available"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "clinical_assessment_indicates_possible_hearing_loss",
+                    "status": "met",
+                    "fact_fields": [
+                      "hearing.clinical_assessment"
+                    ]
+                  },
+                  {
+                    "requirement": "audiometry_available",
+                    "status": "met",
+                    "fact_fields": [
+                      "hearing.audiometry.available"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable.",
+                "finding": "conditional_permission",
+                "conclusion": "Patient has possible hearing loss and audiometry is available. The guideline recommends referral for audiometry, which has been completed. Further assessment by an ENT specialist or audiologist is required to determine fitness for a conditional licence."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+                "fact_fields": [
+                  "hearing.hearing_aid_used",
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "standard_not_met_with_hearing_aid",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "hearing.unaided_better_ear_average_db"
+                    ]
+                  },
+                  {
+                    "requirement": "individualised_assessment_offered",
+                    "status": "not_met",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable.",
+                "finding": "information_missing",
+                "conclusion": "Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-73c4980f4ac406388d8ae40e",
+                "fact_fields": [
+                  "hearing.hearing_aid_used",
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "standard_not_met_with_hearing_aid",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "hearing.unaided_better_ear_average_db"
+                    ]
+                  },
+                  {
+                    "requirement": "individualised_assessment_offered",
+                    "status": "not_met",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable.",
+                "finding": "information_missing",
+                "conclusion": "Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+              "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1620,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db",
+                  "hearing.audiometry.available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "Patient has unaided hearing loss (45 dB) but does not meet the ≥40 dB disqualification threshold. Audiometry is available, but an ENT specialist or audiologist report is missing to confirm if the standard can be met with a hearing aid. A conditional licence may be considered pending this report.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+              "source_id": "AFTD2022-HEAR-COM-002",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 176,
+                  "original_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "Patient is not fit to hold an unconditional licence based on this passage alone, as they do not have unaided hearing loss ≥40 dB in the better ear. However, other factors (e.g., use of hearing aids) may affect fitness for a conditional licence.",
+                "source_id": "AFTD2022-HEAR-COM-002",
+                "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+              "source_id": "AFTD2022-HEAR-COM-001",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 186,
+                  "original_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+                "fact_fields": [
+                  "hearing.clinical_assessment",
+                  "hearing.audiometry.available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "Patient has possible hearing loss and audiometry is available. The guideline recommends referral for audiometry, which has been completed. Further assessment by an ENT specialist or audiologist is required to determine fitness for a conditional licence.",
+                "source_id": "AFTD2022-HEAR-COM-001",
+                "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+              "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+              "pdf_page": 117,
+              "printed_page": 106,
+              "section": "4.2.1",
+              "text_sha256": "28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1599,
+                  "original_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+                "fact_fields": [
+                  "hearing.hearing_aid_used",
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence.",
+                "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+                "guideline_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-73c4980f4ac406388d8ae40e",
+              "source_id": "AFTD2022-HEAR-COM-004",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "2dc9b07eb871ca8d70fd21cc22b6c624418fe6268ac1684b14853dc91cbf2f18",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 804,
+                  "original_quote": "If the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-73c4980f4ac406388d8ae40e",
+                "fact_fields": [
+                  "hearing.hearing_aid_used",
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence.",
+                "source_id": "AFTD2022-HEAR-COM-004",
+                "guideline_quote": "If the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-89f66fa2b99946bf7cef1287:conditional_permission_with_unestablished_prerequisite",
+            "PASS-30b1e9cceaecb89b9c44cf70:established_finding_without_reported_applicability"
+          ],
+          "seconds": 16.351676099999167
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db",
+              "hearing.audiometry.available"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "audiologist_report",
+                "status": "not_met",
+                "fact_fields": [
+                  "hearing.audiometry.available"
+                ]
+              },
+              {
+                "requirement": "unaided_hearing_threshold",
+                "status": "met",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ]
+              }
+            ],
+            "numeric_application": "45.0 dB < 40 dB threshold for disqualification; patient meets hearing aid standard requirement.",
+            "finding": "conditional_permission",
+            "conclusion": "Patient has unaided hearing loss (45 dB) but does not meet the ≥40 dB disqualification threshold. Audiometry is available, but an ENT specialist or audiologist report is missing to confirm if the standard can be met with a hearing aid. A conditional licence may be considered pending this report."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "statement_type": "restriction",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "unaided_hearing_threshold",
+                "status": "not_met",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ]
+              }
+            ],
+            "numeric_application": "45.0 dB < 40 dB threshold; patient does not meet the disqualification criterion.",
+            "finding": "established_restriction",
+            "conclusion": "Patient is not fit to hold an unconditional licence based on this passage alone, as they do not have unaided hearing loss ≥40 dB in the better ear. However, other factors (e.g., use of hearing aids) may affect fitness for a conditional licence."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+            "fact_fields": [
+              "hearing.clinical_assessment",
+              "hearing.audiometry.available"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "clinical_assessment_indicates_possible_hearing_loss",
+                "status": "met",
+                "fact_fields": [
+                  "hearing.clinical_assessment"
+                ]
+              },
+              {
+                "requirement": "audiometry_available",
+                "status": "met",
+                "fact_fields": [
+                  "hearing.audiometry.available"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable.",
+            "finding": "conditional_permission",
+            "conclusion": "Patient has possible hearing loss and audiometry is available. The guideline recommends referral for audiometry, which has been completed. Further assessment by an ENT specialist or audiologist is required to determine fitness for a conditional licence."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+            "fact_fields": [
+              "hearing.hearing_aid_used",
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "standard_not_met_with_hearing_aid",
+                "status": "unknown",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ]
+              },
+              {
+                "requirement": "individualised_assessment_offered",
+                "status": "not_met",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable.",
+            "finding": "information_missing",
+            "conclusion": "Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-73c4980f4ac406388d8ae40e",
+            "fact_fields": [
+              "hearing.hearing_aid_used",
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "standard_not_met_with_hearing_aid",
+                "status": "unknown",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ]
+              },
+              {
+                "requirement": "individualised_assessment_offered",
+                "status": "not_met",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable.",
+            "finding": "information_missing",
+            "conclusion": "Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+          "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1620,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db",
+              "hearing.audiometry.available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "Patient has unaided hearing loss (45 dB) but does not meet the ≥40 dB disqualification threshold. Audiometry is available, but an ENT specialist or audiologist report is missing to confirm if the standard can be met with a hearing aid. A conditional licence may be considered pending this report.",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+          "source_id": "AFTD2022-HEAR-COM-002",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 176,
+              "original_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "Patient is not fit to hold an unconditional licence based on this passage alone, as they do not have unaided hearing loss ≥40 dB in the better ear. However, other factors (e.g., use of hearing aids) may affect fitness for a conditional licence.",
+            "source_id": "AFTD2022-HEAR-COM-002",
+            "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+          "source_id": "AFTD2022-HEAR-COM-001",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 186,
+              "original_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+            "fact_fields": [
+              "hearing.clinical_assessment",
+              "hearing.audiometry.available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "Patient has possible hearing loss and audiometry is available. The guideline recommends referral for audiometry, which has been completed. Further assessment by an ENT specialist or audiologist is required to determine fitness for a conditional licence.",
+            "source_id": "AFTD2022-HEAR-COM-001",
+            "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+          "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+          "pdf_page": 117,
+          "printed_page": 106,
+          "section": "4.2.1",
+          "text_sha256": "28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1599,
+              "original_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+            "fact_fields": [
+              "hearing.hearing_aid_used",
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence.",
+            "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+            "guideline_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-73c4980f4ac406388d8ae40e",
+          "source_id": "AFTD2022-HEAR-COM-004",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "2dc9b07eb871ca8d70fd21cc22b6c624418fe6268ac1684b14853dc91cbf2f18",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 804,
+              "original_quote": "If the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-73c4980f4ac406388d8ae40e",
+            "fact_fields": [
+              "hearing.hearing_aid_used",
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence.",
+            "source_id": "AFTD2022-HEAR-COM-004",
+            "guideline_quote": "If the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-89f66fa2b99946bf7cef1287:conditional_permission_with_unestablished_prerequisite",
+        "PASS-30b1e9cceaecb89b9c44cf70:established_finding_without_reported_applicability"
+      ],
+      "seconds": 16.35167929999443
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hearing"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-89f66fa2b99946bf7cef1287",
+                        "PASS-30b1e9cceaecb89b9c44cf70",
+                        "PASS-c78f4b25ae544e2a61840e6a",
+                        "PASS-64d93951ea0cfe724a5daf99",
+                        "PASS-73c4980f4ac406388d8ae40e"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.observed_systolic",
+                          "cardiovascular.blood_pressure.observed_diastolic",
+                          "cardiovascular.chest_pain",
+                          "vision.normal_statement",
+                          "hearing.clinical_assessment",
+                          "hearing.hearing_aid_used",
+                          "hearing.audiometry.available",
+                          "hearing.unaided_better_ear_average_db"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hearing\"], \"nurse_note\": \"Commercial driver medical. 52-year-old male freight driver. BP 130/82 mmHg; HR 70 bpm. Nil cardiac symptoms. Vision meets commercial driving standards without correction. Bilateral hearing loss; uses hearing aids. Audiometry completed, with unaided better ear average 45 dB. No audiologist report is available.\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.observed_systolic\": {\"value\": 130, \"patient_quotes\": [\"BP 130/82 mmHg\"]}, \"cardiovascular.blood_pressure.observed_diastolic\": {\"value\": 82, \"patient_quotes\": [\"BP 130/82 mmHg\"]}, \"cardiovascular.chest_pain\": {\"value\": false, \"patient_quotes\": [\"Nil cardiac symptoms\"]}, \"vision.normal_statement\": {\"value\": true, \"patient_quotes\": [\"Vision meets commercial driving standards without correction\"]}, \"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"Bilateral hearing loss\"]}, \"hearing.hearing_aid_used\": {\"value\": true, \"patient_quotes\": [\"uses hearing aids\", \"uses hearing aids\"]}, \"hearing.audiometry.available\": {\"value\": true, \"patient_quotes\": [\"Audiometry completed\"]}, \"hearing.unaided_better_ear_average_db\": {\"value\": 45.0, \"patient_quotes\": [\"unaided better ear average 45 dB\", \"unaided better ear average 45 dB\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger vehicles \\nor requiring a dangerous goods driver licence – \\nrefer to definition in Table 3)\\nCompliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\\nA person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account the nature of the driving task \\nand information provided by an ENT specialist or \\naudiologist**, as to whether:\\n•\\t the standard is able to be met with a hearing \\naid***.\\nIf the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"text_sha256\": \"6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7\", \"char_start\": 0, \"char_end\": 1620}, {\"source_id\": \"AFTD2022-HEAR-COM-002\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"A person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\", \"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"text_sha256\": \"78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a\", \"char_start\": 0, \"char_end\": 176}, {\"source_id\": \"AFTD2022-HEAR-COM-001\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Compliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\", \"module\": \"hearing\", \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\", \"text_sha256\": \"658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb\", \"char_start\": 0, \"char_end\": 186}, {\"source_id\": \"AFTD2022-EXP-e3e1cd7604e64e7e\", \"section\": \"4.2.1\", \"pdf_page\": 117, \"printed_page\": 106, \"source_text\": \"•\\t\\nIf the standard is not able to be met with \\na hearing aid, this does not disqualify the \\nperson from driving. They should be offered \\nindividualised assessment to determine their \\neligibility for a conditional licence. This may \\ncomprise assessment by an ENT specialist \\nor audiologist* including consideration of:\\n\\t\\n−\\nthe person’s medical history – for \\nexample, childhood deafness may have \\nled to good adaptation\\n\\t\\n−\\nthe person’s driving record before and \\nsince the hearing loss \\n\\t\\n−\\nthe nature of the driving task – for \\nexample, the type of vehicle (e.g. truck, \\nbus), roads and distances to be travelled\\n\\t\\n−\\nthe ergonomics of the driving cab – for \\nexample, assistive devices such as \\nmirrors and a GPS \\n\\t\\n−\\nconcomitant medical conditions such as \\nvision impairment or cognitive impairment \\n\\t\\n−\\npractical driver assessment if required \\n(refer to Part A section 2.3.1. Practical \\ndriver assessments). The report may \\nadvise on assistive technologies as a \\nlicence condition. \\nThe driver licensing authority may consider a \\nconditional licence based on the information \\nreceived. Periodic review may include medical \\nreview and/or a practical driver assessment at \\nthe discretion of the driver licensing authority. \\nThe health professional should advise on the \\nfrequency of review as determined by the \\nnatural history of the condition. Stable conditions \\nmay not require periodic review.\\nIn some cases, noise amplification from wearing \\nhearing aids may lead to driver distraction \\nand may warrant individualised assessment as \\nabove to determine fitness to drive without the \\nhearing aid.\", \"module\": \"hearing\", \"passage_id\": \"PASS-64d93951ea0cfe724a5daf99\", \"text_sha256\": \"28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb\", \"char_start\": 0, \"char_end\": 1599}, {\"source_id\": \"AFTD2022-HEAR-COM-004\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"If the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-73c4980f4ac406388d8ae40e\", \"text_sha256\": \"2dc9b07eb871ca8d70fd21cc22b6c624418fe6268ac1684b14853dc91cbf2f18\", \"char_start\": 0, \"char_end\": 804}], \"proposed_applicability_ledger\": [{\"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\", \"hearing.audiometry.available\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"audiologist_report\", \"status\": \"not_met\", \"fact_fields\": [\"hearing.audiometry.available\"]}, {\"requirement\": \"unaided_hearing_threshold\", \"status\": \"met\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"]}], \"numeric_application\": \"45.0 dB < 40 dB threshold for disqualification; patient meets hearing aid standard requirement.\", \"finding\": \"conditional_permission\", \"conclusion\": \"Patient has unaided hearing loss (45 dB) but does not meet the ≥40 dB disqualification threshold. Audiometry is available, but an ENT specialist or audiologist report is missing to confirm if the standard can be met with a hearing aid. A conditional licence may be considered pending this report.\", \"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"referenced_patient_values\": {\"hearing.unaided_better_ear_average_db\": {\"value\": 45.0, \"patient_quotes\": [\"unaided better ear average 45 dB\", \"unaided better ear average 45 dB\"]}, \"hearing.audiometry.available\": {\"value\": true, \"patient_quotes\": [\"Audiometry completed\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"unaided_hearing_threshold\", \"status\": \"not_met\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"]}], \"numeric_application\": \"45.0 dB < 40 dB threshold; patient does not meet the disqualification criterion.\", \"finding\": \"established_restriction\", \"conclusion\": \"Patient is not fit to hold an unconditional licence based on this passage alone, as they do not have unaided hearing loss ≥40 dB in the better ear. However, other factors (e.g., use of hearing aids) may affect fitness for a conditional licence.\", \"source_id\": \"AFTD2022-HEAR-COM-002\", \"referenced_patient_values\": {\"hearing.unaided_better_ear_average_db\": {\"value\": 45.0, \"patient_quotes\": [\"unaided better ear average 45 dB\", \"unaided better ear average 45 dB\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hearing\", \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\", \"fact_fields\": [\"hearing.clinical_assessment\", \"hearing.audiometry.available\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"clinical_assessment_indicates_possible_hearing_loss\", \"status\": \"met\", \"fact_fields\": [\"hearing.clinical_assessment\"]}, {\"requirement\": \"audiometry_available\", \"status\": \"met\", \"fact_fields\": [\"hearing.audiometry.available\"]}], \"numeric_application\": \"Not applicable.\", \"finding\": \"conditional_permission\", \"conclusion\": \"Patient has possible hearing loss and audiometry is available. The guideline recommends referral for audiometry, which has been completed. Further assessment by an ENT specialist or audiologist is required to determine fitness for a conditional licence.\", \"source_id\": \"AFTD2022-HEAR-COM-001\", \"referenced_patient_values\": {\"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"Bilateral hearing loss\"]}, \"hearing.audiometry.available\": {\"value\": true, \"patient_quotes\": [\"Audiometry completed\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hearing\", \"passage_id\": \"PASS-64d93951ea0cfe724a5daf99\", \"fact_fields\": [\"hearing.hearing_aid_used\", \"hearing.unaided_better_ear_average_db\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"standard_not_met_with_hearing_aid\", \"status\": \"unknown\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"]}, {\"requirement\": \"individualised_assessment_offered\", \"status\": \"not_met\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable.\", \"finding\": \"information_missing\", \"conclusion\": \"Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence.\", \"source_id\": \"AFTD2022-EXP-e3e1cd7604e64e7e\", \"referenced_patient_values\": {\"hearing.hearing_aid_used\": {\"value\": true, \"patient_quotes\": [\"uses hearing aids\", \"uses hearing aids\"]}, \"hearing.unaided_better_ear_average_db\": {\"value\": 45.0, \"patient_quotes\": [\"unaided better ear average 45 dB\", \"unaided better ear average 45 dB\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hearing\", \"passage_id\": \"PASS-73c4980f4ac406388d8ae40e\", \"fact_fields\": [\"hearing.hearing_aid_used\", \"hearing.unaided_better_ear_average_db\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"standard_not_met_with_hearing_aid\", \"status\": \"unknown\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"]}, {\"requirement\": \"individualised_assessment_offered\", \"status\": \"not_met\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable.\", \"finding\": \"information_missing\", \"conclusion\": \"Patient uses hearing aids. It is unknown if the standard can be met with a hearing aid (requires ENT/audiologist report). If not met, individualised assessment is required to determine eligibility for a conditional licence.\", \"source_id\": \"AFTD2022-HEAR-COM-004\", \"referenced_patient_values\": {\"hearing.hearing_aid_used\": {\"value\": true, \"patient_quotes\": [\"uses hearing aids\", \"uses hearing aids\"]}, \"hearing.unaided_better_ear_average_db\": {\"value\": 45.0, \"patient_quotes\": [\"unaided better ear average 45 dB\", \"unaided better ear average 45 dB\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"bfe27c17fb79cff276cb908aee13ede06de664bc7255b489162c970cdf514586\"}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "94365864a11dedf9e76d5af0a3ca4c568740e49bb8e6a0fd9838fc3a2ad6f7f9",
+          "request_bytes": 19767,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:20:18.0416099Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"may_meet_conditional_standard\",\n  \"explanation\": \"The patient has unaided hearing loss of 45 dB in the better ear, which is below the unconditional disqualification threshold of ≥40 dB. Audiometry has been completed, but an explicit report from an ENT specialist or audiologist confirming that the standard can be met with a hearing aid is missing. Per guidelines, a conditional licence may be considered pending this specific professional assessment and review. No current restrictions (temporary unfitness) apply as the patient does not meet the unconditional criteria.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\",\n      \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The patient's unaided hearing loss (45 dB) is less than the ≥40 dB threshold required to deny an unconditional licence; therefore, the unconditional standard is not met.\"\n    },\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\",\n      \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient meets the prerequisite for conditional consideration (unaided loss < 40 dB), but lacks the specific ENT/audiologist report required to confirm fitness with a hearing aid.\"\n    },\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\",\n      \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The explicit restriction for unaided hearing loss ≥40 dB is not triggered as the patient's value (45 dB) is below this threshold.\"\n    },\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\",\n      \"fact_fields\": [\"hearing.clinical_assessment\", \"hearing.audiometry.available\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient has completed audiometry, but the guideline requires information from an ENT specialist or audiologist to determine if the standard is met with a hearing aid. This missing report prevents final determination of conditional fitness.\"\n    },\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-64d93951ea0cfe724a5daf99\",\n      \"fact_fields\": [\"hearing.hearing_aid_used\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"While the patient uses hearing aids, it is unknown if they meet the standard. The guideline mandates individualised assessment if the standard cannot be met with a hearing aid; this assessment has not yet been completed.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 11899198100,
+            "load_duration": 4575100,
+            "prompt_eval_count": 4608,
+            "prompt_eval_cached_count": 0,
+            "prompt_eval_duration": 1508648000,
+            "eval_count": 792,
+            "eval_duration": 10193231000
+          },
+          "token_counts": {
+            "prompt_eval_count": 4608,
+            "eval_count": 792,
+            "prompt_eval_cached_count": 0
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "may_meet_conditional_standard",
+            "explanation": "The patient has unaided hearing loss of 45 dB in the better ear, which is below the unconditional disqualification threshold of ≥40 dB. Audiometry has been completed, but an explicit report from an ENT specialist or audiologist confirming that the standard can be met with a hearing aid is missing. Per guidelines, a conditional licence may be considered pending this specific professional assessment and review. No current restrictions (temporary unfitness) apply as the patient does not meet the unconditional criteria.",
+            "source_ids": [
+              "AFTD2022-EXP-7f3c434bba3c53df",
+              "AFTD2022-HEAR-COM-002",
+              "AFTD2022-HEAR-COM-001",
+              "AFTD2022-EXP-e3e1cd7604e64e7e"
+            ],
+            "fact_fields": [
+              "hearing.clinical_assessment",
+              "hearing.hearing_aid_used",
+              "hearing.audiometry.available",
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "criterion_checks": [
+              {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The patient's unaided hearing loss (45 dB) is less than the ≥40 dB threshold required to deny an unconditional licence; therefore, the unconditional standard is not met.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient meets the prerequisite for conditional consideration (unaided loss < 40 dB), but lacks the specific ENT/audiologist report required to confirm fitness with a hearing aid.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The explicit restriction for unaided hearing loss ≥40 dB is not triggered as the patient's value (45 dB) is below this threshold.",
+                "source_id": "AFTD2022-HEAR-COM-002",
+                "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+                "fact_fields": [
+                  "hearing.clinical_assessment",
+                  "hearing.audiometry.available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient has completed audiometry, but the guideline requires information from an ENT specialist or audiologist to determine if the standard is met with a hearing aid. This missing report prevents final determination of conditional fitness.",
+                "source_id": "AFTD2022-HEAR-COM-001",
+                "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+                "fact_fields": [
+                  "hearing.hearing_aid_used"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "While the patient uses hearing aids, it is unknown if they meet the standard. The guideline mandates individualised assessment if the standard cannot be met with a hearing aid; this assessment has not yet been completed.",
+                "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+                "guideline_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+              "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1620,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The patient's unaided hearing loss (45 dB) is less than the ≥40 dB threshold required to deny an unconditional licence; therefore, the unconditional standard is not met.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+              "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1620,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient meets the prerequisite for conditional consideration (unaided loss < 40 dB), but lacks the specific ENT/audiologist report required to confirm fitness with a hearing aid.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+              "source_id": "AFTD2022-HEAR-COM-002",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 176,
+                  "original_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The explicit restriction for unaided hearing loss ≥40 dB is not triggered as the patient's value (45 dB) is below this threshold.",
+                "source_id": "AFTD2022-HEAR-COM-002",
+                "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+              "source_id": "AFTD2022-HEAR-COM-001",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 186,
+                  "original_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+                "fact_fields": [
+                  "hearing.clinical_assessment",
+                  "hearing.audiometry.available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient has completed audiometry, but the guideline requires information from an ENT specialist or audiologist to determine if the standard is met with a hearing aid. This missing report prevents final determination of conditional fitness.",
+                "source_id": "AFTD2022-HEAR-COM-001",
+                "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+              "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+              "pdf_page": 117,
+              "printed_page": 106,
+              "section": "4.2.1",
+              "text_sha256": "28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1599,
+                  "original_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+                "fact_fields": [
+                  "hearing.hearing_aid_used"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "While the patient uses hearing aids, it is unknown if they meet the standard. The guideline mandates individualised assessment if the standard cannot be met with a hearing aid; this assessment has not yet been completed.",
+                "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+                "guideline_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "conditional_prerequisites_not_established_in_checks"
+          ],
+          "seconds": 11.913160300005984
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "explanation": "The patient has unaided hearing loss of 45 dB in the better ear, which is below the unconditional disqualification threshold of ≥40 dB. Audiometry has been completed, but an explicit report from an ENT specialist or audiologist confirming that the standard can be met with a hearing aid is missing. Per guidelines, a conditional licence may be considered pending this specific professional assessment and review. No current restrictions (temporary unfitness) apply as the patient does not meet the unconditional criteria.",
+        "source_ids": [
+          "AFTD2022-EXP-7f3c434bba3c53df",
+          "AFTD2022-HEAR-COM-002",
+          "AFTD2022-HEAR-COM-001",
+          "AFTD2022-EXP-e3e1cd7604e64e7e"
+        ],
+        "fact_fields": [
+          "hearing.clinical_assessment",
+          "hearing.hearing_aid_used",
+          "hearing.audiometry.available",
+          "hearing.unaided_better_ear_average_db"
+        ],
+        "criterion_checks": [
+          {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The patient's unaided hearing loss (45 dB) is less than the ≥40 dB threshold required to deny an unconditional licence; therefore, the unconditional standard is not met.",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient meets the prerequisite for conditional consideration (unaided loss < 40 dB), but lacks the specific ENT/audiologist report required to confirm fitness with a hearing aid.",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The explicit restriction for unaided hearing loss ≥40 dB is not triggered as the patient's value (45 dB) is below this threshold.",
+            "source_id": "AFTD2022-HEAR-COM-002",
+            "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+            "fact_fields": [
+              "hearing.clinical_assessment",
+              "hearing.audiometry.available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient has completed audiometry, but the guideline requires information from an ENT specialist or audiologist to determine if the standard is met with a hearing aid. This missing report prevents final determination of conditional fitness.",
+            "source_id": "AFTD2022-HEAR-COM-001",
+            "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+            "fact_fields": [
+              "hearing.hearing_aid_used"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "While the patient uses hearing aids, it is unknown if they meet the standard. The guideline mandates individualised assessment if the standard cannot be met with a hearing aid; this assessment has not yet been completed.",
+            "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+            "guideline_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+          "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1620,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The patient's unaided hearing loss (45 dB) is less than the ≥40 dB threshold required to deny an unconditional licence; therefore, the unconditional standard is not met.",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+          "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1620,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient meets the prerequisite for conditional consideration (unaided loss < 40 dB), but lacks the specific ENT/audiologist report required to confirm fitness with a hearing aid.",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+          "source_id": "AFTD2022-HEAR-COM-002",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 176,
+              "original_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The explicit restriction for unaided hearing loss ≥40 dB is not triggered as the patient's value (45 dB) is below this threshold.",
+            "source_id": "AFTD2022-HEAR-COM-002",
+            "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+          "source_id": "AFTD2022-HEAR-COM-001",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 186,
+              "original_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+            "fact_fields": [
+              "hearing.clinical_assessment",
+              "hearing.audiometry.available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient has completed audiometry, but the guideline requires information from an ENT specialist or audiologist to determine if the standard is met with a hearing aid. This missing report prevents final determination of conditional fitness.",
+            "source_id": "AFTD2022-HEAR-COM-001",
+            "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+          "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+          "pdf_page": 117,
+          "printed_page": 106,
+          "section": "4.2.1",
+          "text_sha256": "28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1599,
+              "original_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+            "fact_fields": [
+              "hearing.hearing_aid_used"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "While the patient uses hearing aids, it is unknown if they meet the standard. The guideline mandates individualised assessment if the standard cannot be met with a hearing aid; this assessment has not yet been completed.",
+            "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+            "guideline_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [
+        "conditional_prerequisites_not_established_in_checks"
+      ],
+      "seconds": 11.913162500000908
+    }
+  },
+  "support_review": "pending_independent_review"
+}

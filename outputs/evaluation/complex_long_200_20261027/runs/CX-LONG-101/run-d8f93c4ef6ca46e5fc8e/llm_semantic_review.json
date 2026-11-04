@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "5d027ac9701929bb595b2b3f8a5de23945b07b0b26b82dd6e4e6bdb36c1d16ed",
+  "input_facts_sha256": "354b086bc8466a4e5647af1720a3db749563d4f4f90551a6b4d12ea9919cb7fa",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 536,
+      "eval_count": 50,
+      "total_duration": 1188821900
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 528,
+      "eval_count": 58,
+      "total_duration": 1212938300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 636,
+      "eval_count": 56,
+      "total_duration": 1178425300
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The current physician assessment explicitly describes the driver with established diabetes as acutely unwell with metabolically unstable diabetes, after vomiting and a measured glucose of 24 mmol/L prompted urgent assessment; the driver says the nausea eased after fluids, but the signed current review has not documented resolution of the instability, and a normal measurement copied from an earlier well visit is not evidence of the present metabolic state.",
+      "explanation": "Independent source reading differs from the extraction. The driver has established diabetes and is being treated with insulin, as explicitly described in the current physician assessment.",
+      "evidence": [
+        {
+          "start": 433,
+          "end": 892,
+          "quote": "The current physician assessment explicitly describes the driver with established diabetes as acutely unwell with metabolically unstable diabetes, after vomiting and a measured glucose of 24 mmol/L prompted urgent assessment; the driver says the nausea eased after fluids, but the signed current review has not documented resolution of the instability, and a normal measurement copied from an earlier well visit is not evidence of the present metabolic state.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [
+    "diabetes.metabolically_unstable",
+    "diabetes.present"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "f2ddd14047a40a74d82d6115a1fd15abc31456dcd5aa08ccf8ddd12ad19219ff",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.metabolically_unstable"
+      ],
+      "status": "valid",
+      "request_sha256": "876163ed7df6d1d30b63533278719bde15abbf2a7c951b2663a0d7ba917e0444",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "8a571a5296c4125c55b7ff0f1834922957d39114374c1dbcadba05913183617b",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "583b9b3dacf809c24a98324875dda303edf61be7d6afae38b7f48e6c417cd595",
+      "response_schema_sha256": "2c49d6e3388209d3520ef1d0982c4a7748fd9c3eff7bc43bc1102e21ab5c797d"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.metabolically_unstable",
+      "value": true,
+      "status": "documented",
+      "quote": "The current physician assessment explicitly describes the driver with established diabetes as acutely unwell with metabolically unstable diabetes, after vomiting and a measured glucose of 24 mmol/L prompted urgent assessment; the driver says the nausea eased after fluids, but the signed current review has not documented resolution of the instability, and a normal measurement copied from an earlier well visit is not evidence of the present metabolic state.",
+      "explanation": "The patient has metabolically unstable diabetes, as explicitly described in the current physician assessment."
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The current physician assessment explicitly describes the driver with established diabetes as acutely unwell with metabolically unstable diabetes, after vomiting and a measured glucose of 24 mmol/L prompted urgent assessment; the driver says the nausea eased after fluids, but the signed current review has not documented resolution of the instability, and a normal measurement copied from an earlier well visit is not evidence of the present metabolic state.",
+      "explanation": "The patient has established diabetes, which is explicitly described as acutely unwell and metabolically unstable in the current physician assessment."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "insulin",
+      "status": "documented",
+      "quote": "The current physician assessment explicitly describes the driver with established diabetes as acutely unwell with metabolically unstable diabetes, after vomiting and a measured glucose of 24 mmol/L prompted urgent assessment; the driver says the nausea eased after fluids, but the signed current review has not documented resolution of the instability, and a normal measurement copied from an earlier well visit is not evidence of the present metabolic state.",
+      "explanation": "The driver has established diabetes and is being treated with insulin, as explicitly described in the current physician assessment."
+    }
+  ],
+  "output_facts_sha256": "1d28a7ffb492471234eabd77a35099e9f1c24e2dc708a708bf589f040a1dbc64",
+  "facts_quarantined": true
+}

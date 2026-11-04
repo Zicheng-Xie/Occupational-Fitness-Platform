@@ -1,0 +1,198 @@
+{
+  "$defs": {
+    "SourceCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "citation_identity": {
+          "title": "Citation Identity",
+          "type": "string"
+        },
+        "pdf_page": {
+          "title": "Pdf Page",
+          "type": "integer"
+        },
+        "section": {
+          "title": "Section",
+          "type": "string"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "licence_scope": {
+          "enum": [
+            "commercial",
+            "shared"
+          ],
+          "title": "Licence Scope",
+          "type": "string"
+        },
+        "bbox": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bbox"
+        },
+        "inspected_original_region": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Inspected Original Region"
+        },
+        "section_verified": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Section Verified"
+        },
+        "commercial_or_shared_column_verified": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commercial Or Shared Column Verified"
+        },
+        "footnotes_and_qualifications_checked": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Footnotes And Qualifications Checked"
+        }
+      },
+      "required": [
+        "citation_identity",
+        "pdf_page",
+        "section",
+        "quote",
+        "licence_scope"
+      ],
+      "title": "SourceCheck",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "packet_identity": {
+      "title": "Packet Identity",
+      "type": "string"
+    },
+    "status": {
+      "default": "draft",
+      "enum": [
+        "draft",
+        "submitted"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "verifier_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verifier Id"
+    },
+    "role": {
+      "anyOf": [
+        {
+          "enum": [
+            "clinician",
+            "domain_reviewer"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Role"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Completed At"
+    },
+    "independent_of_annotation_and_retrieval": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Independent Of Annotation And Retrieval"
+    },
+    "did_not_view_model_outputs": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Did Not View Model Outputs"
+    },
+    "citations": {
+      "items": {
+        "$ref": "#/$defs/SourceCheck"
+      },
+      "title": "Citations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "packet_identity"
+  ],
+  "title": "SourceVerification",
+  "type": "object"
+}

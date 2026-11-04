@@ -1,0 +1,71 @@
+{
+  "reviewed_date": "2026-10-23",
+  "reviewed_timezone": "Asia/Shanghai",
+  "scope": "Official-source feasibility and API review; package presence or a unit test is not a completed retrieval experiment",
+  "packages": {
+    "docling": {
+      "version": "2.142.0",
+      "pypi_metadata": "https://pypi.org/pypi/docling/2.142.0/json",
+      "wheel": "docling-2.142.0-py3-none-any.whl",
+      "wheel_sha256": "57dee8ce7324c6b905d01d01d8fd58783a3649180b5a4a3093b00d1003fdcf61",
+      "release": "https://github.com/docling-project/docling/releases/tag/v2.142.0",
+      "reviewed_repository_commit": "1ee1db0f648c4bd2d25146f5dd100d1b75d94d7d",
+      "apis": ["docling.document_converter.DocumentConverter", "docling.document_converter.PdfFormatOption", "docling.datamodel.pipeline_options.PdfPipelineOptions"],
+      "reference": "https://github.com/docling-project/docling/blob/1ee1db0f648c4bd2d25146f5dd100d1b75d94d7d/docs/examples/custom_convert.py",
+      "experiment_boundary": "Native PDF structure audit, with OCR disabled for the existing text-layer guideline. Main retrieval comparison continues to use the unchanged frozen 94 original units. Structure audit alone is not a new ranked retrieval result."
+    },
+    "FlagEmbedding": {
+      "version": "1.4.2",
+      "pypi_metadata": "https://pypi.org/pypi/FlagEmbedding/1.4.2/json",
+      "wheel": "flagembedding-1.4.2-py3-none-any.whl",
+      "wheel_sha256": "35e33a08e8ed5e299eabbe3bc23518eb66a424dd29ee08fb3802bf9aef9e9bf2",
+      "reviewed_repository_commit": "fd1a2bdf69488ffebe0327999d4400d8c8058a0b",
+      "reference": "https://github.com/FlagOpen/FlagEmbedding/blob/fd1a2bdf69488ffebe0327999d4400d8c8058a0b/examples/inference/reranker/README.md",
+      "apis": ["FlagEmbedding.FlagReranker", "FlagReranker.compute_score"],
+      "checkpoint": "BAAI/bge-reranker-v2-m3",
+      "checkpoint_revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+      "checkpoint_metadata": "https://huggingface.co/api/models/BAAI/bge-reranker-v2-m3",
+      "checkpoint_config": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/config.json",
+      "model_type": "XLMRobertaForSequenceClassification",
+      "max_position_embeddings": 8194,
+      "experiment_boundary": "Native cross-encoder scoring over actual shared retrieval candidates. Record token budgets and truncation. The returned evidence remains the unchanged original text, not the encoded or truncated scoring representation."
+    },
+    "neo4j-graphrag": {
+      "version": "1.22.0",
+      "pypi_metadata": "https://pypi.org/pypi/neo4j-graphrag/1.22.0/json",
+      "wheel": "neo4j_graphrag-1.22.0-py3-none-any.whl",
+      "wheel_sha256": "65e6d2a859d4d6e16f0e450e7d4bed7e3543b3f76ed90f4c6a6d1e3d2a10c691",
+      "release": "https://github.com/neo4j/neo4j-graphrag-python/releases/tag/1.22.0",
+      "reviewed_repository_commit": "609c80fe5968cfb5fd6f99c8604ec291142090cf",
+      "reference": "https://neo4j.com/docs/neo4j-graphrag-python/current/api.html#hybridcypherretriever",
+      "apis": ["neo4j_graphrag.retrievers.HybridCypherRetriever", "neo4j.GraphDatabase.driver"],
+      "server_release": "2026.10.0 Community Edition",
+      "server_reference": "https://neo4j.com/docs/operations-manual/current/installation/windows/",
+      "runtime_observed": "Java 25.0.4; Docker command absent",
+      "experiment_boundary": "Requires an actual local Neo4j server and native SDK search. Use module-specific labels/indexes so commercial/module scope is applied before candidate ranking. Corpus source relationships are independent of patient reference answers. A Python in-memory graph cannot be counted as this native arm."
+    },
+    "pageindex": {
+      "version": "0.4.5",
+      "pypi_metadata": "https://pypi.org/pypi/pageindex/0.4.5/json",
+      "wheel": "pageindex-0.4.5-py3-none-any.whl",
+      "wheel_sha256": "ac792a6bd03637defbbbd9ea843fd17755bc5ac23ce0a0ec3653a89ed84d3185",
+      "reviewed_repository_commit": "cc62cce78483112b83877c2852fb3c0d7f991f54",
+      "repository_reference": "https://github.com/VectifyAI/PageIndex/tree/cc62cce78483112b83877c2852fb3c0d7f991f54",
+      "repository_version_at_review": "0.2.10",
+      "version_note": "The official PyPI metadata names the same author and VectifyAI/PageIndex repository, but GitHub main's declared version differs. Experimental execution must pin and inspect the installed wheel, not assume the GitHub commit and wheel are identical.",
+      "apis": ["pageindex.page_index_md.md_to_tree", "pageindex.PageIndexLocalClient", "PageIndexLocalClient.get_tree", "PageIndexLocalClient.chat"],
+      "local_api_reference": "https://github.com/VectifyAI/PageIndex/blob/cc62cce78483112b83877c2852fb3c0d7f991f54/pageindex/client.py",
+      "experiment_boundary": "The implemented worker uses native Markdown tree indexing over the same frozen originals plus an explicitly first-party bounded local tree-navigation adapter. It does not claim to execute the complete native PageIndex chat-agent retriever. submit_query/get_retrieval are cloud-only and deprecated; they are not local retrieval APIs."
+    }
+  },
+  "common_contract": {
+    "frozen_original_units": 94,
+    "frozen_module_queries": 77,
+    "frozen_patient_cases": 33,
+    "new_reference_labels_in_ranking_inputs": false,
+    "private_clinical_uploads_authorized": false,
+    "third_party_source_copied_to_project": false,
+    "main_project_environment_changed": false,
+    "experimental_environment": ".runtime/retrieval_extensions"
+  }
+}

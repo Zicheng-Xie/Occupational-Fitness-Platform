@@ -1,0 +1,294 @@
+{
+  "schema_version": "1.2.0",
+  "result_id": "RR-28f4a4d8e2c92a447f20",
+  "case_id": "CX-LONG-072",
+  "red_flag_result_sha256": "4b50d9ed41a5db08a57d4899c6710c9900b779440b91df491e16a01d6c47ba04",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "guideline_version": "AP-G56-22",
+  "route": "human_review",
+  "rag_requests": [
+    {
+      "request_id": "RAG-2ab099dbbe210fbd",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-AUDIOMETRY-MISSING-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001"
+      ],
+      "category": "hearing",
+      "subcondition": "possible_hearing_loss",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_audiometry_required_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-0e8f3bba02a7f629",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-UNCONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "subcondition": "better_ear_hearing_loss",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_loss_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-0d908c9bcedee2e5",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-CONDITIONAL-AID-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-003"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_met",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_aid_conditional_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-2296b07a275d35e0",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-INDIVIDUAL-ASSESSMENT-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-004"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_not_met",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_individual_assessment_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-cc1e2a6052b3e1ae",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "hear_com_screen_001",
+      "ambiguity_reasons": [
+        "missing_fact",
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.average_frequencies_khz": "unknown",
+        "hearing.clinical_assessment": "requires_confirmation",
+        "hearing.unaided_better_ear_average_db": "unknown"
+      }
+    }
+  ],
+  "indicator_context": {
+    "RAG-2ab099dbbe210fbd": {
+      "hearing.audiometry.available": {
+        "value": false,
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 692,
+            "end": 889,
+            "quote": "audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.\n\n",
+            "line_start": 5,
+            "line_end": 6,
+            "pdf_page": null
+          }
+        ],
+        "method": "prose_explicit",
+        "derived_from": []
+      },
+      "hearing.clinical_assessment": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 436,
+            "end": 887,
+            "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      }
+    },
+    "RAG-0e8f3bba02a7f629": {
+      "hearing.average_frequencies_khz": {
+        "value": null,
+        "status": "unknown",
+        "unit": "kHz",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "hearing.clinical_assessment": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 436,
+            "end": 887,
+            "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      },
+      "hearing.unaided_better_ear_average_db": {
+        "value": null,
+        "status": "unknown",
+        "unit": "dB",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-0d908c9bcedee2e5": {
+      "hearing.aided_standard_met": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "hearing.ent_or_audiologist_information_available": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-2296b07a275d35e0": {
+      "hearing.aided_standard_met": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-cc1e2a6052b3e1ae": {
+      "hearing.average_frequencies_khz": {
+        "value": null,
+        "status": "unknown",
+        "unit": "kHz",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "hearing.clinical_assessment": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 436,
+            "end": 887,
+            "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      },
+      "hearing.unaided_better_ear_average_db": {
+        "value": null,
+        "status": "unknown",
+        "unit": "dB",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    }
+  },
+  "narrative_context": {
+    "RAG-2ab099dbbe210fbd": [
+      {
+        "start": 436,
+        "end": 887,
+        "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-0e8f3bba02a7f629": [
+      {
+        "start": 436,
+        "end": 887,
+        "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-0d908c9bcedee2e5": [
+      {
+        "start": 436,
+        "end": 887,
+        "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-2296b07a275d35e0": [
+      {
+        "start": 436,
+        "end": 887,
+        "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-cc1e2a6052b3e1ae": [
+      {
+        "start": 436,
+        "end": 887,
+        "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ]
+  },
+  "narrative_source_text_sha256": "4bd3d1f99e29289f188d61023d63f29fde6f9cfa06049f7da43070120c52dfee"
+}

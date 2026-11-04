@@ -1,0 +1,414 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "SYN-EXT-009",
+    "evidence_policy": "module_query",
+    "protocol": "passage_selection",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "outcome_first": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "blackout"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-f518b995ccbf6dfc41900b70",
+                        "PASS-a1eb49f152b573688d112731",
+                        "PASS-82afe6d85f71189739c9ff06",
+                        "PASS-6174748f4c02107432f2c67a",
+                        "PASS-7ee50d3e0359202b51f4380f"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "diabetes.present",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"blackout\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nThe report contains no blackout history information.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\ndiabetes.present = false\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-2332d9548f2abd01\", \"section\": \"1.2.3\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"1.2.3. Blackouts due to medical \\ncauses not covered in the standards\\nIf the cause of the blackout is determined \\nto be a medical condition not covered in \\nthe standards, then first principles regarding \\nfitness to drive should be applied (refer to \\nPart A section 2. Assessing fitness to drive \\n– general guidance). Considerations include \\nthe likelihood of recurrence of blackout and \\nthe treatability of the condition as well as the \\nnature of the driving task. There should also be \\nan appropriate review period. A more stringent \\napproach should be considered for commercial \\nvehicle drivers.\", \"module\": \"blackout\", \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\", \"text_sha256\": \"01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398\", \"char_start\": 0, \"char_end\": 596}, {\"source_id\": \"AFTD2022-BLK-COM-006\", \"section\": \"1.3\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"themselves with the information in this chapter \\nand the tabulated standards before assessing a \\nperson’s fitness to drive. \\nWhere a firm diagnosis has been made, the \\nstandard appropriate to the condition should \\nbe referred to in this publication (refer to Figure \\n6. Management of blackouts and driving). For \\nblackouts due to medical causes not covered \\nin the standard, refer to first principles (refer to \\nPart A section 2. Assessing fitness to drive – \\ngeneral guidance). For blackouts where, after \\ninvestigation, it is not possible to diagnose one \\nof the conditions covered elsewhere in this \\npublication, refer to the table for blackouts of \\nuncertain nature over the page.\", \"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"text_sha256\": \"d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574\", \"char_start\": 0, \"char_end\": 684}, {\"source_id\": \"AFTD2022-EXP-3a8e08652c83a2d0\", \"section\": \"1.2.4\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.2.4. Blackouts of undetermined \\nmechanism\\nIf, despite extensive investigation, the \\nmechanism of a blackout cannot be determined, \\nfitness to drive should be assessed according \\nto section 1.3. Medical standards for licensing. \\nThe standards for blackout of undetermined \\nmechanism are similar to those for seizure.\", \"module\": \"blackout\", \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\", \"text_sha256\": \"3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853\", \"char_start\": 0, \"char_end\": 317}, {\"source_id\": \"AFTD2022-EXP-1292b0286ae90dcd\", \"section\": \"1.3\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.3.\\t Medical standards \\nfor licensing\\nRequirements for unconditional and conditional \\nlicences are outlined in the following tables. \\nHealth professionals should familiarise \\nFigure 6.\\t\\nManagement of blackouts and driving\\nBlac\\n(may be while driving or\\nAdvise not to drive until the c\\nhistory, investigations\\nSyncope\\nEpilepsy/\\nseizure\\nHypogly-\\ncaemic event\\nDru\\nalco\\nmis\\nRefer to \\nsection \\n6.2. \\nRefer to \\nsection 3. \\nRefe\\nsecti\", \"module\": \"blackout\", \"passage_id\": \"PASS-6174748f4c02107432f2c67a\", \"text_sha256\": \"79ffc5d3b2dc15dd4bcaf8ba7cbd9edc7d4200102f1ff0a035fc1e025c1de554\", \"char_start\": 0, \"char_end\": 427}, {\"source_id\": \"AFTD2022-EXP-5546204ae4ffe0ee\", \"section\": \"1.3\", \"pdf_page\": 71, \"printed_page\": 60, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nWhere a person with one or more blackouts \\nof undetermined mechanism does not \\nmeet the standards above for a conditional \\nlicence but may, in the opinion of the \\ntreating specialist, be safe to drive, a \\nconditional licence may be considered by \\nthe driver licensing authority, subject to at \\nleast annual review:\\n•\\t if the driver licensing authority, after \\nconsidering information provided by the \\ntreating specialist(s), considers that the \\nrisk of a crash caused by a blackout is \\nacceptably low.\", \"module\": \"blackout\", \"passage_id\": \"PASS-7ee50d3e0359202b51f4380f\", \"text_sha256\": \"f59e02007fcbdd8180a272dfb7ddfb03d20bb27b18b729d0db3da4dbe29759b0\", \"char_start\": 0, \"char_end\": 658}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "00da6452c3a47876cd912183e4e6845ec33e328aa6370f6c5ab3850b69b3fff7",
+          "request_bytes": 12935,
+          "status": "completed",
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T14:31:50.244886Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n\"assessment_outcome\": \"insufficient_information\",\n\"explanation\": \"The assessment module 'blackout' requires established evidence of a blackout event (history, diagnosis, or investigation results) to apply any guideline criteria. The nurse_note explicitly states that the report contains no blackout history information. While verified_patient_facts confirm normal cardiovascular and visual parameters, these do not establish the presence or absence of a medical condition causing blackouts. Without a confirmed diagnosis, a specific restriction (temporary unfit), a conditional permission, or an unconditional standard can be applied based on the supplied guideline evidence. The guidelines reference investigations and diagnoses for conditions like syncope, epilepsy, hypoglycaemic events, drugs, or alcohol; none of these have been established in the verified facts.\",\n\"criterion_checks\": [\n{\n\"module\": \"blackout\",\n\"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\",\n\"fact_fields\": [],\n\"licence_pathway\": \"general_information\",\n\"finding\": \"information_missing\",\n\"conclusion\": \"The guideline requires a determined cause of blackout to apply first principles regarding fitness to drive. No verified fact establishes the presence, absence, or cause of a blackout.\"\n},\n{\n\"module\": \"blackout\",\n\"passage_id\": \"PASS-a1eb49f152b573688d112731\",\n\"fact_fields\": [],\n\"licence_pathway\": \"general_information\",\n\"finding\": \"information_missing\",\n\"conclusion\": \"The guideline states that where a firm diagnosis has been made, the standard appropriate to the condition should be referred to. No verified fact establishes a firm diagnosis of any blackout-related condition.\"\n},\n{\n\"module\": \"blackout\",\n\"passage_id\": \"PASS-6174748f4c02107432f2c67a\",\n\"fact_fields\": [],\n\"licence_pathway\": \"general_information\",\n\"finding\": \"information_missing\",\n\"conclusion\": \"The guideline outlines requirements for unconditional and conditional licences based on medical standards. No verified fact satisfies the prerequisites for any of these pathways as no blackout event is documented.\"\n},\n{\n\"module\": \"blackout\",\n\"passage_id\": \"PASS-7ee50d3e0359202b51f4380f\",\n\"fact_fields\": [],\n\"licence_pathway\": \"general_information\",\n\"finding\": \"information_missing\",\n\"conclusion\": \"The guideline allows for a conditional licence consideration only if the driver licensing authority considers the risk of a crash caused by a blackout to be acceptably low after considering information from treating specialists. No verified fact provides such an assessment or confirms a blackout history.\"\n}\n]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 8577681600,
+            "load_duration": 3120800,
+            "prompt_eval_count": 2816,
+            "prompt_eval_cached_count": 2812,
+            "prompt_eval_duration": 146209000,
+            "eval_count": 626,
+            "eval_duration": 8389277000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2816,
+            "eval_count": 626,
+            "prompt_eval_cached_count": 2812
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "insufficient_information",
+            "explanation": "The assessment module 'blackout' requires established evidence of a blackout event (history, diagnosis, or investigation results) to apply any guideline criteria. The nurse_note explicitly states that the report contains no blackout history information. While verified_patient_facts confirm normal cardiovascular and visual parameters, these do not establish the presence or absence of a medical condition causing blackouts. Without a confirmed diagnosis, a specific restriction (temporary unfit), a conditional permission, or an unconditional standard can be applied based on the supplied guideline evidence. The guidelines reference investigations and diagnoses for conditions like syncope, epilepsy, hypoglycaemic events, drugs, or alcohol; none of these have been established in the verified facts.",
+            "source_ids": [
+              "AFTD2022-EXP-2332d9548f2abd01",
+              "AFTD2022-BLK-COM-006",
+              "AFTD2022-EXP-1292b0286ae90dcd",
+              "AFTD2022-EXP-5546204ae4ffe0ee"
+            ],
+            "fact_fields": [],
+            "criterion_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+                "fact_fields": [],
+                "licence_pathway": "general_information",
+                "finding": "information_missing",
+                "conclusion": "The guideline requires a determined cause of blackout to apply first principles regarding fitness to drive. No verified fact establishes the presence, absence, or cause of a blackout.",
+                "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+                "guideline_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [],
+                "licence_pathway": "general_information",
+                "finding": "information_missing",
+                "conclusion": "The guideline states that where a firm diagnosis has been made, the standard appropriate to the condition should be referred to. No verified fact establishes a firm diagnosis of any blackout-related condition.",
+                "source_id": "AFTD2022-BLK-COM-006",
+                "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-6174748f4c02107432f2c67a",
+                "fact_fields": [],
+                "licence_pathway": "general_information",
+                "finding": "information_missing",
+                "conclusion": "The guideline outlines requirements for unconditional and conditional licences based on medical standards. No verified fact satisfies the prerequisites for any of these pathways as no blackout event is documented.",
+                "source_id": "AFTD2022-EXP-1292b0286ae90dcd",
+                "guideline_quote": "1.3.\t Medical standards \nfor licensing\nRequirements for unconditional and conditional \nlicences are outlined in the following tables. \nHealth professionals should familiarise \nFigure 6.\t\nManagement of blackouts and driving\nBlac\n(may be while driving or\nAdvise not to drive until the c\nhistory, investigations\nSyncope\nEpilepsy/\nseizure\nHypogly-\ncaemic event\nDru\nalco\nmis\nRefer to \nsection \n6.2. \nRefer to \nsection 3. \nRefe\nsecti"
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-7ee50d3e0359202b51f4380f",
+                "fact_fields": [],
+                "licence_pathway": "general_information",
+                "finding": "information_missing",
+                "conclusion": "The guideline allows for a conditional licence consideration only if the driver licensing authority considers the risk of a crash caused by a blackout to be acceptably low after considering information from treating specialists. No verified fact provides such an assessment or confirms a blackout history.",
+                "source_id": "AFTD2022-EXP-5546204ae4ffe0ee",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nWhere a person with one or more blackouts \nof undetermined mechanism does not \nmeet the standards above for a conditional \nlicence but may, in the opinion of the \ntreating specialist, be safe to drive, a \nconditional licence may be considered by \nthe driver licensing authority, subject to at \nleast annual review:\n•\t if the driver licensing authority, after \nconsidering information provided by the \ntreating specialist(s), considers that the \nrisk of a crash caused by a blackout is \nacceptably low."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+              "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.3",
+              "text_sha256": "01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 596,
+                  "original_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+                "fact_fields": [],
+                "licence_pathway": "general_information",
+                "finding": "information_missing",
+                "conclusion": "The guideline requires a determined cause of blackout to apply first principles regarding fitness to drive. No verified fact establishes the presence, absence, or cause of a blackout.",
+                "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+                "guideline_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-a1eb49f152b573688d112731",
+              "source_id": "AFTD2022-BLK-COM-006",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.3",
+              "text_sha256": "d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 684,
+                  "original_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [],
+                "licence_pathway": "general_information",
+                "finding": "information_missing",
+                "conclusion": "The guideline states that where a firm diagnosis has been made, the standard appropriate to the condition should be referred to. No verified fact establishes a firm diagnosis of any blackout-related condition.",
+                "source_id": "AFTD2022-BLK-COM-006",
+                "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-6174748f4c02107432f2c67a",
+              "source_id": "AFTD2022-EXP-1292b0286ae90dcd",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.3",
+              "text_sha256": "79ffc5d3b2dc15dd4bcaf8ba7cbd9edc7d4200102f1ff0a035fc1e025c1de554",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 427,
+                  "original_quote": "1.3.\t Medical standards \nfor licensing\nRequirements for unconditional and conditional \nlicences are outlined in the following tables. \nHealth professionals should familiarise \nFigure 6.\t\nManagement of blackouts and driving\nBlac\n(may be while driving or\nAdvise not to drive until the c\nhistory, investigations\nSyncope\nEpilepsy/\nseizure\nHypogly-\ncaemic event\nDru\nalco\nmis\nRefer to \nsection \n6.2. \nRefer to \nsection 3. \nRefe\nsecti"
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-6174748f4c02107432f2c67a",
+                "fact_fields": [],
+                "licence_pathway": "general_information",
+                "finding": "information_missing",
+                "conclusion": "The guideline outlines requirements for unconditional and conditional licences based on medical standards. No verified fact satisfies the prerequisites for any of these pathways as no blackout event is documented.",
+                "source_id": "AFTD2022-EXP-1292b0286ae90dcd",
+                "guideline_quote": "1.3.\t Medical standards \nfor licensing\nRequirements for unconditional and conditional \nlicences are outlined in the following tables. \nHealth professionals should familiarise \nFigure 6.\t\nManagement of blackouts and driving\nBlac\n(may be while driving or\nAdvise not to drive until the c\nhistory, investigations\nSyncope\nEpilepsy/\nseizure\nHypogly-\ncaemic event\nDru\nalco\nmis\nRefer to \nsection \n6.2. \nRefer to \nsection 3. \nRefe\nsecti"
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-7ee50d3e0359202b51f4380f",
+              "source_id": "AFTD2022-EXP-5546204ae4ffe0ee",
+              "pdf_page": 71,
+              "printed_page": 60,
+              "section": "1.3",
+              "text_sha256": "f59e02007fcbdd8180a272dfb7ddfb03d20bb27b18b729d0db3da4dbe29759b0",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 658,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nWhere a person with one or more blackouts \nof undetermined mechanism does not \nmeet the standards above for a conditional \nlicence but may, in the opinion of the \ntreating specialist, be safe to drive, a \nconditional licence may be considered by \nthe driver licensing authority, subject to at \nleast annual review:\n•\t if the driver licensing authority, after \nconsidering information provided by the \ntreating specialist(s), considers that the \nrisk of a crash caused by a blackout is \nacceptably low."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-7ee50d3e0359202b51f4380f",
+                "fact_fields": [],
+                "licence_pathway": "general_information",
+                "finding": "information_missing",
+                "conclusion": "The guideline allows for a conditional licence consideration only if the driver licensing authority considers the risk of a crash caused by a blackout to be acceptably low after considering information from treating specialists. No verified fact provides such an assessment or confirms a blackout history.",
+                "source_id": "AFTD2022-EXP-5546204ae4ffe0ee",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nWhere a person with one or more blackouts \nof undetermined mechanism does not \nmeet the standards above for a conditional \nlicence but may, in the opinion of the \ntreating specialist, be safe to drive, a \nconditional licence may be considered by \nthe driver licensing authority, subject to at \nleast annual review:\n•\t if the driver licensing authority, after \nconsidering information provided by the \ntreating specialist(s), considers that the \nrisk of a crash caused by a blackout is \nacceptably low."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [],
+          "seconds": 8.590902899995854,
+          "provider_called": true
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "insufficient_information",
+        "explanation": "The assessment module 'blackout' requires established evidence of a blackout event (history, diagnosis, or investigation results) to apply any guideline criteria. The nurse_note explicitly states that the report contains no blackout history information. While verified_patient_facts confirm normal cardiovascular and visual parameters, these do not establish the presence or absence of a medical condition causing blackouts. Without a confirmed diagnosis, a specific restriction (temporary unfit), a conditional permission, or an unconditional standard can be applied based on the supplied guideline evidence. The guidelines reference investigations and diagnoses for conditions like syncope, epilepsy, hypoglycaemic events, drugs, or alcohol; none of these have been established in the verified facts.",
+        "source_ids": [
+          "AFTD2022-EXP-2332d9548f2abd01",
+          "AFTD2022-BLK-COM-006",
+          "AFTD2022-EXP-1292b0286ae90dcd",
+          "AFTD2022-EXP-5546204ae4ffe0ee"
+        ],
+        "fact_fields": [],
+        "criterion_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+            "fact_fields": [],
+            "licence_pathway": "general_information",
+            "finding": "information_missing",
+            "conclusion": "The guideline requires a determined cause of blackout to apply first principles regarding fitness to drive. No verified fact establishes the presence, absence, or cause of a blackout.",
+            "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+            "guideline_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-a1eb49f152b573688d112731",
+            "fact_fields": [],
+            "licence_pathway": "general_information",
+            "finding": "information_missing",
+            "conclusion": "The guideline states that where a firm diagnosis has been made, the standard appropriate to the condition should be referred to. No verified fact establishes a firm diagnosis of any blackout-related condition.",
+            "source_id": "AFTD2022-BLK-COM-006",
+            "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-6174748f4c02107432f2c67a",
+            "fact_fields": [],
+            "licence_pathway": "general_information",
+            "finding": "information_missing",
+            "conclusion": "The guideline outlines requirements for unconditional and conditional licences based on medical standards. No verified fact satisfies the prerequisites for any of these pathways as no blackout event is documented.",
+            "source_id": "AFTD2022-EXP-1292b0286ae90dcd",
+            "guideline_quote": "1.3.\t Medical standards \nfor licensing\nRequirements for unconditional and conditional \nlicences are outlined in the following tables. \nHealth professionals should familiarise \nFigure 6.\t\nManagement of blackouts and driving\nBlac\n(may be while driving or\nAdvise not to drive until the c\nhistory, investigations\nSyncope\nEpilepsy/\nseizure\nHypogly-\ncaemic event\nDru\nalco\nmis\nRefer to \nsection \n6.2. \nRefer to \nsection 3. \nRefe\nsecti"
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-7ee50d3e0359202b51f4380f",
+            "fact_fields": [],
+            "licence_pathway": "general_information",
+            "finding": "information_missing",
+            "conclusion": "The guideline allows for a conditional licence consideration only if the driver licensing authority considers the risk of a crash caused by a blackout to be acceptably low after considering information from treating specialists. No verified fact provides such an assessment or confirms a blackout history.",
+            "source_id": "AFTD2022-EXP-5546204ae4ffe0ee",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nWhere a person with one or more blackouts \nof undetermined mechanism does not \nmeet the standards above for a conditional \nlicence but may, in the opinion of the \ntreating specialist, be safe to drive, a \nconditional licence may be considered by \nthe driver licensing authority, subject to at \nleast annual review:\n•\t if the driver licensing authority, after \nconsidering information provided by the \ntreating specialist(s), considers that the \nrisk of a crash caused by a blackout is \nacceptably low."
+          }
+        ]
+      },
+      "seconds": 8.592609899998934
+    }
+  },
+  "support_review": "pending_independent_review"
+}

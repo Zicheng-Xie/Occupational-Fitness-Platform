@@ -1,0 +1,463 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-09",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 2
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "failed",
+  "stages": {
+    "applicability": {
+      "status": "failed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver reports a single home blood-pressure display of 179/103 after carrying equipment upstairs, but the cuff size is unknown and today's resting measurement has not been repeated; no clinician has established persistent hypertension. He recalls a normal value some months ago and asks which figure should be used, while the nurse records both accounts without selecting a persistent value or deriving a period of treatment control.\\n\\nAn unsigned hearing worksheet contains a number of 46 dB, but it does not identify the ear, the tested frequencies or whether a hearing aid was worn. The driver says he can usually follow conversation yet misses some radio messages in background noise, and a formal assessment is booked rather than completed.\\n\\nThe driver describes no witnessed loss of consciousness but sometimes feels light-headed when standing quickly. No current specialist conclusion explains the symptom. The note intentionally contains concerns worth retrieving guidance for, while lacking a verified persistent BP and a valid unaided better-ear average; neither numerical threshold should be treated as established by these fragments.\\n\", \"verified_patient_facts\": {}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"text_sha256\": \"63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876\", \"char_start\": 0, \"char_end\": 1176, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-EXP-e8267bf4145306c0\", \"section\": \"10.2.6\", \"pdf_page\": 218, \"printed_page\": 207, \"source_text\": \"10.2.6. Colour vision\\nThere is not a colour vision standard for \\ndrivers, either private or commercial. Doctors, \\noptometrists and ophthalmologist should, \\nhowever, advise drivers who have a significant \\ncolour vision deficiency about how this may \\naffect their responsiveness to signal lights and \\nthe need to adapt their driving accordingly. \\nNote, this standard applies only to driving within \\nnormal road rules and conditions. A standard \\nrequiring colour vision may be justified based on \\nrisk assessment for particular driving tasks.\", \"module\": \"vision\", \"passage_id\": \"PASS-2009e930bac734b0ea2f028d\", \"text_sha256\": \"acefc218677c8fd7cf8700d819a71458e84a127998ef8e737b5b6af7114541ef\", \"char_start\": 0, \"char_end\": 539, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger vehicles \\nor requiring a dangerous goods driver licence – \\nrefer to definition in Table 3)\\nCompliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\\nA person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account the nature of the driving task \\nand information provided by an ENT specialist or \\naudiologist**, as to whether:\\n•\\t the standard is able to be met with a hearing \\naid***.\\nIf the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"text_sha256\": \"6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7\", \"char_start\": 0, \"char_end\": 1620, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-EXP-2332d9548f2abd01\", \"section\": \"1.2.3\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"1.2.3. Blackouts due to medical \\ncauses not covered in the standards\\nIf the cause of the blackout is determined \\nto be a medical condition not covered in \\nthe standards, then first principles regarding \\nfitness to drive should be applied (refer to \\nPart A section 2. Assessing fitness to drive \\n– general guidance). Considerations include \\nthe likelihood of recurrence of blackout and \\nthe treatability of the condition as well as the \\nnature of the driving task. There should also be \\nan appropriate review period. A more stringent \\napproach should be considered for commercial \\nvehicle drivers.\", \"module\": \"blackout\", \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\", \"text_sha256\": \"01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398\", \"char_start\": 0, \"char_end\": 596, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-DM-COM-009\", \"section\": \"3.3.2\", \"pdf_page\": 110, \"printed_page\": 99, \"source_text\": \"3.3.2. Recommendation and \\nreview of conditional licences for \\ncommercial vehicle drivers\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based on \\nadvice from an appropriate medical specialist \\n(endocrinologist or consultant physician \\nspecialising in diabetes) and that these drivers \\nare reviewed periodically by the specialist to \\ndetermine their ongoing fitness to drive (refer \\nto Part A section 4.4. Conditional licences). For \\ncommercial drivers receiving insulin treatment, at \\nleast three months of blood glucose monitoring \\nrecords should be reviewed in assessing fitness \\nto drive.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-a581c31c1d082af9ef3ba3b6\", \"text_sha256\": \"426a6e52e563cfedd137a95b8eddcd0cbefaedd3b6ab9ccc78ad7917d1eb810d\", \"char_start\": 0, \"char_end\": 677, \"applicability_slot\": \"P5\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "d9cb0db9d6806f493dc670c2b7118f2a235af51b2ff9df32560bef8eb0da94a4",
+          "request_bytes": 13561,
+          "status": "failed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T16:03:18.2897047Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"consistent BP > 170/100\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\",\"conclusion\": \"The passage establishes a restriction for consistent BP > 170/100. Patient facts are absent; the single reading is not verified as persistent.\"}, \"P2\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"significant colour vision deficiency\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage discusses conditional advice for significant colour vision deficiency. Patient facts are absent; no deficiency is verified.\"}, \"P3\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"unaided hearing loss >= 40 dB in better ear\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for unaided hearing loss >= 40 dB. Patient facts are absent; the unsigned worksheet value is not verified.\"}, \"P4\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blackout due to medical cause not covered in standards\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage outlines considerations for blackouts from unlisted causes. Patient facts are absent; no blackout is verified.\"}, \"P5\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"diabetes requiring specialist review/insulin treatment\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage outlines requirements for conditional licences in diabetes. Patient facts are absent; no diabetes is verified.\"}}\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 10654858400,
+            "load_duration": 4002600,
+            "prompt_eval_count": 2806,
+            "prompt_eval_cached_count": 2802,
+            "prompt_eval_duration": 100305000,
+            "eval_count": 637,
+            "eval_duration": 10528549000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2806,
+            "eval_count": 637,
+            "prompt_eval_cached_count": 2802
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Established findings require a verified patient fact reference",
+          "failure_stage": "structural_validation",
+          "seconds": 10.684621000000334
+        },
+        {
+          "number": 2,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver reports a single home blood-pressure display of 179/103 after carrying equipment upstairs, but the cuff size is unknown and today's resting measurement has not been repeated; no clinician has established persistent hypertension. He recalls a normal value some months ago and asks which figure should be used, while the nurse records both accounts without selecting a persistent value or deriving a period of treatment control.\\n\\nAn unsigned hearing worksheet contains a number of 46 dB, but it does not identify the ear, the tested frequencies or whether a hearing aid was worn. The driver says he can usually follow conversation yet misses some radio messages in background noise, and a formal assessment is booked rather than completed.\\n\\nThe driver describes no witnessed loss of consciousness but sometimes feels light-headed when standing quickly. No current specialist conclusion explains the symptom. The note intentionally contains concerns worth retrieving guidance for, while lacking a verified persistent BP and a valid unaided better-ear average; neither numerical threshold should be treated as established by these fragments.\\n\", \"verified_patient_facts\": {}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"text_sha256\": \"63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876\", \"char_start\": 0, \"char_end\": 1176, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-EXP-e8267bf4145306c0\", \"section\": \"10.2.6\", \"pdf_page\": 218, \"printed_page\": 207, \"source_text\": \"10.2.6. Colour vision\\nThere is not a colour vision standard for \\ndrivers, either private or commercial. Doctors, \\noptometrists and ophthalmologist should, \\nhowever, advise drivers who have a significant \\ncolour vision deficiency about how this may \\naffect their responsiveness to signal lights and \\nthe need to adapt their driving accordingly. \\nNote, this standard applies only to driving within \\nnormal road rules and conditions. A standard \\nrequiring colour vision may be justified based on \\nrisk assessment for particular driving tasks.\", \"module\": \"vision\", \"passage_id\": \"PASS-2009e930bac734b0ea2f028d\", \"text_sha256\": \"acefc218677c8fd7cf8700d819a71458e84a127998ef8e737b5b6af7114541ef\", \"char_start\": 0, \"char_end\": 539, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger vehicles \\nor requiring a dangerous goods driver licence – \\nrefer to definition in Table 3)\\nCompliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\\nA person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account the nature of the driving task \\nand information provided by an ENT specialist or \\naudiologist**, as to whether:\\n•\\t the standard is able to be met with a hearing \\naid***.\\nIf the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"text_sha256\": \"6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7\", \"char_start\": 0, \"char_end\": 1620, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-EXP-2332d9548f2abd01\", \"section\": \"1.2.3\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"1.2.3. Blackouts due to medical \\ncauses not covered in the standards\\nIf the cause of the blackout is determined \\nto be a medical condition not covered in \\nthe standards, then first principles regarding \\nfitness to drive should be applied (refer to \\nPart A section 2. Assessing fitness to drive \\n– general guidance). Considerations include \\nthe likelihood of recurrence of blackout and \\nthe treatability of the condition as well as the \\nnature of the driving task. There should also be \\nan appropriate review period. A more stringent \\napproach should be considered for commercial \\nvehicle drivers.\", \"module\": \"blackout\", \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\", \"text_sha256\": \"01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398\", \"char_start\": 0, \"char_end\": 596, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-DM-COM-009\", \"section\": \"3.3.2\", \"pdf_page\": 110, \"printed_page\": 99, \"source_text\": \"3.3.2. Recommendation and \\nreview of conditional licences for \\ncommercial vehicle drivers\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based on \\nadvice from an appropriate medical specialist \\n(endocrinologist or consultant physician \\nspecialising in diabetes) and that these drivers \\nare reviewed periodically by the specialist to \\ndetermine their ongoing fitness to drive (refer \\nto Part A section 4.4. Conditional licences). For \\ncommercial drivers receiving insulin treatment, at \\nleast three months of blood glucose monitoring \\nrecords should be reviewed in assessing fitness \\nto drive.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-a581c31c1d082af9ef3ba3b6\", \"text_sha256\": \"426a6e52e563cfedd137a95b8eddcd0cbefaedd3b6ab9ccc78ad7917d1eb810d\", \"char_start\": 0, \"char_end\": 677, \"applicability_slot\": \"P5\"}]}"
+              },
+              {
+                "role": "assistant",
+                "content": "{\"passages\": {\"P1\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"consistent BP > 170/100\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\",\"conclusion\": \"The passage establishes a restriction for consistent BP > 170/100. Patient facts are absent; the single reading is not verified as persistent.\"}, \"P2\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"significant colour vision deficiency\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage discusses conditional advice for significant colour vision deficiency. Patient facts are absent; no deficiency is verified.\"}, \"P3\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"unaided hearing loss >= 40 dB in better ear\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for unaided hearing loss >= 40 dB. Patient facts are absent; the unsigned worksheet value is not verified.\"}, \"P4\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blackout due to medical cause not covered in standards\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage outlines considerations for blackouts from unlisted causes. Patient facts are absent; no blackout is verified.\"}, \"P5\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"diabetes requiring specialist review/insulin treatment\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage outlines requirements for conditional licences in diabetes. Patient facts are absent; no diabetes is verified.\"}}\n}"
+              },
+              {
+                "role": "user",
+                "content": "The output failed structural validation: ValueError: Established findings require a verified patient fact reference. Correct only the output contract using the SAME supplied facts and original passages. Do not invent facts, quotations or identifiers. This validator provides no correct fitness outcome. Semantic consistency flags are not repair instructions."
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "b5d8079825ec54c3371c5ff3bab3c0c76945422abeda51c3bfe2add6170c8f4f",
+          "request_bytes": 16646,
+          "status": "failed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T16:03:29.7532346Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"consistent BP > 170/100\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for consistent BP > 170/100. Patient facts are absent; the single reading is not verified as persistent.\"}, \"P2\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"significant colour vision deficiency\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage discusses conditional advice for significant colour vision deficiency. Patient facts are absent; no deficiency is verified.\"}, \"P3\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"unaided hearing loss >= 40 dB in better ear\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for unaided hearing loss >= 40 dB. Patient facts are absent; the unsigned worksheet value is not verified.\"}, \"P4\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blackout due to medical cause not covered in standards\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage outlines considerations for blackouts from unlisted causes. Patient facts are absent; no blackout is verified.\"}, \"P5\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"diabetes requiring specialist review/insulin treatment\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage outlines requirements for conditional licences in diabetes. Patient facts are absent; no diabetes is verified.\"}}\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 11434566600,
+            "load_duration": 5247600,
+            "prompt_eval_count": 3444,
+            "prompt_eval_cached_count": 2802,
+            "prompt_eval_duration": 461160000,
+            "eval_count": 574,
+            "eval_duration": 10940384000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3444,
+            "eval_count": 574,
+            "prompt_eval_cached_count": 2802
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Established findings require a verified patient fact reference",
+          "failure_stage": "structural_validation",
+          "seconds": 11.463449300004868
+        }
+      ],
+      "error": "ValueError: Established findings require a verified patient fact reference",
+      "seconds": 22.14815360000648
+    }
+  },
+  "support_review": "pending_independent_review"
+}

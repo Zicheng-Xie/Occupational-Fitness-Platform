@@ -1,0 +1,793 @@
+{
+  "method": "lightrag",
+  "config": {
+    "preparation_dir": "outputs/experiments/six_method_query_preparation_v2",
+    "expected_preparation_identity": "d79c6930570f958128fbb7a881f1c407e33e45610b345a04130172b5a65d31af",
+    "baseline_dir": "outputs/experiments/shared_retrieval_v1",
+    "output": "outputs/experiments/external_graph_retrieval_v2",
+    "endpoint": "http://127.0.0.1:11434",
+    "audit_endpoint": "http://127.0.0.1:11544",
+    "expected_runtime_version": "0.40.6",
+    "graph_model": "qwen3.5:4b-q4_K_M",
+    "graph_model_digest": "91fa08b9fedfbbda924cd71febc5f6adbf31503cf7811df817dcf93bd56b08ff",
+    "embedding_model": "nomic-embed-text:latest",
+    "embedding_model_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+    "graph_context_length": 8192,
+    "call_timeout_seconds": 240,
+    "worker_timeout_seconds": 5400,
+    "tokenizer_cache": ".runtime/tokenizers",
+    "tokenizer_sha256": {
+      "fb374d419588a4632f3f557e76b4b70aebbca790": "446a9538cb6c348e3516120d7c08b09f57c36495e2acfffe59a5bf8b0cfb1a2d",
+      "9b5ad71b2ce5302211f9c61530b329a4922fc6a4": "223921b76ee99bde995b7ff738513eef100fb51d18c93597a113bcffe865b2a7"
+    }
+  },
+  "corpus": "E:\\code\\Occupational-Fitness-Platform\\outputs\\experiments\\six_method_query_preparation_v2\\corpus.json",
+  "corpus_file_sha256": "5836b27505139c181783224c31fbd302083235e632f3c4cccca5f004ac7a5909",
+  "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+  "workspace": "E:\\code\\Occupational-Fitness-Platform\\outputs\\experiments\\external_graph_retrieval_v2\\indexes\\lightrag",
+  "top_k": 10,
+  "queries": [
+    {
+      "case_id": "SYN-EXT-001",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard | hearing clinical assessment = \"no_hearing_loss\" | hearing.clinical_assessment = \"no_hearing_loss\"\r",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [
+          "hearing.clinical_assessment"
+        ],
+        "field_values": {
+          "hearing.clinical_assessment": "no_hearing_loss"
+        },
+        "patient_quotes": [
+          "hearing.clinical_assessment = \"no_hearing_loss\"\r"
+        ],
+        "no_documented_facts": false,
+        "query_sha256": "3916961fd73e9c20eeb7ff434a822622925b723de4703149d71f3a50019aaa97",
+        "query_utf8_bytes": 152
+      },
+      "patient_identity": "f24182073c5bf01c59a0ab37ccebb8abb6d4b308e679aa5c0aeba779c6b4ad9c",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "55fb489cf9addc1367550e5ce408f77f787ae8f8a6d74bd68136481a1ef5a2d5"
+    },
+    {
+      "case_id": "SYN-EXT-017",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard | hearing audiometry available = true | hearing average frequencies khz = [0.5, 1, 2, 3] | hearing clinical assessment = \"possible_hearing_loss\" | hearing unaided better ear average db = 40.0 | hearing.audiometry.available = true | hearing.average_frequencies_khz = [0.5, 1, 2, 3] | hearing.clinical_assessment = \"possible_hearing_loss\" | hearing.unaided_better_ear_average_db = 40",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [
+          "hearing.audiometry.available",
+          "hearing.average_frequencies_khz",
+          "hearing.clinical_assessment",
+          "hearing.unaided_better_ear_average_db"
+        ],
+        "field_values": {
+          "hearing.audiometry.available": true,
+          "hearing.average_frequencies_khz": [
+            0.5,
+            1,
+            2,
+            3
+          ],
+          "hearing.clinical_assessment": "possible_hearing_loss",
+          "hearing.unaided_better_ear_average_db": 40.0
+        },
+        "patient_quotes": [
+          "hearing.audiometry.available = true",
+          "hearing.average_frequencies_khz = [0.5, 1, 2, 3]",
+          "hearing.clinical_assessment = \"possible_hearing_loss\"",
+          "hearing.unaided_better_ear_average_db = 40"
+        ],
+        "no_documented_facts": false,
+        "query_sha256": "5602591d3842ee0310c3a955b24dc608ca6ae521a22104534076f82a0a86afb0",
+        "query_utf8_bytes": 433
+      },
+      "patient_identity": "3d2ac612995848a202f6e4c28e15983be4442ca68a86e1fa3853727d41be2974",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "d7126a74912a70e49cc6a3d39d290cadf715474587f84761e580beac4ac1c994"
+    },
+    {
+      "case_id": "SYN-EXT-020",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard | hearing audiometry available = true | hearing average frequencies khz = [0.5, 1, 2, 3] | hearing clinical assessment = \"possible_hearing_loss\" | hearing unaided better ear average db = 39.9 | hearing.audiometry.available = true | hearing.average_frequencies_khz = [0.5, 1, 2, 3] | hearing.clinical_assessment = \"possible_hearing_loss\" | hearing.unaided_better_ear_average_db = 39.9",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [
+          "hearing.audiometry.available",
+          "hearing.average_frequencies_khz",
+          "hearing.clinical_assessment",
+          "hearing.unaided_better_ear_average_db"
+        ],
+        "field_values": {
+          "hearing.audiometry.available": true,
+          "hearing.average_frequencies_khz": [
+            0.5,
+            1,
+            2,
+            3
+          ],
+          "hearing.clinical_assessment": "possible_hearing_loss",
+          "hearing.unaided_better_ear_average_db": 39.9
+        },
+        "patient_quotes": [
+          "hearing.audiometry.available = true",
+          "hearing.average_frequencies_khz = [0.5, 1, 2, 3]",
+          "hearing.clinical_assessment = \"possible_hearing_loss\"",
+          "hearing.unaided_better_ear_average_db = 39.9"
+        ],
+        "no_documented_facts": false,
+        "query_sha256": "10923863415f9f054f2edd17b5e3286ee6d857b975a2ed9f19fcf7a230c3e14c",
+        "query_utf8_bytes": 435
+      },
+      "patient_identity": "3b072c95acd6e4ebc6bfc0b61edf52426111671a165edd972972b7bc9bd00176",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "83c4389a75eff70f95096a38031e9c6abf70538ffaf036af74dc9b97f268dc6d"
+    },
+    {
+      "case_id": "SYN-M2-009",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard | hearing audiometry available = true | hearing clinical assessment = \"possible_hearing_loss\" | hearing hearing aid used = true | hearing unaided better ear average db = 45.0 | Audiometry completed | Bilateral hearing loss | uses hearing aids | unaided better ear average 45 dB",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [
+          "hearing.audiometry.available",
+          "hearing.clinical_assessment",
+          "hearing.hearing_aid_used",
+          "hearing.unaided_better_ear_average_db"
+        ],
+        "field_values": {
+          "hearing.audiometry.available": true,
+          "hearing.clinical_assessment": "possible_hearing_loss",
+          "hearing.hearing_aid_used": true,
+          "hearing.unaided_better_ear_average_db": 45.0
+        },
+        "patient_quotes": [
+          "Audiometry completed",
+          "Bilateral hearing loss",
+          "uses hearing aids",
+          "unaided better ear average 45 dB"
+        ],
+        "no_documented_facts": false,
+        "query_sha256": "e6731b3136c9eb9a24ba56ffe80b10aa2a9ae5d5ccd45b4160321fc3909c6fe6",
+        "query_utf8_bytes": 329
+      },
+      "patient_identity": "09e80c110c4f0868051a5d95ba3ae55892f9d49af6ddf9fc1f4d42f0354067dd",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "a66371d4897a48c54fe3b69f9b90603be599e3afac09ef748e7150c47b886941"
+    },
+    {
+      "case_id": "SYN-M2-010",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard | hearing audiometry available = false | hearing clinical assessment = \"possible_hearing_loss\" | hearing hearing aid used = false | No audiometry or audiogram is available | Reports reduced hearing and hearing loss | Reports reduced hearing and hearing loss in the left ear. | No hearing aid | No hearing aid.",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [
+          "hearing.audiometry.available",
+          "hearing.clinical_assessment",
+          "hearing.hearing_aid_used"
+        ],
+        "field_values": {
+          "hearing.audiometry.available": false,
+          "hearing.clinical_assessment": "possible_hearing_loss",
+          "hearing.hearing_aid_used": false
+        },
+        "patient_quotes": [
+          "No audiometry or audiogram is available",
+          "Reports reduced hearing and hearing loss",
+          "Reports reduced hearing and hearing loss in the left ear.",
+          "No hearing aid",
+          "No hearing aid."
+        ],
+        "no_documented_facts": false,
+        "query_sha256": "d3e76461f2f1d11edccefd6833bae6241b28b922a1ea4e4592028adc47f648c5",
+        "query_utf8_bytes": 361
+      },
+      "patient_identity": "691525a3e89015065124a4633e7945c5d1d1d917fef6dfef249cce9fe397c5c9",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "2a84e5b841ddd387f2272189e44a63ca87c693ac683da80ab8b890e6eeb25dc0"
+    },
+    {
+      "case_id": "VAL-MIX-01",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard | hearing audiometry available = false | hearing clinical assessment = \"possible_hearing_loss\" | No formal audiogram is available.  | reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss | During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. ",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [
+          "hearing.audiometry.available",
+          "hearing.clinical_assessment"
+        ],
+        "field_values": {
+          "hearing.audiometry.available": false,
+          "hearing.clinical_assessment": "possible_hearing_loss"
+        },
+        "patient_quotes": [
+          "No formal audiogram is available. ",
+          "reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss",
+          "During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. "
+        ],
+        "no_documented_facts": false,
+        "query_sha256": "462d0ce6356a0c7b7358b0b62508cca268ac2c12c1c5564de7365f816f187b4b",
+        "query_utf8_bytes": 474
+      },
+      "patient_identity": "06c605b25f8901885b9c3bfd007bd450faf95cbba3a5f137a81e595eb2a61fc5",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "f5d4f65f5a99ec8ce3ca44ed4b353d2a4275e784b231004839c42b52f9bf2a3e"
+    },
+    {
+      "case_id": "VAL-MIX-02",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [],
+        "field_values": {},
+        "patient_quotes": [],
+        "no_documented_facts": true,
+        "query_sha256": "73794f0728ec49a6fce417572bfaea62f32f7394c97652c99fa85352fc8176af",
+        "query_utf8_bytes": 51
+      },
+      "patient_identity": "fa8cd03901648cec324749ba8c9247c37c05c2a9626f84c035ddec2e444815a5",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "1129525bb4e7e238423c26832abe2d9258d2840491b6c97c37a1f3c241809515"
+    },
+    {
+      "case_id": "VAL-MIX-03",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [],
+        "field_values": {},
+        "patient_quotes": [],
+        "no_documented_facts": true,
+        "query_sha256": "73794f0728ec49a6fce417572bfaea62f32f7394c97652c99fa85352fc8176af",
+        "query_utf8_bytes": 51
+      },
+      "patient_identity": "bc0aa81f3582b9ae6241f8a52572cb2a75406d10ed8eb94ca3e0bcef6ef0be84",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "6bb6437e9bc793f6376e6a484e950151d1c01ec7ea2fb2325f4e3e8a79c397eb"
+    },
+    {
+      "case_id": "VAL-MIX-04",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [],
+        "field_values": {},
+        "patient_quotes": [],
+        "no_documented_facts": true,
+        "query_sha256": "73794f0728ec49a6fce417572bfaea62f32f7394c97652c99fa85352fc8176af",
+        "query_utf8_bytes": 51
+      },
+      "patient_identity": "3ae792514a2fb3d6e51cc13dd66553d326279c4bcb6ce0f08fa7e869748ab1e4",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "491133a014adf8bf6805a62cf2b90b2d9ad8d7cc7471ac19092c37ed6370a3c6"
+    },
+    {
+      "case_id": "VAL-MIX-05",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard | hearing audiometry available = true | hearing average frequencies khz = [0.5, 1, 2, 3] | hearing clinical assessment = \"possible_hearing_loss\" | hearing unaided better ear average db = 47.0 | Formal audiometry was completed this week, and the signed audiologist report states that mean unaided threshold in the better ear was 47 dB, averaged over 500, 1000, 2000 and 3000 Hz.  | bilateral hearing loss | Hearing screening indicates bilateral hearing loss. ",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [
+          "hearing.audiometry.available",
+          "hearing.average_frequencies_khz",
+          "hearing.clinical_assessment",
+          "hearing.unaided_better_ear_average_db"
+        ],
+        "field_values": {
+          "hearing.audiometry.available": true,
+          "hearing.average_frequencies_khz": [
+            0.5,
+            1,
+            2,
+            3
+          ],
+          "hearing.clinical_assessment": "possible_hearing_loss",
+          "hearing.unaided_better_ear_average_db": 47.0
+        },
+        "patient_quotes": [
+          "Formal audiometry was completed this week, and the signed audiologist report states that mean unaided threshold in the better ear was 47 dB, averaged over 500, 1000, 2000 and 3000 Hz. ",
+          "bilateral hearing loss",
+          "Hearing screening indicates bilateral hearing loss. "
+        ],
+        "no_documented_facts": false,
+        "query_sha256": "163db6bc76ed962a5d26c4a1e0347d4d31616da42e4508e2c6f4216b3d22ed93",
+        "query_utf8_bytes": 510
+      },
+      "patient_identity": "262351fd15d6d057a3ca029c3d3fbc52759d8375d44fb9fb26339f67ed9ea3f6",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "dad2af09597f810ec6bc347dd43af1374a33bd3330cc6c894d764b2c8e3821d2"
+    },
+    {
+      "case_id": "VAL-MIX-06",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [],
+        "field_values": {},
+        "patient_quotes": [],
+        "no_documented_facts": true,
+        "query_sha256": "73794f0728ec49a6fce417572bfaea62f32f7394c97652c99fa85352fc8176af",
+        "query_utf8_bytes": 51
+      },
+      "patient_identity": "4b6267d1d9a2ca005d9ab07182daf6035eea264fa3673ef85a319e0376399636",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "0c600ee5e4bd953759f7dc6b9dff1206a5cead13e30fcc0050b94ea64755a4a8"
+    },
+    {
+      "case_id": "VAL-MIX-07",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [],
+        "field_values": {},
+        "patient_quotes": [],
+        "no_documented_facts": true,
+        "query_sha256": "73794f0728ec49a6fce417572bfaea62f32f7394c97652c99fa85352fc8176af",
+        "query_utf8_bytes": 51
+      },
+      "patient_identity": "872893594ae29a3bdcc90cb1f59ae4281c421e6d02045aed0fe37c433cd8ae3d",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "a2f41d58e0bb0e153c2c68619cab1545903403ff4fb6a9c31098b7532555217d"
+    },
+    {
+      "case_id": "VAL-MIX-08",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard | hearing audiometry available = false | hearing clinical assessment = \"possible_hearing_loss\" | Clinical assessment suggests possible hearing impairment after the driver repeatedly missed spoken instructions, and audiometry has not been performed.  | Clinical assessment suggests possible hearing impairment",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [
+          "hearing.audiometry.available",
+          "hearing.clinical_assessment"
+        ],
+        "field_values": {
+          "hearing.audiometry.available": false,
+          "hearing.clinical_assessment": "possible_hearing_loss"
+        },
+        "patient_quotes": [
+          "Clinical assessment suggests possible hearing impairment after the driver repeatedly missed spoken instructions, and audiometry has not been performed. ",
+          "Clinical assessment suggests possible hearing impairment"
+        ],
+        "no_documented_facts": false,
+        "query_sha256": "eb868effee3bc86fd0d9637e4d281e80c202efda0fa47d8338c7a2ffadb0b20a",
+        "query_utf8_bytes": 360
+      },
+      "patient_identity": "c41ce8d3cae64c02ab707cfc492b80f7ab5c811cbe25fda44e3e70215b8a8341",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "7316af9854a6fe53e9fb6e401516c59c5b41b638d2e3fa4134743d214555f1d1"
+    },
+    {
+      "case_id": "VAL-MIX-09",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [],
+        "field_values": {},
+        "patient_quotes": [],
+        "no_documented_facts": true,
+        "query_sha256": "73794f0728ec49a6fce417572bfaea62f32f7394c97652c99fa85352fc8176af",
+        "query_utf8_bytes": 51
+      },
+      "patient_identity": "90743bec6bc0544fae5edbcc1e2366915bb0e101d38db4cceb8e5d561792c4a2",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "4c783063b89d840007b3e43a9f31d151ebe78b1576337428eb3d0b4608f9e64d"
+    },
+    {
+      "case_id": "VAL-MIX-10",
+      "module": "hearing",
+      "query": "hearing commercial driving medical fitness standard",
+      "query_audit": {
+        "policy": "verified_module_facts_v1",
+        "module": "hearing",
+        "licence_context": "commercial",
+        "field_names": [],
+        "field_values": {},
+        "patient_quotes": [],
+        "no_documented_facts": true,
+        "query_sha256": "73794f0728ec49a6fce417572bfaea62f32f7394c97652c99fa85352fc8176af",
+        "query_utf8_bytes": 51
+      },
+      "patient_identity": "2a057efe744aefeb0cbcdfc9a89433b6f42ef44a84b0e25f2996850fb98b3fe0",
+      "fact_snapshot_identity": "b156f6ab7f55d03fda9d0c0fb6749f3e0694636cd80392c0bf4567831179e568",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "licence_context": "commercial",
+      "query_id": "802b2ae77fa4b9045c9d4a7ad05e81ac4f358ff740d780d2ab8c814f30a9e591"
+    }
+  ],
+  "experiment_identity": "dd2d39cbedb166801da661132afe15808c00bb093b553ff7f29293e3fce6fb1d",
+  "index_contracts": {
+    "hearing": {
+      "method": "lightrag",
+      "module": "hearing",
+      "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+      "documents": [
+        {
+          "source_id": "AFTD2022-HEAR-COM-001",
+          "text_sha256": "4271ce60eb87e2078a773f2d63311730574ee4c653365cbcf0a31471005cff50"
+        },
+        {
+          "source_id": "AFTD2022-HEAR-COM-002",
+          "text_sha256": "5ca4b48b33d26e65e2e5ab9587bf90a4ac79d585304e24640d479c1060276af7"
+        },
+        {
+          "source_id": "AFTD2022-HEAR-COM-003",
+          "text_sha256": "7decb62588f1a8172d625781f33eb1e640494439279c81ba6643538d01493c21"
+        },
+        {
+          "source_id": "AFTD2022-HEAR-COM-004",
+          "text_sha256": "0bdf64850e4a035d87119d9dd49bd4d394e35f47d90257b56bc6d76563fec7cc"
+        },
+        {
+          "source_id": "AFTD2022-EXP-ac9c0c76b5ead534",
+          "text_sha256": "0f328f4b5f95c27b49b060468efcd454f7a93a570f7910eed5e4fd09f48bbfd9"
+        },
+        {
+          "source_id": "AFTD2022-EXP-cc5b5152249058a5",
+          "text_sha256": "03e547a14ae89098d3d407e57bc7cef68ad304e888d5d7fa080bde01b8991030"
+        },
+        {
+          "source_id": "AFTD2022-EXP-44d20141744cafb2",
+          "text_sha256": "d78535347c7c6a4283f22f7c331b9b59d403c9507f7d723c47beaae74169c14f"
+        },
+        {
+          "source_id": "AFTD2022-EXP-e69686bd8111b385",
+          "text_sha256": "fd76608515b59dc214981a80744e4ee09e65b7bf6f69468a17f3dd79615a327e"
+        },
+        {
+          "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+          "text_sha256": "67d3cc280bf1ad66d9c7690451286a37485e6c2841c7b6824e798a0b22d13a83"
+        },
+        {
+          "source_id": "AFTD2022-EXP-3489e87ef8a4fff2",
+          "text_sha256": "4403493401d8e054a5929e4153f55f9300229b1a992047d73f9b17e97a6ca556"
+        },
+        {
+          "source_id": "AFTD2022-EXP-1ca53671ba0f3fb4",
+          "text_sha256": "b9fa702d424a364ed19d2db79a0183395ab9471d0cc8966bb37712ec027e93bc"
+        },
+        {
+          "source_id": "AFTD2022-EXP-d83c4a25c127adee",
+          "text_sha256": "891868733be3c9f545d7079bd720529f169b06dd48f19e322bfea48ee309f50e"
+        },
+        {
+          "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+          "text_sha256": "ba47e6d92134fd1a904273fad195cd062ed7fad23cce3c053ed51a5b26cbce52"
+        }
+      ],
+      "config": {
+        "preparation_dir": "outputs/experiments/six_method_query_preparation_v2",
+        "expected_preparation_identity": "d79c6930570f958128fbb7a881f1c407e33e45610b345a04130172b5a65d31af",
+        "baseline_dir": "outputs/experiments/shared_retrieval_v1",
+        "output": "outputs/experiments/external_graph_retrieval_v2",
+        "endpoint": "http://127.0.0.1:11434",
+        "audit_endpoint": "http://127.0.0.1:11544",
+        "expected_runtime_version": "0.40.6",
+        "graph_model": "qwen3.5:4b-q4_K_M",
+        "graph_model_digest": "91fa08b9fedfbbda924cd71febc5f6adbf31503cf7811df817dcf93bd56b08ff",
+        "embedding_model": "nomic-embed-text:latest",
+        "embedding_model_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "graph_context_length": 8192,
+        "call_timeout_seconds": 240,
+        "worker_timeout_seconds": 5400,
+        "tokenizer_cache": ".runtime/tokenizers",
+        "tokenizer_sha256": {
+          "fb374d419588a4632f3f557e76b4b70aebbca790": "446a9538cb6c348e3516120d7c08b09f57c36495e2acfffe59a5bf8b0cfb1a2d",
+          "9b5ad71b2ce5302211f9c61530b329a4922fc6a4": "223921b76ee99bde995b7ff738513eef100fb51d18c93597a113bcffe865b2a7"
+        }
+      },
+      "environment": {
+        "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+        "dependencies": [
+          [
+            "aiohappyeyeballs",
+            "2.7.1"
+          ],
+          [
+            "aiohttp",
+            "3.14.4"
+          ],
+          [
+            "aiosignal",
+            "1.4.0"
+          ],
+          [
+            "annotated-types",
+            "0.8.0"
+          ],
+          [
+            "anyio",
+            "4.15.1"
+          ],
+          [
+            "ascii-colors",
+            "0.12.3"
+          ],
+          [
+            "attrs",
+            "26.1.0"
+          ],
+          [
+            "certifi",
+            "2026.7.22"
+          ],
+          [
+            "cffi",
+            "2.1.1"
+          ],
+          [
+            "charset-normalizer",
+            "3.5.2"
+          ],
+          [
+            "configparser",
+            "7.2.0"
+          ],
+          [
+            "cryptography",
+            "50.0.2"
+          ],
+          [
+            "distro",
+            "1.9.0"
+          ],
+          [
+            "frozenlist",
+            "1.8.0"
+          ],
+          [
+            "google-api-core",
+            "2.41.0"
+          ],
+          [
+            "google-auth",
+            "2.60.0"
+          ],
+          [
+            "google-genai",
+            "2.28.0"
+          ],
+          [
+            "googleapis-common-protos",
+            "1.75.5"
+          ],
+          [
+            "h11",
+            "0.16.0"
+          ],
+          [
+            "httpcore",
+            "1.0.9"
+          ],
+          [
+            "httpx",
+            "0.28.1"
+          ],
+          [
+            "idna",
+            "3.20"
+          ],
+          [
+            "json-repair",
+            "0.63.5"
+          ],
+          [
+            "lightrag-hku",
+            "1.5.7"
+          ],
+          [
+            "multidict",
+            "6.9.1"
+          ],
+          [
+            "nano-vectordb",
+            "0.0.4.3"
+          ],
+          [
+            "networkx",
+            "3.7"
+          ],
+          [
+            "numpy",
+            "2.5.3"
+          ],
+          [
+            "ollama",
+            "0.6.3"
+          ],
+          [
+            "opentelemetry-api",
+            "1.45.1"
+          ],
+          [
+            "packaging",
+            "26.3"
+          ],
+          [
+            "pandas",
+            "3.0.6"
+          ],
+          [
+            "pipmaster",
+            "1.1.13"
+          ],
+          [
+            "propcache",
+            "0.5.4"
+          ],
+          [
+            "proto-plus",
+            "1.29.0"
+          ],
+          [
+            "protobuf",
+            "7.36.2"
+          ],
+          [
+            "pyasn1",
+            "0.6.4"
+          ],
+          [
+            "pyasn1-modules",
+            "0.4.2"
+          ],
+          [
+            "pycparser",
+            "3.0"
+          ],
+          [
+            "pydantic",
+            "2.13.5"
+          ],
+          [
+            "pydantic-core",
+            "2.46.5"
+          ],
+          [
+            "pypinyin",
+            "0.55.0"
+          ],
+          [
+            "python-dateutil",
+            "2.9.0.post0"
+          ],
+          [
+            "python-dotenv",
+            "1.2.4"
+          ],
+          [
+            "pyyaml",
+            "6.0.3"
+          ],
+          [
+            "regex",
+            "2026.9.29"
+          ],
+          [
+            "requests",
+            "2.34.2"
+          ],
+          [
+            "setuptools",
+            "84.0.0"
+          ],
+          [
+            "six",
+            "1.17.0"
+          ],
+          [
+            "sniffio",
+            "1.3.1"
+          ],
+          [
+            "tenacity",
+            "9.1.4"
+          ],
+          [
+            "tiktoken",
+            "0.14.0"
+          ],
+          [
+            "typing-extensions",
+            "4.16.0"
+          ],
+          [
+            "typing-inspection",
+            "0.4.4"
+          ],
+          [
+            "tzdata",
+            "2026.5"
+          ],
+          [
+            "urllib3",
+            "2.8.0"
+          ],
+          [
+            "wcwidth",
+            "0.9.2"
+          ],
+          [
+            "websockets",
+            "16.1.1"
+          ],
+          [
+            "xlsxwriter",
+            "3.2.9"
+          ],
+          [
+            "yarl",
+            "1.25.1"
+          ]
+        ],
+        "lock_sha256": "920d6103307fa03aa23aaf6664b630a66ce0cd4e7fdf26d38ec1577b949b408f"
+      },
+      "worker_sha256": "176f09b929cc189803a4900d80c8922830d6dd1c144822a23a0aa909beb0af00",
+      "contract_sha256": "70e2ecab2b1b2bcc13c0e0712aadc66370f8f777cd7d3005d6025b9b8f32e353"
+    }
+  },
+  "worker_sha256": "176f09b929cc189803a4900d80c8922830d6dd1c144822a23a0aa909beb0af00",
+  "contract_sha256": "70e2ecab2b1b2bcc13c0e0712aadc66370f8f777cd7d3005d6025b9b8f32e353",
+  "request_identity": "fb7d832c96b3ba012fb0478d2aa9c6cd944406b2cf426a28fbbac27c046cb158"
+}

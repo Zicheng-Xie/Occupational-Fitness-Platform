@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "2597a2edc87f457a95a3bda2b267592334ab5bb4ce834ae1c9234288282ff6de",
+  "input_facts_sha256": "3f7bbe39f5257a3b68f384f2366098c775df561d5bbc7d30ffcb7a56e52e36dc",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 654,
+      "eval_count": 74,
+      "total_duration": 1589904300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 615,
+      "eval_count": 66,
+      "total_duration": 1373783300
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "blackout.occurred",
+      "kind": "omission",
+      "quote": "A colleague witnessed the driver lose consciousness and fail to respond for 18 seconds during a break, and the current physician referral explicitly records a blackout with the mechanism under investigation; although the driver recalls heat, hunger and a racing heartbeat beforehand, neither syncope, seizure nor hypoglycaemia has been confirmed, cardiac monitoring is pending, and uncertainty about a remote dizzy spell does not erase the documented recent event.",
+      "explanation": "Independent source reading differs from the extraction. The colleague witnessed the driver lose consciousness and fail to respond for 18 seconds during a break, and the current physician referral explicitly records a blackout with the mechanism under investigation.",
+      "evidence": [
+        {
+          "start": 436,
+          "end": 900,
+          "quote": "A colleague witnessed the driver lose consciousness and fail to respond for 18 seconds during a break, and the current physician referral explicitly records a blackout with the mechanism under investigation; although the driver recalls heat, hunger and a racing heartbeat beforehand, neither syncope, seizure nor hypoglycaemia has been confirmed, cardiac monitoring is pending, and uncertainty about a remote dizzy spell does not erase the documented recent event.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "blackout.occurred"
+  ],
+  "checked_fields": [
+    "blackout.mechanism_status"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "blackout"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "52f771dd72d05b4350c62c8084376332ae906725b84ab476ed1a0648c94144a9",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "blackout.occurred": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status"
+      ],
+      "status": "valid",
+      "request_sha256": "1c13f4e5dcca6c9a9e7a8cbfa83a5ab860faad479d703c51126e9ea168ababd1",
+      "response_schema_sha256": "91ed9342bc3afe4439594ed36a6c0504d60da4ae4dff961851177256a22d051a"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "blackout.occurred"
+      ],
+      "status": "valid",
+      "request_sha256": "257865ad03ff947e203847caee18761ee4c54600cd81e41535503a6267b77cf9",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": "under_investigation",
+      "status": "documented",
+      "quote": "A colleague witnessed the driver lose consciousness and fail to respond for 18 seconds during a break, and the current physician referral explicitly records a blackout with the mechanism under investigation; although the driver recalls heat, hunger and a racing heartbeat beforehand, neither syncope, seizure nor hypoglycaemia has been confirmed, cardiac monitoring is pending, and uncertainty about a remote dizzy spell does not erase the documented recent event.",
+      "explanation": "The mechanism of the blackout is under investigation, and the cause is unknown. The passage explicitly states that the mechanism is under investigation, and the driver's recollections do not confirm a specific cause."
+    },
+    {
+      "field": "blackout.occurred",
+      "value": true,
+      "status": "documented",
+      "quote": "A colleague witnessed the driver lose consciousness and fail to respond for 18 seconds during a break, and the current physician referral explicitly records a blackout with the mechanism under investigation; although the driver recalls heat, hunger and a racing heartbeat beforehand, neither syncope, seizure nor hypoglycaemia has been confirmed, cardiac monitoring is pending, and uncertainty about a remote dizzy spell does not erase the documented recent event.",
+      "explanation": "The colleague witnessed the driver lose consciousness and fail to respond for 18 seconds during a break, and the current physician referral explicitly records a blackout with the mechanism under investigation."
+    }
+  ],
+  "output_facts_sha256": "9ac29c7ae0d4c39acfe59ab6885a16392db7e77def626d351ebfbe42b452eac9",
+  "facts_quarantined": true
+}

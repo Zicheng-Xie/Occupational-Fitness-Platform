@@ -1,0 +1,178 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "6727c14f1142e93bedbd3f78e5075b025033d5e96079d0b1087290ce5cc3a234",
+  "input_facts_sha256": "6564dd479355458aa7a07e4a842219893054e19f927dc37e5e624a3bb54267f2",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 559,
+      "eval_count": 43,
+      "total_duration": 1062637900
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 559,
+      "eval_count": 37,
+      "total_duration": 950192400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 557,
+      "eval_count": 43,
+      "total_duration": 1072646800
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 557,
+      "eval_count": 40,
+      "total_duration": 972704100
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "kind": "contradiction",
+      "quote": "The current doctor-reviewed series confirms persistent BP 174/104 mmHg while the driver is taking antihypertensive therapy, but the medication review also documents dizziness that impairs safe vehicle operation after the morning dose; although the driver feels better when sitting still in the interview, the nurse has no evidence that the side effect has resolved, and a proposed future dose change is not recorded as an accomplished treatment outcome.",
+      "explanation": "Independent source reading differs from the extraction. 174/104 mmHg",
+      "evidence": [
+        {
+          "start": 460,
+          "end": 913,
+          "quote": "The current doctor-reviewed series confirms persistent BP 174/104 mmHg while the driver is taking antihypertensive therapy, but the medication review also documents dizziness that impairs safe vehicle operation after the morning dose; although the driver feels better when sitting still in the interview, the nurse has no evidence that the side effect has resolved, and a proposed future dose change is not recorded as an accomplished treatment outcome.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "cardiovascular.blood_pressure.persistent_diastolic"
+  ],
+  "checked_fields": [
+    "cardiovascular.blood_pressure.observed_diastolic",
+    "cardiovascular.blood_pressure.observed_systolic",
+    "cardiovascular.blood_pressure.persistent_diastolic",
+    "cardiovascular.blood_pressure.persistent_systolic"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "hypertension"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "f79e0dfd8debf14f74e600a05aec0e8e67ded1867261d8f11e48be1a82988e0c",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "cardiovascular.blood_pressure.persistent_diastolic": {
+      "value": 104.0,
+      "status": "present",
+      "unit": "mmHg",
+      "evidence": [
+        {
+          "start": 504,
+          "end": 530,
+          "quote": "persistent BP 174/104 mmHg",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        },
+        {
+          "start": 504,
+          "end": 530,
+          "quote": "persistent BP 174/104 mmHg",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "llm_grounded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "cardiovascular.blood_pressure.observed_diastolic"
+      ],
+      "status": "valid",
+      "request_sha256": "1f760acf18807d345cc43d9a7adaf4a5cbd1bd67d887bd3d3b00af2e740a25d0",
+      "response_schema_sha256": "f4d5b67347052aaf3edfb41a3ada79d6d98c4a1a8253729a43bc8e422280c50b"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "cardiovascular.blood_pressure.observed_systolic"
+      ],
+      "status": "valid",
+      "request_sha256": "744056da3b24cb972d8311b453c17ae4613008f3dc7eb628780b507fb9cd351d",
+      "response_schema_sha256": "f4d5b67347052aaf3edfb41a3ada79d6d98c4a1a8253729a43bc8e422280c50b"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic"
+      ],
+      "status": "valid",
+      "request_sha256": "a0ef4a356234b910bb0083f34735c3293fc6256ad4d256ae6832a610001f71b3",
+      "response_schema_sha256": "f4d5b67347052aaf3edfb41a3ada79d6d98c4a1a8253729a43bc8e422280c50b"
+    },
+    {
+      "batch": 4,
+      "attempt": 1,
+      "fields": [
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "status": "valid",
+      "request_sha256": "dd465dab57c746798d536c24eda305eb5534ce1627af4187bd583837767731c6",
+      "response_schema_sha256": "f4d5b67347052aaf3edfb41a3ada79d6d98c4a1a8253729a43bc8e422280c50b"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "cardiovascular.blood_pressure.observed_diastolic",
+      "value": 104.0,
+      "status": "documented",
+      "quote": "The current doctor-reviewed series confirms persistent BP 174/104 mmHg while the driver is taking antihypertensive therapy, but the medication review also documents dizziness that impairs safe vehicle operation after the morning dose; although the driver feels better when sitting still in the interview, the nurse has no evidence that the side effect has resolved, and a proposed future dose change is not recorded as an accomplished treatment outcome.",
+      "explanation": "174/104 mmHg"
+    },
+    {
+      "field": "cardiovascular.blood_pressure.observed_systolic",
+      "value": 174.0,
+      "status": "documented",
+      "quote": "The current doctor-reviewed series confirms persistent BP 174/104 mmHg while the driver is taking antihypertensive therapy, but the medication review also documents dizziness that impairs safe vehicle operation after the morning dose; although the driver feels better when sitting still in the interview, the nurse has no evidence that the side effect has resolved, and a proposed future dose change is not recorded as an accomplished treatment outcome.",
+      "explanation": "174"
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "value": 174.0,
+      "status": "documented",
+      "quote": "The current doctor-reviewed series confirms persistent BP 174/104 mmHg while the driver is taking antihypertensive therapy, but the medication review also documents dizziness that impairs safe vehicle operation after the morning dose; although the driver feels better when sitting still in the interview, the nurse has no evidence that the side effect has resolved, and a proposed future dose change is not recorded as an accomplished treatment outcome.",
+      "explanation": "174/104 mmHg"
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "value": 174.0,
+      "status": "documented",
+      "quote": "The current doctor-reviewed series confirms persistent BP 174/104 mmHg while the driver is taking antihypertensive therapy, but the medication review also documents dizziness that impairs safe vehicle operation after the morning dose; although the driver feels better when sitting still in the interview, the nurse has no evidence that the side effect has resolved, and a proposed future dose change is not recorded as an accomplished treatment outcome.",
+      "explanation": "174 mmHg"
+    }
+  ],
+  "output_facts_sha256": "4925863b72f99a5551592d53ad24b21b61d825a7a2386de2045225b272edff0d",
+  "facts_quarantined": true
+}

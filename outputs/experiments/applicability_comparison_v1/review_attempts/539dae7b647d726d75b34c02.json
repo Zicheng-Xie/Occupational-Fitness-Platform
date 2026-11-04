@@ -1,0 +1,501 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-07",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 0
+  },
+  "results_sha256": "a51fd8c9ef6e8ed312842d7be9c34859b2f8f625dd25755a5a928de2e1512d68",
+  "status": "failed",
+  "stages": {
+    "applicability": {
+      "status": "failed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "ApplicabilityCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-3ed1a5aed97719c969e95bb9",
+                        "PASS-0c4e5d1885b1be7db1a56f0a",
+                        "PASS-205eea15cc36b50dfbb2b9b1",
+                        "PASS-71485241c8be43cc12422a04",
+                        "PASS-2bdf4233f7b3fe60974d8b87"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.acutely_unwell",
+                          "diabetes.metabolically_unstable",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityCheck",
+                  "type": "object"
+                },
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.acutely_unwell",
+                          "diabetes.metabolically_unstable",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "passage_checks": {
+                  "items": {
+                    "$ref": "#/$defs/ApplicabilityCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "title": "Passage Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "passage_checks"
+              ],
+              "title": "ApplicabilityReview",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once in supplied order.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied passage IDs and fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; this is a documented clinical assessment rather than a diagnosis inferred by the nurse from thirst alone. The patient describes nausea and fluctuating blur, and the planned work assessment has been interrupted for clinical care.\\n\\nThe GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. A measurement copied from an older employment form is lower, but the clinician identifies the repeated current values as persistent, and the nurse keeps the older form separate rather than averaging different time periods.\\n\\nThe driver cannot provide a reliable account of the latest diabetes medication change or a complete glucose log, and the visual symptoms have not received an independent specialist assessment. Those missing details remain unresolved even though current metabolic instability and persistent blood pressure are explicitly documented by the treating clinicians.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes\"]}, \"diabetes.acutely_unwell\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \"]}, \"diabetes.metabolically_unstable\": {\"value\": true, \"patient_quotes\": [\"The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; \", \"metabolically unstable diabetes\"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 182.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 108.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}, {\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632}, {\"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"text_sha256\": \"63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876\", \"char_start\": 0, \"char_end\": 1176}, {\"source_id\": \"AFTD2022-DM-COM-003\", \"section\": \"3.2.2\", \"pdf_page\": 106, \"printed_page\": 95, \"source_text\": \"3.2.2. Acute hyperglycaemia\\nWhile acute hyperglycaemia may affect some \\naspects of brain function, there is not enough \\nevidence to determine the regular effects on \\ndriving performance and related crash risk. Each \\nperson with diabetes should be counselled \\nabout managing their diabetes during days \\nwhen they are unwell and should be advised \\nnot to drive if they are acutely unwell with \\nmetabolically unstable diabetes.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"text_sha256\": \"0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda\", \"char_start\": 0, \"char_end\": 424}, {\"source_id\": \"AFTD2022-EXP-7de596b87146a1f5\", \"section\": \"2.2.3\", \"pdf_page\": 77, \"printed_page\": 66, \"source_text\": \"2.2.3. High blood pressure\\nThe cut-off blood pressure values at which \\na person is considered unfit to hold an \\nunconditional licence do not reflect usual goals \\nfor managing hypertension. Rather, they reflect \\nlevels that are likely to be associated with \\nsudden incapacity due to neurological events \\n(e.g. stroke). The cut-off points are based on \\nexpert opinion.\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based \\non the advice of an appropriate medical \\nspecialist and that these drivers are reviewed \\nperiodically by the specialist to determine \\ntheir ongoing fitness to drive (refer to Part A \\nsection 4.4. Conditional licences). In the case \\nof high blood pressure, ongoing fitness to \\ndrive may be assessed by the treating general \\npractitioner, provided this is mutually agreed by \\nthe specialist and the general practitioner. The \\ninitial recommendation of a conditional licence \\nmust, however, be based on the opinion of \\nthe specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"text_sha256\": \"3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734\", \"char_start\": 0, \"char_end\": 1037}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "09d3069fcbd60142017f44757f456ccd35f67a10ac9057d18771dc70718dc9c9",
+          "request_bytes": 14830,
+          "status": "failed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T06:10:46.7768176Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passage_checks\": [{\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"restriction\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blood pressure consistently > 170 systolic or > 100 diastolic (treated or untreated)\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"182.0 > 170 and 108.0 > 100\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient has confirmed persistent blood pressure of 182/108 mmHg, which exceeds the guideline threshold for an unconditional licence (>170 systolic or >100 diastolic). This establishes an established restriction on holding an unconditional licence.\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.present\", \"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"non-insulin treated diabetes mellitus and being treated with glucose-lowering agents other than insulin\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no recent history of a 'severe hypoglycaemic event' as assessed by the specialist\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.acutely_unwell\"]}, {\"requirement\": \"person experiences early warning symptoms (awareness) of hypoglycaemia\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"following a treatment regimen that minimises the risk of hypoglycaemia\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.metabolically_unstable\"]}, {\"requirement\": \"absence of end-organ effects that may affect driving\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient has confirmed type 2 diabetes and is acutely unwell with metabolically unstable diabetes. While the guideline allows for a conditional licence if specific criteria are met, the patient's acute metabolic instability and lack of specialist assessment preclude meeting the prerequisites for \"\n}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"fact_fields\": [\"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"], \"statement_type\": \"restriction\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"advised not to drive if acutely unwell with metabolically unstable diabetes\", \"status\": \"met\", \"fact_fields\": [\"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient is confirmed to be acutely unwell with metabolically unstable diabetes. This establishes an established restriction against driving.\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"treated with antihypertensive therapy and effective control of hypertension achieved over a 4-week follow-up period\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no side effects from medication that will impair safe driving\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no evidence of damage to target organs relevant to driving\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient has persistent hypertension (182/108 mmHg). While the guideline outlines criteria for a conditional licence, the lack of documented antihypertensive therapy and effective control over a 4-week period prevents assessment of these prerequisites.\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"initial recommendation of a conditional licence based on the opinion of the specialist\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The guideline states that initial recommendations for conditional licences must be based on the specialist's opinion. The nurse note indicates the GP records the blood pressure, but does not confirm if a specialist has provided the required opinion.\"}]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 21762757700,
+            "load_duration": 2756900,
+            "prompt_eval_count": 2985,
+            "prompt_eval_cached_count": 302,
+            "prompt_eval_duration": 924939000,
+            "eval_count": 1342,
+            "eval_duration": 20520174000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2985,
+            "eval_count": 1342,
+            "prompt_eval_cached_count": 302
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Ledger must cover each supplied passage exactly once in supplied order",
+          "failure_stage": "structural_validation",
+          "seconds": 21.789195100000143
+        },
+        {
+          "number": 2,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "ApplicabilityCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-3ed1a5aed97719c969e95bb9",
+                        "PASS-0c4e5d1885b1be7db1a56f0a",
+                        "PASS-205eea15cc36b50dfbb2b9b1",
+                        "PASS-71485241c8be43cc12422a04",
+                        "PASS-2bdf4233f7b3fe60974d8b87"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.acutely_unwell",
+                          "diabetes.metabolically_unstable",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityCheck",
+                  "type": "object"
+                },
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.acutely_unwell",
+                          "diabetes.metabolically_unstable",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "passage_checks": {
+                  "items": {
+                    "$ref": "#/$defs/ApplicabilityCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "title": "Passage Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "passage_checks"
+              ],
+              "title": "ApplicabilityReview",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once in supplied order.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied passage IDs and fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; this is a documented clinical assessment rather than a diagnosis inferred by the nurse from thirst alone. The patient describes nausea and fluctuating blur, and the planned work assessment has been interrupted for clinical care.\\n\\nThe GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. A measurement copied from an older employment form is lower, but the clinician identifies the repeated current values as persistent, and the nurse keeps the older form separate rather than averaging different time periods.\\n\\nThe driver cannot provide a reliable account of the latest diabetes medication change or a complete glucose log, and the visual symptoms have not received an independent specialist assessment. Those missing details remain unresolved even though current metabolic instability and persistent blood pressure are explicitly documented by the treating clinicians.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes\"]}, \"diabetes.acutely_unwell\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \"]}, \"diabetes.metabolically_unstable\": {\"value\": true, \"patient_quotes\": [\"The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; \", \"metabolically unstable diabetes\"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 182.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 108.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}, {\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632}, {\"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"text_sha256\": \"63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876\", \"char_start\": 0, \"char_end\": 1176}, {\"source_id\": \"AFTD2022-DM-COM-003\", \"section\": \"3.2.2\", \"pdf_page\": 106, \"printed_page\": 95, \"source_text\": \"3.2.2. Acute hyperglycaemia\\nWhile acute hyperglycaemia may affect some \\naspects of brain function, there is not enough \\nevidence to determine the regular effects on \\ndriving performance and related crash risk. Each \\nperson with diabetes should be counselled \\nabout managing their diabetes during days \\nwhen they are unwell and should be advised \\nnot to drive if they are acutely unwell with \\nmetabolically unstable diabetes.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"text_sha256\": \"0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda\", \"char_start\": 0, \"char_end\": 424}, {\"source_id\": \"AFTD2022-EXP-7de596b87146a1f5\", \"section\": \"2.2.3\", \"pdf_page\": 77, \"printed_page\": 66, \"source_text\": \"2.2.3. High blood pressure\\nThe cut-off blood pressure values at which \\na person is considered unfit to hold an \\nunconditional licence do not reflect usual goals \\nfor managing hypertension. Rather, they reflect \\nlevels that are likely to be associated with \\nsudden incapacity due to neurological events \\n(e.g. stroke). The cut-off points are based on \\nexpert opinion.\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based \\non the advice of an appropriate medical \\nspecialist and that these drivers are reviewed \\nperiodically by the specialist to determine \\ntheir ongoing fitness to drive (refer to Part A \\nsection 4.4. Conditional licences). In the case \\nof high blood pressure, ongoing fitness to \\ndrive may be assessed by the treating general \\npractitioner, provided this is mutually agreed by \\nthe specialist and the general practitioner. The \\ninitial recommendation of a conditional licence \\nmust, however, be based on the opinion of \\nthe specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"text_sha256\": \"3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734\", \"char_start\": 0, \"char_end\": 1037}]}"
+              },
+              {
+                "role": "assistant",
+                "content": "{\"passage_checks\": [{\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"restriction\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blood pressure consistently > 170 systolic or > 100 diastolic (treated or untreated)\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"182.0 > 170 and 108.0 > 100\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient has confirmed persistent blood pressure of 182/108 mmHg, which exceeds the guideline threshold for an unconditional licence (>170 systolic or >100 diastolic). This establishes an established restriction on holding an unconditional licence.\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.present\", \"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"non-insulin treated diabetes mellitus and being treated with glucose-lowering agents other than insulin\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no recent history of a 'severe hypoglycaemic event' as assessed by the specialist\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.acutely_unwell\"]}, {\"requirement\": \"person experiences early warning symptoms (awareness) of hypoglycaemia\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"following a treatment regimen that minimises the risk of hypoglycaemia\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.metabolically_unstable\"]}, {\"requirement\": \"absence of end-organ effects that may affect driving\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient has confirmed type 2 diabetes and is acutely unwell with metabolically unstable diabetes. While the guideline allows for a conditional licence if specific criteria are met, the patient's acute metabolic instability and lack of specialist assessment preclude meeting the prerequisites for \"\n}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"fact_fields\": [\"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"], \"statement_type\": \"restriction\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"advised not to drive if acutely unwell with metabolically unstable diabetes\", \"status\": \"met\", \"fact_fields\": [\"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient is confirmed to be acutely unwell with metabolically unstable diabetes. This establishes an established restriction against driving.\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"treated with antihypertensive therapy and effective control of hypertension achieved over a 4-week follow-up period\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no side effects from medication that will impair safe driving\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no evidence of damage to target organs relevant to driving\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient has persistent hypertension (182/108 mmHg). While the guideline outlines criteria for a conditional licence, the lack of documented antihypertensive therapy and effective control over a 4-week period prevents assessment of these prerequisites.\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"initial recommendation of a conditional licence based on the opinion of the specialist\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The guideline states that initial recommendations for conditional licences must be based on the specialist's opinion. The nurse note indicates the GP records the blood pressure, but does not confirm if a specialist has provided the required opinion.\"}]\n}"
+              },
+              {
+                "role": "user",
+                "content": "The output failed structural validation: ValueError: Ledger must cover each supplied passage exactly once in supplied order. Correct only the output contract using the SAME supplied facts and original passages. Do not invent facts, quotations or identifiers. This validator provides no correct fitness outcome. Semantic consistency flags are not repair instructions."
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "0ba7689ff8d20891833f66a11b09a7c60b26d7de4e0bfb86156442a7b8aaa5cb",
+          "request_bytes": 20597,
+          "status": "failed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T06:11:04.6056148Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passage_checks\": [{\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"restriction\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blood pressure consistently > 170 systolic or > 100 diastolic (treated or untreated)\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"182.0 > 170 and 108.0 > 100\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient has confirmed persistent blood pressure of 182/108 mmHg, which exceeds the guideline threshold for an unconditional licence (>170 systolic or >100 diastolic). This establishes an established restriction on holding an unconditional licence.\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.present\", \"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"non-insulin treated diabetes mellitus and being treated with glucose-lowering agents other than insulin\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no recent history of a 'severe hypoglycaemic event' as assessed by the specialist\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.acutely_unwell\"]}, {\"requirement\": \"person experiences early warning symptoms (awareness) of hypoglycaemia\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"following a treatment regimen that minimises the risk of hypoglycaemia\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.metabolically_unstable\"]}, {\"requirement\": \"absence of end-organ effects that may affect driving\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient has confirmed type 2 diabetes and is acutely unwell with metabolically unstable diabetes. While the guideline allows for a conditional licence if specific criteria are met, the patient's acute metabolic instability and lack of specialist assessment preclude meeting the prerequisites for\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"fact_fields\": [\"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"], \"statement_type\": \"restriction\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"advised not to drive if acutely unwell with metabolically unstable diabetes\", \"status\": \"met\", \"fact_fields\": [\"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient is confirmed to be acutely unwell with metabolically unstable diabetes. This establishes an established restriction against driving.\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"treated with antihypertensive therapy and effective control of hypertension achieved over a 4-week follow-up period\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no side effects from medication that will impair safe driving\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no evidence of damage to target organs relevant to driving\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient has persistent hypertension (182/108 mmHg). While the guideline outlines criteria for a conditional licence, the lack of documented antihypertensive therapy and effective control over a 4-week period prevents assessment of these prerequisites.\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"initial recommendation of a conditional licence based on the opinion of the specialist\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The guideline states that initial recommendations for conditional licences must be based on the specialist's opinion. The nurse note indicates the GP records the blood pressure, but does not confirm if a specialist has provided the required opinion.\"}]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 17792230200,
+            "load_duration": 3363800,
+            "prompt_eval_count": 4306,
+            "prompt_eval_cached_count": 2981,
+            "prompt_eval_duration": 564492000,
+            "eval_count": 1251,
+            "eval_duration": 17175185000
+          },
+          "token_counts": {
+            "prompt_eval_count": 4306,
+            "eval_count": 1251,
+            "prompt_eval_cached_count": 2981
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Ledger must cover each supplied passage exactly once in supplied order",
+          "failure_stage": "structural_validation",
+          "seconds": 17.828663100000085
+        }
+      ],
+      "error": "ValueError: Ledger must cover each supplied passage exactly once in supplied order",
+      "seconds": 39.618016100000204
+    }
+  },
+  "support_review": "pending_independent_review"
+}

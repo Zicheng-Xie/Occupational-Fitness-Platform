@@ -1,0 +1,294 @@
+{
+  "schema_version": "1.2.0",
+  "result_id": "RR-cf0a7e08548aa5ef3569",
+  "case_id": "CX-LONG-100",
+  "red_flag_result_sha256": "7407b098b3dec3fe3b3328a7aa5daee89b543fe19bac225f7b974bb4a94b7a61",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "guideline_version": "AP-G56-22",
+  "route": "human_review",
+  "rag_requests": [
+    {
+      "request_id": "RAG-88aa35ddf68ab065",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-AUDIOMETRY-MISSING-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001"
+      ],
+      "category": "hearing",
+      "subcondition": "possible_hearing_loss",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_audiometry_required_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-02e2cf19120bf662",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-UNCONDITIONAL-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "subcondition": "better_ear_hearing_loss",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_loss_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-c850242d152b7d11",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-CONDITIONAL-AID-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-003"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_met",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_aid_conditional_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-351f810cf9ec9410",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-INDIVIDUAL-ASSESSMENT-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-004"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_aid_standard_not_met",
+      "licence_context": "commercial",
+      "rag_query_key": "hearing_individual_assessment_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.clinical_assessment": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-a3f0ffd6cc6dd03a",
+      "request_type": "missing_information_guidance",
+      "rule_id": "HEAR-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HEAR-COM-001",
+        "AFTD2022-HEAR-COM-002"
+      ],
+      "category": "hearing",
+      "subcondition": "hearing_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "hear_com_screen_001",
+      "ambiguity_reasons": [
+        "missing_fact",
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "hearing.average_frequencies_khz": "unknown",
+        "hearing.clinical_assessment": "requires_confirmation",
+        "hearing.unaided_better_ear_average_db": "unknown"
+      }
+    }
+  ],
+  "indicator_context": {
+    "RAG-88aa35ddf68ab065": {
+      "hearing.audiometry.available": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 442,
+            "end": 856,
+            "quote": "The audiologist's current signed report documents an unaided better-ear average of 37 dB over 0.5, 1, 2 and 3 kHz, with no aid worn during the measurements and audiometry explicitly completed; the driver sometimes turns the volume up for traffic updates in a noisy loading area, but the nurse separates that environmental complaint from the identified ear, frequencies and unaided testing conditions in the report.",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      },
+      "hearing.clinical_assessment": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 0,
+            "end": 64,
+            "quote": "Synthetic nurse note for software testing. No real patient data.",
+            "line_start": 1,
+            "line_end": 1,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      }
+    },
+    "RAG-02e2cf19120bf662": {
+      "hearing.average_frequencies_khz": {
+        "value": null,
+        "status": "unknown",
+        "unit": "kHz",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "hearing.clinical_assessment": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 0,
+            "end": 64,
+            "quote": "Synthetic nurse note for software testing. No real patient data.",
+            "line_start": 1,
+            "line_end": 1,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      },
+      "hearing.unaided_better_ear_average_db": {
+        "value": null,
+        "status": "unknown",
+        "unit": "dB",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-c850242d152b7d11": {
+      "hearing.aided_standard_met": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "hearing.ent_or_audiologist_information_available": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-351f810cf9ec9410": {
+      "hearing.aided_standard_met": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-a3f0ffd6cc6dd03a": {
+      "hearing.average_frequencies_khz": {
+        "value": null,
+        "status": "unknown",
+        "unit": "kHz",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "hearing.clinical_assessment": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 0,
+            "end": 64,
+            "quote": "Synthetic nurse note for software testing. No real patient data.",
+            "line_start": 1,
+            "line_end": 1,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      },
+      "hearing.unaided_better_ear_average_db": {
+        "value": null,
+        "status": "unknown",
+        "unit": "dB",
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    }
+  },
+  "narrative_context": {
+    "RAG-88aa35ddf68ab065": [
+      {
+        "start": 442,
+        "end": 856,
+        "quote": "The audiologist's current signed report documents an unaided better-ear average of 37 dB over 0.5, 1, 2 and 3 kHz, with no aid worn during the measurements and audiometry explicitly completed; the driver sometimes turns the volume up for traffic updates in a noisy loading area, but the nurse separates that environmental complaint from the identified ear, frequencies and unaided testing conditions in the report.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-02e2cf19120bf662": [
+      {
+        "start": 442,
+        "end": 856,
+        "quote": "The audiologist's current signed report documents an unaided better-ear average of 37 dB over 0.5, 1, 2 and 3 kHz, with no aid worn during the measurements and audiometry explicitly completed; the driver sometimes turns the volume up for traffic updates in a noisy loading area, but the nurse separates that environmental complaint from the identified ear, frequencies and unaided testing conditions in the report.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-c850242d152b7d11": [
+      {
+        "start": 442,
+        "end": 856,
+        "quote": "The audiologist's current signed report documents an unaided better-ear average of 37 dB over 0.5, 1, 2 and 3 kHz, with no aid worn during the measurements and audiometry explicitly completed; the driver sometimes turns the volume up for traffic updates in a noisy loading area, but the nurse separates that environmental complaint from the identified ear, frequencies and unaided testing conditions in the report.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-351f810cf9ec9410": [
+      {
+        "start": 442,
+        "end": 856,
+        "quote": "The audiologist's current signed report documents an unaided better-ear average of 37 dB over 0.5, 1, 2 and 3 kHz, with no aid worn during the measurements and audiometry explicitly completed; the driver sometimes turns the volume up for traffic updates in a noisy loading area, but the nurse separates that environmental complaint from the identified ear, frequencies and unaided testing conditions in the report.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-a3f0ffd6cc6dd03a": [
+      {
+        "start": 442,
+        "end": 856,
+        "quote": "The audiologist's current signed report documents an unaided better-ear average of 37 dB over 0.5, 1, 2 and 3 kHz, with no aid worn during the measurements and audiometry explicitly completed; the driver sometimes turns the volume up for traffic updates in a noisy loading area, but the nurse separates that environmental complaint from the identified ear, frequencies and unaided testing conditions in the report.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ]
+  },
+  "narrative_source_text_sha256": "1c4764d42a969d8507cea3857a8ede64f8646b660636817124c4fc308b58b4ce"
+}

@@ -1,0 +1,1156 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "SYN-M2-003",
+    "evidence_policy": "reference_evidence",
+    "protocol": "applicability_first",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.observed_systolic",
+                          "cardiovascular.blood_pressure.observed_diastolic",
+                          "cardiovascular.blood_pressure.repeat_available",
+                          "cardiovascular.chest_pain",
+                          "vision.normal_statement",
+                          "hearing.clinical_assessment",
+                          "hearing.hearing_aid_used"
+                        ]
+                      },
+                      "maxItems": 7,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.observed_systolic",
+                          "cardiovascular.blood_pressure.observed_diastolic",
+                          "cardiovascular.blood_pressure.repeat_available",
+                          "cardiovascular.chest_pain",
+                          "vision.normal_statement",
+                          "hearing.clinical_assessment",
+                          "hearing.hearing_aid_used"
+                        ]
+                      },
+                      "maxItems": 7,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\"], \"nurse_note\": \"Commercial driver assessment. 58-year-old male driver. BP 174/104 mmHg; pulse 76 bpm. No repeat BP is available. Denies chest pain, palpitations and breathlessness. No known cardiac history. Vision: WNL without corrective lenses. Audio: WNL without hearing aids.\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.observed_systolic\": {\"value\": 174.0, \"patient_quotes\": [\"BP 174/104 mmHg\", \"BP 174/104 mmHg\"]}, \"cardiovascular.blood_pressure.observed_diastolic\": {\"value\": 104.0, \"patient_quotes\": [\"BP 174/104 mmHg\", \"BP 174/104 mmHg\"]}, \"cardiovascular.blood_pressure.repeat_available\": {\"value\": false, \"patient_quotes\": [\"No repeat BP is available\"]}, \"cardiovascular.chest_pain\": {\"value\": false, \"patient_quotes\": [\"Denies chest pain\", \"Denies chest pain\"]}, \"vision.normal_statement\": {\"value\": true, \"patient_quotes\": [\"Vision: WNL without corrective lenses\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"Audio: WNL without hearing aids\"]}, \"hearing.hearing_aid_used\": {\"value\": false, \"patient_quotes\": [\"without hearing aids\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-HTN-COM-002\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-8b1df9fec02f8c8dff189779\", \"text_sha256\": \"d83f41571c48dc3b7c6033b230f17179c3146235732afd0f232960104543dc22\", \"char_start\": 0, \"char_end\": 855, \"applicability_slot\": \"P2\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "f5557b3788feb3a3f34b017ceca68d838a20bd953decd8bbbc0bc721dbb926c3",
+          "request_bytes": 8871,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:18:44.4291934Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [\"cardiovascular.blood_pressure.observed_systolic\", \"cardiovascular.blood_pressure.observed_diastolic\"], \"statement_type\": \"unconditional_requirement\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blood_pressure_consistently_greater_than_170_systolic_or_100_diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.observed_systolic\", \"cardiovascular.blood_pressure.observed_diastolic\"]}], \"numeric_application\": \"observed_systolic 174.0 > 170; observed_diastolic 104.0 > 100\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient has a verified systolic BP of 174.0 mmHg and diastolic BP of 104.0 mmHg, both exceeding the unconditional licence thresholds (>170 systolic or >100 diastolic). This establishes an established restriction on holding an unconditional licence.\"}, \"P2\": {\"fact_fields\": [\"cardiovascular.blood_pressure.repeat_available\", \"cardiovascular.chest_pain\", \"vision.normal_statement\", \"hearing.clinical_assessment\", \"hearing.hearing_aid_used\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"treated_with_antihypertensive_therapy\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"effective_control_over_4_week_follow_up\", \"status\": \"not_met\", \"fact_fields\": [\"cardiovascular.blood_pressure.repeat_available\"]}, {\"requirement\": \"no_side_effects_impairing_driving\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no_evidence_of_damage_to_target_organs\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"not_established\", \"conclusion\": \"A conditional licence is not established because the patient is untreated (treatment status unknown), has no repeat BP available to confirm control over a 4-week period, and lacks specialist assessment confirming absence of target organ damage or medication side effects.\"}}\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 8982641700,
+            "load_duration": 2953600,
+            "prompt_eval_count": 1495,
+            "prompt_eval_cached_count": 1491,
+            "prompt_eval_duration": 144858000,
+            "eval_count": 559,
+            "eval_duration": 8660909000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1495,
+            "eval_count": 559,
+            "prompt_eval_cached_count": 1491
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.observed_systolic",
+                  "cardiovascular.blood_pressure.observed_diastolic"
+                ],
+                "statement_type": "unconditional_requirement",
+                "applicability": "applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "blood_pressure_consistently_greater_than_170_systolic_or_100_diastolic",
+                    "status": "met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.observed_systolic",
+                      "cardiovascular.blood_pressure.observed_diastolic"
+                    ]
+                  }
+                ],
+                "numeric_application": "observed_systolic 174.0 > 170; observed_diastolic 104.0 > 100",
+                "finding": "established_restriction",
+                "conclusion": "The patient has a verified systolic BP of 174.0 mmHg and diastolic BP of 104.0 mmHg, both exceeding the unconditional licence thresholds (>170 systolic or >100 diastolic). This establishes an established restriction on holding an unconditional licence."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.repeat_available",
+                  "cardiovascular.chest_pain",
+                  "vision.normal_statement",
+                  "hearing.clinical_assessment",
+                  "hearing.hearing_aid_used"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "treated_with_antihypertensive_therapy",
+                    "status": "unknown",
+                    "fact_fields": []
+                  },
+                  {
+                    "requirement": "effective_control_over_4_week_follow_up",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.repeat_available"
+                    ]
+                  },
+                  {
+                    "requirement": "no_side_effects_impairing_driving",
+                    "status": "unknown",
+                    "fact_fields": []
+                  },
+                  {
+                    "requirement": "no_evidence_of_damage_to_target_organs",
+                    "status": "unknown",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "not_established",
+                "conclusion": "A conditional licence is not established because the patient is untreated (treatment status unknown), has no repeat BP available to confirm control over a 4-week period, and lacks specialist assessment confirming absence of target organ damage or medication side effects."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+              "source_id": "AFTD2022-HTN-COM-001",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 163,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.observed_systolic",
+                  "cardiovascular.blood_pressure.observed_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient has a verified systolic BP of 174.0 mmHg and diastolic BP of 104.0 mmHg, both exceeding the unconditional licence thresholds (>170 systolic or >100 diastolic). This establishes an established restriction on holding an unconditional licence.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+              "source_id": "AFTD2022-HTN-COM-002",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "d83f41571c48dc3b7c6033b230f17179c3146235732afd0f232960104543dc22",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 855,
+                  "original_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.repeat_available",
+                  "cardiovascular.chest_pain",
+                  "vision.normal_statement",
+                  "hearing.clinical_assessment",
+                  "hearing.hearing_aid_used"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "A conditional licence is not established because the patient is untreated (treatment status unknown), has no repeat BP available to confirm control over a 4-week period, and lacks specialist assessment confirming absence of target organ damage or medication side effects.",
+                "source_id": "AFTD2022-HTN-COM-002",
+                "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [],
+          "seconds": 9.011043400001654
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.observed_systolic",
+              "cardiovascular.blood_pressure.observed_diastolic"
+            ],
+            "statement_type": "unconditional_requirement",
+            "applicability": "applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "blood_pressure_consistently_greater_than_170_systolic_or_100_diastolic",
+                "status": "met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.observed_systolic",
+                  "cardiovascular.blood_pressure.observed_diastolic"
+                ]
+              }
+            ],
+            "numeric_application": "observed_systolic 174.0 > 170; observed_diastolic 104.0 > 100",
+            "finding": "established_restriction",
+            "conclusion": "The patient has a verified systolic BP of 174.0 mmHg and diastolic BP of 104.0 mmHg, both exceeding the unconditional licence thresholds (>170 systolic or >100 diastolic). This establishes an established restriction on holding an unconditional licence."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.repeat_available",
+              "cardiovascular.chest_pain",
+              "vision.normal_statement",
+              "hearing.clinical_assessment",
+              "hearing.hearing_aid_used"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "treated_with_antihypertensive_therapy",
+                "status": "unknown",
+                "fact_fields": []
+              },
+              {
+                "requirement": "effective_control_over_4_week_follow_up",
+                "status": "not_met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.repeat_available"
+                ]
+              },
+              {
+                "requirement": "no_side_effects_impairing_driving",
+                "status": "unknown",
+                "fact_fields": []
+              },
+              {
+                "requirement": "no_evidence_of_damage_to_target_organs",
+                "status": "unknown",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "not_established",
+            "conclusion": "A conditional licence is not established because the patient is untreated (treatment status unknown), has no repeat BP available to confirm control over a 4-week period, and lacks specialist assessment confirming absence of target organ damage or medication side effects."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+          "source_id": "AFTD2022-HTN-COM-001",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 163,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.observed_systolic",
+              "cardiovascular.blood_pressure.observed_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient has a verified systolic BP of 174.0 mmHg and diastolic BP of 104.0 mmHg, both exceeding the unconditional licence thresholds (>170 systolic or >100 diastolic). This establishes an established restriction on holding an unconditional licence.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+          "source_id": "AFTD2022-HTN-COM-002",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "d83f41571c48dc3b7c6033b230f17179c3146235732afd0f232960104543dc22",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 855,
+              "original_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.repeat_available",
+              "cardiovascular.chest_pain",
+              "vision.normal_statement",
+              "hearing.clinical_assessment",
+              "hearing.hearing_aid_used"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "A conditional licence is not established because the patient is untreated (treatment status unknown), has no repeat BP available to confirm control over a 4-week period, and lacks specialist assessment confirming absence of target organ damage or medication side effects.",
+            "source_id": "AFTD2022-HTN-COM-002",
+            "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [],
+      "seconds": 9.011045199993532
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-3ed1a5aed97719c969e95bb9",
+                        "PASS-8b1df9fec02f8c8dff189779"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.observed_systolic",
+                          "cardiovascular.blood_pressure.observed_diastolic",
+                          "cardiovascular.blood_pressure.repeat_available",
+                          "cardiovascular.chest_pain",
+                          "vision.normal_statement",
+                          "hearing.clinical_assessment",
+                          "hearing.hearing_aid_used"
+                        ]
+                      },
+                      "maxItems": 7,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\"], \"nurse_note\": \"Commercial driver assessment. 58-year-old male driver. BP 174/104 mmHg; pulse 76 bpm. No repeat BP is available. Denies chest pain, palpitations and breathlessness. No known cardiac history. Vision: WNL without corrective lenses. Audio: WNL without hearing aids.\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.observed_systolic\": {\"value\": 174.0, \"patient_quotes\": [\"BP 174/104 mmHg\", \"BP 174/104 mmHg\"]}, \"cardiovascular.blood_pressure.observed_diastolic\": {\"value\": 104.0, \"patient_quotes\": [\"BP 174/104 mmHg\", \"BP 174/104 mmHg\"]}, \"cardiovascular.blood_pressure.repeat_available\": {\"value\": false, \"patient_quotes\": [\"No repeat BP is available\"]}, \"cardiovascular.chest_pain\": {\"value\": false, \"patient_quotes\": [\"Denies chest pain\", \"Denies chest pain\"]}, \"vision.normal_statement\": {\"value\": true, \"patient_quotes\": [\"Vision: WNL without corrective lenses\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"Audio: WNL without hearing aids\"]}, \"hearing.hearing_aid_used\": {\"value\": false, \"patient_quotes\": [\"without hearing aids\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}, {\"source_id\": \"AFTD2022-HTN-COM-002\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-8b1df9fec02f8c8dff189779\", \"text_sha256\": \"d83f41571c48dc3b7c6033b230f17179c3146235732afd0f232960104543dc22\", \"char_start\": 0, \"char_end\": 855}], \"proposed_applicability_ledger\": [{\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [\"cardiovascular.blood_pressure.observed_systolic\", \"cardiovascular.blood_pressure.observed_diastolic\"], \"statement_type\": \"unconditional_requirement\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blood_pressure_consistently_greater_than_170_systolic_or_100_diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.observed_systolic\", \"cardiovascular.blood_pressure.observed_diastolic\"]}], \"numeric_application\": \"observed_systolic 174.0 > 170; observed_diastolic 104.0 > 100\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient has a verified systolic BP of 174.0 mmHg and diastolic BP of 104.0 mmHg, both exceeding the unconditional licence thresholds (>170 systolic or >100 diastolic). This establishes an established restriction on holding an unconditional licence.\", \"source_id\": \"AFTD2022-HTN-COM-001\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.observed_systolic\": {\"value\": 174.0, \"patient_quotes\": [\"BP 174/104 mmHg\", \"BP 174/104 mmHg\"]}, \"cardiovascular.blood_pressure.observed_diastolic\": {\"value\": 104.0, \"patient_quotes\": [\"BP 174/104 mmHg\", \"BP 174/104 mmHg\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-8b1df9fec02f8c8dff189779\", \"fact_fields\": [\"cardiovascular.blood_pressure.repeat_available\", \"cardiovascular.chest_pain\", \"vision.normal_statement\", \"hearing.clinical_assessment\", \"hearing.hearing_aid_used\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"treated_with_antihypertensive_therapy\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"effective_control_over_4_week_follow_up\", \"status\": \"not_met\", \"fact_fields\": [\"cardiovascular.blood_pressure.repeat_available\"]}, {\"requirement\": \"no_side_effects_impairing_driving\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no_evidence_of_damage_to_target_organs\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"not_established\", \"conclusion\": \"A conditional licence is not established because the patient is untreated (treatment status unknown), has no repeat BP available to confirm control over a 4-week period, and lacks specialist assessment confirming absence of target organ damage or medication side effects.\", \"source_id\": \"AFTD2022-HTN-COM-002\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.repeat_available\": {\"value\": false, \"patient_quotes\": [\"No repeat BP is available\"]}, \"cardiovascular.chest_pain\": {\"value\": false, \"patient_quotes\": [\"Denies chest pain\", \"Denies chest pain\"]}, \"vision.normal_statement\": {\"value\": true, \"patient_quotes\": [\"Vision: WNL without corrective lenses\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"Audio: WNL without hearing aids\"]}, \"hearing.hearing_aid_used\": {\"value\": false, \"patient_quotes\": [\"without hearing aids\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"ac34b5b06d9d755793abc22be2202eb4cda63e0f15f3a1cadb13dca4df63b4da\"}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "ee3db91173221b461e317c77c824ed50351c6fd9670506ba38934b8ed94b6479",
+          "request_bytes": 11727,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:18:54.2446946Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"temporarily_unfit\",\n  \"explanation\": \"The patient's observed blood pressure (174/104 mmHg) explicitly exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a verified restriction on holding an unconditional licence. While the conditional pathway requires treatment and specialist assessment, the current established restriction due to uncontrolled hypertension takes precedence. The absence of repeat measurements prevents confirming control for the conditional pathway, but does not erase the existing restriction caused by the high reading.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.observed_systolic\", \"cardiovascular.blood_pressure.observed_diastolic\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient's systolic BP (174.0) exceeds 170 and diastolic BP (104.0) exceeds 100, meeting the unconditional restriction criteria.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-8b1df9fec02f8c8dff189779\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.repeat_available\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The prerequisite of effective control over a 4-week follow-up period cannot be met as no repeat BP is available.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.observed_systolic\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The systolic value of 174.0 mmHg is strictly greater than the 170 mmHg threshold, confirming the restriction.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-8b1df9fec02f8c8dff189779\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.repeat_available\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"Without repeat measurements, the condition of 'effective control... over a 4-week follow-up period' is not established.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.observed_diastolic\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The diastolic value of 104.0 mmHg is strictly greater than the 100 mmHg threshold, confirming the restriction.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 9779573500,
+            "load_duration": 4042500,
+            "prompt_eval_count": 2475,
+            "prompt_eval_cached_count": 2471,
+            "prompt_eval_duration": 105015000,
+            "eval_count": 758,
+            "eval_duration": 9481729000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2475,
+            "eval_count": 758,
+            "prompt_eval_cached_count": 2471
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "temporarily_unfit",
+            "explanation": "The patient's observed blood pressure (174/104 mmHg) explicitly exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a verified restriction on holding an unconditional licence. While the conditional pathway requires treatment and specialist assessment, the current established restriction due to uncontrolled hypertension takes precedence. The absence of repeat measurements prevents confirming control for the conditional pathway, but does not erase the existing restriction caused by the high reading.",
+            "source_ids": [
+              "AFTD2022-HTN-COM-001",
+              "AFTD2022-HTN-COM-002"
+            ],
+            "fact_fields": [
+              "cardiovascular.blood_pressure.observed_systolic",
+              "cardiovascular.blood_pressure.observed_diastolic",
+              "cardiovascular.blood_pressure.repeat_available"
+            ],
+            "criterion_checks": [
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.observed_systolic",
+                  "cardiovascular.blood_pressure.observed_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's systolic BP (174.0) exceeds 170 and diastolic BP (104.0) exceeds 100, meeting the unconditional restriction criteria.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.repeat_available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "The prerequisite of effective control over a 4-week follow-up period cannot be met as no repeat BP is available.",
+                "source_id": "AFTD2022-HTN-COM-002",
+                "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.observed_systolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The systolic value of 174.0 mmHg is strictly greater than the 170 mmHg threshold, confirming the restriction.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.repeat_available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Without repeat measurements, the condition of 'effective control... over a 4-week follow-up period' is not established.",
+                "source_id": "AFTD2022-HTN-COM-002",
+                "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.observed_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The diastolic value of 104.0 mmHg is strictly greater than the 100 mmHg threshold, confirming the restriction.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+              "source_id": "AFTD2022-HTN-COM-001",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 163,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.observed_systolic",
+                  "cardiovascular.blood_pressure.observed_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's systolic BP (174.0) exceeds 170 and diastolic BP (104.0) exceeds 100, meeting the unconditional restriction criteria.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+              "source_id": "AFTD2022-HTN-COM-002",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "d83f41571c48dc3b7c6033b230f17179c3146235732afd0f232960104543dc22",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 855,
+                  "original_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.repeat_available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "The prerequisite of effective control over a 4-week follow-up period cannot be met as no repeat BP is available.",
+                "source_id": "AFTD2022-HTN-COM-002",
+                "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+              "source_id": "AFTD2022-HTN-COM-001",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 163,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.observed_systolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The systolic value of 174.0 mmHg is strictly greater than the 170 mmHg threshold, confirming the restriction.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+              "source_id": "AFTD2022-HTN-COM-002",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "d83f41571c48dc3b7c6033b230f17179c3146235732afd0f232960104543dc22",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 855,
+                  "original_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.repeat_available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Without repeat measurements, the condition of 'effective control... over a 4-week follow-up period' is not established.",
+                "source_id": "AFTD2022-HTN-COM-002",
+                "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+              "source_id": "AFTD2022-HTN-COM-001",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 163,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.observed_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The diastolic value of 104.0 mmHg is strictly greater than the 100 mmHg threshold, confirming the restriction.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "temporary_restriction_not_established_in_checks"
+          ],
+          "seconds": 9.813897699998051
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient's observed blood pressure (174/104 mmHg) explicitly exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a verified restriction on holding an unconditional licence. While the conditional pathway requires treatment and specialist assessment, the current established restriction due to uncontrolled hypertension takes precedence. The absence of repeat measurements prevents confirming control for the conditional pathway, but does not erase the existing restriction caused by the high reading.",
+        "source_ids": [
+          "AFTD2022-HTN-COM-001",
+          "AFTD2022-HTN-COM-002"
+        ],
+        "fact_fields": [
+          "cardiovascular.blood_pressure.observed_systolic",
+          "cardiovascular.blood_pressure.observed_diastolic",
+          "cardiovascular.blood_pressure.repeat_available"
+        ],
+        "criterion_checks": [
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.observed_systolic",
+              "cardiovascular.blood_pressure.observed_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's systolic BP (174.0) exceeds 170 and diastolic BP (104.0) exceeds 100, meeting the unconditional restriction criteria.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.repeat_available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "The prerequisite of effective control over a 4-week follow-up period cannot be met as no repeat BP is available.",
+            "source_id": "AFTD2022-HTN-COM-002",
+            "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.observed_systolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The systolic value of 174.0 mmHg is strictly greater than the 170 mmHg threshold, confirming the restriction.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.repeat_available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "Without repeat measurements, the condition of 'effective control... over a 4-week follow-up period' is not established.",
+            "source_id": "AFTD2022-HTN-COM-002",
+            "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.observed_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The diastolic value of 104.0 mmHg is strictly greater than the 100 mmHg threshold, confirming the restriction.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+          "source_id": "AFTD2022-HTN-COM-001",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 163,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.observed_systolic",
+              "cardiovascular.blood_pressure.observed_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's systolic BP (174.0) exceeds 170 and diastolic BP (104.0) exceeds 100, meeting the unconditional restriction criteria.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+          "source_id": "AFTD2022-HTN-COM-002",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "d83f41571c48dc3b7c6033b230f17179c3146235732afd0f232960104543dc22",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 855,
+              "original_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.repeat_available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "The prerequisite of effective control over a 4-week follow-up period cannot be met as no repeat BP is available.",
+            "source_id": "AFTD2022-HTN-COM-002",
+            "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+          "source_id": "AFTD2022-HTN-COM-001",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 163,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.observed_systolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The systolic value of 174.0 mmHg is strictly greater than the 170 mmHg threshold, confirming the restriction.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+          "source_id": "AFTD2022-HTN-COM-002",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "d83f41571c48dc3b7c6033b230f17179c3146235732afd0f232960104543dc22",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 855,
+              "original_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-8b1df9fec02f8c8dff189779",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.repeat_available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "Without repeat measurements, the condition of 'effective control... over a 4-week follow-up period' is not established.",
+            "source_id": "AFTD2022-HTN-COM-002",
+            "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+          "source_id": "AFTD2022-HTN-COM-001",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 163,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.observed_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The diastolic value of 104.0 mmHg is strictly greater than the 100 mmHg threshold, confirming the restriction.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [
+        "temporary_restriction_not_established_in_checks"
+      ],
+      "seconds": 9.813899900000251
+    }
+  },
+  "support_review": "pending_independent_review"
+}

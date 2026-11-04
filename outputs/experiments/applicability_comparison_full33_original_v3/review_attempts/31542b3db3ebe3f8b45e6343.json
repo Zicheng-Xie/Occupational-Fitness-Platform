@@ -1,0 +1,484 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-03",
+    "evidence_policy": "module_query",
+    "protocol": "passage_selection",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "outcome_first": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-0c4e5d1885b1be7db1a56f0a",
+                        "PASS-63d4e8b3db93cf13901932e2",
+                        "PASS-715342aff6b3feef5a7daef9",
+                        "PASS-a581c31c1d082af9ef3ba3b6",
+                        "PASS-8401b66c94ee6dd91e4d6af9"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.treatment_category"
+                        ]
+                      },
+                      "maxItems": 2,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver has confirmed type 2 diabetes, and the current GP medication reconciliation states that diabetes is treated with oral medication. The driver takes the prescribed tablets and explicitly denies current insulin use; an old appointment reminder about discussing injectable options is not a prescription and has not been treated as evidence that an injection was started.\\n\\nAfter a delayed lunch last month he felt shaky and ate a snack without assistance, but glucose was measured only after the symptoms settled, so the nurse has no verified measurement during that event and no treating-clinician classification of severe hypoglycaemia. He has brought four weeks of glucose entries rather than a complete three-month record, and the specialist review has not yet occurred.\\n\\nHe also describes reduced radio clarity when the cab is noisy, although quiet conversation is easy and no complete audiogram accompanies the referral. His father used hearing aids, which does not establish the driver's threshold. The nurse records the confirmed diabetes and current oral treatment separately from the unclassified episode and the unmeasured hearing complaint.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The driver has confirmed type 2 diabetes, and the current GP medication reconciliation states that diabetes is treated with oral medication. \", \"The driver has confirmed type 2 diabetes, and the current GP medication reconciliation states that diabetes is treated with oral medication. \", \"The nurse records the confirmed diabetes and current oral treatment separately from the unclassified episode and the unmeasured hearing complaint.\\n\", \"The driver has confirmed type 2 diabetes\"]}, \"diabetes.treatment_category\": {\"value\": \"glucose_lowering_agent_non_insulin\", \"patient_quotes\": [\"The driver has confirmed type 2 diabetes, and the current GP medication reconciliation states that diabetes is treated with oral medication. \"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632}, {\"source_id\": \"AFTD2022-DM-COM-006\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"A conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-63d4e8b3db93cf13901932e2\", \"text_sha256\": \"f1f98641878471e92379f83a9232cda6864ca59f57eea04909726eae4280e747\", \"char_start\": 0, \"char_end\": 1081}, {\"source_id\": \"AFTD2022-EXP-e3ca8efaf3d71461\", \"section\": \"3.3\", \"pdf_page\": 113, \"printed_page\": 102, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has insulin-treated diabetes.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes on whether \\nthe following criteria are met:\\n•\\t there is no recent history (generally at least \\n6 weeks) of a ‘severe hypoglycaemic event’ \\nas assessed by the specialist; and\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia \\n(refer to section 3.2.1); and\\n•\\t there are no end-organ effects that may \\naffect driving as per this publication.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\", \"text_sha256\": \"4666cf6826c41479889aad7d7073447eb3dc2f0922a39dd24a46dbed118bff5e\", \"char_start\": 0, \"char_end\": 988}, {\"source_id\": \"AFTD2022-DM-COM-009\", \"section\": \"3.3.2\", \"pdf_page\": 110, \"printed_page\": 99, \"source_text\": \"3.3.2. Recommendation and \\nreview of conditional licences for \\ncommercial vehicle drivers\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based on \\nadvice from an appropriate medical specialist \\n(endocrinologist or consultant physician \\nspecialising in diabetes) and that these drivers \\nare reviewed periodically by the specialist to \\ndetermine their ongoing fitness to drive (refer \\nto Part A section 4.4. Conditional licences). For \\ncommercial drivers receiving insulin treatment, at \\nleast three months of blood glucose monitoring \\nrecords should be reviewed in assessing fitness \\nto drive.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-a581c31c1d082af9ef3ba3b6\", \"text_sha256\": \"426a6e52e563cfedd137a95b8eddcd0cbefaedd3b6ab9ccc78ad7917d1eb810d\", \"char_start\": 0, \"char_end\": 677}, {\"source_id\": \"AFTD2022-EXP-758d10f29d7875e9\", \"section\": \"3.3.2\", \"pdf_page\": 110, \"printed_page\": 99, \"source_text\": \"Commercial vehicle drivers treated by glucose-\\nlowering agents other than insulin must have \\nat least an annual review by an appropriate \\nspecialist to monitor the progression of their \\ncondition. However, in the case of type 2 \\ndiabetes managed by metformin alone, ongoing \\nfitness to drive may be assessed by the treating \\ngeneral practitioner by mutual agreement with \\nthe specialist. The initial recommendation of \\na conditional licence must be based on the \\nopinion of an endocrinologist or consultant \\nphysician specialising in diabetes.\\nIn areas where access to specialists may be \\ndifficult, the driver licensing authority may agree \\nto a process in which:\\n•\\t\\ninitial assessment and advice for the \\nconditional licence is provided by a \\nspecialist (endocrinologist or consultant \\nphysician specialising in diabetes)\\n•\\t\\nongoing periodic review for the conditional \\nlicence is provided by the treating general \\npractitioner, with the cooperation of the \\nspecialist.\\nWhere appropriate and available, the use \\nof telemedicine technologies such as \\nvideoconferencing is encouraged as a means of \\nfacilitating access to specialist opinion (refer to \\nPart A section 3.3.5. Role of medical specialists).\", \"module\": \"diabetes\", \"passage_id\": \"PASS-8401b66c94ee6dd91e4d6af9\", \"text_sha256\": \"928c62fc1b9302946a6829319d61b52f0dd9553f13392ed54f70bf510dea4c7a\", \"char_start\": 0, \"char_end\": 1203}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "05741db89de9663f6aac89df6ea1453fc37a59fe99ba032c99c86c8801d66e80",
+          "request_bytes": 15919,
+          "status": "completed",
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:34:35.9217082Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n\"assessment_outcome\": \"meets_unconditional_standard\",\n\"explanation\": \"The patient has confirmed type 2 diabetes treated with non-insulin glucose-lowering agents (oral medication). According to the supplied guideline evidence, a person with diabetes treated by diet and exercise alone may drive without restriction. However, the specific clause states that a person is not fit for an unconditional licence if they have non-insulin treated diabetes and are being treated with glucose-lowering agents other than insulin. The patient's treatment category is explicitly recorded as 'glucose_lowering_agent_non_insulin'. Therefore, the patient does not meet the unconditional standard due to the specific medication class used. However, the evidence allows for a conditional licence assessment if further criteria (hypoglycaemia history, awareness, end-organ effects) are met. The nurse note mentions symptoms of shakiness but explicitly states there is no verified measurement during the event and no treating-clinician classification of severe hypoglycaemia. Thus, the 'severe hypoglycaemic event' criterion for conditional licensing cannot be established as present or absent based on verified facts alone, but the absence of a verified severe event does not negate the restriction caused by the medication type itself regarding unconditional fitness. The primary finding is the failure to meet the unconditional standard due to the specific treatment modality.\",\n\"criterion_checks\": [\n{\n\"module\": \"diabetes\",\n\"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\",\n\"fact_fields\": [\"diabetes.treatment_category\"],\n\"licence_pathway\": \"unconditional\",\n\"finding\": \"not_established\",\n\"conclusion\": \"The patient is not fit to hold an unconditional licence because they have non-insulin treated diabetes mellitus and are being treated with glucose-lowering agents other than insulin.\"\n},\n{\n\"module\": \"diabetes\",\n\"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\",\n\"fact_fields\": [\"diabetes.present\"],\n\"licence_pathway\": \"conditional\",\n\"finding\": \"information_missing\",\n\"conclusion\": \"Information regarding the absence of a recent history of severe hypoglycaemic event is missing; verified facts do not confirm or deny this criterion.\"\n},\n{\n\"module\": \"diabetes\",\n\"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\",\n\"fact_fields\": [\"diabetes.treatment_category\"],\n\"licence_pathway\": \"conditional\",\n\"finding\": \"not_established\",\n\"conclusion\": \"Information regarding whether the person is following a treatment regimen that minimises the risk of hypoglycaemia is not established by verified facts alone.\"\n},\n{\n\"module\": \"diabetes\",\n\"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\",\n\"fact_fields\": [\"diabetes.present\"],\n\"licence_pathway\": \"conditional\",\n\"finding\": \"not_established\",\n\"conclusion\": \"Information regarding the absence of end-organ effects that may affect driving is not established by verified facts alone.\"\n},\n{\n\"module\": \"diabetes\",\n\"passage_id\": \"PASS-a581c31c1d082af9ef3ba3b6\",\n\"fact_fields\": [],\n\"licence_pathway\": \"conditional\",\n\"finding\": \"information_missing\",\n\"conclusion\": \"Three months of blood glucose monitoring records are required for assessing fitness to drive; the patient has only four weeks of entries, so this requirement is not met.\"\n}\n]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 11303386500,
+            "load_duration": 3761000,
+            "prompt_eval_count": 3351,
+            "prompt_eval_cached_count": 3347,
+            "prompt_eval_duration": 225903000,
+            "eval_count": 834,
+            "eval_duration": 11037316000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3351,
+            "eval_count": 834,
+            "prompt_eval_cached_count": 3347
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "meets_unconditional_standard",
+            "explanation": "The patient has confirmed type 2 diabetes treated with non-insulin glucose-lowering agents (oral medication). According to the supplied guideline evidence, a person with diabetes treated by diet and exercise alone may drive without restriction. However, the specific clause states that a person is not fit for an unconditional licence if they have non-insulin treated diabetes and are being treated with glucose-lowering agents other than insulin. The patient's treatment category is explicitly recorded as 'glucose_lowering_agent_non_insulin'. Therefore, the patient does not meet the unconditional standard due to the specific medication class used. However, the evidence allows for a conditional licence assessment if further criteria (hypoglycaemia history, awareness, end-organ effects) are met. The nurse note mentions symptoms of shakiness but explicitly states there is no verified measurement during the event and no treating-clinician classification of severe hypoglycaemia. Thus, the 'severe hypoglycaemic event' criterion for conditional licensing cannot be established as present or absent based on verified facts alone, but the absence of a verified severe event does not negate the restriction caused by the medication type itself regarding unconditional fitness. The primary finding is the failure to meet the unconditional standard due to the specific treatment modality.",
+            "source_ids": [
+              "AFTD2022-EXP-42507db0424f7a27",
+              "AFTD2022-DM-COM-009"
+            ],
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category"
+            ],
+            "criterion_checks": [
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The patient is not fit to hold an unconditional licence because they have non-insulin treated diabetes mellitus and are being treated with glucose-lowering agents other than insulin.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "Information regarding the absence of a recent history of severe hypoglycaemic event is missing; verified facts do not confirm or deny this criterion.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Information regarding whether the person is following a treatment regimen that minimises the risk of hypoglycaemia is not established by verified facts alone.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Information regarding the absence of end-organ effects that may affect driving is not established by verified facts alone.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-a581c31c1d082af9ef3ba3b6",
+                "fact_fields": [],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "Three months of blood glucose monitoring records are required for assessing fitness to drive; the patient has only four weeks of entries, so this requirement is not met.",
+                "source_id": "AFTD2022-DM-COM-009",
+                "guideline_quote": "3.3.2. Recommendation and \nreview of conditional licences for \ncommercial vehicle drivers\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based on \nadvice from an appropriate medical specialist \n(endocrinologist or consultant physician \nspecialising in diabetes) and that these drivers \nare reviewed periodically by the specialist to \ndetermine their ongoing fitness to drive (refer \nto Part A section 4.4. Conditional licences). For \ncommercial drivers receiving insulin treatment, at \nleast three months of blood glucose monitoring \nrecords should be reviewed in assessing fitness \nto drive."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The patient is not fit to hold an unconditional licence because they have non-insulin treated diabetes mellitus and are being treated with glucose-lowering agents other than insulin.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "Information regarding the absence of a recent history of severe hypoglycaemic event is missing; verified facts do not confirm or deny this criterion.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Information regarding whether the person is following a treatment regimen that minimises the risk of hypoglycaemia is not established by verified facts alone.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Information regarding the absence of end-organ effects that may affect driving is not established by verified facts alone.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-a581c31c1d082af9ef3ba3b6",
+              "source_id": "AFTD2022-DM-COM-009",
+              "pdf_page": 110,
+              "printed_page": 99,
+              "section": "3.3.2",
+              "text_sha256": "426a6e52e563cfedd137a95b8eddcd0cbefaedd3b6ab9ccc78ad7917d1eb810d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 677,
+                  "original_quote": "3.3.2. Recommendation and \nreview of conditional licences for \ncommercial vehicle drivers\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based on \nadvice from an appropriate medical specialist \n(endocrinologist or consultant physician \nspecialising in diabetes) and that these drivers \nare reviewed periodically by the specialist to \ndetermine their ongoing fitness to drive (refer \nto Part A section 4.4. Conditional licences). For \ncommercial drivers receiving insulin treatment, at \nleast three months of blood glucose monitoring \nrecords should be reviewed in assessing fitness \nto drive."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-a581c31c1d082af9ef3ba3b6",
+                "fact_fields": [],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "Three months of blood glucose monitoring records are required for assessing fitness to drive; the patient has only four weeks of entries, so this requirement is not met.",
+                "source_id": "AFTD2022-DM-COM-009",
+                "guideline_quote": "3.3.2. Recommendation and \nreview of conditional licences for \ncommercial vehicle drivers\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based on \nadvice from an appropriate medical specialist \n(endocrinologist or consultant physician \nspecialising in diabetes) and that these drivers \nare reviewed periodically by the specialist to \ndetermine their ongoing fitness to drive (refer \nto Part A section 4.4. Conditional licences). For \ncommercial drivers receiving insulin treatment, at \nleast three months of blood glucose monitoring \nrecords should be reviewed in assessing fitness \nto drive."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [],
+          "seconds": 11.333715100001427,
+          "provider_called": true
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "meets_unconditional_standard",
+        "explanation": "The patient has confirmed type 2 diabetes treated with non-insulin glucose-lowering agents (oral medication). According to the supplied guideline evidence, a person with diabetes treated by diet and exercise alone may drive without restriction. However, the specific clause states that a person is not fit for an unconditional licence if they have non-insulin treated diabetes and are being treated with glucose-lowering agents other than insulin. The patient's treatment category is explicitly recorded as 'glucose_lowering_agent_non_insulin'. Therefore, the patient does not meet the unconditional standard due to the specific medication class used. However, the evidence allows for a conditional licence assessment if further criteria (hypoglycaemia history, awareness, end-organ effects) are met. The nurse note mentions symptoms of shakiness but explicitly states there is no verified measurement during the event and no treating-clinician classification of severe hypoglycaemia. Thus, the 'severe hypoglycaemic event' criterion for conditional licensing cannot be established as present or absent based on verified facts alone, but the absence of a verified severe event does not negate the restriction caused by the medication type itself regarding unconditional fitness. The primary finding is the failure to meet the unconditional standard due to the specific treatment modality.",
+        "source_ids": [
+          "AFTD2022-EXP-42507db0424f7a27",
+          "AFTD2022-DM-COM-009"
+        ],
+        "fact_fields": [
+          "diabetes.present",
+          "diabetes.treatment_category"
+        ],
+        "criterion_checks": [
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The patient is not fit to hold an unconditional licence because they have non-insulin treated diabetes mellitus and are being treated with glucose-lowering agents other than insulin.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.present"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "Information regarding the absence of a recent history of severe hypoglycaemic event is missing; verified facts do not confirm or deny this criterion.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "Information regarding whether the person is following a treatment regimen that minimises the risk of hypoglycaemia is not established by verified facts alone.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.present"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "Information regarding the absence of end-organ effects that may affect driving is not established by verified facts alone.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-a581c31c1d082af9ef3ba3b6",
+            "fact_fields": [],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "Three months of blood glucose monitoring records are required for assessing fitness to drive; the patient has only four weeks of entries, so this requirement is not met.",
+            "source_id": "AFTD2022-DM-COM-009",
+            "guideline_quote": "3.3.2. Recommendation and \nreview of conditional licences for \ncommercial vehicle drivers\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based on \nadvice from an appropriate medical specialist \n(endocrinologist or consultant physician \nspecialising in diabetes) and that these drivers \nare reviewed periodically by the specialist to \ndetermine their ongoing fitness to drive (refer \nto Part A section 4.4. Conditional licences). For \ncommercial drivers receiving insulin treatment, at \nleast three months of blood glucose monitoring \nrecords should be reviewed in assessing fitness \nto drive."
+          }
+        ]
+      },
+      "seconds": 11.335945900005754
+    }
+  },
+  "support_review": "pending_independent_review"
+}

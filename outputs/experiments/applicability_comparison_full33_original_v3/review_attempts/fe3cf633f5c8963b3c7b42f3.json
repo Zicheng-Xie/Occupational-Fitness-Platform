@@ -1,0 +1,1595 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "SYN-EXT-007",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "blackout.mechanism_status",
+                          "blackout.episodes_separated_by_24h_count",
+                          "blackout.years_since_last_event",
+                          "blackout.appropriate_specialist_information_available",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "blackout.mechanism_status",
+                          "blackout.episodes_separated_by_24h_count",
+                          "blackout.years_since_last_event",
+                          "blackout.appropriate_specialist_information_available",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"blackout\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nRecurrent uncertain blackouts separated by at least 24 hours; exactly ten event-free years with specialist information.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\nblackout.occurred = true\\r\\ndiabetes.present = false\\r\\nblackout.mechanism_status = \\\"undetermined_after_investigation\\\"\\r\\nblackout.diagnosis = \\\"undetermined\\\"\\r\\nblackout.episodes_separated_by_24h_count = 2\\r\\nblackout.years_since_last_event = 10\\r\\nblackout.appropriate_specialist_information_available = true\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"blackout.occurred = true\", \"blackout.occurred = true\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"blackout.mechanism_status\": {\"value\": \"undetermined_after_investigation\", \"patient_quotes\": [\"blackout.mechanism_status = \\\"undetermined_after_investigation\\\"\"]}, \"blackout.episodes_separated_by_24h_count\": {\"value\": 2, \"patient_quotes\": [\"blackout.episodes_separated_by_24h_count = 2\"]}, \"blackout.years_since_last_event\": {\"value\": 10, \"patient_quotes\": [\"blackout.years_since_last_event = 10\"]}, \"blackout.appropriate_specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"blackout.appropriate_specialist_information_available = true\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-bbf242d555576d02\", \"section\": \"1.3\", \"pdf_page\": 70, \"printed_page\": 59, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person should not drive for 5 \\nyears following a single blackout of \\nundetermined nature.\\nA person should not drive for 10 years \\nfollowing two or more blackouts of \\nundetermined nature separated by a 24-\\nhour period.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has experienced blackouts \\nthat cannot be diagnosed as syncope, \\nseizure or another condition.\\nIf there has been a single blackout or more \\nthan one blackout within a 24-hour period, \\na conditional licence may be considered \\nby the driver licensing authority subject to \\nat least annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 5 years.\\nIf there have been two or more blackouts \\nseparated by at least 24 hours, a \\nconditional licence may be considered by \\nthe driver licensing authority subject to at \\nleast annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 10 years.\", \"module\": \"blackout\", \"passage_id\": \"PASS-4a8f5a5a5c747d8bd97f4c05\", \"text_sha256\": \"0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53\", \"char_start\": 0, \"char_end\": 1294, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-EXP-3a8e08652c83a2d0\", \"section\": \"1.2.4\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.2.4. Blackouts of undetermined \\nmechanism\\nIf, despite extensive investigation, the \\nmechanism of a blackout cannot be determined, \\nfitness to drive should be assessed according \\nto section 1.3. Medical standards for licensing. \\nThe standards for blackout of undetermined \\nmechanism are similar to those for seizure.\", \"module\": \"blackout\", \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\", \"text_sha256\": \"3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853\", \"char_start\": 0, \"char_end\": 317, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-EXP-2332d9548f2abd01\", \"section\": \"1.2.3\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"1.2.3. Blackouts due to medical \\ncauses not covered in the standards\\nIf the cause of the blackout is determined \\nto be a medical condition not covered in \\nthe standards, then first principles regarding \\nfitness to drive should be applied (refer to \\nPart A section 2. Assessing fitness to drive \\n– general guidance). Considerations include \\nthe likelihood of recurrence of blackout and \\nthe treatability of the condition as well as the \\nnature of the driving task. There should also be \\nan appropriate review period. A more stringent \\napproach should be considered for commercial \\nvehicle drivers.\", \"module\": \"blackout\", \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\", \"text_sha256\": \"01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398\", \"char_start\": 0, \"char_end\": 596, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-BLK-COM-004\", \"section\": \"1.3\", \"pdf_page\": 70, \"printed_page\": 59, \"source_text\": \"A person should not drive for 5 \\nyears following a single blackout of \\nundetermined nature.\\nA person should not drive for 10 years \\nfollowing two or more blackouts of \\nundetermined nature separated by a 24-\\nhour period.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has experienced blackouts \\nthat cannot be diagnosed as syncope, \\nseizure or another condition.\\nIf there has been a single blackout or more \\nthan one blackout within a 24-hour period, \\na conditional licence may be considered \\nby the driver licensing authority subject to \\nat least annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 5 years.\", \"module\": \"blackout\", \"passage_id\": \"PASS-257a87d15dd2c1b7005a21ef\", \"text_sha256\": \"755748eea7c89a47066501c56a6fd8850304b696fcca5f69b0f83faf58ffec59\", \"char_start\": 0, \"char_end\": 768, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-BLK-COM-005\", \"section\": \"1.3\", \"pdf_page\": 70, \"printed_page\": 59, \"source_text\": \"A person should not drive for 10 years \\nfollowing two or more blackouts of \\nundetermined nature separated by a 24-\\nhour period.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has experienced blackouts \\nthat cannot be diagnosed as syncope, \\nseizure or another condition.\\nIf there has been a single blackout or more \\nthan one blackout within a 24-hour period, \\na conditional licence may be considered \\nby the driver licensing authority subject to \\nat least annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 5 years.\\nIf there have been two or more blackouts \\nseparated by at least 24 hours, a \\nconditional licence may be considered by \\nthe driver licensing authority subject to at \\nleast annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 10 years.\", \"module\": \"blackout\", \"passage_id\": \"PASS-c2389eae9eca5bb96ceb386b\", \"text_sha256\": \"518da4f1500d8f8c838d81b4032f1a22f7e592d32c018c48a0242fc3c20bb05e\", \"char_start\": 0, \"char_end\": 1045, \"applicability_slot\": \"P5\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "a379173ee7d0136a4dc80529abbc983592b411ebf49a6f4e6df1624c2460ce85",
+          "request_bytes": 15854,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T14:25:41.6427514Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\", \"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\", \"blackout.appropriate_specialist_information_available\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"single blackout of undetermined nature\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\"]}, {\"requirement\": \"two or more blackouts separated by 24 hours\", \"status\": \"met\", \"fact_fields\": [\"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (\"\n    },\"P2\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blackout mechanism cannot be determined despite investigation\", \"status\": \"met\", \"fact_fields\": [\"blackout.mechanism_status\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage states that if the mechanism is undetermined, fitness should be assessed per section 1.3. Patient facts confirm mechanism status is 'undetermined_after_investigation'. However, this passage does not define specific time-based restrictions or conditional criteria; it only references the 1\"\n    },\"P3\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blackout cause determined to be a medical condition not covered in standards\", \"status\": \"unknown\", \"fact_fields\": [\"blackout.mechanism_status\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage outlines principles for blackouts due to medical causes not covered in standards, requiring first principles assessment. Patient facts show mechanism is 'undetermined_after_investigation', which does not confirm if the cause is a specific uncovered medical condition or remains undiagnos\"\n    },\"P4\": {\"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\", \"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\", \"blackout.appropriate_specialist_information_available\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"single blackout of undetermined nature\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\"]}, {\"requirement\": \"two or more blackouts separated by 24 hours\", \"status\": \"met\", \"fact_fields\": [\"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (\"},\"P5\": {\"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\", \"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\", \"blackout.appropriate_specialist_information_available\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"single blackout of undetermined nature\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\"]}, {\"requirement\": \"two or more blackouts separated by 24 hours\", \"status\": \"met\", \"fact_fields\": [\"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (\"}\n}}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 18208929000,
+            "load_duration": 6691200,
+            "prompt_eval_count": 3274,
+            "prompt_eval_cached_count": 3270,
+            "prompt_eval_duration": 154431000,
+            "eval_count": 1181,
+            "eval_duration": 17770133000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3274,
+            "eval_count": 1181,
+            "prompt_eval_cached_count": 3270
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event",
+                  "blackout.appropriate_specialist_information_available"
+                ],
+                "statement_type": "restriction",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "single blackout of undetermined nature",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "blackout.occurred",
+                      "blackout.mechanism_status"
+                    ]
+                  },
+                  {
+                    "requirement": "two or more blackouts separated by 24 hours",
+                    "status": "met",
+                    "fact_fields": [
+                      "blackout.episodes_separated_by_24h_count",
+                      "blackout.years_since_last_event"
+                    ]
+                  }
+                ],
+                "numeric_application": "not_applicable",
+                "finding": "established_restriction",
+                "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' ("
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-82afe6d85f71189739c9ff06",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "blackout mechanism cannot be determined despite investigation",
+                    "status": "met",
+                    "fact_fields": [
+                      "blackout.mechanism_status"
+                    ]
+                  }
+                ],
+                "numeric_application": "not_applicable",
+                "finding": "information_missing",
+                "conclusion": "The passage states that if the mechanism is undetermined, fitness should be assessed per section 1.3. Patient facts confirm mechanism status is 'undetermined_after_investigation'. However, this passage does not define specific time-based restrictions or conditional criteria; it only references the 1"
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "blackout cause determined to be a medical condition not covered in standards",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "blackout.mechanism_status"
+                    ]
+                  }
+                ],
+                "numeric_application": "not_applicable",
+                "finding": "information_missing",
+                "conclusion": "The passage outlines principles for blackouts due to medical causes not covered in standards, requiring first principles assessment. Patient facts show mechanism is 'undetermined_after_investigation', which does not confirm if the cause is a specific uncovered medical condition or remains undiagnos"
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-257a87d15dd2c1b7005a21ef",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event",
+                  "blackout.appropriate_specialist_information_available"
+                ],
+                "statement_type": "restriction",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "single blackout of undetermined nature",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "blackout.occurred",
+                      "blackout.mechanism_status"
+                    ]
+                  },
+                  {
+                    "requirement": "two or more blackouts separated by 24 hours",
+                    "status": "met",
+                    "fact_fields": [
+                      "blackout.episodes_separated_by_24h_count",
+                      "blackout.years_since_last_event"
+                    ]
+                  }
+                ],
+                "numeric_application": "not_applicable",
+                "finding": "established_restriction",
+                "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' ("
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event",
+                  "blackout.appropriate_specialist_information_available"
+                ],
+                "statement_type": "restriction",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "single blackout of undetermined nature",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "blackout.occurred",
+                      "blackout.mechanism_status"
+                    ]
+                  },
+                  {
+                    "requirement": "two or more blackouts separated by 24 hours",
+                    "status": "met",
+                    "fact_fields": [
+                      "blackout.episodes_separated_by_24h_count",
+                      "blackout.years_since_last_event"
+                    ]
+                  }
+                ],
+                "numeric_application": "not_applicable",
+                "finding": "established_restriction",
+                "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' ("
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+              "source_id": "AFTD2022-EXP-bbf242d555576d02",
+              "pdf_page": 70,
+              "printed_page": 59,
+              "section": "1.3",
+              "text_sha256": "0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1294,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event",
+                  "blackout.appropriate_specialist_information_available"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (",
+                "source_id": "AFTD2022-EXP-bbf242d555576d02",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-82afe6d85f71189739c9ff06",
+              "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.2.4",
+              "text_sha256": "3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 317,
+                  "original_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-82afe6d85f71189739c9ff06",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "information_missing",
+                "conclusion": "The passage states that if the mechanism is undetermined, fitness should be assessed per section 1.3. Patient facts confirm mechanism status is 'undetermined_after_investigation'. However, this passage does not define specific time-based restrictions or conditional criteria; it only references the 1",
+                "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+                "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+              "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.3",
+              "text_sha256": "01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 596,
+                  "original_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "information_missing",
+                "conclusion": "The passage outlines principles for blackouts due to medical causes not covered in standards, requiring first principles assessment. Patient facts show mechanism is 'undetermined_after_investigation', which does not confirm if the cause is a specific uncovered medical condition or remains undiagnos",
+                "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+                "guideline_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-257a87d15dd2c1b7005a21ef",
+              "source_id": "AFTD2022-BLK-COM-004",
+              "pdf_page": 70,
+              "printed_page": 59,
+              "section": "1.3",
+              "text_sha256": "755748eea7c89a47066501c56a6fd8850304b696fcca5f69b0f83faf58ffec59",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 768,
+                  "original_quote": "A person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-257a87d15dd2c1b7005a21ef",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event",
+                  "blackout.appropriate_specialist_information_available"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (",
+                "source_id": "AFTD2022-BLK-COM-004",
+                "guideline_quote": "A person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+              "source_id": "AFTD2022-BLK-COM-005",
+              "pdf_page": 70,
+              "printed_page": 59,
+              "section": "1.3",
+              "text_sha256": "518da4f1500d8f8c838d81b4032f1a22f7e592d32c018c48a0242fc3c20bb05e",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1045,
+                  "original_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event",
+                  "blackout.appropriate_specialist_information_available"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (",
+                "source_id": "AFTD2022-BLK-COM-005",
+                "guideline_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-4a8f5a5a5c747d8bd97f4c05:established_finding_without_reported_applicability",
+            "PASS-257a87d15dd2c1b7005a21ef:established_finding_without_reported_applicability",
+            "PASS-c2389eae9eca5bb96ceb386b:established_finding_without_reported_applicability"
+          ],
+          "seconds": 18.23591380000289
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event",
+              "blackout.appropriate_specialist_information_available"
+            ],
+            "statement_type": "restriction",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "single blackout of undetermined nature",
+                "status": "not_met",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status"
+                ]
+              },
+              {
+                "requirement": "two or more blackouts separated by 24 hours",
+                "status": "met",
+                "fact_fields": [
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event"
+                ]
+              }
+            ],
+            "numeric_application": "not_applicable",
+            "finding": "established_restriction",
+            "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' ("
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-82afe6d85f71189739c9ff06",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "blackout mechanism cannot be determined despite investigation",
+                "status": "met",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ]
+              }
+            ],
+            "numeric_application": "not_applicable",
+            "finding": "information_missing",
+            "conclusion": "The passage states that if the mechanism is undetermined, fitness should be assessed per section 1.3. Patient facts confirm mechanism status is 'undetermined_after_investigation'. However, this passage does not define specific time-based restrictions or conditional criteria; it only references the 1"
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "blackout cause determined to be a medical condition not covered in standards",
+                "status": "unknown",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ]
+              }
+            ],
+            "numeric_application": "not_applicable",
+            "finding": "information_missing",
+            "conclusion": "The passage outlines principles for blackouts due to medical causes not covered in standards, requiring first principles assessment. Patient facts show mechanism is 'undetermined_after_investigation', which does not confirm if the cause is a specific uncovered medical condition or remains undiagnos"
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-257a87d15dd2c1b7005a21ef",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event",
+              "blackout.appropriate_specialist_information_available"
+            ],
+            "statement_type": "restriction",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "single blackout of undetermined nature",
+                "status": "not_met",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status"
+                ]
+              },
+              {
+                "requirement": "two or more blackouts separated by 24 hours",
+                "status": "met",
+                "fact_fields": [
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event"
+                ]
+              }
+            ],
+            "numeric_application": "not_applicable",
+            "finding": "established_restriction",
+            "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' ("
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event",
+              "blackout.appropriate_specialist_information_available"
+            ],
+            "statement_type": "restriction",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "single blackout of undetermined nature",
+                "status": "not_met",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status"
+                ]
+              },
+              {
+                "requirement": "two or more blackouts separated by 24 hours",
+                "status": "met",
+                "fact_fields": [
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event"
+                ]
+              }
+            ],
+            "numeric_application": "not_applicable",
+            "finding": "established_restriction",
+            "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' ("
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+          "source_id": "AFTD2022-EXP-bbf242d555576d02",
+          "pdf_page": 70,
+          "printed_page": 59,
+          "section": "1.3",
+          "text_sha256": "0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1294,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event",
+              "blackout.appropriate_specialist_information_available"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (",
+            "source_id": "AFTD2022-EXP-bbf242d555576d02",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-82afe6d85f71189739c9ff06",
+          "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+          "pdf_page": 69,
+          "printed_page": 58,
+          "section": "1.2.4",
+          "text_sha256": "3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 317,
+              "original_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-82afe6d85f71189739c9ff06",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "information_missing",
+            "conclusion": "The passage states that if the mechanism is undetermined, fitness should be assessed per section 1.3. Patient facts confirm mechanism status is 'undetermined_after_investigation'. However, this passage does not define specific time-based restrictions or conditional criteria; it only references the 1",
+            "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+            "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+          "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+          "pdf_page": 68,
+          "printed_page": 57,
+          "section": "1.2.3",
+          "text_sha256": "01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 596,
+              "original_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "information_missing",
+            "conclusion": "The passage outlines principles for blackouts due to medical causes not covered in standards, requiring first principles assessment. Patient facts show mechanism is 'undetermined_after_investigation', which does not confirm if the cause is a specific uncovered medical condition or remains undiagnos",
+            "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+            "guideline_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-257a87d15dd2c1b7005a21ef",
+          "source_id": "AFTD2022-BLK-COM-004",
+          "pdf_page": 70,
+          "printed_page": 59,
+          "section": "1.3",
+          "text_sha256": "755748eea7c89a47066501c56a6fd8850304b696fcca5f69b0f83faf58ffec59",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 768,
+              "original_quote": "A person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-257a87d15dd2c1b7005a21ef",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event",
+              "blackout.appropriate_specialist_information_available"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (",
+            "source_id": "AFTD2022-BLK-COM-004",
+            "guideline_quote": "A person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+          "source_id": "AFTD2022-BLK-COM-005",
+          "pdf_page": 70,
+          "printed_page": 59,
+          "section": "1.3",
+          "text_sha256": "518da4f1500d8f8c838d81b4032f1a22f7e592d32c018c48a0242fc3c20bb05e",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1045,
+              "original_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event",
+              "blackout.appropriate_specialist_information_available"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (",
+            "source_id": "AFTD2022-BLK-COM-005",
+            "guideline_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-4a8f5a5a5c747d8bd97f4c05:established_finding_without_reported_applicability",
+        "PASS-257a87d15dd2c1b7005a21ef:established_finding_without_reported_applicability",
+        "PASS-c2389eae9eca5bb96ceb386b:established_finding_without_reported_applicability"
+      ],
+      "seconds": 18.23591590000433
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "blackout"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-4a8f5a5a5c747d8bd97f4c05",
+                        "PASS-82afe6d85f71189739c9ff06",
+                        "PASS-f518b995ccbf6dfc41900b70",
+                        "PASS-257a87d15dd2c1b7005a21ef",
+                        "PASS-c2389eae9eca5bb96ceb386b"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "blackout.mechanism_status",
+                          "blackout.episodes_separated_by_24h_count",
+                          "blackout.years_since_last_event",
+                          "blackout.appropriate_specialist_information_available",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"blackout\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nRecurrent uncertain blackouts separated by at least 24 hours; exactly ten event-free years with specialist information.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\nblackout.occurred = true\\r\\ndiabetes.present = false\\r\\nblackout.mechanism_status = \\\"undetermined_after_investigation\\\"\\r\\nblackout.diagnosis = \\\"undetermined\\\"\\r\\nblackout.episodes_separated_by_24h_count = 2\\r\\nblackout.years_since_last_event = 10\\r\\nblackout.appropriate_specialist_information_available = true\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"blackout.occurred = true\", \"blackout.occurred = true\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"blackout.mechanism_status\": {\"value\": \"undetermined_after_investigation\", \"patient_quotes\": [\"blackout.mechanism_status = \\\"undetermined_after_investigation\\\"\"]}, \"blackout.episodes_separated_by_24h_count\": {\"value\": 2, \"patient_quotes\": [\"blackout.episodes_separated_by_24h_count = 2\"]}, \"blackout.years_since_last_event\": {\"value\": 10, \"patient_quotes\": [\"blackout.years_since_last_event = 10\"]}, \"blackout.appropriate_specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"blackout.appropriate_specialist_information_available = true\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-bbf242d555576d02\", \"section\": \"1.3\", \"pdf_page\": 70, \"printed_page\": 59, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person should not drive for 5 \\nyears following a single blackout of \\nundetermined nature.\\nA person should not drive for 10 years \\nfollowing two or more blackouts of \\nundetermined nature separated by a 24-\\nhour period.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has experienced blackouts \\nthat cannot be diagnosed as syncope, \\nseizure or another condition.\\nIf there has been a single blackout or more \\nthan one blackout within a 24-hour period, \\na conditional licence may be considered \\nby the driver licensing authority subject to \\nat least annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 5 years.\\nIf there have been two or more blackouts \\nseparated by at least 24 hours, a \\nconditional licence may be considered by \\nthe driver licensing authority subject to at \\nleast annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 10 years.\", \"module\": \"blackout\", \"passage_id\": \"PASS-4a8f5a5a5c747d8bd97f4c05\", \"text_sha256\": \"0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53\", \"char_start\": 0, \"char_end\": 1294}, {\"source_id\": \"AFTD2022-EXP-3a8e08652c83a2d0\", \"section\": \"1.2.4\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.2.4. Blackouts of undetermined \\nmechanism\\nIf, despite extensive investigation, the \\nmechanism of a blackout cannot be determined, \\nfitness to drive should be assessed according \\nto section 1.3. Medical standards for licensing. \\nThe standards for blackout of undetermined \\nmechanism are similar to those for seizure.\", \"module\": \"blackout\", \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\", \"text_sha256\": \"3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853\", \"char_start\": 0, \"char_end\": 317}, {\"source_id\": \"AFTD2022-EXP-2332d9548f2abd01\", \"section\": \"1.2.3\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"1.2.3. Blackouts due to medical \\ncauses not covered in the standards\\nIf the cause of the blackout is determined \\nto be a medical condition not covered in \\nthe standards, then first principles regarding \\nfitness to drive should be applied (refer to \\nPart A section 2. Assessing fitness to drive \\n– general guidance). Considerations include \\nthe likelihood of recurrence of blackout and \\nthe treatability of the condition as well as the \\nnature of the driving task. There should also be \\nan appropriate review period. A more stringent \\napproach should be considered for commercial \\nvehicle drivers.\", \"module\": \"blackout\", \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\", \"text_sha256\": \"01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398\", \"char_start\": 0, \"char_end\": 596}, {\"source_id\": \"AFTD2022-BLK-COM-004\", \"section\": \"1.3\", \"pdf_page\": 70, \"printed_page\": 59, \"source_text\": \"A person should not drive for 5 \\nyears following a single blackout of \\nundetermined nature.\\nA person should not drive for 10 years \\nfollowing two or more blackouts of \\nundetermined nature separated by a 24-\\nhour period.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has experienced blackouts \\nthat cannot be diagnosed as syncope, \\nseizure or another condition.\\nIf there has been a single blackout or more \\nthan one blackout within a 24-hour period, \\na conditional licence may be considered \\nby the driver licensing authority subject to \\nat least annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 5 years.\", \"module\": \"blackout\", \"passage_id\": \"PASS-257a87d15dd2c1b7005a21ef\", \"text_sha256\": \"755748eea7c89a47066501c56a6fd8850304b696fcca5f69b0f83faf58ffec59\", \"char_start\": 0, \"char_end\": 768}, {\"source_id\": \"AFTD2022-BLK-COM-005\", \"section\": \"1.3\", \"pdf_page\": 70, \"printed_page\": 59, \"source_text\": \"A person should not drive for 10 years \\nfollowing two or more blackouts of \\nundetermined nature separated by a 24-\\nhour period.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has experienced blackouts \\nthat cannot be diagnosed as syncope, \\nseizure or another condition.\\nIf there has been a single blackout or more \\nthan one blackout within a 24-hour period, \\na conditional licence may be considered \\nby the driver licensing authority subject to \\nat least annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 5 years.\\nIf there have been two or more blackouts \\nseparated by at least 24 hours, a \\nconditional licence may be considered by \\nthe driver licensing authority subject to at \\nleast annual review, taking into account \\ninformation provided by an appropriate \\nspecialist as to whether the following \\ncriterion is met:\\n•\\t there have been no further blackouts for \\nat least 10 years.\", \"module\": \"blackout\", \"passage_id\": \"PASS-c2389eae9eca5bb96ceb386b\", \"text_sha256\": \"518da4f1500d8f8c838d81b4032f1a22f7e592d32c018c48a0242fc3c20bb05e\", \"char_start\": 0, \"char_end\": 1045}], \"proposed_applicability_ledger\": [{\"module\": \"blackout\", \"passage_id\": \"PASS-4a8f5a5a5c747d8bd97f4c05\", \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\", \"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\", \"blackout.appropriate_specialist_information_available\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"single blackout of undetermined nature\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\"]}, {\"requirement\": \"two or more blackouts separated by 24 hours\", \"status\": \"met\", \"fact_fields\": [\"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (\", \"source_id\": \"AFTD2022-EXP-bbf242d555576d02\", \"referenced_patient_values\": {\"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"blackout.occurred = true\", \"blackout.occurred = true\"]}, \"blackout.mechanism_status\": {\"value\": \"undetermined_after_investigation\", \"patient_quotes\": [\"blackout.mechanism_status = \\\"undetermined_after_investigation\\\"\"]}, \"blackout.episodes_separated_by_24h_count\": {\"value\": 2, \"patient_quotes\": [\"blackout.episodes_separated_by_24h_count = 2\"]}, \"blackout.years_since_last_event\": {\"value\": 10, \"patient_quotes\": [\"blackout.years_since_last_event = 10\"]}, \"blackout.appropriate_specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"blackout.appropriate_specialist_information_available = true\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\", \"fact_fields\": [\"blackout.mechanism_status\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blackout mechanism cannot be determined despite investigation\", \"status\": \"met\", \"fact_fields\": [\"blackout.mechanism_status\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage states that if the mechanism is undetermined, fitness should be assessed per section 1.3. Patient facts confirm mechanism status is 'undetermined_after_investigation'. However, this passage does not define specific time-based restrictions or conditional criteria; it only references the 1\", \"source_id\": \"AFTD2022-EXP-3a8e08652c83a2d0\", \"referenced_patient_values\": {\"blackout.mechanism_status\": {\"value\": \"undetermined_after_investigation\", \"patient_quotes\": [\"blackout.mechanism_status = \\\"undetermined_after_investigation\\\"\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\", \"fact_fields\": [\"blackout.mechanism_status\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blackout cause determined to be a medical condition not covered in standards\", \"status\": \"unknown\", \"fact_fields\": [\"blackout.mechanism_status\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The passage outlines principles for blackouts due to medical causes not covered in standards, requiring first principles assessment. Patient facts show mechanism is 'undetermined_after_investigation', which does not confirm if the cause is a specific uncovered medical condition or remains undiagnos\", \"source_id\": \"AFTD2022-EXP-2332d9548f2abd01\", \"referenced_patient_values\": {\"blackout.mechanism_status\": {\"value\": \"undetermined_after_investigation\", \"patient_quotes\": [\"blackout.mechanism_status = \\\"undetermined_after_investigation\\\"\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-257a87d15dd2c1b7005a21ef\", \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\", \"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\", \"blackout.appropriate_specialist_information_available\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"single blackout of undetermined nature\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\"]}, {\"requirement\": \"two or more blackouts separated by 24 hours\", \"status\": \"met\", \"fact_fields\": [\"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (\", \"source_id\": \"AFTD2022-BLK-COM-004\", \"referenced_patient_values\": {\"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"blackout.occurred = true\", \"blackout.occurred = true\"]}, \"blackout.mechanism_status\": {\"value\": \"undetermined_after_investigation\", \"patient_quotes\": [\"blackout.mechanism_status = \\\"undetermined_after_investigation\\\"\"]}, \"blackout.episodes_separated_by_24h_count\": {\"value\": 2, \"patient_quotes\": [\"blackout.episodes_separated_by_24h_count = 2\"]}, \"blackout.years_since_last_event\": {\"value\": 10, \"patient_quotes\": [\"blackout.years_since_last_event = 10\"]}, \"blackout.appropriate_specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"blackout.appropriate_specialist_information_available = true\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-c2389eae9eca5bb96ceb386b\", \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\", \"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\", \"blackout.appropriate_specialist_information_available\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"single blackout of undetermined nature\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\"]}, {\"requirement\": \"two or more blackouts separated by 24 hours\", \"status\": \"met\", \"fact_fields\": [\"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\"]}], \"numeric_application\": \"not_applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage establishes a restriction for drivers with two or more blackouts separated by at least 24 hours. Patient facts confirm blackout occurred, mechanism is undetermined, episodes separated by 24h count is 2, and years since last event is 10. However, the passage states 'A person should not' (\", \"source_id\": \"AFTD2022-BLK-COM-005\", \"referenced_patient_values\": {\"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"blackout.occurred = true\", \"blackout.occurred = true\"]}, \"blackout.mechanism_status\": {\"value\": \"undetermined_after_investigation\", \"patient_quotes\": [\"blackout.mechanism_status = \\\"undetermined_after_investigation\\\"\"]}, \"blackout.episodes_separated_by_24h_count\": {\"value\": 2, \"patient_quotes\": [\"blackout.episodes_separated_by_24h_count = 2\"]}, \"blackout.years_since_last_event\": {\"value\": 10, \"patient_quotes\": [\"blackout.years_since_last_event = 10\"]}, \"blackout.appropriate_specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"blackout.appropriate_specialist_information_available = true\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"40c5a689308baf23d7d234de5ace3152c3a31a2a483974fd201d775dea4fac08\"}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "8daab15588ee14972a42a8b9e2cc94a2f3c731e1378fc6455d9a66063b52e20f",
+          "request_bytes": 23360,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T14:25:57.6378027Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"temporarily_unfit\",\n  \"explanation\": \"The patient has experienced two blackouts of undetermined nature separated by at least 24 hours. According to the guideline evidence (PASS-4a8f5a5a5c747d8bd97f4c05, PASS-c2389eae9eca5bb96ceb386b), a person should not drive for 10 years following two or more such blackouts. The patient facts confirm blackout occurred (true), mechanism is undetermined after investigation, episodes separated by 24 hours count is 2, and years since last event is 10. While the 10-year restriction period has elapsed, the underlying condition remains 'undetermined' and cannot be diagnosed as syncope, seizure, or another specific condition. The guideline explicitly states a person is not fit to hold an unconditional licence if they have experienced blackouts that cannot be diagnosed. Furthermore, for conditional licensing consideration under these specific circumstances (two+ events), the criterion requires no further blackouts for at least 10 years *and* specialist confirmation of stability. Although the time period has passed, the lack of a diagnosis and the explicit 'should not drive' language for undetermined nature creates an established restriction that prevents granting an unconditional standard or even a confirmed conditional standard without further diagnostic resolution. The nurse note confirms recurrent uncertain blackouts with exactly ten event-free years, but the mechanism remains undetermined. This constitutes a current restriction pending investigation/recovery/stabilisation of the diagnosis.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-4a8f5a5a5c747d8bd97f4c05\",\n      \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\", \"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The guideline states a person is not fit to hold an unconditional licence if they have experienced blackouts that cannot be diagnosed as syncope, seizure or another condition. Patient facts show mechanism_status is 'undetermined_after_investigation', which satisfies the condition of being undiagnosable. Therefore, the unconditional standard is explicitly excluded.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-4a8f5a5a5c747d8bd97f4c05\",\n      \"fact_fields\": [\"blackout.episodes_separated_by_24h_count\", \"blackout.years_since_last_event\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The guideline allows a conditional licence only if 'there have been no further blackouts for at least 10 years' AND specialist information confirms the criterion is met. While years_since_last_event is 10, the mechanism remains undetermined. The guideline implies that without resolving the 'undetermined nature', the safety criteria are not fully satisfied to grant a licence, creating a restriction.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\",\n      \"fact_fields\": [\"blackout.mechanism_status\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"This passage confirms that if the mechanism cannot be determined, fitness is assessed per section 1.3 (which contains the restrictions found in PASS-4a8f5a5a5c747d8bd97f4c05). It does not override the restriction established by the specific blackout count.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-c2389eae9eca5bb96ceb386b\",\n      \"fact_fields\": [\"blackout.occurred\", \"blackout.mechanism_status\", \"blackout.episodes_separated_by_24h_count\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The guideline states for two or more blackouts separated by 24 hours, a conditional licence may be considered subject to annual review taking into account specialist information. The patient has specialist information available, but the core issue remains the 'undetermined nature' which triggers the 'should not drive' clause in the same section.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-4a8f5a5a5c747d8bd97f4c05\",\n      \"fact_fields\": [\"blackout.years_since_last_event\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"While the patient meets the 10-year event-free period, the guideline's primary restriction for 'undetermined nature' blackouts ('should not drive') takes precedence until a diagnosis is made or stability is confirmed. The absence of a diagnosis prevents the establishment of a conditional standard.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 15979309100,
+            "load_duration": 4399400,
+            "prompt_eval_count": 5466,
+            "prompt_eval_cached_count": 5462,
+            "prompt_eval_duration": 94925000,
+            "eval_count": 1189,
+            "eval_duration": 15628119000
+          },
+          "token_counts": {
+            "prompt_eval_count": 5466,
+            "eval_count": 1189,
+            "prompt_eval_cached_count": 5462
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "temporarily_unfit",
+            "explanation": "The patient has experienced two blackouts of undetermined nature separated by at least 24 hours. According to the guideline evidence (PASS-4a8f5a5a5c747d8bd97f4c05, PASS-c2389eae9eca5bb96ceb386b), a person should not drive for 10 years following two or more such blackouts. The patient facts confirm blackout occurred (true), mechanism is undetermined after investigation, episodes separated by 24 hours count is 2, and years since last event is 10. While the 10-year restriction period has elapsed, the underlying condition remains 'undetermined' and cannot be diagnosed as syncope, seizure, or another specific condition. The guideline explicitly states a person is not fit to hold an unconditional licence if they have experienced blackouts that cannot be diagnosed. Furthermore, for conditional licensing consideration under these specific circumstances (two+ events), the criterion requires no further blackouts for at least 10 years *and* specialist confirmation of stability. Although the time period has passed, the lack of a diagnosis and the explicit 'should not drive' language for undetermined nature creates an established restriction that prevents granting an unconditional standard or even a confirmed conditional standard without further diagnostic resolution. The nurse note confirms recurrent uncertain blackouts with exactly ten event-free years, but the mechanism remains undetermined. This constitutes a current restriction pending investigation/recovery/stabilisation of the diagnosis.",
+            "source_ids": [
+              "AFTD2022-EXP-bbf242d555576d02",
+              "AFTD2022-EXP-3a8e08652c83a2d0",
+              "AFTD2022-BLK-COM-005"
+            ],
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event"
+            ],
+            "criterion_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The guideline states a person is not fit to hold an unconditional licence if they have experienced blackouts that cannot be diagnosed as syncope, seizure or another condition. Patient facts show mechanism_status is 'undetermined_after_investigation', which satisfies the condition of being undiagnosable. Therefore, the unconditional standard is explicitly excluded.",
+                "source_id": "AFTD2022-EXP-bbf242d555576d02",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+                "fact_fields": [
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "The guideline allows a conditional licence only if 'there have been no further blackouts for at least 10 years' AND specialist information confirms the criterion is met. While years_since_last_event is 10, the mechanism remains undetermined. The guideline implies that without resolving the 'undetermined nature', the safety criteria are not fully satisfied to grant a licence, creating a restriction.",
+                "source_id": "AFTD2022-EXP-bbf242d555576d02",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-82afe6d85f71189739c9ff06",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "This passage confirms that if the mechanism cannot be determined, fitness is assessed per section 1.3 (which contains the restrictions found in PASS-4a8f5a5a5c747d8bd97f4c05). It does not override the restriction established by the specific blackout count.",
+                "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+                "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "The guideline states for two or more blackouts separated by 24 hours, a conditional licence may be considered subject to annual review taking into account specialist information. The patient has specialist information available, but the core issue remains the 'undetermined nature' which triggers the 'should not drive' clause in the same section.",
+                "source_id": "AFTD2022-BLK-COM-005",
+                "guideline_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+                "fact_fields": [
+                  "blackout.years_since_last_event"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "While the patient meets the 10-year event-free period, the guideline's primary restriction for 'undetermined nature' blackouts ('should not drive') takes precedence until a diagnosis is made or stability is confirmed. The absence of a diagnosis prevents the establishment of a conditional standard.",
+                "source_id": "AFTD2022-EXP-bbf242d555576d02",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+              "source_id": "AFTD2022-EXP-bbf242d555576d02",
+              "pdf_page": 70,
+              "printed_page": 59,
+              "section": "1.3",
+              "text_sha256": "0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1294,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The guideline states a person is not fit to hold an unconditional licence if they have experienced blackouts that cannot be diagnosed as syncope, seizure or another condition. Patient facts show mechanism_status is 'undetermined_after_investigation', which satisfies the condition of being undiagnosable. Therefore, the unconditional standard is explicitly excluded.",
+                "source_id": "AFTD2022-EXP-bbf242d555576d02",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+              "source_id": "AFTD2022-EXP-bbf242d555576d02",
+              "pdf_page": 70,
+              "printed_page": 59,
+              "section": "1.3",
+              "text_sha256": "0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1294,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+                "fact_fields": [
+                  "blackout.episodes_separated_by_24h_count",
+                  "blackout.years_since_last_event"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "The guideline allows a conditional licence only if 'there have been no further blackouts for at least 10 years' AND specialist information confirms the criterion is met. While years_since_last_event is 10, the mechanism remains undetermined. The guideline implies that without resolving the 'undetermined nature', the safety criteria are not fully satisfied to grant a licence, creating a restriction.",
+                "source_id": "AFTD2022-EXP-bbf242d555576d02",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-82afe6d85f71189739c9ff06",
+              "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.2.4",
+              "text_sha256": "3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 317,
+                  "original_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-82afe6d85f71189739c9ff06",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "This passage confirms that if the mechanism cannot be determined, fitness is assessed per section 1.3 (which contains the restrictions found in PASS-4a8f5a5a5c747d8bd97f4c05). It does not override the restriction established by the specific blackout count.",
+                "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+                "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+              "source_id": "AFTD2022-BLK-COM-005",
+              "pdf_page": 70,
+              "printed_page": 59,
+              "section": "1.3",
+              "text_sha256": "518da4f1500d8f8c838d81b4032f1a22f7e592d32c018c48a0242fc3c20bb05e",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1045,
+                  "original_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+                "fact_fields": [
+                  "blackout.occurred",
+                  "blackout.mechanism_status",
+                  "blackout.episodes_separated_by_24h_count"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "The guideline states for two or more blackouts separated by 24 hours, a conditional licence may be considered subject to annual review taking into account specialist information. The patient has specialist information available, but the core issue remains the 'undetermined nature' which triggers the 'should not drive' clause in the same section.",
+                "source_id": "AFTD2022-BLK-COM-005",
+                "guideline_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+              "source_id": "AFTD2022-EXP-bbf242d555576d02",
+              "pdf_page": 70,
+              "printed_page": 59,
+              "section": "1.3",
+              "text_sha256": "0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1294,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+                "fact_fields": [
+                  "blackout.years_since_last_event"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "While the patient meets the 10-year event-free period, the guideline's primary restriction for 'undetermined nature' blackouts ('should not drive') takes precedence until a diagnosis is made or stability is confirmed. The absence of a diagnosis prevents the establishment of a conditional standard.",
+                "source_id": "AFTD2022-EXP-bbf242d555576d02",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "temporary_restriction_not_established_in_checks"
+          ],
+          "seconds": 15.992553000003682
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient has experienced two blackouts of undetermined nature separated by at least 24 hours. According to the guideline evidence (PASS-4a8f5a5a5c747d8bd97f4c05, PASS-c2389eae9eca5bb96ceb386b), a person should not drive for 10 years following two or more such blackouts. The patient facts confirm blackout occurred (true), mechanism is undetermined after investigation, episodes separated by 24 hours count is 2, and years since last event is 10. While the 10-year restriction period has elapsed, the underlying condition remains 'undetermined' and cannot be diagnosed as syncope, seizure, or another specific condition. The guideline explicitly states a person is not fit to hold an unconditional licence if they have experienced blackouts that cannot be diagnosed. Furthermore, for conditional licensing consideration under these specific circumstances (two+ events), the criterion requires no further blackouts for at least 10 years *and* specialist confirmation of stability. Although the time period has passed, the lack of a diagnosis and the explicit 'should not drive' language for undetermined nature creates an established restriction that prevents granting an unconditional standard or even a confirmed conditional standard without further diagnostic resolution. The nurse note confirms recurrent uncertain blackouts with exactly ten event-free years, but the mechanism remains undetermined. This constitutes a current restriction pending investigation/recovery/stabilisation of the diagnosis.",
+        "source_ids": [
+          "AFTD2022-EXP-bbf242d555576d02",
+          "AFTD2022-EXP-3a8e08652c83a2d0",
+          "AFTD2022-BLK-COM-005"
+        ],
+        "fact_fields": [
+          "blackout.occurred",
+          "blackout.mechanism_status",
+          "blackout.episodes_separated_by_24h_count",
+          "blackout.years_since_last_event"
+        ],
+        "criterion_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The guideline states a person is not fit to hold an unconditional licence if they have experienced blackouts that cannot be diagnosed as syncope, seizure or another condition. Patient facts show mechanism_status is 'undetermined_after_investigation', which satisfies the condition of being undiagnosable. Therefore, the unconditional standard is explicitly excluded.",
+            "source_id": "AFTD2022-EXP-bbf242d555576d02",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+            "fact_fields": [
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "The guideline allows a conditional licence only if 'there have been no further blackouts for at least 10 years' AND specialist information confirms the criterion is met. While years_since_last_event is 10, the mechanism remains undetermined. The guideline implies that without resolving the 'undetermined nature', the safety criteria are not fully satisfied to grant a licence, creating a restriction.",
+            "source_id": "AFTD2022-EXP-bbf242d555576d02",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-82afe6d85f71189739c9ff06",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "This passage confirms that if the mechanism cannot be determined, fitness is assessed per section 1.3 (which contains the restrictions found in PASS-4a8f5a5a5c747d8bd97f4c05). It does not override the restriction established by the specific blackout count.",
+            "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+            "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "The guideline states for two or more blackouts separated by 24 hours, a conditional licence may be considered subject to annual review taking into account specialist information. The patient has specialist information available, but the core issue remains the 'undetermined nature' which triggers the 'should not drive' clause in the same section.",
+            "source_id": "AFTD2022-BLK-COM-005",
+            "guideline_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+            "fact_fields": [
+              "blackout.years_since_last_event"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "While the patient meets the 10-year event-free period, the guideline's primary restriction for 'undetermined nature' blackouts ('should not drive') takes precedence until a diagnosis is made or stability is confirmed. The absence of a diagnosis prevents the establishment of a conditional standard.",
+            "source_id": "AFTD2022-EXP-bbf242d555576d02",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+          "source_id": "AFTD2022-EXP-bbf242d555576d02",
+          "pdf_page": 70,
+          "printed_page": 59,
+          "section": "1.3",
+          "text_sha256": "0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1294,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The guideline states a person is not fit to hold an unconditional licence if they have experienced blackouts that cannot be diagnosed as syncope, seizure or another condition. Patient facts show mechanism_status is 'undetermined_after_investigation', which satisfies the condition of being undiagnosable. Therefore, the unconditional standard is explicitly excluded.",
+            "source_id": "AFTD2022-EXP-bbf242d555576d02",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+          "source_id": "AFTD2022-EXP-bbf242d555576d02",
+          "pdf_page": 70,
+          "printed_page": 59,
+          "section": "1.3",
+          "text_sha256": "0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1294,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+            "fact_fields": [
+              "blackout.episodes_separated_by_24h_count",
+              "blackout.years_since_last_event"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "The guideline allows a conditional licence only if 'there have been no further blackouts for at least 10 years' AND specialist information confirms the criterion is met. While years_since_last_event is 10, the mechanism remains undetermined. The guideline implies that without resolving the 'undetermined nature', the safety criteria are not fully satisfied to grant a licence, creating a restriction.",
+            "source_id": "AFTD2022-EXP-bbf242d555576d02",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-82afe6d85f71189739c9ff06",
+          "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+          "pdf_page": 69,
+          "printed_page": 58,
+          "section": "1.2.4",
+          "text_sha256": "3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 317,
+              "original_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-82afe6d85f71189739c9ff06",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "This passage confirms that if the mechanism cannot be determined, fitness is assessed per section 1.3 (which contains the restrictions found in PASS-4a8f5a5a5c747d8bd97f4c05). It does not override the restriction established by the specific blackout count.",
+            "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+            "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+          "source_id": "AFTD2022-BLK-COM-005",
+          "pdf_page": 70,
+          "printed_page": 59,
+          "section": "1.3",
+          "text_sha256": "518da4f1500d8f8c838d81b4032f1a22f7e592d32c018c48a0242fc3c20bb05e",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1045,
+              "original_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-c2389eae9eca5bb96ceb386b",
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.mechanism_status",
+              "blackout.episodes_separated_by_24h_count"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "The guideline states for two or more blackouts separated by 24 hours, a conditional licence may be considered subject to annual review taking into account specialist information. The patient has specialist information available, but the core issue remains the 'undetermined nature' which triggers the 'should not drive' clause in the same section.",
+            "source_id": "AFTD2022-BLK-COM-005",
+            "guideline_quote": "A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+          "source_id": "AFTD2022-EXP-bbf242d555576d02",
+          "pdf_page": 70,
+          "printed_page": 59,
+          "section": "1.3",
+          "text_sha256": "0abb7ccef82cc2e604e88d8b4422dbd0f0e54b234110d880799f5d9375cedc53",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1294,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-4a8f5a5a5c747d8bd97f4c05",
+            "fact_fields": [
+              "blackout.years_since_last_event"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "While the patient meets the 10-year event-free period, the guideline's primary restriction for 'undetermined nature' blackouts ('should not drive') takes precedence until a diagnosis is made or stability is confirmed. The absence of a diagnosis prevents the establishment of a conditional standard.",
+            "source_id": "AFTD2022-EXP-bbf242d555576d02",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person should not drive for 5 \nyears following a single blackout of \nundetermined nature.\nA person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [
+        "temporary_restriction_not_established_in_checks"
+      ],
+      "seconds": 15.992554899996321
+    }
+  },
+  "support_review": "pending_independent_review"
+}

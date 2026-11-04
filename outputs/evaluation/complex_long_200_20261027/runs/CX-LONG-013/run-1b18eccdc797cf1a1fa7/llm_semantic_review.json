@@ -1,0 +1,246 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "20b680d491c80f87a9b0ef10b145c2a5a3464e3046d3fcc7e72e2705ce00f896",
+  "input_facts_sha256": "9f6261aed7dbbda3187a956aa2af732d490c3f216c591d8ef90b8b0834cb9e88",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 563,
+      "eval_count": 56,
+      "total_duration": 1113589400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 563,
+      "eval_count": 37,
+      "total_duration": 905662200
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 561,
+      "eval_count": 54,
+      "total_duration": 1089771800
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 561,
+      "eval_count": 54,
+      "total_duration": 1084704000
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "cardiovascular.blood_pressure.observed_diastolic",
+      "kind": "unsupported",
+      "quote": "BP 174/104 mmHg",
+      "explanation": "Independent source reading differs from the extraction. The patient fact 'cardiovascular.blood_pressure.observed_diastolic' is not documented in the provided source passages.",
+      "evidence": [
+        {
+          "start": 585,
+          "end": 600,
+          "quote": "BP 174/104 mmHg",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "kind": "unsupported",
+      "quote": "persistent BP 174/104 mmHg",
+      "explanation": "Independent source reading differs from the extraction. The patient fact 'cardiovascular.blood_pressure.persistent_diastolic' is not documented in the provided source passages.",
+      "evidence": [
+        {
+          "start": 574,
+          "end": 600,
+          "quote": "persistent BP 174/104 mmHg",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "kind": "unsupported",
+      "quote": "persistent BP 174/104 mmHg",
+      "explanation": "Independent source reading differs from the extraction. The patient fact 'cardiovascular.blood_pressure.persistent_systolic' is not documented in the provided source passages.",
+      "evidence": [
+        {
+          "start": 574,
+          "end": 600,
+          "quote": "persistent BP 174/104 mmHg",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "cardiovascular.blood_pressure.observed_diastolic",
+    "cardiovascular.blood_pressure.persistent_diastolic",
+    "cardiovascular.blood_pressure.persistent_systolic"
+  ],
+  "checked_fields": [
+    "cardiovascular.blood_pressure.observed_diastolic",
+    "cardiovascular.blood_pressure.observed_systolic",
+    "cardiovascular.blood_pressure.persistent_diastolic",
+    "cardiovascular.blood_pressure.persistent_systolic"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "hypertension"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "edb765f438b4c8823da5f02d5cb250a8f9e371383b240323a90a7d58b917a970",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "cardiovascular.blood_pressure.observed_diastolic": {
+      "value": 104.0,
+      "status": "present",
+      "unit": "mmHg",
+      "evidence": [
+        {
+          "start": 585,
+          "end": 600,
+          "quote": "BP 174/104 mmHg",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        },
+        {
+          "start": 574,
+          "end": 600,
+          "quote": "persistent BP 174/104 mmHg",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "llm_grounded",
+      "derived_from": []
+    },
+    "cardiovascular.blood_pressure.persistent_diastolic": {
+      "value": 104,
+      "status": "present",
+      "unit": "mmHg",
+      "evidence": [
+        {
+          "start": 574,
+          "end": 600,
+          "quote": "persistent BP 174/104 mmHg",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "regex",
+      "derived_from": []
+    },
+    "cardiovascular.blood_pressure.persistent_systolic": {
+      "value": 174,
+      "status": "present",
+      "unit": "mmHg",
+      "evidence": [
+        {
+          "start": 574,
+          "end": 600,
+          "quote": "persistent BP 174/104 mmHg",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "regex",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "cardiovascular.blood_pressure.observed_diastolic"
+      ],
+      "status": "valid",
+      "request_sha256": "ec908454659e7ae6002aaa38b71d3a3ca08985256ef2bff6bb3579192ec495c0",
+      "response_schema_sha256": "f4d5b67347052aaf3edfb41a3ada79d6d98c4a1a8253729a43bc8e422280c50b"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "cardiovascular.blood_pressure.observed_systolic"
+      ],
+      "status": "valid",
+      "request_sha256": "898777a7f9be3187a525f98c95b4a1c6c52f5885c1c74e79d772a7bfc9ff9049",
+      "response_schema_sha256": "f4d5b67347052aaf3edfb41a3ada79d6d98c4a1a8253729a43bc8e422280c50b"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "cardiovascular.blood_pressure.persistent_diastolic"
+      ],
+      "status": "valid",
+      "request_sha256": "94fb7c7f60ed6a8ecce688452a1dc6a613f5795ec6b4aa821c86424c7f6c542a",
+      "response_schema_sha256": "f4d5b67347052aaf3edfb41a3ada79d6d98c4a1a8253729a43bc8e422280c50b"
+    },
+    {
+      "batch": 4,
+      "attempt": 1,
+      "fields": [
+        "cardiovascular.blood_pressure.persistent_systolic"
+      ],
+      "status": "valid",
+      "request_sha256": "bb1e1b6d9ebeb83d0fb169ebeb7261a1eedf09b035e3c3947689ceab4deefad8",
+      "response_schema_sha256": "f4d5b67347052aaf3edfb41a3ada79d6d98c4a1a8253729a43bc8e422280c50b"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "cardiovascular.blood_pressure.observed_diastolic",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The patient fact 'cardiovascular.blood_pressure.observed_diastolic' is not documented in the provided source passages."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.observed_systolic",
+      "value": 174.0,
+      "status": "documented",
+      "quote": "The driver restarted antihypertensive tablets twelve days ago after a period of missed doses, and the current clinic letter still records persistent BP 174/104 mmHg on repeat checks; a four-week follow-up period has not yet been completed, the driver brings a booking confirmation rather than a specialist opinion, and occasional improvement on a home display cannot establish sustained control or the absence of relevant treatment problems.",
+      "explanation": "174"
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_diastolic",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The patient fact 'cardiovascular.blood_pressure.persistent_diastolic' is not documented in the provided source passages."
+    },
+    {
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The patient fact 'cardiovascular.blood_pressure.persistent_systolic' is not documented in the provided source passages."
+    }
+  ],
+  "output_facts_sha256": "8ece7e2686aa42097f3a4890468c1dcce8751cef784016959f9c5609c8e2029c",
+  "facts_quarantined": true
+}

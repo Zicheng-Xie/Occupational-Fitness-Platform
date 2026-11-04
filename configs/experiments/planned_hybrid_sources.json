@@ -1,0 +1,90 @@
+{
+  "reviewed_on": "2026-10-23",
+  "method": "planned_hybrid",
+  "display_name": "Planned Hybrid RRF",
+  "implementation": "First-party adaptation of selected orchestration and retrieval ideas; neither complete external framework is executed by this method.",
+  "repositories": [
+    {
+      "repository": "Zicheng-Xie/WeKnora",
+      "upstream": "Tencent/WeKnora",
+      "revision": "eecfe4b3c8c34c94e9b559e5dd02187b4ae447cd",
+      "license": "MIT for first-party source; repository LICENSE also enumerates third-party components",
+      "files": [
+        {
+          "path": "internal/application/service/knowledgebase_search_fusion.go",
+          "git_blob_sha": "fe96a89c41ef06caf3ea8c543211fb7d3b12d880",
+          "url": "https://github.com/Zicheng-Xie/WeKnora/blob/eecfe4b3c8c34c94e9b559e5dd02187b4ae447cd/internal/application/service/knowledgebase_search_fusion.go"
+        },
+        {
+          "path": "internal/application/service/chat_pipeline/query_expansion.go",
+          "git_blob_sha": "e6ca1271204a6f8b290c1e886d91486f801483e1",
+          "url": "https://github.com/Zicheng-Xie/WeKnora/blob/eecfe4b3c8c34c94e9b559e5dd02187b4ae447cd/internal/application/service/chat_pipeline/query_expansion.go"
+        },
+        {
+          "path": "internal/reranking/mmr.go",
+          "git_blob_sha": "3120f654adf7a4c673dfae68250f5b8433a053bb",
+          "url": "https://github.com/Zicheng-Xie/WeKnora/blob/eecfe4b3c8c34c94e9b559e5dd02187b4ae447cd/internal/reranking/mmr.go"
+        },
+        {
+          "path": "internal/agent/tools/search_knowledge.go",
+          "git_blob_sha": "fa2b917caa80b37a4af4482720053b7037c96c47",
+          "url": "https://github.com/Zicheng-Xie/WeKnora/blob/eecfe4b3c8c34c94e9b559e5dd02187b4ae447cd/internal/agent/tools/search_knowledge.go"
+        }
+      ],
+      "ideas": [
+        "Preserve per-channel rank before fusion; use best rank per retriever type across query variants.",
+        "Bounded keyword-only expansion rather than repeatedly embedding nearly identical keyword variants.",
+        "Deduplicate original source IDs and diversify by relevance versus passage redundancy."
+      ]
+    },
+    {
+      "repository": "Zicheng-Xie/deer-flow",
+      "upstream": "bytedance/deer-flow",
+      "revision": "18ca09b2dac76e26cbdcbbc6936be4f6f166283f",
+      "license": "MIT",
+      "files": [
+        {
+          "path": "backend/docs/plan_mode_usage.md",
+          "git_blob_sha": "9b82e677fab52be3947ae4372fa3a9533dc401d5",
+          "url": "https://github.com/Zicheng-Xie/deer-flow/blob/18ca09b2dac76e26cbdcbbc6936be4f6f166283f/backend/docs/plan_mode_usage.md"
+        },
+        {
+          "path": "backend/packages/harness/deerflow/knowledge/contract.py",
+          "git_blob_sha": "06da9b1ba6c5e5758e01ce1e0b2808c1fea48764",
+          "url": "https://github.com/Zicheng-Xie/deer-flow/blob/18ca09b2dac76e26cbdcbbc6936be4f6f166283f/backend/packages/harness/deerflow/knowledge/contract.py"
+        },
+        {
+          "path": "backend/packages/harness/deerflow/knowledge/sources.py",
+          "git_blob_sha": "e35d3a87305c288a08b216d302639617515bfc93",
+          "url": "https://github.com/Zicheng-Xie/deer-flow/blob/18ca09b2dac76e26cbdcbbc6936be4f6f166283f/backend/packages/harness/deerflow/knowledge/sources.py"
+        },
+        {
+          "path": "backend/packages/harness/deerflow/knowledge/tools.py",
+          "git_blob_sha": "5153872839fff6e32b1e3bb8d24b86f4c53a3302",
+          "url": "https://github.com/Zicheng-Xie/deer-flow/blob/18ca09b2dac76e26cbdcbbc6936be4f6f166283f/backend/packages/harness/deerflow/knowledge/tools.py"
+        },
+        {
+          "path": "backend/packages/harness/deerflow/agents/lead_agent/agent.py",
+          "git_blob_sha": "ab2bcdc3e5d965b8c7d4848b28cb806e777a0704",
+          "url": "https://github.com/Zicheng-Xie/deer-flow/blob/18ca09b2dac76e26cbdcbbc6936be4f6f166283f/backend/packages/harness/deerflow/agents/lead_agent/agent.py"
+        },
+        {
+          "path": "backend/packages/harness/deerflow/agents/middlewares/todo_middleware.py",
+          "git_blob_sha": "e5208a704da376b7f81a70ee5c7d8279735d60c3",
+          "url": "https://github.com/Zicheng-Xie/deer-flow/blob/18ca09b2dac76e26cbdcbbc6936be4f6f166283f/backend/packages/harness/deerflow/agents/middlewares/todo_middleware.py"
+        }
+      ],
+      "ideas": [
+        "Explicit plan/search/inspect/refine/finalize stages with bounded execution.",
+        "Scoped provider contract; an inaccessible or failed scope is not retried unconstrained.",
+        "Evidence identifiers bind to actual returned original text; budget transformations retain matching source metadata."
+      ]
+    }
+  ],
+  "boundaries": [
+    "No third-party source directory or dependency is copied into production.",
+    "The planner is deterministic and source-literal; no autonomous medical reasoning or multi-agent execution is claimed.",
+    "Query-term coverage is a lexical diagnostic, not clinical sufficiency or explanation entailment.",
+    "Existing six methods and production configuration are unchanged."
+  ]
+}

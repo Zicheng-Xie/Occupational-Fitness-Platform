@@ -1,0 +1,1511 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-06",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 2
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "blackout.mechanism_status",
+                          "blackout.occurred",
+                          "vision.visual_field.confirmed_defect"
+                        ]
+                      },
+                      "maxItems": 3,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "blackout.mechanism_status",
+                          "blackout.occurred",
+                          "vision.visual_field.confirmed_defect"
+                        ]
+                      },
+                      "maxItems": 3,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.\\n\\nThe optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.\\n\\nAn older report described satisfactory central acuity, but the nurse has not used it to overrule the newer field finding. The driver is unsure whether a remote dizzy spell involved loss of awareness, so the number of confirmed events and the appropriate event-free interval remain unresolved despite documentation of the recent event and the visual field defect.\\n\", \"verified_patient_facts\": {\"blackout.mechanism_status\": {\"value\": \"under_investigation\", \"patient_quotes\": [\"the mechanism is under investigation\", \"The current physician referral states that the mechanism is under investigation. \"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. \", \"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall.\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": true, \"patient_quotes\": [\"The optometrist confirms a visual field defect on a separate current signed assessment. \", \"The optometrist confirms a visual field defect on a separate current signed assessment.\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-a5934e81e0aee450\", \"section\": \"10.2.2\", \"pdf_page\": 216, \"printed_page\": 205, \"source_text\": \"•\\t\\nany central loss that is an extension of \\na hemianopia or quadrantanopia of size \\ngreater than three missed points.\\nMethods of measuring visual fields are limited in \\ntheir ability to resemble the demands of the real-\\nworld driving environment where drivers are free \\nto move their eyes as required and must sustain \\ntheir visual function in variable conditions. \\nAdditional factors to be considered by the driver \\nlicensing authority in assessing patients with \\ndefects in visual fields therefore include, but are \\nnot limited to, the following:\\n•\\t\\nkinetic fields conducted on a Goldman\\n•\\t\\nbinocular Esterman visual fields conducted \\nwithout fixation monitoring, often referred to \\nas a roving Esterman (two consecutive tests \\nmust be performed with no more than one \\nfalse-positive allowed) – the test should be \\nin the numeric field format when it is printed \\nout or sent for an opinion\\n•\\t\\ncontrast sensitivity and glare susceptibility\\n•\\t\\nmedical history; duration and prognosis; \\nif the condition is progressive; rate of \\nprogression/deterioration; effectiveness of \\ntreatment/management\\n•\\t\\ndriving record before and since the \\noccurrence of the defect\\n•\\t\\nthe nature of the driving task – for example, \\ntype of vehicle (truck, bus, etc.), roads \\nand distances to be travelled concomitant \\nmedical conditions such as cognitive \\nimpairment or impaired rotation of the neck.\\nThere is no flexibility in this regard for \\ncommercial vehicle drivers. \\nMonocular vision (one-eyed driver)\\nMonocular drivers have a reduction of visual \\nfields due to the nose obstructing the medial \\nvisual field. They also have no stereoscopic \\nvision and may have other deficits in \\nvisual functions.\", \"module\": \"vision\", \"passage_id\": \"PASS-e0ba3c6be9f81362a255984c\", \"text_sha256\": \"d6e252946675a947d5fb9727e8101f186e9f11c075bec05f3161d7f1591211af\", \"char_start\": 0, \"char_end\": 1682, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-EXP-3a8e08652c83a2d0\", \"section\": \"1.2.4\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.2.4. Blackouts of undetermined \\nmechanism\\nIf, despite extensive investigation, the \\nmechanism of a blackout cannot be determined, \\nfitness to drive should be assessed according \\nto section 1.3. Medical standards for licensing. \\nThe standards for blackout of undetermined \\nmechanism are similar to those for seizure.\", \"module\": \"blackout\", \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\", \"text_sha256\": \"3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853\", \"char_start\": 0, \"char_end\": 317, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-EXP-3feaa249d640fab4\", \"section\": \"10.2.2\", \"pdf_page\": 217, \"printed_page\": 206, \"source_text\": \"For private vehicle drivers, a conditional licence \\nmay be considered by the driver licensing \\nauthority if the horizontal visual field is 110 \\ndegrees and the visual acuity is satisfactory in \\nthe better eye. People with monocular vision are \\ngenerally not fit to drive a commercial vehicle. \\nA conditional licence may be considered by the \\ndriver licensing authority if the horizontal visual \\nfield is 140 degrees, the visual acuity in the \\nbetter eye is satisfactory, there is no other visual \\nfield loss that is likely to impede driving and an \\nophthalmologist/optometrist assesses that the \\nperson may be safe to drive after consideration \\nof the above factors. The better eye must be \\nreviewed at least every two years. \\nIf monocular automated static perimetry is \\nundertaken on patients without symptoms, family \\nhistory or risk factors for visual field loss, and \\nshows no indication of any visual field concerns, \\nthis information may be sufficient to confirm \\nthat the standard is met. If monocular testing \\nsuggests a field defect, or if the patient has a \\nprogressive eye condition, and/or the patient \\nhas any other symptoms or signs that indicate \\na field defect, then binocular testing should be \\nconducted using the Esterman binocular field \\ntest or an Esterman-equivalent test. Alternative \\ndevices must have the ability to monitor fixation \\nand to stimulate the same spots as the standard \\nbinocular Esterman. \\nSudden loss of unilateral vision\\nA person who has lost an eye or most of the \\nvision in an eye on a long-term basis has to \\nadapt to their new visual circumstances and \\nre-establish depth perception. They should \\ntherefore be advised not to drive for an \\nappropriate period after the onset of their \\nsudden loss of vision (usually three months). \\nThey should notify the driver licensing authority \\nand be assessed according to the relevant \\nvisual field standard.\", \"module\": \"vision\", \"passage_id\": \"PASS-3276de1e77e80fa8d0179df2\", \"text_sha256\": \"1fc3172704bb3037bd6aa2fb1129b3add901f9331b48416b4f32cbaeceaeeee8\", \"char_start\": 0, \"char_end\": 1892, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-EXP-05643c50d6cf5973\", \"section\": \"1.2.1\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"cardiovascular and neurological investigations \\nand referral to several specialists. People should \\nbe advised not to drive until the mechanism is \\nascertained and the corresponding standard met.\\nSome drivers may attribute a crash or driving \\nmishap to a ‘blackout’ to excuse an event \\nthat occurred for some other reason such as \\ninattention or distraction (e.g. a mobile phone \\nconversation). There will also be a small \\nproportion of cases in which a clear cause \\ncannot be established.\", \"module\": \"blackout\", \"passage_id\": \"PASS-d230e17d97c6db53b703c726\", \"text_sha256\": \"c6796f495b3f01f1595ddb94bfa8ff6f4830c3d75a297cf28e8dc9285fe9881a\", \"char_start\": 0, \"char_end\": 489, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-EXP-adb72bb1f206f023\", \"section\": \"10.2.2\", \"pdf_page\": 215, \"printed_page\": 204, \"source_text\": \"10.2.2. Visual fields3–6,8–13\\nFor the purposes of this publication, visual \\nfields are defined as a measure of the extent \\nof peripheral (side) vision. Normal visual field is: \\n60 degrees nasally, 100 degrees temporally, 75 \\ndegrees inferiorly and 60 degrees superiorly. \\nThe binocular field extends the horizontal extent \\nfrom 160 to 200 degrees, with the central 120 \\ndegrees overlapping and providing the potential \\nfor stereopsis. \\nVisual fields may be reduced due to a range \\nof neurological conditions (e.g. stroke, multiple \\nsclerosis) as well by ocular diseases (e.g. \\nglaucoma), or injuries, resulting in hemionopia, \\nquadrantanopia or monocularity. \\nPeripheral vision assists the driver to be aware \\nof the total driving environment. Once alerted, \\nthe central fovea area is moved to identify \\nthe importance of the information. Therefore, \\nperipheral vision loss that is incomplete will \\nstill allow awareness; this includes small areas \\nof loss and patchy loss. Additionally, affected \\ndrivers can adapt to the defect by scanning \\nregularly and effectively and can have good \\nawareness. Patients with visual field defects \\nwho have full intellectual/cognitive capacity \\nare more able to adapt, but those with such \\nimpairments will have decreased awareness and \\nare therefore not safe to drive.\\nA longstanding field defect, such as from \\nchildhood, may lead to visual adaptation. Such \\ndefects need to be assessed by an optometrist \\nor ophthalmologist for a conditional licence \\nto be considered. They should be managed \\nas an exceptional case to the standard, with \\nconsideration for duration and evidence of visual \\nadaptation, whether the location of the defect is \\nan area that may already be blocked by the car \\ndoor on the passenger side (i.e. the inferior field \\non the left side without central field loss), driver \\nsafety record and the nature of the driving task.\", \"module\": \"vision\", \"passage_id\": \"PASS-48ca7f596942100fcaa8bd07\", \"text_sha256\": \"e3577e9125f8b357450802fcb0818cc328e5a6f80e1dbfdd1eca9267d160578d\", \"char_start\": 0, \"char_end\": 1885, \"applicability_slot\": \"P5\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "baef304f4dd8b825e72d8ed55c439f95f037eef61b2a023da890ff58c9dc6af0",
+          "request_bytes": 16344,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:47:56.7180634Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [\"vision.visual_field.confirmed_defect\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"horizontal_visual_field_minimum_degrees\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"visual_acuity_satisfactory_better_eye\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no_other_significant_visual_field_loss\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The passage outlines criteria for a conditional licence (110° or 140° horizontal field, satisfactory acuity, no significant additional loss). However, the verified patient facts confirm only that a visual field defect exists; they do not provide specific measurements of the horizontal extent, binocu\"\n}, \"P2\": {\"fact_fields\": [\"blackout.mechanism_status\", \"blackout.occurred\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"mechanism_determined\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.mechanism_status\"]}, {\"requirement\": \"corresponding_standard_met\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage states that if the mechanism of a blackout cannot be determined, fitness should be assessed according to seizure standards. The verified patient facts indicate the mechanism is 'under_investigation' (not determined) and an event occurred. Therefore, the specific standard for undetermined\"\n}, \"P3\": {\"fact_fields\": [\"vision.visual_field.confirmed_defect\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"horizontal_visual_field_minimum_degrees\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"visual_acuity_satisfactory_better_eye\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no_other_significant_visual_field_loss\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The passage details criteria for conditional licences (110°/140° field, satisfactory acuity) and notes that monocular drivers are generally not fit for commercial vehicles. It also mentions adaptation periods for sudden vision loss. The verified facts confirm a visual field defect but lack the quant\"\n}, \"P4\": {\"fact_fields\": [\"blackout.mechanism_status\", \"blackout.occurred\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"mechanism_ascertained\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.mechanism_status\"]}, {\"requirement\": \"corresponding_standard_met\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage advises that people should not drive until the mechanism of a blackout is ascertained and the corresponding standard met. The verified patient facts show the mechanism is 'under_investigation' (not ascertained) and an event occurred. This establishes a restriction based on the unascert\"\n}, \"P5\": {\"fact_fields\": [\"vision.visual_field.confirmed_defect\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"assessment_by_specialist\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"duration_and_adaptation_evidence\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The passage discusses longstanding field defects, noting they may lead to visual adaptation and can be considered for a conditional licence by an optometrist or ophthalmologist. It requires assessment of duration, evidence of adaptation, defect location relative to vehicle blind spots, safety record\"\n}}\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 21911823400,
+            "load_duration": 4371300,
+            "prompt_eval_count": 3402,
+            "prompt_eval_cached_count": 3398,
+            "prompt_eval_duration": 135144000,
+            "eval_count": 1052,
+            "eval_duration": 21503655000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3402,
+            "eval_count": 1052,
+            "prompt_eval_cached_count": 3398
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "vision",
+                "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "horizontal_visual_field_minimum_degrees",
+                    "status": "unknown",
+                    "fact_fields": []
+                  },
+                  {
+                    "requirement": "visual_acuity_satisfactory_better_eye",
+                    "status": "unknown",
+                    "fact_fields": []
+                  },
+                  {
+                    "requirement": "no_other_significant_visual_field_loss",
+                    "status": "unknown",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "conditional_permission",
+                "conclusion": "The passage outlines criteria for a conditional licence (110° or 140° horizontal field, satisfactory acuity, no significant additional loss). However, the verified patient facts confirm only that a visual field defect exists; they do not provide specific measurements of the horizontal extent, binocu"
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-82afe6d85f71189739c9ff06",
+                "fact_fields": [
+                  "blackout.mechanism_status",
+                  "blackout.occurred"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "mechanism_determined",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "blackout.mechanism_status"
+                    ]
+                  },
+                  {
+                    "requirement": "corresponding_standard_met",
+                    "status": "unknown",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The passage states that if the mechanism of a blackout cannot be determined, fitness should be assessed according to seizure standards. The verified patient facts indicate the mechanism is 'under_investigation' (not determined) and an event occurred. Therefore, the specific standard for undetermined"
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "horizontal_visual_field_minimum_degrees",
+                    "status": "unknown",
+                    "fact_fields": []
+                  },
+                  {
+                    "requirement": "visual_acuity_satisfactory_better_eye",
+                    "status": "unknown",
+                    "fact_fields": []
+                  },
+                  {
+                    "requirement": "no_other_significant_visual_field_loss",
+                    "status": "unknown",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "conditional_permission",
+                "conclusion": "The passage details criteria for conditional licences (110°/140° field, satisfactory acuity) and notes that monocular drivers are generally not fit for commercial vehicles. It also mentions adaptation periods for sudden vision loss. The verified facts confirm a visual field defect but lack the quant"
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-d230e17d97c6db53b703c726",
+                "fact_fields": [
+                  "blackout.mechanism_status",
+                  "blackout.occurred"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "mechanism_ascertained",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "blackout.mechanism_status"
+                    ]
+                  },
+                  {
+                    "requirement": "corresponding_standard_met",
+                    "status": "unknown",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The passage advises that people should not drive until the mechanism of a blackout is ascertained and the corresponding standard met. The verified patient facts show the mechanism is 'under_investigation' (not ascertained) and an event occurred. This establishes a restriction based on the unascert"
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-48ca7f596942100fcaa8bd07",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "assessment_by_specialist",
+                    "status": "unknown",
+                    "fact_fields": []
+                  },
+                  {
+                    "requirement": "duration_and_adaptation_evidence",
+                    "status": "unknown",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "conditional_permission",
+                "conclusion": "The passage discusses longstanding field defects, noting they may lead to visual adaptation and can be considered for a conditional licence by an optometrist or ophthalmologist. It requires assessment of duration, evidence of adaptation, defect location relative to vehicle blind spots, safety record"
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+              "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+              "pdf_page": 216,
+              "printed_page": 205,
+              "section": "10.2.2",
+              "text_sha256": "d6e252946675a947d5fb9727e8101f186e9f11c075bec05f3161d7f1591211af",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1682,
+                  "original_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The passage outlines criteria for a conditional licence (110° or 140° horizontal field, satisfactory acuity, no significant additional loss). However, the verified patient facts confirm only that a visual field defect exists; they do not provide specific measurements of the horizontal extent, binocu",
+                "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+                "guideline_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-82afe6d85f71189739c9ff06",
+              "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.2.4",
+              "text_sha256": "3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 317,
+                  "original_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-82afe6d85f71189739c9ff06",
+                "fact_fields": [
+                  "blackout.mechanism_status",
+                  "blackout.occurred"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage states that if the mechanism of a blackout cannot be determined, fitness should be assessed according to seizure standards. The verified patient facts indicate the mechanism is 'under_investigation' (not determined) and an event occurred. Therefore, the specific standard for undetermined",
+                "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+                "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+              "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+              "pdf_page": 217,
+              "printed_page": 206,
+              "section": "10.2.2",
+              "text_sha256": "1fc3172704bb3037bd6aa2fb1129b3add901f9331b48416b4f32cbaeceaeeee8",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1892,
+                  "original_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The passage details criteria for conditional licences (110°/140° field, satisfactory acuity) and notes that monocular drivers are generally not fit for commercial vehicles. It also mentions adaptation periods for sudden vision loss. The verified facts confirm a visual field defect but lack the quant",
+                "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+                "guideline_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-d230e17d97c6db53b703c726",
+              "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.1",
+              "text_sha256": "c6796f495b3f01f1595ddb94bfa8ff6f4830c3d75a297cf28e8dc9285fe9881a",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 489,
+                  "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-d230e17d97c6db53b703c726",
+                "fact_fields": [
+                  "blackout.mechanism_status",
+                  "blackout.occurred"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage advises that people should not drive until the mechanism of a blackout is ascertained and the corresponding standard met. The verified patient facts show the mechanism is 'under_investigation' (not ascertained) and an event occurred. This establishes a restriction based on the unascert",
+                "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-48ca7f596942100fcaa8bd07",
+              "source_id": "AFTD2022-EXP-adb72bb1f206f023",
+              "pdf_page": 215,
+              "printed_page": 204,
+              "section": "10.2.2",
+              "text_sha256": "e3577e9125f8b357450802fcb0818cc328e5a6f80e1dbfdd1eca9267d160578d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1885,
+                  "original_quote": "10.2.2. Visual fields3–6,8–13\nFor the purposes of this publication, visual \nfields are defined as a measure of the extent \nof peripheral (side) vision. Normal visual field is: \n60 degrees nasally, 100 degrees temporally, 75 \ndegrees inferiorly and 60 degrees superiorly. \nThe binocular field extends the horizontal extent \nfrom 160 to 200 degrees, with the central 120 \ndegrees overlapping and providing the potential \nfor stereopsis. \nVisual fields may be reduced due to a range \nof neurological conditions (e.g. stroke, multiple \nsclerosis) as well by ocular diseases (e.g. \nglaucoma), or injuries, resulting in hemionopia, \nquadrantanopia or monocularity. \nPeripheral vision assists the driver to be aware \nof the total driving environment. Once alerted, \nthe central fovea area is moved to identify \nthe importance of the information. Therefore, \nperipheral vision loss that is incomplete will \nstill allow awareness; this includes small areas \nof loss and patchy loss. Additionally, affected \ndrivers can adapt to the defect by scanning \nregularly and effectively and can have good \nawareness. Patients with visual field defects \nwho have full intellectual/cognitive capacity \nare more able to adapt, but those with such \nimpairments will have decreased awareness and \nare therefore not safe to drive.\nA longstanding field defect, such as from \nchildhood, may lead to visual adaptation. Such \ndefects need to be assessed by an optometrist \nor ophthalmologist for a conditional licence \nto be considered. They should be managed \nas an exceptional case to the standard, with \nconsideration for duration and evidence of visual \nadaptation, whether the location of the defect is \nan area that may already be blocked by the car \ndoor on the passenger side (i.e. the inferior field \non the left side without central field loss), driver \nsafety record and the nature of the driving task."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-48ca7f596942100fcaa8bd07",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The passage discusses longstanding field defects, noting they may lead to visual adaptation and can be considered for a conditional licence by an optometrist or ophthalmologist. It requires assessment of duration, evidence of adaptation, defect location relative to vehicle blind spots, safety record",
+                "source_id": "AFTD2022-EXP-adb72bb1f206f023",
+                "guideline_quote": "10.2.2. Visual fields3–6,8–13\nFor the purposes of this publication, visual \nfields are defined as a measure of the extent \nof peripheral (side) vision. Normal visual field is: \n60 degrees nasally, 100 degrees temporally, 75 \ndegrees inferiorly and 60 degrees superiorly. \nThe binocular field extends the horizontal extent \nfrom 160 to 200 degrees, with the central 120 \ndegrees overlapping and providing the potential \nfor stereopsis. \nVisual fields may be reduced due to a range \nof neurological conditions (e.g. stroke, multiple \nsclerosis) as well by ocular diseases (e.g. \nglaucoma), or injuries, resulting in hemionopia, \nquadrantanopia or monocularity. \nPeripheral vision assists the driver to be aware \nof the total driving environment. Once alerted, \nthe central fovea area is moved to identify \nthe importance of the information. Therefore, \nperipheral vision loss that is incomplete will \nstill allow awareness; this includes small areas \nof loss and patchy loss. Additionally, affected \ndrivers can adapt to the defect by scanning \nregularly and effectively and can have good \nawareness. Patients with visual field defects \nwho have full intellectual/cognitive capacity \nare more able to adapt, but those with such \nimpairments will have decreased awareness and \nare therefore not safe to drive.\nA longstanding field defect, such as from \nchildhood, may lead to visual adaptation. Such \ndefects need to be assessed by an optometrist \nor ophthalmologist for a conditional licence \nto be considered. They should be managed \nas an exceptional case to the standard, with \nconsideration for duration and evidence of visual \nadaptation, whether the location of the defect is \nan area that may already be blocked by the car \ndoor on the passenger side (i.e. the inferior field \non the left side without central field loss), driver \nsafety record and the nature of the driving task."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-e0ba3c6be9f81362a255984c:established_finding_without_reported_applicability",
+            "PASS-e0ba3c6be9f81362a255984c:conditional_permission_with_unestablished_prerequisite",
+            "PASS-82afe6d85f71189739c9ff06:established_finding_without_reported_applicability",
+            "PASS-3276de1e77e80fa8d0179df2:established_finding_without_reported_applicability",
+            "PASS-3276de1e77e80fa8d0179df2:conditional_permission_with_unestablished_prerequisite",
+            "PASS-d230e17d97c6db53b703c726:established_finding_without_reported_applicability",
+            "PASS-48ca7f596942100fcaa8bd07:established_finding_without_reported_applicability",
+            "PASS-48ca7f596942100fcaa8bd07:conditional_permission_with_unestablished_prerequisite"
+          ],
+          "seconds": 21.95547980000265
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "vision",
+            "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "horizontal_visual_field_minimum_degrees",
+                "status": "unknown",
+                "fact_fields": []
+              },
+              {
+                "requirement": "visual_acuity_satisfactory_better_eye",
+                "status": "unknown",
+                "fact_fields": []
+              },
+              {
+                "requirement": "no_other_significant_visual_field_loss",
+                "status": "unknown",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "conditional_permission",
+            "conclusion": "The passage outlines criteria for a conditional licence (110° or 140° horizontal field, satisfactory acuity, no significant additional loss). However, the verified patient facts confirm only that a visual field defect exists; they do not provide specific measurements of the horizontal extent, binocu"
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-82afe6d85f71189739c9ff06",
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "blackout.occurred"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "mechanism_determined",
+                "status": "not_met",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ]
+              },
+              {
+                "requirement": "corresponding_standard_met",
+                "status": "unknown",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The passage states that if the mechanism of a blackout cannot be determined, fitness should be assessed according to seizure standards. The verified patient facts indicate the mechanism is 'under_investigation' (not determined) and an event occurred. Therefore, the specific standard for undetermined"
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "horizontal_visual_field_minimum_degrees",
+                "status": "unknown",
+                "fact_fields": []
+              },
+              {
+                "requirement": "visual_acuity_satisfactory_better_eye",
+                "status": "unknown",
+                "fact_fields": []
+              },
+              {
+                "requirement": "no_other_significant_visual_field_loss",
+                "status": "unknown",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "conditional_permission",
+            "conclusion": "The passage details criteria for conditional licences (110°/140° field, satisfactory acuity) and notes that monocular drivers are generally not fit for commercial vehicles. It also mentions adaptation periods for sudden vision loss. The verified facts confirm a visual field defect but lack the quant"
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-d230e17d97c6db53b703c726",
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "blackout.occurred"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "mechanism_ascertained",
+                "status": "not_met",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ]
+              },
+              {
+                "requirement": "corresponding_standard_met",
+                "status": "unknown",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The passage advises that people should not drive until the mechanism of a blackout is ascertained and the corresponding standard met. The verified patient facts show the mechanism is 'under_investigation' (not ascertained) and an event occurred. This establishes a restriction based on the unascert"
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-48ca7f596942100fcaa8bd07",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "assessment_by_specialist",
+                "status": "unknown",
+                "fact_fields": []
+              },
+              {
+                "requirement": "duration_and_adaptation_evidence",
+                "status": "unknown",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "conditional_permission",
+            "conclusion": "The passage discusses longstanding field defects, noting they may lead to visual adaptation and can be considered for a conditional licence by an optometrist or ophthalmologist. It requires assessment of duration, evidence of adaptation, defect location relative to vehicle blind spots, safety record"
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+          "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+          "pdf_page": 216,
+          "printed_page": 205,
+          "section": "10.2.2",
+          "text_sha256": "d6e252946675a947d5fb9727e8101f186e9f11c075bec05f3161d7f1591211af",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1682,
+              "original_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The passage outlines criteria for a conditional licence (110° or 140° horizontal field, satisfactory acuity, no significant additional loss). However, the verified patient facts confirm only that a visual field defect exists; they do not provide specific measurements of the horizontal extent, binocu",
+            "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+            "guideline_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-82afe6d85f71189739c9ff06",
+          "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+          "pdf_page": 69,
+          "printed_page": 58,
+          "section": "1.2.4",
+          "text_sha256": "3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 317,
+              "original_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-82afe6d85f71189739c9ff06",
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "blackout.occurred"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage states that if the mechanism of a blackout cannot be determined, fitness should be assessed according to seizure standards. The verified patient facts indicate the mechanism is 'under_investigation' (not determined) and an event occurred. Therefore, the specific standard for undetermined",
+            "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+            "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+          "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+          "pdf_page": 217,
+          "printed_page": 206,
+          "section": "10.2.2",
+          "text_sha256": "1fc3172704bb3037bd6aa2fb1129b3add901f9331b48416b4f32cbaeceaeeee8",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1892,
+              "original_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The passage details criteria for conditional licences (110°/140° field, satisfactory acuity) and notes that monocular drivers are generally not fit for commercial vehicles. It also mentions adaptation periods for sudden vision loss. The verified facts confirm a visual field defect but lack the quant",
+            "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+            "guideline_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-d230e17d97c6db53b703c726",
+          "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+          "pdf_page": 68,
+          "printed_page": 57,
+          "section": "1.2.1",
+          "text_sha256": "c6796f495b3f01f1595ddb94bfa8ff6f4830c3d75a297cf28e8dc9285fe9881a",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 489,
+              "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-d230e17d97c6db53b703c726",
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "blackout.occurred"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage advises that people should not drive until the mechanism of a blackout is ascertained and the corresponding standard met. The verified patient facts show the mechanism is 'under_investigation' (not ascertained) and an event occurred. This establishes a restriction based on the unascert",
+            "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-48ca7f596942100fcaa8bd07",
+          "source_id": "AFTD2022-EXP-adb72bb1f206f023",
+          "pdf_page": 215,
+          "printed_page": 204,
+          "section": "10.2.2",
+          "text_sha256": "e3577e9125f8b357450802fcb0818cc328e5a6f80e1dbfdd1eca9267d160578d",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1885,
+              "original_quote": "10.2.2. Visual fields3–6,8–13\nFor the purposes of this publication, visual \nfields are defined as a measure of the extent \nof peripheral (side) vision. Normal visual field is: \n60 degrees nasally, 100 degrees temporally, 75 \ndegrees inferiorly and 60 degrees superiorly. \nThe binocular field extends the horizontal extent \nfrom 160 to 200 degrees, with the central 120 \ndegrees overlapping and providing the potential \nfor stereopsis. \nVisual fields may be reduced due to a range \nof neurological conditions (e.g. stroke, multiple \nsclerosis) as well by ocular diseases (e.g. \nglaucoma), or injuries, resulting in hemionopia, \nquadrantanopia or monocularity. \nPeripheral vision assists the driver to be aware \nof the total driving environment. Once alerted, \nthe central fovea area is moved to identify \nthe importance of the information. Therefore, \nperipheral vision loss that is incomplete will \nstill allow awareness; this includes small areas \nof loss and patchy loss. Additionally, affected \ndrivers can adapt to the defect by scanning \nregularly and effectively and can have good \nawareness. Patients with visual field defects \nwho have full intellectual/cognitive capacity \nare more able to adapt, but those with such \nimpairments will have decreased awareness and \nare therefore not safe to drive.\nA longstanding field defect, such as from \nchildhood, may lead to visual adaptation. Such \ndefects need to be assessed by an optometrist \nor ophthalmologist for a conditional licence \nto be considered. They should be managed \nas an exceptional case to the standard, with \nconsideration for duration and evidence of visual \nadaptation, whether the location of the defect is \nan area that may already be blocked by the car \ndoor on the passenger side (i.e. the inferior field \non the left side without central field loss), driver \nsafety record and the nature of the driving task."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-48ca7f596942100fcaa8bd07",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The passage discusses longstanding field defects, noting they may lead to visual adaptation and can be considered for a conditional licence by an optometrist or ophthalmologist. It requires assessment of duration, evidence of adaptation, defect location relative to vehicle blind spots, safety record",
+            "source_id": "AFTD2022-EXP-adb72bb1f206f023",
+            "guideline_quote": "10.2.2. Visual fields3–6,8–13\nFor the purposes of this publication, visual \nfields are defined as a measure of the extent \nof peripheral (side) vision. Normal visual field is: \n60 degrees nasally, 100 degrees temporally, 75 \ndegrees inferiorly and 60 degrees superiorly. \nThe binocular field extends the horizontal extent \nfrom 160 to 200 degrees, with the central 120 \ndegrees overlapping and providing the potential \nfor stereopsis. \nVisual fields may be reduced due to a range \nof neurological conditions (e.g. stroke, multiple \nsclerosis) as well by ocular diseases (e.g. \nglaucoma), or injuries, resulting in hemionopia, \nquadrantanopia or monocularity. \nPeripheral vision assists the driver to be aware \nof the total driving environment. Once alerted, \nthe central fovea area is moved to identify \nthe importance of the information. Therefore, \nperipheral vision loss that is incomplete will \nstill allow awareness; this includes small areas \nof loss and patchy loss. Additionally, affected \ndrivers can adapt to the defect by scanning \nregularly and effectively and can have good \nawareness. Patients with visual field defects \nwho have full intellectual/cognitive capacity \nare more able to adapt, but those with such \nimpairments will have decreased awareness and \nare therefore not safe to drive.\nA longstanding field defect, such as from \nchildhood, may lead to visual adaptation. Such \ndefects need to be assessed by an optometrist \nor ophthalmologist for a conditional licence \nto be considered. They should be managed \nas an exceptional case to the standard, with \nconsideration for duration and evidence of visual \nadaptation, whether the location of the defect is \nan area that may already be blocked by the car \ndoor on the passenger side (i.e. the inferior field \non the left side without central field loss), driver \nsafety record and the nature of the driving task."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-e0ba3c6be9f81362a255984c:established_finding_without_reported_applicability",
+        "PASS-e0ba3c6be9f81362a255984c:conditional_permission_with_unestablished_prerequisite",
+        "PASS-82afe6d85f71189739c9ff06:established_finding_without_reported_applicability",
+        "PASS-3276de1e77e80fa8d0179df2:established_finding_without_reported_applicability",
+        "PASS-3276de1e77e80fa8d0179df2:conditional_permission_with_unestablished_prerequisite",
+        "PASS-d230e17d97c6db53b703c726:established_finding_without_reported_applicability",
+        "PASS-48ca7f596942100fcaa8bd07:established_finding_without_reported_applicability",
+        "PASS-48ca7f596942100fcaa8bd07:conditional_permission_with_unestablished_prerequisite"
+      ],
+      "seconds": 21.955483400000958
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-e0ba3c6be9f81362a255984c",
+                        "PASS-82afe6d85f71189739c9ff06",
+                        "PASS-3276de1e77e80fa8d0179df2",
+                        "PASS-d230e17d97c6db53b703c726",
+                        "PASS-48ca7f596942100fcaa8bd07"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "blackout.mechanism_status",
+                          "blackout.occurred",
+                          "vision.visual_field.confirmed_defect"
+                        ]
+                      },
+                      "maxItems": 3,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.\\n\\nThe optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.\\n\\nAn older report described satisfactory central acuity, but the nurse has not used it to overrule the newer field finding. The driver is unsure whether a remote dizzy spell involved loss of awareness, so the number of confirmed events and the appropriate event-free interval remain unresolved despite documentation of the recent event and the visual field defect.\\n\", \"verified_patient_facts\": {\"blackout.mechanism_status\": {\"value\": \"under_investigation\", \"patient_quotes\": [\"the mechanism is under investigation\", \"The current physician referral states that the mechanism is under investigation. \"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. \", \"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall.\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": true, \"patient_quotes\": [\"The optometrist confirms a visual field defect on a separate current signed assessment. \", \"The optometrist confirms a visual field defect on a separate current signed assessment.\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-a5934e81e0aee450\", \"section\": \"10.2.2\", \"pdf_page\": 216, \"printed_page\": 205, \"source_text\": \"•\\t\\nany central loss that is an extension of \\na hemianopia or quadrantanopia of size \\ngreater than three missed points.\\nMethods of measuring visual fields are limited in \\ntheir ability to resemble the demands of the real-\\nworld driving environment where drivers are free \\nto move their eyes as required and must sustain \\ntheir visual function in variable conditions. \\nAdditional factors to be considered by the driver \\nlicensing authority in assessing patients with \\ndefects in visual fields therefore include, but are \\nnot limited to, the following:\\n•\\t\\nkinetic fields conducted on a Goldman\\n•\\t\\nbinocular Esterman visual fields conducted \\nwithout fixation monitoring, often referred to \\nas a roving Esterman (two consecutive tests \\nmust be performed with no more than one \\nfalse-positive allowed) – the test should be \\nin the numeric field format when it is printed \\nout or sent for an opinion\\n•\\t\\ncontrast sensitivity and glare susceptibility\\n•\\t\\nmedical history; duration and prognosis; \\nif the condition is progressive; rate of \\nprogression/deterioration; effectiveness of \\ntreatment/management\\n•\\t\\ndriving record before and since the \\noccurrence of the defect\\n•\\t\\nthe nature of the driving task – for example, \\ntype of vehicle (truck, bus, etc.), roads \\nand distances to be travelled concomitant \\nmedical conditions such as cognitive \\nimpairment or impaired rotation of the neck.\\nThere is no flexibility in this regard for \\ncommercial vehicle drivers. \\nMonocular vision (one-eyed driver)\\nMonocular drivers have a reduction of visual \\nfields due to the nose obstructing the medial \\nvisual field. They also have no stereoscopic \\nvision and may have other deficits in \\nvisual functions.\", \"module\": \"vision\", \"passage_id\": \"PASS-e0ba3c6be9f81362a255984c\", \"text_sha256\": \"d6e252946675a947d5fb9727e8101f186e9f11c075bec05f3161d7f1591211af\", \"char_start\": 0, \"char_end\": 1682}, {\"source_id\": \"AFTD2022-EXP-3a8e08652c83a2d0\", \"section\": \"1.2.4\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.2.4. Blackouts of undetermined \\nmechanism\\nIf, despite extensive investigation, the \\nmechanism of a blackout cannot be determined, \\nfitness to drive should be assessed according \\nto section 1.3. Medical standards for licensing. \\nThe standards for blackout of undetermined \\nmechanism are similar to those for seizure.\", \"module\": \"blackout\", \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\", \"text_sha256\": \"3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853\", \"char_start\": 0, \"char_end\": 317}, {\"source_id\": \"AFTD2022-EXP-3feaa249d640fab4\", \"section\": \"10.2.2\", \"pdf_page\": 217, \"printed_page\": 206, \"source_text\": \"For private vehicle drivers, a conditional licence \\nmay be considered by the driver licensing \\nauthority if the horizontal visual field is 110 \\ndegrees and the visual acuity is satisfactory in \\nthe better eye. People with monocular vision are \\ngenerally not fit to drive a commercial vehicle. \\nA conditional licence may be considered by the \\ndriver licensing authority if the horizontal visual \\nfield is 140 degrees, the visual acuity in the \\nbetter eye is satisfactory, there is no other visual \\nfield loss that is likely to impede driving and an \\nophthalmologist/optometrist assesses that the \\nperson may be safe to drive after consideration \\nof the above factors. The better eye must be \\nreviewed at least every two years. \\nIf monocular automated static perimetry is \\nundertaken on patients without symptoms, family \\nhistory or risk factors for visual field loss, and \\nshows no indication of any visual field concerns, \\nthis information may be sufficient to confirm \\nthat the standard is met. If monocular testing \\nsuggests a field defect, or if the patient has a \\nprogressive eye condition, and/or the patient \\nhas any other symptoms or signs that indicate \\na field defect, then binocular testing should be \\nconducted using the Esterman binocular field \\ntest or an Esterman-equivalent test. Alternative \\ndevices must have the ability to monitor fixation \\nand to stimulate the same spots as the standard \\nbinocular Esterman. \\nSudden loss of unilateral vision\\nA person who has lost an eye or most of the \\nvision in an eye on a long-term basis has to \\nadapt to their new visual circumstances and \\nre-establish depth perception. They should \\ntherefore be advised not to drive for an \\nappropriate period after the onset of their \\nsudden loss of vision (usually three months). \\nThey should notify the driver licensing authority \\nand be assessed according to the relevant \\nvisual field standard.\", \"module\": \"vision\", \"passage_id\": \"PASS-3276de1e77e80fa8d0179df2\", \"text_sha256\": \"1fc3172704bb3037bd6aa2fb1129b3add901f9331b48416b4f32cbaeceaeeee8\", \"char_start\": 0, \"char_end\": 1892}, {\"source_id\": \"AFTD2022-EXP-05643c50d6cf5973\", \"section\": \"1.2.1\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"cardiovascular and neurological investigations \\nand referral to several specialists. People should \\nbe advised not to drive until the mechanism is \\nascertained and the corresponding standard met.\\nSome drivers may attribute a crash or driving \\nmishap to a ‘blackout’ to excuse an event \\nthat occurred for some other reason such as \\ninattention or distraction (e.g. a mobile phone \\nconversation). There will also be a small \\nproportion of cases in which a clear cause \\ncannot be established.\", \"module\": \"blackout\", \"passage_id\": \"PASS-d230e17d97c6db53b703c726\", \"text_sha256\": \"c6796f495b3f01f1595ddb94bfa8ff6f4830c3d75a297cf28e8dc9285fe9881a\", \"char_start\": 0, \"char_end\": 489}, {\"source_id\": \"AFTD2022-EXP-adb72bb1f206f023\", \"section\": \"10.2.2\", \"pdf_page\": 215, \"printed_page\": 204, \"source_text\": \"10.2.2. Visual fields3–6,8–13\\nFor the purposes of this publication, visual \\nfields are defined as a measure of the extent \\nof peripheral (side) vision. Normal visual field is: \\n60 degrees nasally, 100 degrees temporally, 75 \\ndegrees inferiorly and 60 degrees superiorly. \\nThe binocular field extends the horizontal extent \\nfrom 160 to 200 degrees, with the central 120 \\ndegrees overlapping and providing the potential \\nfor stereopsis. \\nVisual fields may be reduced due to a range \\nof neurological conditions (e.g. stroke, multiple \\nsclerosis) as well by ocular diseases (e.g. \\nglaucoma), or injuries, resulting in hemionopia, \\nquadrantanopia or monocularity. \\nPeripheral vision assists the driver to be aware \\nof the total driving environment. Once alerted, \\nthe central fovea area is moved to identify \\nthe importance of the information. Therefore, \\nperipheral vision loss that is incomplete will \\nstill allow awareness; this includes small areas \\nof loss and patchy loss. Additionally, affected \\ndrivers can adapt to the defect by scanning \\nregularly and effectively and can have good \\nawareness. Patients with visual field defects \\nwho have full intellectual/cognitive capacity \\nare more able to adapt, but those with such \\nimpairments will have decreased awareness and \\nare therefore not safe to drive.\\nA longstanding field defect, such as from \\nchildhood, may lead to visual adaptation. Such \\ndefects need to be assessed by an optometrist \\nor ophthalmologist for a conditional licence \\nto be considered. They should be managed \\nas an exceptional case to the standard, with \\nconsideration for duration and evidence of visual \\nadaptation, whether the location of the defect is \\nan area that may already be blocked by the car \\ndoor on the passenger side (i.e. the inferior field \\non the left side without central field loss), driver \\nsafety record and the nature of the driving task.\", \"module\": \"vision\", \"passage_id\": \"PASS-48ca7f596942100fcaa8bd07\", \"text_sha256\": \"e3577e9125f8b357450802fcb0818cc328e5a6f80e1dbfdd1eca9267d160578d\", \"char_start\": 0, \"char_end\": 1885}], \"proposed_applicability_ledger\": [{\"module\": \"vision\", \"passage_id\": \"PASS-e0ba3c6be9f81362a255984c\", \"fact_fields\": [\"vision.visual_field.confirmed_defect\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"horizontal_visual_field_minimum_degrees\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"visual_acuity_satisfactory_better_eye\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no_other_significant_visual_field_loss\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The passage outlines criteria for a conditional licence (110° or 140° horizontal field, satisfactory acuity, no significant additional loss). However, the verified patient facts confirm only that a visual field defect exists; they do not provide specific measurements of the horizontal extent, binocu\", \"source_id\": \"AFTD2022-EXP-a5934e81e0aee450\", \"referenced_patient_values\": {\"vision.visual_field.confirmed_defect\": {\"value\": true, \"patient_quotes\": [\"The optometrist confirms a visual field defect on a separate current signed assessment. \", \"The optometrist confirms a visual field defect on a separate current signed assessment.\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\", \"fact_fields\": [\"blackout.mechanism_status\", \"blackout.occurred\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"mechanism_determined\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.mechanism_status\"]}, {\"requirement\": \"corresponding_standard_met\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage states that if the mechanism of a blackout cannot be determined, fitness should be assessed according to seizure standards. The verified patient facts indicate the mechanism is 'under_investigation' (not determined) and an event occurred. Therefore, the specific standard for undetermined\", \"source_id\": \"AFTD2022-EXP-3a8e08652c83a2d0\", \"referenced_patient_values\": {\"blackout.mechanism_status\": {\"value\": \"under_investigation\", \"patient_quotes\": [\"the mechanism is under investigation\", \"The current physician referral states that the mechanism is under investigation. \"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. \", \"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall.\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"vision\", \"passage_id\": \"PASS-3276de1e77e80fa8d0179df2\", \"fact_fields\": [\"vision.visual_field.confirmed_defect\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"horizontal_visual_field_minimum_degrees\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"visual_acuity_satisfactory_better_eye\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"no_other_significant_visual_field_loss\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The passage details criteria for conditional licences (110°/140° field, satisfactory acuity) and notes that monocular drivers are generally not fit for commercial vehicles. It also mentions adaptation periods for sudden vision loss. The verified facts confirm a visual field defect but lack the quant\", \"source_id\": \"AFTD2022-EXP-3feaa249d640fab4\", \"referenced_patient_values\": {\"vision.visual_field.confirmed_defect\": {\"value\": true, \"patient_quotes\": [\"The optometrist confirms a visual field defect on a separate current signed assessment. \", \"The optometrist confirms a visual field defect on a separate current signed assessment.\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-d230e17d97c6db53b703c726\", \"fact_fields\": [\"blackout.mechanism_status\", \"blackout.occurred\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"mechanism_ascertained\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.mechanism_status\"]}, {\"requirement\": \"corresponding_standard_met\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage advises that people should not drive until the mechanism of a blackout is ascertained and the corresponding standard met. The verified patient facts show the mechanism is 'under_investigation' (not ascertained) and an event occurred. This establishes a restriction based on the unascert\", \"source_id\": \"AFTD2022-EXP-05643c50d6cf5973\", \"referenced_patient_values\": {\"blackout.mechanism_status\": {\"value\": \"under_investigation\", \"patient_quotes\": [\"the mechanism is under investigation\", \"The current physician referral states that the mechanism is under investigation. \"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. \", \"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall.\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"vision\", \"passage_id\": \"PASS-48ca7f596942100fcaa8bd07\", \"fact_fields\": [\"vision.visual_field.confirmed_defect\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"assessment_by_specialist\", \"status\": \"unknown\", \"fact_fields\": []}, {\"requirement\": \"duration_and_adaptation_evidence\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The passage discusses longstanding field defects, noting they may lead to visual adaptation and can be considered for a conditional licence by an optometrist or ophthalmologist. It requires assessment of duration, evidence of adaptation, defect location relative to vehicle blind spots, safety record\", \"source_id\": \"AFTD2022-EXP-adb72bb1f206f023\", \"referenced_patient_values\": {\"vision.visual_field.confirmed_defect\": {\"value\": true, \"patient_quotes\": [\"The optometrist confirms a visual field defect on a separate current signed assessment. \", \"The optometrist confirms a visual field defect on a separate current signed assessment.\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"666a33dd9b96b316df741bf8fbbac79ce974d37b7e4c28aa95bc981f0b91344c\"}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "7417dd01ca81891637c637087ed37332dde371b08b9b39f743561cdfcda9f0f1",
+          "request_bytes": 23384,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:48:10.6789949Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"temporarily_unfit\",\n  \"explanation\": \"The patient has a confirmed transient loss of consciousness (blackout) where the mechanism remains 'under investigation'. Guideline evidence explicitly states that people should not drive until the mechanism is ascertained and the corresponding standard met. Additionally, the patient has a confirmed visual field defect with unknown extent, preventing verification of conditional standards (110°/140°). The combination of an unascertained blackout mechanism and an unresolved visual field defect precludes both unconditional and conditional eligibility.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-d230e17d97c6db53b703c726\",\n      \"fact_fields\": [\"blackout.mechanism_status\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The mechanism is 'under_investigation', meaning the prerequisite for driving until the cause is ascertained has not been met.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-d230e17d97c6db53b703c726\",\n      \"fact_fields\": [\"blackout.mechanism_status\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"Guidelines require the mechanism to be ascertained before assessing against seizure standards; this prerequisite is not met.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-e0ba3c6be9f81362a255984c\",\n      \"fact_fields\": [\"vision.visual_field.confirmed_defect\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"A visual field defect exists, but the specific horizontal degrees (110° or 140°) and acuity status required for conditional licensing are unknown.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-3276de1e77e80fa8d0179df2\",\n      \"fact_fields\": [\"vision.visual_field.confirmed_defect\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The defect is not longstanding (recently confirmed), and the extent of loss relative to vehicle blind spots cannot be determined, preventing adaptation assessment.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\",\n      \"fact_fields\": [\"blackout.mechanism_status\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"Since the mechanism is undetermined, fitness must be assessed according to seizure standards, which are not currently met due to the lack of investigation completion.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 13924293000,
+            "load_duration": 2503600,
+            "prompt_eval_count": 5205,
+            "prompt_eval_cached_count": 5201,
+            "prompt_eval_duration": 109586000,
+            "eval_count": 720,
+            "eval_duration": 13519921000
+          },
+          "token_counts": {
+            "prompt_eval_count": 5205,
+            "eval_count": 720,
+            "prompt_eval_cached_count": 5201
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "temporarily_unfit",
+            "explanation": "The patient has a confirmed transient loss of consciousness (blackout) where the mechanism remains 'under investigation'. Guideline evidence explicitly states that people should not drive until the mechanism is ascertained and the corresponding standard met. Additionally, the patient has a confirmed visual field defect with unknown extent, preventing verification of conditional standards (110°/140°). The combination of an unascertained blackout mechanism and an unresolved visual field defect precludes both unconditional and conditional eligibility.",
+            "source_ids": [
+              "AFTD2022-EXP-a5934e81e0aee450",
+              "AFTD2022-EXP-3a8e08652c83a2d0",
+              "AFTD2022-EXP-3feaa249d640fab4",
+              "AFTD2022-EXP-05643c50d6cf5973"
+            ],
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "vision.visual_field.confirmed_defect"
+            ],
+            "criterion_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-d230e17d97c6db53b703c726",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The mechanism is 'under_investigation', meaning the prerequisite for driving until the cause is ascertained has not been met.",
+                "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-d230e17d97c6db53b703c726",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Guidelines require the mechanism to be ascertained before assessing against seizure standards; this prerequisite is not met.",
+                "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "A visual field defect exists, but the specific horizontal degrees (110° or 140°) and acuity status required for conditional licensing are unknown.",
+                "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+                "guideline_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "The defect is not longstanding (recently confirmed), and the extent of loss relative to vehicle blind spots cannot be determined, preventing adaptation assessment.",
+                "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+                "guideline_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-82afe6d85f71189739c9ff06",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Since the mechanism is undetermined, fitness must be assessed according to seizure standards, which are not currently met due to the lack of investigation completion.",
+                "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+                "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-d230e17d97c6db53b703c726",
+              "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.1",
+              "text_sha256": "c6796f495b3f01f1595ddb94bfa8ff6f4830c3d75a297cf28e8dc9285fe9881a",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 489,
+                  "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-d230e17d97c6db53b703c726",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The mechanism is 'under_investigation', meaning the prerequisite for driving until the cause is ascertained has not been met.",
+                "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-d230e17d97c6db53b703c726",
+              "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.1",
+              "text_sha256": "c6796f495b3f01f1595ddb94bfa8ff6f4830c3d75a297cf28e8dc9285fe9881a",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 489,
+                  "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-d230e17d97c6db53b703c726",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Guidelines require the mechanism to be ascertained before assessing against seizure standards; this prerequisite is not met.",
+                "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+              "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+              "pdf_page": 216,
+              "printed_page": 205,
+              "section": "10.2.2",
+              "text_sha256": "d6e252946675a947d5fb9727e8101f186e9f11c075bec05f3161d7f1591211af",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1682,
+                  "original_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "A visual field defect exists, but the specific horizontal degrees (110° or 140°) and acuity status required for conditional licensing are unknown.",
+                "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+                "guideline_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+              "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+              "pdf_page": 217,
+              "printed_page": 206,
+              "section": "10.2.2",
+              "text_sha256": "1fc3172704bb3037bd6aa2fb1129b3add901f9331b48416b4f32cbaeceaeeee8",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1892,
+                  "original_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "The defect is not longstanding (recently confirmed), and the extent of loss relative to vehicle blind spots cannot be determined, preventing adaptation assessment.",
+                "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+                "guideline_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-82afe6d85f71189739c9ff06",
+              "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.2.4",
+              "text_sha256": "3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 317,
+                  "original_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-82afe6d85f71189739c9ff06",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "not_established",
+                "conclusion": "Since the mechanism is undetermined, fitness must be assessed according to seizure standards, which are not currently met due to the lack of investigation completion.",
+                "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+                "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "temporary_restriction_not_established_in_checks"
+          ],
+          "seconds": 13.957264200005739
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient has a confirmed transient loss of consciousness (blackout) where the mechanism remains 'under investigation'. Guideline evidence explicitly states that people should not drive until the mechanism is ascertained and the corresponding standard met. Additionally, the patient has a confirmed visual field defect with unknown extent, preventing verification of conditional standards (110°/140°). The combination of an unascertained blackout mechanism and an unresolved visual field defect precludes both unconditional and conditional eligibility.",
+        "source_ids": [
+          "AFTD2022-EXP-a5934e81e0aee450",
+          "AFTD2022-EXP-3a8e08652c83a2d0",
+          "AFTD2022-EXP-3feaa249d640fab4",
+          "AFTD2022-EXP-05643c50d6cf5973"
+        ],
+        "fact_fields": [
+          "blackout.mechanism_status",
+          "vision.visual_field.confirmed_defect"
+        ],
+        "criterion_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-d230e17d97c6db53b703c726",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The mechanism is 'under_investigation', meaning the prerequisite for driving until the cause is ascertained has not been met.",
+            "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-d230e17d97c6db53b703c726",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "Guidelines require the mechanism to be ascertained before assessing against seizure standards; this prerequisite is not met.",
+            "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "A visual field defect exists, but the specific horizontal degrees (110° or 140°) and acuity status required for conditional licensing are unknown.",
+            "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+            "guideline_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "The defect is not longstanding (recently confirmed), and the extent of loss relative to vehicle blind spots cannot be determined, preventing adaptation assessment.",
+            "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+            "guideline_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-82afe6d85f71189739c9ff06",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "Since the mechanism is undetermined, fitness must be assessed according to seizure standards, which are not currently met due to the lack of investigation completion.",
+            "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+            "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-d230e17d97c6db53b703c726",
+          "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+          "pdf_page": 68,
+          "printed_page": 57,
+          "section": "1.2.1",
+          "text_sha256": "c6796f495b3f01f1595ddb94bfa8ff6f4830c3d75a297cf28e8dc9285fe9881a",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 489,
+              "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-d230e17d97c6db53b703c726",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The mechanism is 'under_investigation', meaning the prerequisite for driving until the cause is ascertained has not been met.",
+            "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-d230e17d97c6db53b703c726",
+          "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+          "pdf_page": 68,
+          "printed_page": 57,
+          "section": "1.2.1",
+          "text_sha256": "c6796f495b3f01f1595ddb94bfa8ff6f4830c3d75a297cf28e8dc9285fe9881a",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 489,
+              "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-d230e17d97c6db53b703c726",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "Guidelines require the mechanism to be ascertained before assessing against seizure standards; this prerequisite is not met.",
+            "source_id": "AFTD2022-EXP-05643c50d6cf5973",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met.\nSome drivers may attribute a crash or driving \nmishap to a ‘blackout’ to excuse an event \nthat occurred for some other reason such as \ninattention or distraction (e.g. a mobile phone \nconversation). There will also be a small \nproportion of cases in which a clear cause \ncannot be established."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+          "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+          "pdf_page": 216,
+          "printed_page": 205,
+          "section": "10.2.2",
+          "text_sha256": "d6e252946675a947d5fb9727e8101f186e9f11c075bec05f3161d7f1591211af",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1682,
+              "original_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-e0ba3c6be9f81362a255984c",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "A visual field defect exists, but the specific horizontal degrees (110° or 140°) and acuity status required for conditional licensing are unknown.",
+            "source_id": "AFTD2022-EXP-a5934e81e0aee450",
+            "guideline_quote": "•\t\nany central loss that is an extension of \na hemianopia or quadrantanopia of size \ngreater than three missed points.\nMethods of measuring visual fields are limited in \ntheir ability to resemble the demands of the real-\nworld driving environment where drivers are free \nto move their eyes as required and must sustain \ntheir visual function in variable conditions. \nAdditional factors to be considered by the driver \nlicensing authority in assessing patients with \ndefects in visual fields therefore include, but are \nnot limited to, the following:\n•\t\nkinetic fields conducted on a Goldman\n•\t\nbinocular Esterman visual fields conducted \nwithout fixation monitoring, often referred to \nas a roving Esterman (two consecutive tests \nmust be performed with no more than one \nfalse-positive allowed) – the test should be \nin the numeric field format when it is printed \nout or sent for an opinion\n•\t\ncontrast sensitivity and glare susceptibility\n•\t\nmedical history; duration and prognosis; \nif the condition is progressive; rate of \nprogression/deterioration; effectiveness of \ntreatment/management\n•\t\ndriving record before and since the \noccurrence of the defect\n•\t\nthe nature of the driving task – for example, \ntype of vehicle (truck, bus, etc.), roads \nand distances to be travelled concomitant \nmedical conditions such as cognitive \nimpairment or impaired rotation of the neck.\nThere is no flexibility in this regard for \ncommercial vehicle drivers. \nMonocular vision (one-eyed driver)\nMonocular drivers have a reduction of visual \nfields due to the nose obstructing the medial \nvisual field. They also have no stereoscopic \nvision and may have other deficits in \nvisual functions."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+          "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+          "pdf_page": 217,
+          "printed_page": 206,
+          "section": "10.2.2",
+          "text_sha256": "1fc3172704bb3037bd6aa2fb1129b3add901f9331b48416b4f32cbaeceaeeee8",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1892,
+              "original_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-3276de1e77e80fa8d0179df2",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "The defect is not longstanding (recently confirmed), and the extent of loss relative to vehicle blind spots cannot be determined, preventing adaptation assessment.",
+            "source_id": "AFTD2022-EXP-3feaa249d640fab4",
+            "guideline_quote": "For private vehicle drivers, a conditional licence \nmay be considered by the driver licensing \nauthority if the horizontal visual field is 110 \ndegrees and the visual acuity is satisfactory in \nthe better eye. People with monocular vision are \ngenerally not fit to drive a commercial vehicle. \nA conditional licence may be considered by the \ndriver licensing authority if the horizontal visual \nfield is 140 degrees, the visual acuity in the \nbetter eye is satisfactory, there is no other visual \nfield loss that is likely to impede driving and an \nophthalmologist/optometrist assesses that the \nperson may be safe to drive after consideration \nof the above factors. The better eye must be \nreviewed at least every two years. \nIf monocular automated static perimetry is \nundertaken on patients without symptoms, family \nhistory or risk factors for visual field loss, and \nshows no indication of any visual field concerns, \nthis information may be sufficient to confirm \nthat the standard is met. If monocular testing \nsuggests a field defect, or if the patient has a \nprogressive eye condition, and/or the patient \nhas any other symptoms or signs that indicate \na field defect, then binocular testing should be \nconducted using the Esterman binocular field \ntest or an Esterman-equivalent test. Alternative \ndevices must have the ability to monitor fixation \nand to stimulate the same spots as the standard \nbinocular Esterman. \nSudden loss of unilateral vision\nA person who has lost an eye or most of the \nvision in an eye on a long-term basis has to \nadapt to their new visual circumstances and \nre-establish depth perception. They should \ntherefore be advised not to drive for an \nappropriate period after the onset of their \nsudden loss of vision (usually three months). \nThey should notify the driver licensing authority \nand be assessed according to the relevant \nvisual field standard."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-82afe6d85f71189739c9ff06",
+          "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+          "pdf_page": 69,
+          "printed_page": 58,
+          "section": "1.2.4",
+          "text_sha256": "3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 317,
+              "original_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-82afe6d85f71189739c9ff06",
+            "fact_fields": [
+              "blackout.mechanism_status"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "not_established",
+            "conclusion": "Since the mechanism is undetermined, fitness must be assessed according to seizure standards, which are not currently met due to the lack of investigation completion.",
+            "source_id": "AFTD2022-EXP-3a8e08652c83a2d0",
+            "guideline_quote": "1.2.4. Blackouts of undetermined \nmechanism\nIf, despite extensive investigation, the \nmechanism of a blackout cannot be determined, \nfitness to drive should be assessed according \nto section 1.3. Medical standards for licensing. \nThe standards for blackout of undetermined \nmechanism are similar to those for seizure."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [
+        "temporary_restriction_not_established_in_checks"
+      ],
+      "seconds": 13.957267600002524
+    }
+  },
+  "support_review": "pending_independent_review"
+}

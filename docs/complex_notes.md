@@ -1,7 +1,7 @@
 # Complex nurse-note validation
 
-The platform accepts long-form nurse notes as ordinary UTF-8 `.txt` input. The new
-synthetic set contains 12 complex cases and two short negative controls. It covers
+The platform accepts long-form nurse notes as ordinary UTF-8 `.txt` input. The original
+small synthetic fixture contains 12 complex cases and two short negative controls. It covers
 hypertension, vision, hearing, blackout and diabetes, including two cases involving
 multiple modules. These are engineering fixtures, not real patient records or an
 independently reviewed clinical benchmark.
@@ -104,3 +104,13 @@ extracted all facts. Model output can still fail schema, coverage or exact-quote
 validation; those cases are explicitly routed for human review. Rules still use
 the existing verified source catalogue rather than a complete cross-disease graph.
 Do not infer that hybrid RRF is superior merely because it is the default.
+
+## 200 additional long-note stress inputs
+
+The folder now also contains the ten earlier `CX-MIX-03` through `CX-MIX-12`
+notes and 200 new `CX-LONG-*` inputs: 224 TXT files in total. The original small
+fixture and historical results remain unchanged. The new cohort has a separate
+manifest, source-grounded engineering references and live evaluation command;
+see `data/cases/complex_nurse_notes/README.md` and
+`configs/experiments/complex_long_200.yaml`. Do not assume the original command's
+small-fixture metrics describe the newly added files.

@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "74f6e5b81a2b887d3bc8f383bf3328c9ea852d45cbd9cfaad534f31bfb87ccd5",
+  "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 544,
+      "eval_count": 62,
+      "total_duration": 1312468400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 652,
+      "eval_count": 47,
+      "total_duration": 1172319800
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.present",
+      "kind": "omission",
+      "quote": "The discharge summary confirms a severe hypoglycaemic event 2 weeks ago in a driver with insulin-treated diabetes, when confusion prevented self-treatment and another person had to give assistance, with contemporaneous glucose of 2.2 mmol/L; the nurse records the event and interval from the signed document, while a later glucose of 6.1 after treatment and the driver's improved appearance today do not erase the documented recent severe episode or supply a specialist return-to-driving assessment.",
+      "explanation": "Independent source reading differs from the extraction. The patient has insulin-treated diabetes, and a severe hypoglycaemic event occurred 2 weeks ago, which is documented in the discharge summary.",
+      "evidence": [
+        {
+          "start": 442,
+          "end": 941,
+          "quote": "The discharge summary confirms a severe hypoglycaemic event 2 weeks ago in a driver with insulin-treated diabetes, when confusion prevented self-treatment and another person had to give assistance, with contemporaneous glucose of 2.2 mmol/L; the nurse records the event and interval from the signed document, while a later glucose of 6.1 after treatment and the driver's improved appearance today do not erase the documented recent severe episode or supply a specialist return-to-driving assessment.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The discharge summary confirms a severe hypoglycaemic event 2 weeks ago in a driver with insulin-treated diabetes, when confusion prevented self-treatment and another person had to give assistance, with contemporaneous glucose of 2.2 mmol/L; the nurse records the event and interval from the signed document, while a later glucose of 6.1 after treatment and the driver's improved appearance today do not erase the documented recent severe episode or supply a specialist return-to-driving assessment.",
+      "explanation": "Independent source reading differs from the extraction. The driver has insulin-treated diabetes, which maps to insulin.",
+      "evidence": [
+        {
+          "start": 442,
+          "end": 941,
+          "quote": "The discharge summary confirms a severe hypoglycaemic event 2 weeks ago in a driver with insulin-treated diabetes, when confusion prevented self-treatment and another person had to give assistance, with contemporaneous glucose of 2.2 mmol/L; the nurse records the event and interval from the signed document, while a later glucose of 6.1 after treatment and the driver's improved appearance today do not erase the documented recent severe episode or supply a specialist return-to-driving assessment.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.present",
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "604458d49fbedcfb73c52173189f0edba04813d3fbf880faf7c085872c1b37ba",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.present": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "1d4b8e92dcbe1945552dbef3881d7582fa1bdffb259951176918d9975fa7be51",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "404974fb7fea1cc94357343acd4ecd8a513d16181a9f212d10289e75d3e6fc98",
+      "response_schema_sha256": "2c49d6e3388209d3520ef1d0982c4a7748fd9c3eff7bc43bc1102e21ab5c797d"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The discharge summary confirms a severe hypoglycaemic event 2 weeks ago in a driver with insulin-treated diabetes, when confusion prevented self-treatment and another person had to give assistance, with contemporaneous glucose of 2.2 mmol/L; the nurse records the event and interval from the signed document, while a later glucose of 6.1 after treatment and the driver's improved appearance today do not erase the documented recent severe episode or supply a specialist return-to-driving assessment.",
+      "explanation": "The patient has insulin-treated diabetes, and a severe hypoglycaemic event occurred 2 weeks ago, which is documented in the discharge summary."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "insulin",
+      "status": "documented",
+      "quote": "The discharge summary confirms a severe hypoglycaemic event 2 weeks ago in a driver with insulin-treated diabetes, when confusion prevented self-treatment and another person had to give assistance, with contemporaneous glucose of 2.2 mmol/L; the nurse records the event and interval from the signed document, while a later glucose of 6.1 after treatment and the driver's improved appearance today do not erase the documented recent severe episode or supply a specialist return-to-driving assessment.",
+      "explanation": "The driver has insulin-treated diabetes, which maps to insulin."
+    }
+  ],
+  "output_facts_sha256": "7045babe027b6ccfbce1ef86f6c7a03cab8dd088305dd909cfcaa4c0549abd75",
+  "facts_quarantined": true
+}

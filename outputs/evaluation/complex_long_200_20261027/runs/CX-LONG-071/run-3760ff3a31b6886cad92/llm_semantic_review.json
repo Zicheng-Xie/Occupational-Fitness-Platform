@@ -1,0 +1,208 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "b8781ae0cf4320674302d9b8423d2d89fd1f6c0505810909218eaf14a6b6a751",
+  "input_facts_sha256": "9462ece011763b66b15f116a2260ccb6096a771f6725fa36841cb20e01f85664",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 612,
+      "eval_count": 51,
+      "total_duration": 1354878500
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 614,
+      "eval_count": 49,
+      "total_duration": 1228170600
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 606,
+      "eval_count": 53,
+      "total_duration": 1344397700
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 714,
+      "eval_count": 63,
+      "total_duration": 1484868700
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 663,
+      "eval_count": 77,
+      "total_duration": 1550539300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 666,
+      "eval_count": 78,
+      "total_duration": 1556628500
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "Independent source reading differs from the extraction. The driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment.",
+      "evidence": [
+        {
+          "start": 1224,
+          "end": 1553,
+          "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+          "line_start": 9,
+          "line_end": 9,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [
+    "diabetes.acutely_unwell",
+    "diabetes.metabolically_unstable",
+    "diabetes.present"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "fde431753a6709d403c5be8798ff639866ba4fc9ec1cb3e55d7527769f2defa1",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.acutely_unwell"
+      ],
+      "status": "valid",
+      "request_sha256": "5e4d3578e4ed0e79926a3c7a85dca23baa7f285a75e7e3c2c2e053f0cfbd1063",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.metabolically_unstable"
+      ],
+      "status": "valid",
+      "request_sha256": "606bd054205f751a83a30f0249f0959c020edc1ec6d2a5e7ff5549c4c9364829",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "d41f6dd38d148a9a7b2edd8cab2504fb230b00333c29c7c53630833efb618533",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    },
+    {
+      "batch": 4,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "b2a166c12478ac739b2f6a69d12dd1aabe89a4db9773b5e8e92c456f500c3127",
+      "response_schema_sha256": "9b9485a1aaafcaf6136d1c8879700f5f1ef67b1c83ba88e0072cf2d637b7e113"
+    },
+    {
+      "batch": 5,
+      "attempt": 1,
+      "fields": [
+        "vision.diplopia.present"
+      ],
+      "status": "valid",
+      "request_sha256": "32d8a17b8dfb1484be4f1222d48541e6c975353bf31a616fb085fb7cb00add53",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    },
+    {
+      "batch": 6,
+      "attempt": 1,
+      "fields": [
+        "vision.visual_field.confirmed_defect"
+      ],
+      "status": "valid",
+      "request_sha256": "3034c287d67e0abae0e391dad2278b9616e7eb3a60fdcf700518d5a7442ce49d",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.acutely_unwell",
+      "value": true,
+      "status": "documented",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "The patient is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment."
+    },
+    {
+      "field": "diabetes.metabolically_unstable",
+      "value": true,
+      "status": "documented",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "The patient has metabolically unstable diabetes, as confirmed by the current clinical review."
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "The patient has diabetes, which is explicitly stated in the clinical review (Source Passage 4)."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "glucose_lowering_agent_non_insulin",
+      "status": "documented",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "The driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment."
+    },
+    {
+      "field": "vision.diplopia.present",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The clinical source does not explicitly mention diplopia (double vision) or any related visual acuity measurements. The available information only discusses the patient's diabetes and acute metabolic instability, but does not provide any information about diplopia."
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The question is about the confirmation of a visual field defect, which is not explicitly mentioned in any of the source passages. The passages discuss visual acuity, diplopia, and blur, but do not specifically mention a visual field defect."
+    }
+  ],
+  "output_facts_sha256": "9f026555d54016eb379e939d94c27e6fa03241263cc1d48611bf54e5dac8c700",
+  "facts_quarantined": true
+}

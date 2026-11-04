@@ -1,0 +1,529 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Cross-stage permission review</title><style>body{font:14px/1.6 Segoe UI,Arial;margin:36px;color:#243244;max-width:1300px}details{border:1px solid #dce3e9;border-radius:8px;margin:12px 0;padding:14px}summary{cursor:pointer}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.6 Consolas,monospace}.filter{padding:10px;width:min(700px,90%)}a{color:#255b83}.muted{color:#576577}</style><h1>Cross-stage permission review</h1><p>3 claim occurrences across 3 conditions require independent review.</p><p>A final conditional-permission claim disagrees with the same-passage first-stage applicability or prerequisite proposal. Both proposals are fallible. A disagreement is a source-review priority, not proof that either stage is correct or a clinical error rate. Saved judgments, source inputs and production behavior are unchanged. Reference labels and overall model outcomes are withheld from these review packets.</p><p><a href="review.csv">Review worksheet</a> · <a href="disagreements.json">Exact source packets and identity</a></p><p class="muted">Review status: pending, stage_one_supported, final_supported, both_unsupported or uncertain. Record reviewer and rationale in the worksheet. Pending is never counted as reviewed. Do not treat this computer-generated audit as human or clinical review.</p><label>Filter case, model, query policy or reason <input class="filter" id="filter" type="search"></label><p><a href="../review.html">Return to the complete experimental report</a></p><details data-search="SYN-EXT-006 · llama3:8b · reference_evidence · Repeat 1 · 27dddebe8997 final_permission_despite_stage_one_non_applicability final_permission_despite_stage_one_unestablished_prerequisite"><summary>SYN-EXT-006 · llama3:8b · reference_evidence · Repeat 1 · 27dddebe8997</summary><p>final_permission_despite_stage_one_non_applicability; final_permission_despite_stage_one_unestablished_prerequisite</p><pre>{
+  &quot;event_id&quot;: &quot;27dddebe8997708136a0d2d05210c516e2fa53b152c22327310edd7cb91f8c7a&quot;,
+  &quot;model&quot;: &quot;llama3:8b&quot;,
+  &quot;case_id&quot;: &quot;SYN-EXT-006&quot;,
+  &quot;evidence_policy&quot;: &quot;reference_evidence&quot;,
+  &quot;protocol&quot;: &quot;applicability_first&quot;,
+  &quot;repeat&quot;: 0,
+  &quot;input_sha256&quot;: &quot;89d727210edeb933a5e9b9ef1e0c1cc89e42ba0072246ee0041c651ef6474e95&quot;,
+  &quot;final_check_ordinal&quot;: 0,
+  &quot;reasons&quot;: [
+    &quot;final_permission_despite_stage_one_non_applicability&quot;,
+    &quot;final_permission_despite_stage_one_unestablished_prerequisite&quot;
+  ],
+  &quot;stage_one_proposal&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;passage_id&quot;: &quot;PASS-c2389eae9eca5bb96ceb386b&quot;,
+    &quot;fact_fields&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;,
+      &quot;vision.uncorrected.right.snellen&quot;,
+      &quot;vision.uncorrected.left.snellen&quot;,
+      &quot;vision.visual_field.confirmed_defect&quot;,
+      &quot;vision.diplopia.present&quot;,
+      &quot;vision.monocular&quot;,
+      &quot;hearing.clinical_assessment&quot;,
+      &quot;blackout.episodes_separated_by_24h_count&quot;,
+      &quot;blackout.years_since_last_event&quot;
+    ],
+    &quot;statement_type&quot;: &quot;conditional_opportunity&quot;,
+    &quot;applicability&quot;: &quot;not_applicable&quot;,
+    &quot;licence_pathway&quot;: &quot;conditional&quot;,
+    &quot;prerequisites&quot;: [
+      {
+        &quot;requirement&quot;: &quot;no further blackouts for at least 10 years&quot;,
+        &quot;status&quot;: &quot;unknown&quot;,
+        &quot;fact_fields&quot;: [
+          &quot;blackout.episodes_separated_by_24h_count&quot;,
+          &quot;blackout.years_since_last_event&quot;
+        ]
+      }
+    ],
+    &quot;numeric_application&quot;: &quot;Not applicable&quot;,
+    &quot;finding&quot;: &quot;established_restriction&quot;,
+    &quot;conclusion&quot;: &quot;The patient&#x27;s recurrent uncertain blackouts separated by at least 24 hours, with 9.99 event-free years, do not meet the criteria for an unconditional licence. A conditional licence may be considered, subject to at least annual review, taking into account information provided by an appropriate expert&quot;
+  },
+  &quot;final_proposal&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;passage_id&quot;: &quot;PASS-c2389eae9eca5bb96ceb386b&quot;,
+    &quot;fact_fields&quot;: [
+      &quot;blackout.episodes_separated_by_24h_count&quot;,
+      &quot;blackout.years_since_last_event&quot;
+    ],
+    &quot;licence_pathway&quot;: &quot;conditional&quot;,
+    &quot;finding&quot;: &quot;conditional_permission&quot;,
+    &quot;conclusion&quot;: &quot;The patient&#x27;s recurrent uncertain blackouts separated by at least 24 hours, with 9.99 event-free years, may meet the criteria for a conditional licence, subject to at least annual review, taking into account information provided by an appropriate expert.&quot;,
+    &quot;source_id&quot;: &quot;AFTD2022-BLK-COM-005&quot;,
+    &quot;guideline_quote&quot;: &quot;A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years.&quot;
+  },
+  &quot;original_passage&quot;: {
+    &quot;passage_id&quot;: &quot;PASS-c2389eae9eca5bb96ceb386b&quot;,
+    &quot;source_id&quot;: &quot;AFTD2022-BLK-COM-005&quot;,
+    &quot;pdf_page&quot;: 70,
+    &quot;printed_page&quot;: 59,
+    &quot;section&quot;: &quot;1.3&quot;,
+    &quot;text_sha256&quot;: &quot;518da4f1500d8f8c838d81b4032f1a22f7e592d32c018c48a0242fc3c20bb05e&quot;,
+    &quot;offset_unit&quot;: &quot;python_unicode_code_points&quot;,
+    &quot;anchor_scope&quot;: &quot;complete_original_knowledge_unit&quot;,
+    &quot;spans&quot;: [
+      {
+        &quot;char_start&quot;: 0,
+        &quot;char_end&quot;: 1045,
+        &quot;original_quote&quot;: &quot;A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years.&quot;
+      }
+    ]
+  },
+  &quot;patient_context&quot;: {
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;modules&quot;: [
+      &quot;blackout&quot;
+    ],
+    &quot;nurse_note&quot;: &quot;SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\r\nCommercial driver assessment.\r\nRecurrent uncertain blackouts separated by at least 24 hours; 9.99 event-free years.\r\n\r\nStructured assessment addendum (explicit documented facts; no inferred values):\r\ncardiovascular.blood_pressure.persistent_systolic = 120\r\ncardiovascular.blood_pressure.persistent_diastolic = 80\r\nvision.uncorrected.right.snellen = \&quot;6/6\&quot;\r\nvision.uncorrected.left.snellen = \&quot;6/6\&quot;\r\nvision.visual_field.confirmed_defect = false\r\nvision.diplopia.present = false\r\nvision.monocular = false\r\nhearing.clinical_assessment = \&quot;no_hearing_loss\&quot;\r\nblackout.occurred = true\r\ndiabetes.present = false\r\nblackout.mechanism_status = \&quot;undetermined_after_investigation\&quot;\r\nblackout.diagnosis = \&quot;undetermined\&quot;\r\nblackout.episodes_separated_by_24h_count = 2\r\nblackout.years_since_last_event = 9.99\r\nblackout.appropriate_specialist_information_available = true\r\n&quot;,
+    &quot;verified_patient_facts&quot;: {
+      &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+        &quot;value&quot;: 120,
+        &quot;patient_quotes&quot;: [
+          &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+        ]
+      },
+      &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+        &quot;value&quot;: 80,
+        &quot;patient_quotes&quot;: [
+          &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+        ]
+      },
+      &quot;vision.uncorrected.right.snellen&quot;: {
+        &quot;value&quot;: &quot;6/6&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+        ]
+      },
+      &quot;vision.uncorrected.left.snellen&quot;: {
+        &quot;value&quot;: &quot;6/6&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+        ]
+      },
+      &quot;vision.visual_field.confirmed_defect&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.visual_field.confirmed_defect = false&quot;
+        ]
+      },
+      &quot;vision.diplopia.present&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.diplopia.present = false&quot;
+        ]
+      },
+      &quot;vision.monocular&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.monocular = false&quot;
+        ]
+      },
+      &quot;hearing.clinical_assessment&quot;: {
+        &quot;value&quot;: &quot;no_hearing_loss&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;hearing.clinical_assessment = \&quot;no_hearing_loss\&quot;&quot;
+        ]
+      },
+      &quot;blackout.occurred&quot;: {
+        &quot;value&quot;: true,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.occurred = true&quot;,
+          &quot;blackout.occurred = true&quot;
+        ]
+      },
+      &quot;diabetes.present&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;diabetes.present = false&quot;
+        ]
+      },
+      &quot;blackout.mechanism_status&quot;: {
+        &quot;value&quot;: &quot;undetermined_after_investigation&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.mechanism_status = \&quot;undetermined_after_investigation\&quot;&quot;
+        ]
+      },
+      &quot;blackout.episodes_separated_by_24h_count&quot;: {
+        &quot;value&quot;: 2,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.episodes_separated_by_24h_count = 2&quot;
+        ]
+      },
+      &quot;blackout.years_since_last_event&quot;: {
+        &quot;value&quot;: 9.99,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.years_since_last_event = 9.99&quot;
+        ]
+      },
+      &quot;blackout.appropriate_specialist_information_available&quot;: {
+        &quot;value&quot;: true,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.appropriate_specialist_information_available = true&quot;
+        ]
+      },
+      &quot;vision.uncorrected.better_eye&quot;: {
+        &quot;value&quot;: &quot;6/6&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+          &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+        ]
+      }
+    }
+  }
+}</pre></details><details data-search="SYN-EXT-006 · llama3:8b · reference_evidence · Repeat 2 · bbe92903afe2 final_permission_despite_stage_one_non_applicability final_permission_despite_stage_one_unestablished_prerequisite"><summary>SYN-EXT-006 · llama3:8b · reference_evidence · Repeat 2 · bbe92903afe2</summary><p>final_permission_despite_stage_one_non_applicability; final_permission_despite_stage_one_unestablished_prerequisite</p><pre>{
+  &quot;event_id&quot;: &quot;bbe92903afe29fd5304a34dd33daffee13d58ebe21fa99e9a15c476189c99022&quot;,
+  &quot;model&quot;: &quot;llama3:8b&quot;,
+  &quot;case_id&quot;: &quot;SYN-EXT-006&quot;,
+  &quot;evidence_policy&quot;: &quot;reference_evidence&quot;,
+  &quot;protocol&quot;: &quot;applicability_first&quot;,
+  &quot;repeat&quot;: 1,
+  &quot;input_sha256&quot;: &quot;89d727210edeb933a5e9b9ef1e0c1cc89e42ba0072246ee0041c651ef6474e95&quot;,
+  &quot;final_check_ordinal&quot;: 0,
+  &quot;reasons&quot;: [
+    &quot;final_permission_despite_stage_one_non_applicability&quot;,
+    &quot;final_permission_despite_stage_one_unestablished_prerequisite&quot;
+  ],
+  &quot;stage_one_proposal&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;passage_id&quot;: &quot;PASS-c2389eae9eca5bb96ceb386b&quot;,
+    &quot;fact_fields&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;,
+      &quot;vision.uncorrected.right.snellen&quot;,
+      &quot;vision.uncorrected.left.snellen&quot;,
+      &quot;vision.visual_field.confirmed_defect&quot;,
+      &quot;vision.diplopia.present&quot;,
+      &quot;vision.monocular&quot;,
+      &quot;hearing.clinical_assessment&quot;,
+      &quot;blackout.episodes_separated_by_24h_count&quot;,
+      &quot;blackout.years_since_last_event&quot;
+    ],
+    &quot;statement_type&quot;: &quot;conditional_opportunity&quot;,
+    &quot;applicability&quot;: &quot;not_applicable&quot;,
+    &quot;licence_pathway&quot;: &quot;conditional&quot;,
+    &quot;prerequisites&quot;: [
+      {
+        &quot;requirement&quot;: &quot;no further blackouts for at least 10 years&quot;,
+        &quot;status&quot;: &quot;unknown&quot;,
+        &quot;fact_fields&quot;: [
+          &quot;blackout.episodes_separated_by_24h_count&quot;,
+          &quot;blackout.years_since_last_event&quot;
+        ]
+      }
+    ],
+    &quot;numeric_application&quot;: &quot;Not applicable&quot;,
+    &quot;finding&quot;: &quot;established_restriction&quot;,
+    &quot;conclusion&quot;: &quot;The patient&#x27;s recurrent uncertain blackouts separated by at least 24 hours, with 9.99 event-free years, do not meet the criteria for an unconditional licence. A conditional licence may be considered, subject to at least annual review, taking into account information provided by an appropriate expert&quot;
+  },
+  &quot;final_proposal&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;passage_id&quot;: &quot;PASS-c2389eae9eca5bb96ceb386b&quot;,
+    &quot;fact_fields&quot;: [
+      &quot;blackout.episodes_separated_by_24h_count&quot;,
+      &quot;blackout.years_since_last_event&quot;
+    ],
+    &quot;licence_pathway&quot;: &quot;conditional&quot;,
+    &quot;finding&quot;: &quot;conditional_permission&quot;,
+    &quot;conclusion&quot;: &quot;The patient&#x27;s recurrent uncertain blackouts separated by at least 24 hours, with 9.99 event-free years, may be eligible for a conditional licence, pending further evaluation and monitoring.&quot;,
+    &quot;source_id&quot;: &quot;AFTD2022-BLK-COM-005&quot;,
+    &quot;guideline_quote&quot;: &quot;A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years.&quot;
+  },
+  &quot;original_passage&quot;: {
+    &quot;passage_id&quot;: &quot;PASS-c2389eae9eca5bb96ceb386b&quot;,
+    &quot;source_id&quot;: &quot;AFTD2022-BLK-COM-005&quot;,
+    &quot;pdf_page&quot;: 70,
+    &quot;printed_page&quot;: 59,
+    &quot;section&quot;: &quot;1.3&quot;,
+    &quot;text_sha256&quot;: &quot;518da4f1500d8f8c838d81b4032f1a22f7e592d32c018c48a0242fc3c20bb05e&quot;,
+    &quot;offset_unit&quot;: &quot;python_unicode_code_points&quot;,
+    &quot;anchor_scope&quot;: &quot;complete_original_knowledge_unit&quot;,
+    &quot;spans&quot;: [
+      {
+        &quot;char_start&quot;: 0,
+        &quot;char_end&quot;: 1045,
+        &quot;original_quote&quot;: &quot;A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years.&quot;
+      }
+    ]
+  },
+  &quot;patient_context&quot;: {
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;modules&quot;: [
+      &quot;blackout&quot;
+    ],
+    &quot;nurse_note&quot;: &quot;SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\r\nCommercial driver assessment.\r\nRecurrent uncertain blackouts separated by at least 24 hours; 9.99 event-free years.\r\n\r\nStructured assessment addendum (explicit documented facts; no inferred values):\r\ncardiovascular.blood_pressure.persistent_systolic = 120\r\ncardiovascular.blood_pressure.persistent_diastolic = 80\r\nvision.uncorrected.right.snellen = \&quot;6/6\&quot;\r\nvision.uncorrected.left.snellen = \&quot;6/6\&quot;\r\nvision.visual_field.confirmed_defect = false\r\nvision.diplopia.present = false\r\nvision.monocular = false\r\nhearing.clinical_assessment = \&quot;no_hearing_loss\&quot;\r\nblackout.occurred = true\r\ndiabetes.present = false\r\nblackout.mechanism_status = \&quot;undetermined_after_investigation\&quot;\r\nblackout.diagnosis = \&quot;undetermined\&quot;\r\nblackout.episodes_separated_by_24h_count = 2\r\nblackout.years_since_last_event = 9.99\r\nblackout.appropriate_specialist_information_available = true\r\n&quot;,
+    &quot;verified_patient_facts&quot;: {
+      &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+        &quot;value&quot;: 120,
+        &quot;patient_quotes&quot;: [
+          &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+        ]
+      },
+      &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+        &quot;value&quot;: 80,
+        &quot;patient_quotes&quot;: [
+          &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+        ]
+      },
+      &quot;vision.uncorrected.right.snellen&quot;: {
+        &quot;value&quot;: &quot;6/6&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+        ]
+      },
+      &quot;vision.uncorrected.left.snellen&quot;: {
+        &quot;value&quot;: &quot;6/6&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+        ]
+      },
+      &quot;vision.visual_field.confirmed_defect&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.visual_field.confirmed_defect = false&quot;
+        ]
+      },
+      &quot;vision.diplopia.present&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.diplopia.present = false&quot;
+        ]
+      },
+      &quot;vision.monocular&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.monocular = false&quot;
+        ]
+      },
+      &quot;hearing.clinical_assessment&quot;: {
+        &quot;value&quot;: &quot;no_hearing_loss&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;hearing.clinical_assessment = \&quot;no_hearing_loss\&quot;&quot;
+        ]
+      },
+      &quot;blackout.occurred&quot;: {
+        &quot;value&quot;: true,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.occurred = true&quot;,
+          &quot;blackout.occurred = true&quot;
+        ]
+      },
+      &quot;diabetes.present&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;diabetes.present = false&quot;
+        ]
+      },
+      &quot;blackout.mechanism_status&quot;: {
+        &quot;value&quot;: &quot;undetermined_after_investigation&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.mechanism_status = \&quot;undetermined_after_investigation\&quot;&quot;
+        ]
+      },
+      &quot;blackout.episodes_separated_by_24h_count&quot;: {
+        &quot;value&quot;: 2,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.episodes_separated_by_24h_count = 2&quot;
+        ]
+      },
+      &quot;blackout.years_since_last_event&quot;: {
+        &quot;value&quot;: 9.99,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.years_since_last_event = 9.99&quot;
+        ]
+      },
+      &quot;blackout.appropriate_specialist_information_available&quot;: {
+        &quot;value&quot;: true,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.appropriate_specialist_information_available = true&quot;
+        ]
+      },
+      &quot;vision.uncorrected.better_eye&quot;: {
+        &quot;value&quot;: &quot;6/6&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+          &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+        ]
+      }
+    }
+  }
+}</pre></details><details data-search="SYN-EXT-006 · llama3:8b · reference_evidence · Repeat 3 · ad77b5400116 final_permission_despite_stage_one_non_applicability final_permission_despite_stage_one_unestablished_prerequisite"><summary>SYN-EXT-006 · llama3:8b · reference_evidence · Repeat 3 · ad77b5400116</summary><p>final_permission_despite_stage_one_non_applicability; final_permission_despite_stage_one_unestablished_prerequisite</p><pre>{
+  &quot;event_id&quot;: &quot;ad77b5400116c6af327e0470cab436a20e68b2b4968c3312c7157a26e190bab6&quot;,
+  &quot;model&quot;: &quot;llama3:8b&quot;,
+  &quot;case_id&quot;: &quot;SYN-EXT-006&quot;,
+  &quot;evidence_policy&quot;: &quot;reference_evidence&quot;,
+  &quot;protocol&quot;: &quot;applicability_first&quot;,
+  &quot;repeat&quot;: 2,
+  &quot;input_sha256&quot;: &quot;89d727210edeb933a5e9b9ef1e0c1cc89e42ba0072246ee0041c651ef6474e95&quot;,
+  &quot;final_check_ordinal&quot;: 0,
+  &quot;reasons&quot;: [
+    &quot;final_permission_despite_stage_one_non_applicability&quot;,
+    &quot;final_permission_despite_stage_one_unestablished_prerequisite&quot;
+  ],
+  &quot;stage_one_proposal&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;passage_id&quot;: &quot;PASS-c2389eae9eca5bb96ceb386b&quot;,
+    &quot;fact_fields&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;,
+      &quot;vision.uncorrected.right.snellen&quot;,
+      &quot;vision.uncorrected.left.snellen&quot;,
+      &quot;vision.visual_field.confirmed_defect&quot;,
+      &quot;vision.diplopia.present&quot;,
+      &quot;vision.monocular&quot;,
+      &quot;hearing.clinical_assessment&quot;,
+      &quot;blackout.episodes_separated_by_24h_count&quot;,
+      &quot;blackout.years_since_last_event&quot;
+    ],
+    &quot;statement_type&quot;: &quot;conditional_opportunity&quot;,
+    &quot;applicability&quot;: &quot;not_applicable&quot;,
+    &quot;licence_pathway&quot;: &quot;conditional&quot;,
+    &quot;prerequisites&quot;: [
+      {
+        &quot;requirement&quot;: &quot;no further blackouts for at least 10 years&quot;,
+        &quot;status&quot;: &quot;unknown&quot;,
+        &quot;fact_fields&quot;: [
+          &quot;blackout.episodes_separated_by_24h_count&quot;,
+          &quot;blackout.years_since_last_event&quot;
+        ]
+      }
+    ],
+    &quot;numeric_application&quot;: &quot;Not applicable&quot;,
+    &quot;finding&quot;: &quot;established_restriction&quot;,
+    &quot;conclusion&quot;: &quot;The patient&#x27;s recurrent uncertain blackouts separated by at least 24 hours, with 9.99 event-free years, do not meet the criteria for an unconditional licence. A conditional licence may be considered, subject to at least annual review, taking into account information provided by an appropriate expert&quot;
+  },
+  &quot;final_proposal&quot;: {
+    &quot;module&quot;: &quot;blackout&quot;,
+    &quot;passage_id&quot;: &quot;PASS-c2389eae9eca5bb96ceb386b&quot;,
+    &quot;fact_fields&quot;: [
+      &quot;blackout.episodes_separated_by_24h_count&quot;,
+      &quot;blackout.years_since_last_event&quot;
+    ],
+    &quot;licence_pathway&quot;: &quot;conditional&quot;,
+    &quot;finding&quot;: &quot;conditional_permission&quot;,
+    &quot;conclusion&quot;: &quot;The patient&#x27;s recurrent uncertain blackouts separated by at least 24 hours, with 9.99 event-free years, may be eligible for a conditional licence, pending further evaluation and monitoring.&quot;,
+    &quot;source_id&quot;: &quot;AFTD2022-BLK-COM-005&quot;,
+    &quot;guideline_quote&quot;: &quot;A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years.&quot;
+  },
+  &quot;original_passage&quot;: {
+    &quot;passage_id&quot;: &quot;PASS-c2389eae9eca5bb96ceb386b&quot;,
+    &quot;source_id&quot;: &quot;AFTD2022-BLK-COM-005&quot;,
+    &quot;pdf_page&quot;: 70,
+    &quot;printed_page&quot;: 59,
+    &quot;section&quot;: &quot;1.3&quot;,
+    &quot;text_sha256&quot;: &quot;518da4f1500d8f8c838d81b4032f1a22f7e592d32c018c48a0242fc3c20bb05e&quot;,
+    &quot;offset_unit&quot;: &quot;python_unicode_code_points&quot;,
+    &quot;anchor_scope&quot;: &quot;complete_original_knowledge_unit&quot;,
+    &quot;spans&quot;: [
+      {
+        &quot;char_start&quot;: 0,
+        &quot;char_end&quot;: 1045,
+        &quot;original_quote&quot;: &quot;A person should not drive for 10 years \nfollowing two or more blackouts of \nundetermined nature separated by a 24-\nhour period.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition.\nIf there has been a single blackout or more \nthan one blackout within a 24-hour period, \na conditional licence may be considered \nby the driver licensing authority subject to \nat least annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 5 years.\nIf there have been two or more blackouts \nseparated by at least 24 hours, a \nconditional licence may be considered by \nthe driver licensing authority subject to at \nleast annual review, taking into account \ninformation provided by an appropriate \nspecialist as to whether the following \ncriterion is met:\n•\t there have been no further blackouts for \nat least 10 years.&quot;
+      }
+    ]
+  },
+  &quot;patient_context&quot;: {
+    &quot;licence_context&quot;: &quot;commercial&quot;,
+    &quot;modules&quot;: [
+      &quot;blackout&quot;
+    ],
+    &quot;nurse_note&quot;: &quot;SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\r\nCommercial driver assessment.\r\nRecurrent uncertain blackouts separated by at least 24 hours; 9.99 event-free years.\r\n\r\nStructured assessment addendum (explicit documented facts; no inferred values):\r\ncardiovascular.blood_pressure.persistent_systolic = 120\r\ncardiovascular.blood_pressure.persistent_diastolic = 80\r\nvision.uncorrected.right.snellen = \&quot;6/6\&quot;\r\nvision.uncorrected.left.snellen = \&quot;6/6\&quot;\r\nvision.visual_field.confirmed_defect = false\r\nvision.diplopia.present = false\r\nvision.monocular = false\r\nhearing.clinical_assessment = \&quot;no_hearing_loss\&quot;\r\nblackout.occurred = true\r\ndiabetes.present = false\r\nblackout.mechanism_status = \&quot;undetermined_after_investigation\&quot;\r\nblackout.diagnosis = \&quot;undetermined\&quot;\r\nblackout.episodes_separated_by_24h_count = 2\r\nblackout.years_since_last_event = 9.99\r\nblackout.appropriate_specialist_information_available = true\r\n&quot;,
+    &quot;verified_patient_facts&quot;: {
+      &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+        &quot;value&quot;: 120,
+        &quot;patient_quotes&quot;: [
+          &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+        ]
+      },
+      &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+        &quot;value&quot;: 80,
+        &quot;patient_quotes&quot;: [
+          &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+        ]
+      },
+      &quot;vision.uncorrected.right.snellen&quot;: {
+        &quot;value&quot;: &quot;6/6&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+        ]
+      },
+      &quot;vision.uncorrected.left.snellen&quot;: {
+        &quot;value&quot;: &quot;6/6&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+        ]
+      },
+      &quot;vision.visual_field.confirmed_defect&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.visual_field.confirmed_defect = false&quot;
+        ]
+      },
+      &quot;vision.diplopia.present&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.diplopia.present = false&quot;
+        ]
+      },
+      &quot;vision.monocular&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.monocular = false&quot;
+        ]
+      },
+      &quot;hearing.clinical_assessment&quot;: {
+        &quot;value&quot;: &quot;no_hearing_loss&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;hearing.clinical_assessment = \&quot;no_hearing_loss\&quot;&quot;
+        ]
+      },
+      &quot;blackout.occurred&quot;: {
+        &quot;value&quot;: true,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.occurred = true&quot;,
+          &quot;blackout.occurred = true&quot;
+        ]
+      },
+      &quot;diabetes.present&quot;: {
+        &quot;value&quot;: false,
+        &quot;patient_quotes&quot;: [
+          &quot;diabetes.present = false&quot;
+        ]
+      },
+      &quot;blackout.mechanism_status&quot;: {
+        &quot;value&quot;: &quot;undetermined_after_investigation&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.mechanism_status = \&quot;undetermined_after_investigation\&quot;&quot;
+        ]
+      },
+      &quot;blackout.episodes_separated_by_24h_count&quot;: {
+        &quot;value&quot;: 2,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.episodes_separated_by_24h_count = 2&quot;
+        ]
+      },
+      &quot;blackout.years_since_last_event&quot;: {
+        &quot;value&quot;: 9.99,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.years_since_last_event = 9.99&quot;
+        ]
+      },
+      &quot;blackout.appropriate_specialist_information_available&quot;: {
+        &quot;value&quot;: true,
+        &quot;patient_quotes&quot;: [
+          &quot;blackout.appropriate_specialist_information_available = true&quot;
+        ]
+      },
+      &quot;vision.uncorrected.better_eye&quot;: {
+        &quot;value&quot;: &quot;6/6&quot;,
+        &quot;patient_quotes&quot;: [
+          &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+          &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+        ]
+      }
+    }
+  }
+}</pre></details><script>document.getElementById("filter").addEventListener("input",function(){let q=this.value.toLowerCase();document.querySelectorAll("details").forEach(d=>d.hidden=!d.dataset.search.toLowerCase().includes(q));});</script></html>

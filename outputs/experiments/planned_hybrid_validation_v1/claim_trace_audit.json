@@ -1,0 +1,213 @@
+{
+  "source_run_identity": "4fb6b97319f19ffe1b03e3cf47d54f7dfa912727b1106ae06e4da87bd25b6c2a",
+  "source_artifacts_sha256": "4abe3d37a6516246aab95d48c083a0eef21e92824ee3bc4cf6dfef33c769d852",
+  "policy": {
+    "source_identifier_regex": "\\bAFTD2022-[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\b",
+    "explicit_missingness_regex": "\\b(?:absent|missing|not\\s+(?:present|provided|included|verified))\\s+(?:from|in)?\\s*(?:the\\s+)?verified[_ ]patient[_ ]facts\\b",
+    "nearest_available_field_lookback_characters": 300
+  },
+  "accepted_outputs": 267,
+  "flag_counts": {
+    "possible_false_fact_absence_claim": 10,
+    "prose_source_identifier_not_supplied": 5
+  },
+  "flags": [
+    {
+      "case_id": "SYN-EXT-018",
+      "method": "lightrag",
+      "model": "llama3:8b",
+      "repeat": 1,
+      "request_identity": "3d8417b80c23421fbe1b5fce6f7bd626f4815d43c0a6bc038bc56fb5e97485f4",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "vision.visual_field.confirmed_defect",
+      "actual_verified_value": false,
+      "excerpt": "The patient's vision module assessment is incomplete due to the absence of guideline evidence for the 'vision.visual_field.confirmed_defect' field. The 'vision.visual_field.confirmed_defect' field is mentioned in the nurse_note, but it is not present in the verified_patient_facts. Therefore, it is not possible to determine the patient's v",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-018",
+      "method": "lightrag",
+      "model": "llama3:8b",
+      "repeat": 2,
+      "request_identity": "3d8417b80c23421fbe1b5fce6f7bd626f4815d43c0a6bc038bc56fb5e97485f4",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "vision.visual_field.confirmed_defect",
+      "actual_verified_value": false,
+      "excerpt": "The patient's vision module assessment is incomplete due to the absence of guideline evidence for the 'vision.visual_field.confirmed_defect' field. The 'vision.visual_field.confirmed_defect' field is mentioned in the nurse_note, but it is not present in the verified_patient_facts. Therefore, it is not possible to determine the patient's v",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-017",
+      "method": "lightrag",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 0,
+      "request_identity": "6b51358c84991909716cb5da403a6c6ac50b26f5dbb60c4083329d9b558225a5",
+      "kind": "prose_source_identifier_not_supplied",
+      "identifiers": [
+        "AFTD2022-HEAR-COM-0002"
+      ],
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-017",
+      "method": "reference_evidence",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 0,
+      "request_identity": "8b91188a1027ef27de2ea5912f839acfd6622d261e37fed1d3938979f4f6d4f8",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "hearing.average_frequencies_khz",
+      "actual_verified_value": [
+        0.5,
+        1,
+        2,
+        3
+      ],
+      "excerpt": "act 'hearing.average_frequencies_khz' only lists [0.5, 1, 2, 3], omitting the 4 KHz frequency required by the guideline. Consequently, the complete unaided average cannot be calculated from the supplied facts. Additionally, the nurse note mentions an 'aided assessment is missing', but this field is absent from verified_patient_facts and therefore remains unverified; without it, we cannot con",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-018",
+      "method": "hybrid",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 0,
+      "request_identity": "2b95993cfa3c6c2ec1a57d0246513cffb72dd9a6442a29713b9f8f01292020c4",
+      "kind": "prose_source_identifier_not_supplied",
+      "identifiers": [
+        "AFTD2022-EXP-VIS-COM-007"
+      ],
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-018",
+      "method": "hybrid",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 0,
+      "request_identity": "2b95993cfa3c6c2ec1a57d0246513cffb72dd9a6442a29713b9f8f01292020c4",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "vision.diplopia.physiological",
+      "actual_verified_value": false,
+      "excerpt": "diplopia within 20 degrees from central fixation. However, the verified facts confirm only that the diplopia is present and within twenty degrees; they do not verify whether it is physiological or non-physiological. The nurse note indicates 'vision.diplopia.physiological = false', but this field is absent from verified_patient_facts and therefore cannot be cited as an established fact per th",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-010",
+      "method": "graphrag",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 1,
+      "request_identity": "f1dc6ff8f1b1971dd8a049239d71309e551d80396d65f90232a3e1d40e2f68e2",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "actual_verified_value": 120,
+      "excerpt": "ed.right.snellen = '6/6', verified_patient_facts.vision.visual_field.confirmed_defect = false), and cardiovascular status is stable (verified_patient_facts.cardiovascular.blood_pressure.persistent_systolic = 120). Although the nurse_note mentions a driving-relevant comorbidity status, this field is absent from verified_patient_facts; however, the verified fact regarding end-organ effects com",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-017",
+      "method": "lightrag",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 1,
+      "request_identity": "6b51358c84991909716cb5da403a6c6ac50b26f5dbb60c4083329d9b558225a5",
+      "kind": "prose_source_identifier_not_supplied",
+      "identifiers": [
+        "AFTD2022-HEAR-COM-0002"
+      ],
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-017",
+      "method": "reference_evidence",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 1,
+      "request_identity": "8b91188a1027ef27de2ea5912f839acfd6622d261e37fed1d3938979f4f6d4f8",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "hearing.average_frequencies_khz",
+      "actual_verified_value": [
+        0.5,
+        1,
+        2,
+        3
+      ],
+      "excerpt": "act 'hearing.average_frequencies_khz' only lists [0.5, 1, 2, 3], omitting the 4 KHz frequency required by the guideline. Consequently, the complete unaided average cannot be calculated from the supplied facts. Additionally, the nurse note mentions an 'aided assessment is missing', but this field is absent from verified_patient_facts and therefore remains unverified; without it, we cannot con",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-018",
+      "method": "hybrid",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 1,
+      "request_identity": "2b95993cfa3c6c2ec1a57d0246513cffb72dd9a6442a29713b9f8f01292020c4",
+      "kind": "prose_source_identifier_not_supplied",
+      "identifiers": [
+        "AFTD2022-EXP-VIS-COM-007"
+      ],
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-018",
+      "method": "hybrid",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 1,
+      "request_identity": "2b95993cfa3c6c2ec1a57d0246513cffb72dd9a6442a29713b9f8f01292020c4",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "vision.diplopia.physiological",
+      "actual_verified_value": false,
+      "excerpt": "diplopia within 20 degrees from central fixation. However, the verified facts confirm only that the diplopia is present and within twenty degrees; they do not verify whether it is physiological or non-physiological. The nurse note indicates 'vision.diplopia.physiological = false', but this field is absent from verified_patient_facts and therefore cannot be cited as an established fact per th",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-010",
+      "method": "graphrag",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 2,
+      "request_identity": "f1dc6ff8f1b1971dd8a049239d71309e551d80396d65f90232a3e1d40e2f68e2",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "cardiovascular.blood_pressure.persistent_systolic",
+      "actual_verified_value": 120,
+      "excerpt": "ed.right.snellen = '6/6', verified_patient_facts.vision.visual_field.confirmed_defect = false), and cardiovascular status is stable (verified_patient_facts.cardiovascular.blood_pressure.persistent_systolic = 120). Although the nurse_note mentions a driving-relevant comorbidity status, this field is absent from verified_patient_facts; however, the verified fact regarding end-organ effects com",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-017",
+      "method": "reference_evidence",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 2,
+      "request_identity": "8b91188a1027ef27de2ea5912f839acfd6622d261e37fed1d3938979f4f6d4f8",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "hearing.average_frequencies_khz",
+      "actual_verified_value": [
+        0.5,
+        1,
+        2,
+        3
+      ],
+      "excerpt": "act 'hearing.average_frequencies_khz' only lists [0.5, 1, 2, 3], omitting the 4 KHz frequency required by the guideline. Consequently, the complete unaided average cannot be calculated from the supplied facts. Additionally, the nurse note mentions an 'aided assessment is missing', but this field is absent from verified_patient_facts and therefore remains unverified; without it, we cannot con",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-018",
+      "method": "hybrid",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 2,
+      "request_identity": "2b95993cfa3c6c2ec1a57d0246513cffb72dd9a6442a29713b9f8f01292020c4",
+      "kind": "prose_source_identifier_not_supplied",
+      "identifiers": [
+        "AFTD2022-EXP-VIS-COM-007"
+      ],
+      "review_status": "pending_independent_review"
+    },
+    {
+      "case_id": "SYN-EXT-018",
+      "method": "hybrid",
+      "model": "qwen3.5:4b-q4_K_M",
+      "repeat": 2,
+      "request_identity": "2b95993cfa3c6c2ec1a57d0246513cffb72dd9a6442a29713b9f8f01292020c4",
+      "kind": "possible_false_fact_absence_claim",
+      "field": "vision.diplopia.physiological",
+      "actual_verified_value": false,
+      "excerpt": "diplopia within 20 degrees from central fixation. However, the verified facts confirm only that the diplopia is present and within twenty degrees; they do not verify whether it is physiological or non-physiological. The nurse note indicates 'vision.diplopia.physiological = false', but this field is absent from verified_patient_facts and therefore cannot be cited as an established fact per th",
+      "review_status": "pending_independent_review"
+    }
+  ],
+  "clinical_review": "pending",
+  "interpretation": "Auxiliary literal trace checks only. Possible missingness flags require reading the full explanation. Valid structured IDs do not guarantee valid prose IDs or clinically supported reasoning. No patient facts, labels or model outputs were changed."
+}

@@ -1,0 +1,456 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-10",
+    "evidence_policy": "module_query",
+    "protocol": "passage_selection",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "outcome_first": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-205eea15cc36b50dfbb2b9b1",
+                        "PASS-2009e930bac734b0ea2f028d",
+                        "PASS-89f66fa2b99946bf7cef1287",
+                        "PASS-f518b995ccbf6dfc41900b70",
+                        "PASS-a581c31c1d082af9ef3ba3b6"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver's mother has diabetes and uses insulin, but the driver says there has been no diagnosis of diabetes for him; he has recently felt thirsty and noticed intermittent blur, and a laboratory appointment has been arranged. A borrowed glucose meter produced an isolated elevated value without a verified technique or accompanying clinical assessment, so neither a diagnosis nor a treatment category has been established from the available material.\\n\\nHe describes a brief blank sensation after poor sleep but remembers the whole conversation, while a colleague says he paused before replying; there is no confirmed loss of consciousness and no specialist determination of a cause. A referral asks whether further cardiac or neurological investigation is needed and does not supply a definitive explanation or recurrence assessment.\\n\\nAn undated eye card lists 6/12 and 6/9 without identifying the eyes or correction status. The driver thinks the blur improves after resting, but current acuity, fields and the presence of true diplopia have not been established. The nurse distinguishes family history and provisional questions from confirmed patient findings.\\n\", \"verified_patient_facts\": {}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"text_sha256\": \"63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876\", \"char_start\": 0, \"char_end\": 1176}, {\"source_id\": \"AFTD2022-EXP-e8267bf4145306c0\", \"section\": \"10.2.6\", \"pdf_page\": 218, \"printed_page\": 207, \"source_text\": \"10.2.6. Colour vision\\nThere is not a colour vision standard for \\ndrivers, either private or commercial. Doctors, \\noptometrists and ophthalmologist should, \\nhowever, advise drivers who have a significant \\ncolour vision deficiency about how this may \\naffect their responsiveness to signal lights and \\nthe need to adapt their driving accordingly. \\nNote, this standard applies only to driving within \\nnormal road rules and conditions. A standard \\nrequiring colour vision may be justified based on \\nrisk assessment for particular driving tasks.\", \"module\": \"vision\", \"passage_id\": \"PASS-2009e930bac734b0ea2f028d\", \"text_sha256\": \"acefc218677c8fd7cf8700d819a71458e84a127998ef8e737b5b6af7114541ef\", \"char_start\": 0, \"char_end\": 539}, {\"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger vehicles \\nor requiring a dangerous goods driver licence – \\nrefer to definition in Table 3)\\nCompliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\\nA person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account the nature of the driving task \\nand information provided by an ENT specialist or \\naudiologist**, as to whether:\\n•\\t the standard is able to be met with a hearing \\naid***.\\nIf the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"text_sha256\": \"6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7\", \"char_start\": 0, \"char_end\": 1620}, {\"source_id\": \"AFTD2022-EXP-2332d9548f2abd01\", \"section\": \"1.2.3\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"1.2.3. Blackouts due to medical \\ncauses not covered in the standards\\nIf the cause of the blackout is determined \\nto be a medical condition not covered in \\nthe standards, then first principles regarding \\nfitness to drive should be applied (refer to \\nPart A section 2. Assessing fitness to drive \\n– general guidance). Considerations include \\nthe likelihood of recurrence of blackout and \\nthe treatability of the condition as well as the \\nnature of the driving task. There should also be \\nan appropriate review period. A more stringent \\napproach should be considered for commercial \\nvehicle drivers.\", \"module\": \"blackout\", \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\", \"text_sha256\": \"01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398\", \"char_start\": 0, \"char_end\": 596}, {\"source_id\": \"AFTD2022-DM-COM-009\", \"section\": \"3.3.2\", \"pdf_page\": 110, \"printed_page\": 99, \"source_text\": \"3.3.2. Recommendation and \\nreview of conditional licences for \\ncommercial vehicle drivers\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based on \\nadvice from an appropriate medical specialist \\n(endocrinologist or consultant physician \\nspecialising in diabetes) and that these drivers \\nare reviewed periodically by the specialist to \\ndetermine their ongoing fitness to drive (refer \\nto Part A section 4.4. Conditional licences). For \\ncommercial drivers receiving insulin treatment, at \\nleast three months of blood glucose monitoring \\nrecords should be reviewed in assessing fitness \\nto drive.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-a581c31c1d082af9ef3ba3b6\", \"text_sha256\": \"426a6e52e563cfedd137a95b8eddcd0cbefaedd3b6ab9ccc78ad7917d1eb810d\", \"char_start\": 0, \"char_end\": 677}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "c516c19bd27b378d2a21387df69a4b66b73d9cf59eb74fec4d3953b0787d4bee",
+          "request_bytes": 13951,
+          "status": "completed",
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T16:05:49.2570995Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"insufficient_information\",\n  \"explanation\": \"No verified patient facts exist to establish eligibility for either unconditional or conditional licensing across any module. The nurse note explicitly states that no diagnosis of diabetes has been established, a glucose meter reading lacks verification, and there is no confirmed loss of consciousness or specialist determination regarding the blackout. Similarly, hypertension, vision, and hearing findings are unverified or insufficiently documented to meet guideline criteria. Without verified facts establishing specific medical conditions (e.g., blood pressure levels, confirmed hypoglycemia, audiometry results), no restrictive criterion can be confirmed, nor can any prerequisite for a conditional licence be proven. The absence of verified data prevents the application of standard fitness rules.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline states a person is not fit if BP is consistently > 170/100, but no verified patient fact establishes blood pressure levels. Therefore, the restriction cannot be established.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-a581c31c1d082af9ef3ba3b6\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline requires advice from a specialist and review of blood glucose monitoring records for drivers on insulin. No verified fact confirms the patient is on insulin treatment or has established diabetes; thus, conditional eligibility cannot be assessed.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"temporary_no_driving\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline applies first principles if a medical cause is determined, but no verified fact confirms a diagnosed blackout or its cause. The nurse note explicitly states there is no confirmed loss of consciousness.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-2009e930bac734b0ea2f028d\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"While no specific colour vision standard exists, the nurse note indicates current acuity and diplopia have not been established. Without verified visual field or acuity data, compliance with general commercial standards cannot be confirmed.\"\n    },\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline sets a restriction for unaided hearing loss ≥ 40 dB. No verified audiometry results are available to confirm this threshold, so the restriction cannot be established.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 11170566900,
+            "load_duration": 2120800,
+            "prompt_eval_count": 2947,
+            "prompt_eval_cached_count": 2943,
+            "prompt_eval_duration": 147152000,
+            "eval_count": 781,
+            "eval_duration": 10995193000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2947,
+            "eval_count": 781,
+            "prompt_eval_cached_count": 2943
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "insufficient_information",
+            "explanation": "No verified patient facts exist to establish eligibility for either unconditional or conditional licensing across any module. The nurse note explicitly states that no diagnosis of diabetes has been established, a glucose meter reading lacks verification, and there is no confirmed loss of consciousness or specialist determination regarding the blackout. Similarly, hypertension, vision, and hearing findings are unverified or insufficiently documented to meet guideline criteria. Without verified facts establishing specific medical conditions (e.g., blood pressure levels, confirmed hypoglycemia, audiometry results), no restrictive criterion can be confirmed, nor can any prerequisite for a conditional licence be proven. The absence of verified data prevents the application of standard fitness rules.",
+            "source_ids": [
+              "AFTD2022-EXP-f57fef6c660a1e6d",
+              "AFTD2022-EXP-e8267bf4145306c0",
+              "AFTD2022-EXP-7f3c434bba3c53df",
+              "AFTD2022-EXP-2332d9548f2abd01",
+              "AFTD2022-DM-COM-009"
+            ],
+            "fact_fields": [],
+            "criterion_checks": [
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [],
+                "licence_pathway": "unconditional",
+                "finding": "information_missing",
+                "conclusion": "The guideline states a person is not fit if BP is consistently > 170/100, but no verified patient fact establishes blood pressure levels. Therefore, the restriction cannot be established.",
+                "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-a581c31c1d082af9ef3ba3b6",
+                "fact_fields": [],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "The guideline requires advice from a specialist and review of blood glucose monitoring records for drivers on insulin. No verified fact confirms the patient is on insulin treatment or has established diabetes; thus, conditional eligibility cannot be assessed.",
+                "source_id": "AFTD2022-DM-COM-009",
+                "guideline_quote": "3.3.2. Recommendation and \nreview of conditional licences for \ncommercial vehicle drivers\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based on \nadvice from an appropriate medical specialist \n(endocrinologist or consultant physician \nspecialising in diabetes) and that these drivers \nare reviewed periodically by the specialist to \ndetermine their ongoing fitness to drive (refer \nto Part A section 4.4. Conditional licences). For \ncommercial drivers receiving insulin treatment, at \nleast three months of blood glucose monitoring \nrecords should be reviewed in assessing fitness \nto drive."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+                "fact_fields": [],
+                "licence_pathway": "temporary_no_driving",
+                "finding": "information_missing",
+                "conclusion": "The guideline applies first principles if a medical cause is determined, but no verified fact confirms a diagnosed blackout or its cause. The nurse note explicitly states there is no confirmed loss of consciousness.",
+                "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+                "guideline_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-2009e930bac734b0ea2f028d",
+                "fact_fields": [],
+                "licence_pathway": "unconditional",
+                "finding": "information_missing",
+                "conclusion": "While no specific colour vision standard exists, the nurse note indicates current acuity and diplopia have not been established. Without verified visual field or acuity data, compliance with general commercial standards cannot be confirmed.",
+                "source_id": "AFTD2022-EXP-e8267bf4145306c0",
+                "guideline_quote": "10.2.6. Colour vision\nThere is not a colour vision standard for \ndrivers, either private or commercial. Doctors, \noptometrists and ophthalmologist should, \nhowever, advise drivers who have a significant \ncolour vision deficiency about how this may \naffect their responsiveness to signal lights and \nthe need to adapt their driving accordingly. \nNote, this standard applies only to driving within \nnormal road rules and conditions. A standard \nrequiring colour vision may be justified based on \nrisk assessment for particular driving tasks."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [],
+                "licence_pathway": "unconditional",
+                "finding": "information_missing",
+                "conclusion": "The guideline sets a restriction for unaided hearing loss ≥ 40 dB. No verified audiometry results are available to confirm this threshold, so the restriction cannot be established.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+              "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1176,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [],
+                "licence_pathway": "unconditional",
+                "finding": "information_missing",
+                "conclusion": "The guideline states a person is not fit if BP is consistently > 170/100, but no verified patient fact establishes blood pressure levels. Therefore, the restriction cannot be established.",
+                "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-a581c31c1d082af9ef3ba3b6",
+              "source_id": "AFTD2022-DM-COM-009",
+              "pdf_page": 110,
+              "printed_page": 99,
+              "section": "3.3.2",
+              "text_sha256": "426a6e52e563cfedd137a95b8eddcd0cbefaedd3b6ab9ccc78ad7917d1eb810d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 677,
+                  "original_quote": "3.3.2. Recommendation and \nreview of conditional licences for \ncommercial vehicle drivers\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based on \nadvice from an appropriate medical specialist \n(endocrinologist or consultant physician \nspecialising in diabetes) and that these drivers \nare reviewed periodically by the specialist to \ndetermine their ongoing fitness to drive (refer \nto Part A section 4.4. Conditional licences). For \ncommercial drivers receiving insulin treatment, at \nleast three months of blood glucose monitoring \nrecords should be reviewed in assessing fitness \nto drive."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-a581c31c1d082af9ef3ba3b6",
+                "fact_fields": [],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "The guideline requires advice from a specialist and review of blood glucose monitoring records for drivers on insulin. No verified fact confirms the patient is on insulin treatment or has established diabetes; thus, conditional eligibility cannot be assessed.",
+                "source_id": "AFTD2022-DM-COM-009",
+                "guideline_quote": "3.3.2. Recommendation and \nreview of conditional licences for \ncommercial vehicle drivers\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based on \nadvice from an appropriate medical specialist \n(endocrinologist or consultant physician \nspecialising in diabetes) and that these drivers \nare reviewed periodically by the specialist to \ndetermine their ongoing fitness to drive (refer \nto Part A section 4.4. Conditional licences). For \ncommercial drivers receiving insulin treatment, at \nleast three months of blood glucose monitoring \nrecords should be reviewed in assessing fitness \nto drive."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+              "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.3",
+              "text_sha256": "01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 596,
+                  "original_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+                "fact_fields": [],
+                "licence_pathway": "temporary_no_driving",
+                "finding": "information_missing",
+                "conclusion": "The guideline applies first principles if a medical cause is determined, but no verified fact confirms a diagnosed blackout or its cause. The nurse note explicitly states there is no confirmed loss of consciousness.",
+                "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+                "guideline_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-2009e930bac734b0ea2f028d",
+              "source_id": "AFTD2022-EXP-e8267bf4145306c0",
+              "pdf_page": 218,
+              "printed_page": 207,
+              "section": "10.2.6",
+              "text_sha256": "acefc218677c8fd7cf8700d819a71458e84a127998ef8e737b5b6af7114541ef",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 539,
+                  "original_quote": "10.2.6. Colour vision\nThere is not a colour vision standard for \ndrivers, either private or commercial. Doctors, \noptometrists and ophthalmologist should, \nhowever, advise drivers who have a significant \ncolour vision deficiency about how this may \naffect their responsiveness to signal lights and \nthe need to adapt their driving accordingly. \nNote, this standard applies only to driving within \nnormal road rules and conditions. A standard \nrequiring colour vision may be justified based on \nrisk assessment for particular driving tasks."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-2009e930bac734b0ea2f028d",
+                "fact_fields": [],
+                "licence_pathway": "unconditional",
+                "finding": "information_missing",
+                "conclusion": "While no specific colour vision standard exists, the nurse note indicates current acuity and diplopia have not been established. Without verified visual field or acuity data, compliance with general commercial standards cannot be confirmed.",
+                "source_id": "AFTD2022-EXP-e8267bf4145306c0",
+                "guideline_quote": "10.2.6. Colour vision\nThere is not a colour vision standard for \ndrivers, either private or commercial. Doctors, \noptometrists and ophthalmologist should, \nhowever, advise drivers who have a significant \ncolour vision deficiency about how this may \naffect their responsiveness to signal lights and \nthe need to adapt their driving accordingly. \nNote, this standard applies only to driving within \nnormal road rules and conditions. A standard \nrequiring colour vision may be justified based on \nrisk assessment for particular driving tasks."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+              "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1620,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [],
+                "licence_pathway": "unconditional",
+                "finding": "information_missing",
+                "conclusion": "The guideline sets a restriction for unaided hearing loss ≥ 40 dB. No verified audiometry results are available to confirm this threshold, so the restriction cannot be established.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [],
+          "seconds": 11.186403899999277,
+          "provider_called": true
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "insufficient_information",
+        "explanation": "No verified patient facts exist to establish eligibility for either unconditional or conditional licensing across any module. The nurse note explicitly states that no diagnosis of diabetes has been established, a glucose meter reading lacks verification, and there is no confirmed loss of consciousness or specialist determination regarding the blackout. Similarly, hypertension, vision, and hearing findings are unverified or insufficiently documented to meet guideline criteria. Without verified facts establishing specific medical conditions (e.g., blood pressure levels, confirmed hypoglycemia, audiometry results), no restrictive criterion can be confirmed, nor can any prerequisite for a conditional licence be proven. The absence of verified data prevents the application of standard fitness rules.",
+        "source_ids": [
+          "AFTD2022-EXP-f57fef6c660a1e6d",
+          "AFTD2022-EXP-e8267bf4145306c0",
+          "AFTD2022-EXP-7f3c434bba3c53df",
+          "AFTD2022-EXP-2332d9548f2abd01",
+          "AFTD2022-DM-COM-009"
+        ],
+        "fact_fields": [],
+        "criterion_checks": [
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+            "fact_fields": [],
+            "licence_pathway": "unconditional",
+            "finding": "information_missing",
+            "conclusion": "The guideline states a person is not fit if BP is consistently > 170/100, but no verified patient fact establishes blood pressure levels. Therefore, the restriction cannot be established.",
+            "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-a581c31c1d082af9ef3ba3b6",
+            "fact_fields": [],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "The guideline requires advice from a specialist and review of blood glucose monitoring records for drivers on insulin. No verified fact confirms the patient is on insulin treatment or has established diabetes; thus, conditional eligibility cannot be assessed.",
+            "source_id": "AFTD2022-DM-COM-009",
+            "guideline_quote": "3.3.2. Recommendation and \nreview of conditional licences for \ncommercial vehicle drivers\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based on \nadvice from an appropriate medical specialist \n(endocrinologist or consultant physician \nspecialising in diabetes) and that these drivers \nare reviewed periodically by the specialist to \ndetermine their ongoing fitness to drive (refer \nto Part A section 4.4. Conditional licences). For \ncommercial drivers receiving insulin treatment, at \nleast three months of blood glucose monitoring \nrecords should be reviewed in assessing fitness \nto drive."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-f518b995ccbf6dfc41900b70",
+            "fact_fields": [],
+            "licence_pathway": "temporary_no_driving",
+            "finding": "information_missing",
+            "conclusion": "The guideline applies first principles if a medical cause is determined, but no verified fact confirms a diagnosed blackout or its cause. The nurse note explicitly states there is no confirmed loss of consciousness.",
+            "source_id": "AFTD2022-EXP-2332d9548f2abd01",
+            "guideline_quote": "1.2.3. Blackouts due to medical \ncauses not covered in the standards\nIf the cause of the blackout is determined \nto be a medical condition not covered in \nthe standards, then first principles regarding \nfitness to drive should be applied (refer to \nPart A section 2. Assessing fitness to drive \n– general guidance). Considerations include \nthe likelihood of recurrence of blackout and \nthe treatability of the condition as well as the \nnature of the driving task. There should also be \nan appropriate review period. A more stringent \napproach should be considered for commercial \nvehicle drivers."
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-2009e930bac734b0ea2f028d",
+            "fact_fields": [],
+            "licence_pathway": "unconditional",
+            "finding": "information_missing",
+            "conclusion": "While no specific colour vision standard exists, the nurse note indicates current acuity and diplopia have not been established. Without verified visual field or acuity data, compliance with general commercial standards cannot be confirmed.",
+            "source_id": "AFTD2022-EXP-e8267bf4145306c0",
+            "guideline_quote": "10.2.6. Colour vision\nThere is not a colour vision standard for \ndrivers, either private or commercial. Doctors, \noptometrists and ophthalmologist should, \nhowever, advise drivers who have a significant \ncolour vision deficiency about how this may \naffect their responsiveness to signal lights and \nthe need to adapt their driving accordingly. \nNote, this standard applies only to driving within \nnormal road rules and conditions. A standard \nrequiring colour vision may be justified based on \nrisk assessment for particular driving tasks."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [],
+            "licence_pathway": "unconditional",
+            "finding": "information_missing",
+            "conclusion": "The guideline sets a restriction for unaided hearing loss ≥ 40 dB. No verified audiometry results are available to confirm this threshold, so the restriction cannot be established.",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          }
+        ]
+      },
+      "seconds": 11.189292000002752
+    }
+  },
+  "support_review": "pending_independent_review"
+}

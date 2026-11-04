@@ -1,0 +1,371 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-07",
+    "evidence_policy": "reference_evidence",
+    "protocol": "passage_selection",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "failed",
+  "stages": {
+    "outcome_first": {
+      "status": "failed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-3ed1a5aed97719c969e95bb9",
+                        "PASS-71485241c8be43cc12422a04"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.acutely_unwell",
+                          "diabetes.metabolically_unstable",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; this is a documented clinical assessment rather than a diagnosis inferred by the nurse from thirst alone. The patient describes nausea and fluctuating blur, and the planned work assessment has been interrupted for clinical care.\\n\\nThe GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. A measurement copied from an older employment form is lower, but the clinician identifies the repeated current values as persistent, and the nurse keeps the older form separate rather than averaging different time periods.\\n\\nThe driver cannot provide a reliable account of the latest diabetes medication change or a complete glucose log, and the visual symptoms have not received an independent specialist assessment. Those missing details remain unresolved even though current metabolic instability and persistent blood pressure are explicitly documented by the treating clinicians.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes\"]}, \"diabetes.acutely_unwell\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \"]}, \"diabetes.metabolically_unstable\": {\"value\": true, \"patient_quotes\": [\"The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; \", \"metabolically unstable diabetes\"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 182.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 108.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}, {\"source_id\": \"AFTD2022-DM-COM-003\", \"section\": \"3.2.2\", \"pdf_page\": 106, \"printed_page\": 95, \"source_text\": \"3.2.2. Acute hyperglycaemia\\nWhile acute hyperglycaemia may affect some \\naspects of brain function, there is not enough \\nevidence to determine the regular effects on \\ndriving performance and related crash risk. Each \\nperson with diabetes should be counselled \\nabout managing their diabetes during days \\nwhen they are unwell and should be advised \\nnot to drive if they are acutely unwell with \\nmetabolically unstable diabetes.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"text_sha256\": \"0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda\", \"char_start\": 0, \"char_end\": 424}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "ff9f64f92289b976e51a4ab9cf97e00572101cee8c425adc7808b5f77b7796e0",
+          "request_bytes": 10042,
+          "status": "failed",
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:54:11.5508982Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"temporarily_unfit\",\n  \"explanation\": \"The patient is established as unfit to hold an unconditional licence due to persistently elevated blood pressure (182/108 mmHg) exceeding the guideline threshold for systolic and diastolic readings. Additionally, the patient has confirmed metabolically unstable diabetes with acute unwellness, which explicitly requires cessation of driving pending investigation and stabilisation. While specific conditional pathways may exist for hypertension if treated, the current evidence establishes a temporary restriction that overrides any potential conditional permission due to the presence of an active, diagnosed medical instability affecting safety. The visual symptoms and medication history remain unresolved, but the established restrictions regarding blood pressure and metabolic instability are sufficient to declare temporary unfitness.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient has blood pressure consistently > 170 systolic (182.0) or > 100 diastolic (108.0), which explicitly excludes them from holding an unconditional licence.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-71485241c8be43cc12422a04\",\n      \"fact_fields\": [\"diabetes.present\", \"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient is acutely unwell with metabolically unstable diabetes; the guideline advises not to drive in this state, establishing a temporary restriction pending recovery or stabilisation.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The patient describes fluctuating blur but has not received an independent specialist assessment; therefore, the status of visual acuity and field cannot be established as meeting conditional standards.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-71485241c8be43cc12422a04\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified fact confirms a diagnosed blackout or loss of consciousness; however, the established metabolic instability and acute unwellness independently support a temporary driving restriction.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"While the patient has hypertension, there is no verified fact confirming that the condition is treated and controlled to a level allowing conditional licence eligibility; the current persistent readings establish a restriction regardless of treatment status.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 15480227900,
+            "load_duration": 1550700,
+            "prompt_eval_count": 1773,
+            "prompt_eval_cached_count": 1769,
+            "prompt_eval_duration": 158636000,
+            "eval_count": 820,
+            "eval_duration": 15304533000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1773,
+            "eval_count": 820,
+            "prompt_eval_cached_count": 1769
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Criterion module differs from the selected original source",
+          "failure_stage": "structural_validation",
+          "seconds": 15.49411500000133,
+          "provider_called": true
+        },
+        {
+          "number": 2,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-3ed1a5aed97719c969e95bb9",
+                        "PASS-71485241c8be43cc12422a04"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.acutely_unwell",
+                          "diabetes.metabolically_unstable",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic"
+                        ]
+                      },
+                      "maxItems": 5,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; this is a documented clinical assessment rather than a diagnosis inferred by the nurse from thirst alone. The patient describes nausea and fluctuating blur, and the planned work assessment has been interrupted for clinical care.\\n\\nThe GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. A measurement copied from an older employment form is lower, but the clinician identifies the repeated current values as persistent, and the nurse keeps the older form separate rather than averaging different time periods.\\n\\nThe driver cannot provide a reliable account of the latest diabetes medication change or a complete glucose log, and the visual symptoms have not received an independent specialist assessment. Those missing details remain unresolved even though current metabolic instability and persistent blood pressure are explicitly documented by the treating clinicians.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \", \"The patient has confirmed type 2 diabetes\"]}, \"diabetes.acutely_unwell\": {\"value\": true, \"patient_quotes\": [\"The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment. \"]}, \"diabetes.metabolically_unstable\": {\"value\": true, \"patient_quotes\": [\"The treating physician's signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results; \", \"metabolically unstable diabetes\"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 182.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 108.0, \"patient_quotes\": [\"The GP's separate current summary records that persistent blood pressure remains 182/108 mmHg after repeated measurements. \", \"persistent blood pressure remains 182/108 mmHg\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}, {\"source_id\": \"AFTD2022-DM-COM-003\", \"section\": \"3.2.2\", \"pdf_page\": 106, \"printed_page\": 95, \"source_text\": \"3.2.2. Acute hyperglycaemia\\nWhile acute hyperglycaemia may affect some \\naspects of brain function, there is not enough \\nevidence to determine the regular effects on \\ndriving performance and related crash risk. Each \\nperson with diabetes should be counselled \\nabout managing their diabetes during days \\nwhen they are unwell and should be advised \\nnot to drive if they are acutely unwell with \\nmetabolically unstable diabetes.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-71485241c8be43cc12422a04\", \"text_sha256\": \"0ba4927e7248164977d80cbeb75c7ce270e2ccd2fd071e70b41323db1ee10cda\", \"char_start\": 0, \"char_end\": 424}]}"
+              },
+              {
+                "role": "assistant",
+                "content": "{\n  \"assessment_outcome\": \"temporarily_unfit\",\n  \"explanation\": \"The patient is established as unfit to hold an unconditional licence due to persistently elevated blood pressure (182/108 mmHg) exceeding the guideline threshold for systolic and diastolic readings. Additionally, the patient has confirmed metabolically unstable diabetes with acute unwellness, which explicitly requires cessation of driving pending investigation and stabilisation. While specific conditional pathways may exist for hypertension if treated, the current evidence establishes a temporary restriction that overrides any potential conditional permission due to the presence of an active, diagnosed medical instability affecting safety. The visual symptoms and medication history remain unresolved, but the established restrictions regarding blood pressure and metabolic instability are sufficient to declare temporary unfitness.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient has blood pressure consistently > 170 systolic (182.0) or > 100 diastolic (108.0), which explicitly excludes them from holding an unconditional licence.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-71485241c8be43cc12422a04\",\n      \"fact_fields\": [\"diabetes.present\", \"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient is acutely unwell with metabolically unstable diabetes; the guideline advises not to drive in this state, establishing a temporary restriction pending recovery or stabilisation.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The patient describes fluctuating blur but has not received an independent specialist assessment; therefore, the status of visual acuity and field cannot be established as meeting conditional standards.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-71485241c8be43cc12422a04\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified fact confirms a diagnosed blackout or loss of consciousness; however, the established metabolic instability and acute unwellness independently support a temporary driving restriction.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"While the patient has hypertension, there is no verified fact confirming that the condition is treated and controlled to a level allowing conditional licence eligibility; the current persistent readings establish a restriction regardless of treatment status.\"\n    }\n  ]\n}"
+              },
+              {
+                "role": "user",
+                "content": "The previous output failed structural validation: ValueError: Criterion module differs from the selected original source. Correct only the output contract using the SAME original patient facts and evidence. Do not invent a source, passage, quotation or fact. The validator supplies no correct outcome. No semantic consistency flag is a repair instruction."
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "c6e5d10b7aba51c9072108663f7c09a004bf7ca764d1795eb53762423c033396",
+          "request_bytes": 13898,
+          "status": "failed",
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:54:26.721431Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"temporarily_unfit\",\n  \"explanation\": \"The patient is established as temporarily unfit to hold an unconditional licence due to persistently elevated blood pressure (182/108 mmHg) exceeding the guideline threshold for systolic and diastolic readings, and confirmed metabolically unstable diabetes with acute unwellness. The guideline explicitly advises against driving when acutely unwell with metabolically unstable diabetes. While specific conditional pathways may exist for hypertension if treated, the current evidence establishes a temporary restriction that overrides any potential conditional permission due to the presence of active medical instability. Visual symptoms and medication history remain unresolved, but the established restrictions regarding blood pressure and metabolic instability are sufficient to declare temporary unfitness.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient has blood pressure consistently > 170 systolic (182.0) or > 100 diastolic (108.0), which explicitly excludes them from holding an unconditional licence.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-71485241c8be43cc12422a04\",\n      \"fact_fields\": [\"diabetes.present\", \"diabetes.acutely_unwell\", \"diabetes.metabolically_unstable\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient is acutely unwell with metabolically unstable diabetes; the guideline advises not to drive in this state, establishing a temporary restriction pending recovery or stabilisation.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The patient describes fluctuating blur but has not received an independent specialist assessment; therefore, the status of visual acuity and field cannot be established as meeting conditional standards.\"\n    },\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-71485241c8be43cc12422a04\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified fact confirms a diagnosed blackout or loss of consciousness; however, the established metabolic instability and acute unwellness independently support a temporary driving restriction.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"While the patient has hypertension, there is no verified fact confirming that the condition is treated and controlled to a level allowing conditional licence eligibility; the current persistent readings establish a restriction regardless of treatment status.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 15137898700,
+            "load_duration": 2272300,
+            "prompt_eval_count": 2646,
+            "prompt_eval_cached_count": 1769,
+            "prompt_eval_duration": 535047000,
+            "eval_count": 800,
+            "eval_duration": 14575675000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2646,
+            "eval_count": 800,
+            "prompt_eval_cached_count": 1769
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Criterion module differs from the selected original source",
+          "failure_stage": "structural_validation",
+          "seconds": 15.170032599999104,
+          "provider_called": true
+        }
+      ],
+      "error": "ValueError: Criterion module differs from the selected original source",
+      "seconds": 30.66597499999625
+    }
+  },
+  "support_review": "pending_independent_review"
+}

@@ -1,0 +1,852 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "VAL-MIX-06",
+    "evidence_policy": "reference_evidence",
+    "protocol": "applicability_first",
+    "repeat": 0
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "blackout.mechanism_status",
+                          "blackout.occurred",
+                          "vision.visual_field.confirmed_defect"
+                        ]
+                      },
+                      "maxItems": 3,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "blackout.mechanism_status",
+                          "blackout.occurred",
+                          "vision.visual_field.confirmed_defect"
+                        ]
+                      },
+                      "maxItems": 3,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.\\n\\nThe optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.\\n\\nAn older report described satisfactory central acuity, but the nurse has not used it to overrule the newer field finding. The driver is unsure whether a remote dizzy spell involved loss of awareness, so the number of confirmed events and the appropriate event-free interval remain unresolved despite documentation of the recent event and the visual field defect.\\n\", \"verified_patient_facts\": {\"blackout.mechanism_status\": {\"value\": \"under_investigation\", \"patient_quotes\": [\"the mechanism is under investigation\", \"The current physician referral states that the mechanism is under investigation. \"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. \", \"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall.\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": true, \"patient_quotes\": [\"The optometrist confirms a visual field defect on a separate current signed assessment. \", \"The optometrist confirms a visual field defect on a separate current signed assessment.\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-BLK-COM-001\", \"section\": \"1.2.1\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"cardiovascular and neurological investigations \\nand referral to several specialists. People should \\nbe advised not to drive until the mechanism is \\nascertained and the corresponding standard met.\", \"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"text_sha256\": \"dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55\", \"char_start\": 0, \"char_end\": 195, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-VIS-COM-004\", \"section\": \"10.3\", \"pdf_page\": 221, \"printed_page\": 210, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has any visual field defect.\", \"module\": \"vision\", \"passage_id\": \"PASS-2503a79b6b7336207b91cbd6\", \"text_sha256\": \"d54b84732d5cc173a2f28c988779c0e5717b436ce27bb2630ccbc25b9dd9ee61\", \"char_start\": 0, \"char_end\": 100, \"applicability_slot\": \"P2\"}]}"
+              }
+            ]
+          },
+          "request_sha256": "30100fd06e60ab60fd9f25ca722f366588b7c604469f86e97c2da1da167f93f3",
+          "request_bytes": 8697,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T13:49:45.9862514Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"passages\": {\n    \"P1\": {\n      \"fact_fields\": [\n        \"blackout.mechanism_status\",\n        \"blackout.occurred\"\n      ],\n      \"statement_type\": \"conditional_opportunity\",\n      \"applicability\": \"not_applicable\",\n      \"licence_pathway\": \"conditional\",\n      \"prerequisites\": [\n        {\n          \"requirement\": \"ascertainment of the mechanism\",\n          \"status\": \"not_met\",\n          \"fact_fields\": [\"blackout.mechanism_status\"]\n        }\n      ],\n      \"numeric_application\": \"Not applicable\",\n      \"finding\": \"conditional_permission\",\n      \"conclusion\": \"The driver is not fit to hold an unconditional licence until the mechanism is ascertained.\"\n    },\n    \"P2\": {\n      \"fact_fields\": [\n        \"vision.visual_field.confirmed_defect\"\n      ],\n      \"statement_type\": \"restriction\",\n      \"applicability\": \"applicable\",\n      \"licence_pathway\": \"unconditional\",\n      \"prerequisites\": [\n        {\n          \"requirement\": \"no visual field defect\",\n          \"status\": \"not_met\",\n          \"fact_fields\": [\"vision.visual_field.confirmed_defect\"]\n        }\n      ],\n      \"numeric_application\": \"Not applicable\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The driver is not fit to hold an unconditional licence due to the visual field defect.\"\n    }\n  }\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 6029987200,
+            "load_duration": 2873600,
+            "prompt_eval_count": 1299,
+            "prompt_eval_cached_count": 6,
+            "prompt_eval_duration": 532746999,
+            "eval_count": 317,
+            "eval_duration": 5378939000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1299,
+            "eval_count": 317,
+            "prompt_eval_cached_count": 6
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "blackout.mechanism_status",
+                  "blackout.occurred"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "ascertainment of the mechanism",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "blackout.mechanism_status"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "conditional_permission",
+                "conclusion": "The driver is not fit to hold an unconditional licence until the mechanism is ascertained."
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "statement_type": "restriction",
+                "applicability": "applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "no visual field defect",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "vision.visual_field.confirmed_defect"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The driver is not fit to hold an unconditional licence due to the visual field defect."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+              "source_id": "AFTD2022-BLK-COM-001",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.1",
+              "text_sha256": "dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 195,
+                  "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "blackout.mechanism_status",
+                  "blackout.occurred"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The driver is not fit to hold an unconditional licence until the mechanism is ascertained.",
+                "source_id": "AFTD2022-BLK-COM-001",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+              "source_id": "AFTD2022-VIS-COM-004",
+              "pdf_page": 221,
+              "printed_page": 210,
+              "section": "10.3",
+              "text_sha256": "d54b84732d5cc173a2f28c988779c0e5717b436ce27bb2630ccbc25b9dd9ee61",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 100,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The driver is not fit to hold an unconditional licence due to the visual field defect.",
+                "source_id": "AFTD2022-VIS-COM-004",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-2dc3117e7c443462699ed5e0:established_finding_without_reported_applicability",
+            "PASS-2dc3117e7c443462699ed5e0:conditional_permission_with_unestablished_prerequisite"
+          ],
+          "seconds": 6.058984399998735
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "blackout.occurred"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "ascertainment of the mechanism",
+                "status": "not_met",
+                "fact_fields": [
+                  "blackout.mechanism_status"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "conditional_permission",
+            "conclusion": "The driver is not fit to hold an unconditional licence until the mechanism is ascertained."
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "statement_type": "restriction",
+            "applicability": "applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "no visual field defect",
+                "status": "not_met",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The driver is not fit to hold an unconditional licence due to the visual field defect."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+          "source_id": "AFTD2022-BLK-COM-001",
+          "pdf_page": 68,
+          "printed_page": 57,
+          "section": "1.2.1",
+          "text_sha256": "dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 195,
+              "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "blackout.occurred"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The driver is not fit to hold an unconditional licence until the mechanism is ascertained.",
+            "source_id": "AFTD2022-BLK-COM-001",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+          "source_id": "AFTD2022-VIS-COM-004",
+          "pdf_page": 221,
+          "printed_page": 210,
+          "section": "10.3",
+          "text_sha256": "d54b84732d5cc173a2f28c988779c0e5717b436ce27bb2630ccbc25b9dd9ee61",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 100,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The driver is not fit to hold an unconditional licence due to the visual field defect.",
+            "source_id": "AFTD2022-VIS-COM-004",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-2dc3117e7c443462699ed5e0:established_finding_without_reported_applicability",
+        "PASS-2dc3117e7c443462699ed5e0:conditional_permission_with_unestablished_prerequisite"
+      ],
+      "seconds": 6.058986299998651
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-2dc3117e7c443462699ed5e0",
+                        "PASS-2503a79b6b7336207b91cbd6"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "blackout.mechanism_status",
+                          "blackout.occurred",
+                          "vision.visual_field.confirmed_defect"
+                        ]
+                      },
+                      "maxItems": 3,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.\\n\\nThe optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.\\n\\nAn older report described satisfactory central acuity, but the nurse has not used it to overrule the newer field finding. The driver is unsure whether a remote dizzy spell involved loss of awareness, so the number of confirmed events and the appropriate event-free interval remain unresolved despite documentation of the recent event and the visual field defect.\\n\", \"verified_patient_facts\": {\"blackout.mechanism_status\": {\"value\": \"under_investigation\", \"patient_quotes\": [\"the mechanism is under investigation\", \"The current physician referral states that the mechanism is under investigation. \"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. \", \"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall.\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": true, \"patient_quotes\": [\"The optometrist confirms a visual field defect on a separate current signed assessment. \", \"The optometrist confirms a visual field defect on a separate current signed assessment.\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-BLK-COM-001\", \"section\": \"1.2.1\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"cardiovascular and neurological investigations \\nand referral to several specialists. People should \\nbe advised not to drive until the mechanism is \\nascertained and the corresponding standard met.\", \"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"text_sha256\": \"dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55\", \"char_start\": 0, \"char_end\": 195}, {\"source_id\": \"AFTD2022-VIS-COM-004\", \"section\": \"10.3\", \"pdf_page\": 221, \"printed_page\": 210, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has any visual field defect.\", \"module\": \"vision\", \"passage_id\": \"PASS-2503a79b6b7336207b91cbd6\", \"text_sha256\": \"d54b84732d5cc173a2f28c988779c0e5717b436ce27bb2630ccbc25b9dd9ee61\", \"char_start\": 0, \"char_end\": 100}], \"proposed_applicability_ledger\": [{\"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"fact_fields\": [\"blackout.mechanism_status\", \"blackout.occurred\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"ascertainment of the mechanism\", \"status\": \"not_met\", \"fact_fields\": [\"blackout.mechanism_status\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The driver is not fit to hold an unconditional licence until the mechanism is ascertained.\", \"source_id\": \"AFTD2022-BLK-COM-001\", \"referenced_patient_values\": {\"blackout.mechanism_status\": {\"value\": \"under_investigation\", \"patient_quotes\": [\"the mechanism is under investigation\", \"The current physician referral states that the mechanism is under investigation. \"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. \", \"The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall.\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"vision\", \"passage_id\": \"PASS-2503a79b6b7336207b91cbd6\", \"fact_fields\": [\"vision.visual_field.confirmed_defect\"], \"statement_type\": \"restriction\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"no visual field defect\", \"status\": \"not_met\", \"fact_fields\": [\"vision.visual_field.confirmed_defect\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The driver is not fit to hold an unconditional licence due to the visual field defect.\", \"source_id\": \"AFTD2022-VIS-COM-004\", \"referenced_patient_values\": {\"vision.visual_field.confirmed_defect\": {\"value\": true, \"patient_quotes\": [\"The optometrist confirms a visual field defect on a separate current signed assessment. \", \"The optometrist confirms a visual field defect on a separate current signed assessment.\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"ad12e43b9921c2649edd714fd6ab51e0eb5e04370523925f9adfb94a155dac6c\"}"
+              }
+            ]
+          },
+          "request_sha256": "32ec73611d800d1cc0fccec279e9f8ed6e0722544bc737992a3c1a40d8a164f6",
+          "request_bytes": 10734,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T13:49:50.9340131Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"temporarily_unfit\", \"explanation\": \"The driver had a blackout event while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The mechanism is under investigation, and the driver is not fit to hold an unconditional licence until the mechanism is ascertained. Additionally, the driver has a visual field defect, which establishes a restriction for unconditional licence eligibility. Therefore, the driver is temporarily unfit to hold a commercial driver's licence.\", \"criterion_checks\": [\n{\"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"fact_fields\": [\"blackout.mechanism_status\", \"blackout.occurred\"], \"licence_pathway\": \"conditional\", \"finding\": \"conditional_permission\", \"conclusion\": \"The driver is not fit to hold an unconditional licence until the mechanism is ascertained.\"}, {\"module\": \"vision\", \"passage_id\": \"PASS-2503a79b6b7336207b91cbd6\", \"fact_fields\": [\"vision.visual_field.confirmed_defect\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"The driver is not fit to hold an unconditional licence due to the visual field defect.\"}]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 4917883100,
+            "load_duration": 5697900,
+            "prompt_eval_count": 1890,
+            "prompt_eval_cached_count": 6,
+            "prompt_eval_duration": 810153000,
+            "eval_count": 280,
+            "eval_duration": 3983375000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1890,
+            "eval_count": 280,
+            "prompt_eval_cached_count": 6
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "temporarily_unfit",
+            "explanation": "The driver had a blackout event while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The mechanism is under investigation, and the driver is not fit to hold an unconditional licence until the mechanism is ascertained. Additionally, the driver has a visual field defect, which establishes a restriction for unconditional licence eligibility. Therefore, the driver is temporarily unfit to hold a commercial driver's licence.",
+            "source_ids": [
+              "AFTD2022-BLK-COM-001",
+              "AFTD2022-VIS-COM-004"
+            ],
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "blackout.occurred",
+              "vision.visual_field.confirmed_defect"
+            ],
+            "criterion_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "blackout.mechanism_status",
+                  "blackout.occurred"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The driver is not fit to hold an unconditional licence until the mechanism is ascertained.",
+                "source_id": "AFTD2022-BLK-COM-001",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The driver is not fit to hold an unconditional licence due to the visual field defect.",
+                "source_id": "AFTD2022-VIS-COM-004",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+              "source_id": "AFTD2022-BLK-COM-001",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.1",
+              "text_sha256": "dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 195,
+                  "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "blackout.mechanism_status",
+                  "blackout.occurred"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The driver is not fit to hold an unconditional licence until the mechanism is ascertained.",
+                "source_id": "AFTD2022-BLK-COM-001",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+              "source_id": "AFTD2022-VIS-COM-004",
+              "pdf_page": 221,
+              "printed_page": 210,
+              "section": "10.3",
+              "text_sha256": "d54b84732d5cc173a2f28c988779c0e5717b436ce27bb2630ccbc25b9dd9ee61",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 100,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+                "fact_fields": [
+                  "vision.visual_field.confirmed_defect"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The driver is not fit to hold an unconditional licence due to the visual field defect.",
+                "source_id": "AFTD2022-VIS-COM-004",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "temporary_restriction_not_established_in_checks"
+          ],
+          "seconds": 4.94627429999673
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The driver had a blackout event while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The mechanism is under investigation, and the driver is not fit to hold an unconditional licence until the mechanism is ascertained. Additionally, the driver has a visual field defect, which establishes a restriction for unconditional licence eligibility. Therefore, the driver is temporarily unfit to hold a commercial driver's licence.",
+        "source_ids": [
+          "AFTD2022-BLK-COM-001",
+          "AFTD2022-VIS-COM-004"
+        ],
+        "fact_fields": [
+          "blackout.mechanism_status",
+          "blackout.occurred",
+          "vision.visual_field.confirmed_defect"
+        ],
+        "criterion_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "blackout.occurred"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The driver is not fit to hold an unconditional licence until the mechanism is ascertained.",
+            "source_id": "AFTD2022-BLK-COM-001",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The driver is not fit to hold an unconditional licence due to the visual field defect.",
+            "source_id": "AFTD2022-VIS-COM-004",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+          "source_id": "AFTD2022-BLK-COM-001",
+          "pdf_page": 68,
+          "printed_page": 57,
+          "section": "1.2.1",
+          "text_sha256": "dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 195,
+              "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+            "fact_fields": [
+              "blackout.mechanism_status",
+              "blackout.occurred"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The driver is not fit to hold an unconditional licence until the mechanism is ascertained.",
+            "source_id": "AFTD2022-BLK-COM-001",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+          "source_id": "AFTD2022-VIS-COM-004",
+          "pdf_page": 221,
+          "printed_page": 210,
+          "section": "10.3",
+          "text_sha256": "d54b84732d5cc173a2f28c988779c0e5717b436ce27bb2630ccbc25b9dd9ee61",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 100,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-2503a79b6b7336207b91cbd6",
+            "fact_fields": [
+              "vision.visual_field.confirmed_defect"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The driver is not fit to hold an unconditional licence due to the visual field defect.",
+            "source_id": "AFTD2022-VIS-COM-004",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has any visual field defect."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [
+        "temporary_restriction_not_established_in_checks"
+      ],
+      "seconds": 4.946277099996223
+    }
+  },
+  "support_review": "pending_independent_review"
+}

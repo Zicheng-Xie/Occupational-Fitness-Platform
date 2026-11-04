@@ -1,0 +1,42 @@
+{
+  "config": {
+    "workflow_config": "configs/workflow.yaml",
+    "output": "outputs/experiments/judgment_comparison",
+    "models": [
+      "llama3:8b",
+      "qwen3.5:4b-q4_K_M"
+    ],
+    "methods": [
+      "vector",
+      "bm25",
+      "hybrid",
+      "graph_local",
+      "lightrag",
+      "graphrag",
+      "no_evidence",
+      "reference_evidence"
+    ],
+    "repeats": 3,
+    "top_k": 5,
+    "sensitivity_k": 10,
+    "evidence_max_bytes": 9000,
+    "prompt_max_bytes": 24000,
+    "context_length": 8192,
+    "output_tokens": 1536,
+    "graph_model": "qwen3.5:4b-q4_K_M",
+    "graph_context_length": 32768,
+    "embedding_model": "nomic-embed-text",
+    "endpoint": "http://127.0.0.1:11434",
+    "external_timeout_seconds": 7200,
+    "cohorts": {
+      "engineering": "data/cases/gold/workflow_expectations.json",
+      "complex": "data/cases/gold/validation_complex_expectations.json"
+    }
+  },
+  "corpus_sha256": "f2465705cb09fbcad1194c8668bd0b742088e379fe35cf69aedc3931c69f17b3",
+  "label_sha256": "b798ba91c44711084126e7baa0c22ad5c165db4519ce02355bbfe0175704ae95",
+  "system_sha256": "776678a1f3daefae32d8d92d23d2033365e1135a365376e0134e37e13ffca37b",
+  "seed": 0,
+  "clinical_review_status": "pending",
+  "production_mutation": false
+}

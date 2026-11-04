@@ -1,0 +1,511 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "SYN-EXT-009",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 0
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "failed",
+  "stages": {
+    "applicability": {
+      "status": "failed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "diabetes.present",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "diabetes.present",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"blackout\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nThe report contains no blackout history information.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\ndiabetes.present = false\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-2332d9548f2abd01\", \"section\": \"1.2.3\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"1.2.3. Blackouts due to medical \\ncauses not covered in the standards\\nIf the cause of the blackout is determined \\nto be a medical condition not covered in \\nthe standards, then first principles regarding \\nfitness to drive should be applied (refer to \\nPart A section 2. Assessing fitness to drive \\n– general guidance). Considerations include \\nthe likelihood of recurrence of blackout and \\nthe treatability of the condition as well as the \\nnature of the driving task. There should also be \\nan appropriate review period. A more stringent \\napproach should be considered for commercial \\nvehicle drivers.\", \"module\": \"blackout\", \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\", \"text_sha256\": \"01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398\", \"char_start\": 0, \"char_end\": 596, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-BLK-COM-006\", \"section\": \"1.3\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"themselves with the information in this chapter \\nand the tabulated standards before assessing a \\nperson’s fitness to drive. \\nWhere a firm diagnosis has been made, the \\nstandard appropriate to the condition should \\nbe referred to in this publication (refer to Figure \\n6. Management of blackouts and driving). For \\nblackouts due to medical causes not covered \\nin the standard, refer to first principles (refer to \\nPart A section 2. Assessing fitness to drive – \\ngeneral guidance). For blackouts where, after \\ninvestigation, it is not possible to diagnose one \\nof the conditions covered elsewhere in this \\npublication, refer to the table for blackouts of \\nuncertain nature over the page.\", \"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"text_sha256\": \"d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574\", \"char_start\": 0, \"char_end\": 684, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-EXP-3a8e08652c83a2d0\", \"section\": \"1.2.4\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.2.4. Blackouts of undetermined \\nmechanism\\nIf, despite extensive investigation, the \\nmechanism of a blackout cannot be determined, \\nfitness to drive should be assessed according \\nto section 1.3. Medical standards for licensing. \\nThe standards for blackout of undetermined \\nmechanism are similar to those for seizure.\", \"module\": \"blackout\", \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\", \"text_sha256\": \"3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853\", \"char_start\": 0, \"char_end\": 317, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-EXP-1292b0286ae90dcd\", \"section\": \"1.3\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.3.\\t Medical standards \\nfor licensing\\nRequirements for unconditional and conditional \\nlicences are outlined in the following tables. \\nHealth professionals should familiarise \\nFigure 6.\\t\\nManagement of blackouts and driving\\nBlac\\n(may be while driving or\\nAdvise not to drive until the c\\nhistory, investigations\\nSyncope\\nEpilepsy/\\nseizure\\nHypogly-\\ncaemic event\\nDru\\nalco\\nmis\\nRefer to \\nsection \\n6.2. \\nRefer to \\nsection 3. \\nRefe\\nsecti\", \"module\": \"blackout\", \"passage_id\": \"PASS-6174748f4c02107432f2c67a\", \"text_sha256\": \"79ffc5d3b2dc15dd4bcaf8ba7cbd9edc7d4200102f1ff0a035fc1e025c1de554\", \"char_start\": 0, \"char_end\": 427, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-EXP-5546204ae4ffe0ee\", \"section\": \"1.3\", \"pdf_page\": 71, \"printed_page\": 60, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nWhere a person with one or more blackouts \\nof undetermined mechanism does not \\nmeet the standards above for a conditional \\nlicence but may, in the opinion of the \\ntreating specialist, be safe to drive, a \\nconditional licence may be considered by \\nthe driver licensing authority, subject to at \\nleast annual review:\\n•\\t if the driver licensing authority, after \\nconsidering information provided by the \\ntreating specialist(s), considers that the \\nrisk of a crash caused by a blackout is \\nacceptably low.\", \"module\": \"blackout\", \"passage_id\": \"PASS-7ee50d3e0359202b51f4380f\", \"text_sha256\": \"f59e02007fcbdd8180a272dfb7ddfb03d20bb27b18b729d0db3da4dbe29759b0\", \"char_start\": 0, \"char_end\": 658, \"applicability_slot\": \"P5\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "f0460c7786cdf26cc2b790f05d291384ed065e81ba04dbd21403cb286ee8f460",
+          "request_bytes": 12967,
+          "status": "failed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T14:32:14.4020925Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage outlines a pathway for drivers with blackouts of unknown medical cause. However, the nurse note explicitly states there is no blackout history information in the report. Without verified patient facts confirming a blackout event, this conditional opportunity cannot be applied.\"}, \"P2\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"This passage directs clinicians to refer to standards for blackouts of uncertain nature. Since no blackout history is recorded in the verified patient facts, the prerequisite for assessing fitness regarding an undetermined mechanism is not met.\"}, \"P3\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage discusses blackouts of undetermined mechanism and compares them to seizure standards. The absence of any blackout history in the verified facts means this specific assessment pathway is not applicable.\"}, \"P4\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"This passage introduces medical standards for licensing, including tables for various conditions. The lack of a verified blackout history prevents the application of these specific blackout-related standards.\"}, \"P5\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage details a conditional licence pathway for commercial drivers with blackouts of undetermined mechanism. The nurse note confirms no blackout history exists in the report, making this specific conditional permission inapplicable.\"}}\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 11697635200,
+            "load_duration": 15542700,
+            "prompt_eval_count": 2674,
+            "prompt_eval_cached_count": 557,
+            "prompt_eval_duration": 961682000,
+            "eval_count": 706,
+            "eval_duration": 10444806000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2674,
+            "eval_count": 706,
+            "prompt_eval_cached_count": 557
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Established findings require a verified patient fact reference",
+          "failure_stage": "structural_validation",
+          "seconds": 11.726277100002335
+        },
+        {
+          "number": 2,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "diabetes.present",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "diabetes.present",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"blackout\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nThe report contains no blackout history information.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\ndiabetes.present = false\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-2332d9548f2abd01\", \"section\": \"1.2.3\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"1.2.3. Blackouts due to medical \\ncauses not covered in the standards\\nIf the cause of the blackout is determined \\nto be a medical condition not covered in \\nthe standards, then first principles regarding \\nfitness to drive should be applied (refer to \\nPart A section 2. Assessing fitness to drive \\n– general guidance). Considerations include \\nthe likelihood of recurrence of blackout and \\nthe treatability of the condition as well as the \\nnature of the driving task. There should also be \\nan appropriate review period. A more stringent \\napproach should be considered for commercial \\nvehicle drivers.\", \"module\": \"blackout\", \"passage_id\": \"PASS-f518b995ccbf6dfc41900b70\", \"text_sha256\": \"01cca62bbfdceb1171006de5a9572ece8e6a954b1c40f4c662218ab6d8c32398\", \"char_start\": 0, \"char_end\": 596, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-BLK-COM-006\", \"section\": \"1.3\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"themselves with the information in this chapter \\nand the tabulated standards before assessing a \\nperson’s fitness to drive. \\nWhere a firm diagnosis has been made, the \\nstandard appropriate to the condition should \\nbe referred to in this publication (refer to Figure \\n6. Management of blackouts and driving). For \\nblackouts due to medical causes not covered \\nin the standard, refer to first principles (refer to \\nPart A section 2. Assessing fitness to drive – \\ngeneral guidance). For blackouts where, after \\ninvestigation, it is not possible to diagnose one \\nof the conditions covered elsewhere in this \\npublication, refer to the table for blackouts of \\nuncertain nature over the page.\", \"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"text_sha256\": \"d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574\", \"char_start\": 0, \"char_end\": 684, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-EXP-3a8e08652c83a2d0\", \"section\": \"1.2.4\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.2.4. Blackouts of undetermined \\nmechanism\\nIf, despite extensive investigation, the \\nmechanism of a blackout cannot be determined, \\nfitness to drive should be assessed according \\nto section 1.3. Medical standards for licensing. \\nThe standards for blackout of undetermined \\nmechanism are similar to those for seizure.\", \"module\": \"blackout\", \"passage_id\": \"PASS-82afe6d85f71189739c9ff06\", \"text_sha256\": \"3a3fc2a9bca8dac12089d10361abfd72474bd1b89fe905446fd67acef801c853\", \"char_start\": 0, \"char_end\": 317, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-EXP-1292b0286ae90dcd\", \"section\": \"1.3\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"1.3.\\t Medical standards \\nfor licensing\\nRequirements for unconditional and conditional \\nlicences are outlined in the following tables. \\nHealth professionals should familiarise \\nFigure 6.\\t\\nManagement of blackouts and driving\\nBlac\\n(may be while driving or\\nAdvise not to drive until the c\\nhistory, investigations\\nSyncope\\nEpilepsy/\\nseizure\\nHypogly-\\ncaemic event\\nDru\\nalco\\nmis\\nRefer to \\nsection \\n6.2. \\nRefer to \\nsection 3. \\nRefe\\nsecti\", \"module\": \"blackout\", \"passage_id\": \"PASS-6174748f4c02107432f2c67a\", \"text_sha256\": \"79ffc5d3b2dc15dd4bcaf8ba7cbd9edc7d4200102f1ff0a035fc1e025c1de554\", \"char_start\": 0, \"char_end\": 427, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-EXP-5546204ae4ffe0ee\", \"section\": \"1.3\", \"pdf_page\": 71, \"printed_page\": 60, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nWhere a person with one or more blackouts \\nof undetermined mechanism does not \\nmeet the standards above for a conditional \\nlicence but may, in the opinion of the \\ntreating specialist, be safe to drive, a \\nconditional licence may be considered by \\nthe driver licensing authority, subject to at \\nleast annual review:\\n•\\t if the driver licensing authority, after \\nconsidering information provided by the \\ntreating specialist(s), considers that the \\nrisk of a crash caused by a blackout is \\nacceptably low.\", \"module\": \"blackout\", \"passage_id\": \"PASS-7ee50d3e0359202b51f4380f\", \"text_sha256\": \"f59e02007fcbdd8180a272dfb7ddfb03d20bb27b18b729d0db3da4dbe29759b0\", \"char_start\": 0, \"char_end\": 658, \"applicability_slot\": \"P5\"}]}"
+              },
+              {
+                "role": "assistant",
+                "content": "{\"passages\": {\"P1\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage outlines a pathway for drivers with blackouts of unknown medical cause. However, the nurse note explicitly states there is no blackout history information in the report. Without verified patient facts confirming a blackout event, this conditional opportunity cannot be applied.\"}, \"P2\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"This passage directs clinicians to refer to standards for blackouts of uncertain nature. Since no blackout history is recorded in the verified patient facts, the prerequisite for assessing fitness regarding an undetermined mechanism is not met.\"}, \"P3\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage discusses blackouts of undetermined mechanism and compares them to seizure standards. The absence of any blackout history in the verified facts means this specific assessment pathway is not applicable.\"}, \"P4\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"This passage introduces medical standards for licensing, including tables for various conditions. The lack of a verified blackout history prevents the application of these specific blackout-related standards.\"}, \"P5\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage details a conditional licence pathway for commercial drivers with blackouts of undetermined mechanism. The nurse note confirms no blackout history exists in the report, making this specific conditional permission inapplicable.\"}}\n}"
+              },
+              {
+                "role": "user",
+                "content": "The output failed structural validation: ValueError: Established findings require a verified patient fact reference. Correct only the output contract using the SAME supplied facts and original passages. Do not invent facts, quotations or identifiers. This validator provides no correct fitness outcome. Semantic consistency flags are not repair instructions."
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "4a2825989ad28a466875f98c1a38cb357f8994613e8b5f7adc53a695f8c5f776",
+          "request_bytes": 16516,
+          "status": "failed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T14:32:22.5728416Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage outlines a pathway for drivers with blackouts of unknown medical cause. However, the nurse note explicitly states there is no blackout history information in the report. Without verified patient facts confirming a blackout event, this conditional opportunity cannot be applied.\"}, \"P2\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"This passage directs clinicians to refer to standards for blackouts of uncertain nature. Since no blackout history is recorded in the verified patient facts, the prerequisite for assessing fitness regarding an undetermined mechanism is not met.\"}, \"P3\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage discusses blackouts of undetermined mechanism and compares them to seizure standards. The absence of any blackout history in the verified facts means this specific assessment pathway is not applicable.\"}, \"P4\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"This passage introduces medical standards for licensing, including tables for various conditions. The lack of a verified blackout history prevents the application of these specific blackout-related standards.\"}, \"P5\": {\"fact_fields\": [], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"general_information\", \"prerequisites\": [{\"requirement\": \"blackout_history\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage details a conditional licence pathway for commercial drivers with blackouts of undetermined mechanism. The nurse note confirms no blackout history exists in the report, making this specific conditional permission inapplicable.\"}}\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 8140205900,
+            "load_duration": 3100600,
+            "prompt_eval_count": 3360,
+            "prompt_eval_cached_count": 2670,
+            "prompt_eval_duration": 347886000,
+            "eval_count": 621,
+            "eval_duration": 7754684000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3360,
+            "eval_count": 621,
+            "prompt_eval_cached_count": 2670
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Established findings require a verified patient fact reference",
+          "failure_stage": "structural_validation",
+          "seconds": 8.17058160000306
+        }
+      ],
+      "error": "ValueError: Established findings require a verified patient fact reference",
+      "seconds": 19.896966600004816
+    }
+  },
+  "support_review": "pending_independent_review"
+}

@@ -1,0 +1,31 @@
+schema_version: 1.2.0
+project_root: ../../..
+rules: configs/rules/austroads_commercial_v1.yaml
+anchors: configs/source_anchors.json
+catalogue: data/knowledge/processed/source_catalogue.json
+output_directory: outputs/runs
+retrieval:
+  mode: chroma
+  top_k: 5
+  candidate_k: 20
+  collection_name: aftd_commercial_v1_1
+  persist_directory: .runtime/complex_long_200/production_chroma
+  embedding_model: nomic-embed-text
+  ollama_url: http://127.0.0.1:11434
+llm:
+  enabled: true
+  provider: ollama
+  base_url: http://127.0.0.1:11434
+  model: llama3:8b
+  timeout_seconds: 120
+  extraction_enabled: true
+  semantic_review_enabled: true
+  route_classification_enabled: false
+  narrative_enabled: false
+  context_length: 8192
+  max_output_tokens: 2048
+  max_input_chars: 10000
+  extraction_chunk_chars: 6000
+  extraction_chunk_overlap: 400
+  think: null
+  model_digest: 365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1

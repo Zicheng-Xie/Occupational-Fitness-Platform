@@ -1,0 +1,439 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-09",
+    "evidence_policy": "reference_evidence",
+    "protocol": "applicability_first",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "failed",
+  "stages": {
+    "applicability": {
+      "status": "failed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver reports a single home blood-pressure display of 179/103 after carrying equipment upstairs, but the cuff size is unknown and today's resting measurement has not been repeated; no clinician has established persistent hypertension. He recalls a normal value some months ago and asks which figure should be used, while the nurse records both accounts without selecting a persistent value or deriving a period of treatment control.\\n\\nAn unsigned hearing worksheet contains a number of 46 dB, but it does not identify the ear, the tested frequencies or whether a hearing aid was worn. The driver says he can usually follow conversation yet misses some radio messages in background noise, and a formal assessment is booked rather than completed.\\n\\nThe driver describes no witnessed loss of consciousness but sometimes feels light-headed when standing quickly. No current specialist conclusion explains the symptom. The note intentionally contains concerns worth retrieving guidance for, while lacking a verified persistent BP and a valid unaided better-ear average; neither numerical threshold should be treated as established by these fragments.\\n\", \"verified_patient_facts\": {}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-HEAR-COM-002\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"A person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\", \"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"text_sha256\": \"78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a\", \"char_start\": 0, \"char_end\": 176, \"applicability_slot\": \"P2\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "48af7fb43b327db377fb925d296fa08fcd971dca3dc76c352c8aeba46e78369c",
+          "request_bytes": 7739,
+          "status": "failed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T16:04:52.3582887Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"consistent blood pressure > 170 systolic or > 100 diastolic (treated or untreated)\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\",\"conclusion\": \"The passage defines a restriction for consistent hypertension (>170/100). No verified patient facts confirm persistent hypertension; the reported 179/103 is a single elevated reading without confirmed consistency or treatment status. The finding remains an established restriction clause but does not\"},\"P2\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"unaided hearing loss ≥ 40 dB in the better ear (averaged over 0.5, 1, 2 and 3 KHz)\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\",\"conclusion\": \"The passage defines a restriction for unaided hearing loss ≥40 dB in the better ear. The unsigned worksheet shows 46 dB but lacks ear identification, frequency averaging, and confirmation of unaided status. No verified patient facts confirm the specific threshold requirement. The finding remains an\"}\n}\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 6669471800,
+            "load_duration": 3325000,
+            "prompt_eval_count": 1271,
+            "prompt_eval_cached_count": 1267,
+            "prompt_eval_duration": 122608000,
+            "eval_count": 358,
+            "eval_duration": 6528761000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1271,
+            "eval_count": 358,
+            "prompt_eval_cached_count": 1267
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Established findings require a verified patient fact reference",
+          "failure_stage": "structural_validation",
+          "seconds": 6.6842984999966575
+        },
+        {
+          "number": 2,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver reports a single home blood-pressure display of 179/103 after carrying equipment upstairs, but the cuff size is unknown and today's resting measurement has not been repeated; no clinician has established persistent hypertension. He recalls a normal value some months ago and asks which figure should be used, while the nurse records both accounts without selecting a persistent value or deriving a period of treatment control.\\n\\nAn unsigned hearing worksheet contains a number of 46 dB, but it does not identify the ear, the tested frequencies or whether a hearing aid was worn. The driver says he can usually follow conversation yet misses some radio messages in background noise, and a formal assessment is booked rather than completed.\\n\\nThe driver describes no witnessed loss of consciousness but sometimes feels light-headed when standing quickly. No current specialist conclusion explains the symptom. The note intentionally contains concerns worth retrieving guidance for, while lacking a verified persistent BP and a valid unaided better-ear average; neither numerical threshold should be treated as established by these fragments.\\n\", \"verified_patient_facts\": {}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-HEAR-COM-002\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"A person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\", \"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"text_sha256\": \"78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a\", \"char_start\": 0, \"char_end\": 176, \"applicability_slot\": \"P2\"}]}"
+              },
+              {
+                "role": "assistant",
+                "content": "{\"passages\": {\"P1\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"consistent blood pressure > 170 systolic or > 100 diastolic (treated or untreated)\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\",\"conclusion\": \"The passage defines a restriction for consistent hypertension (>170/100). No verified patient facts confirm persistent hypertension; the reported 179/103 is a single elevated reading without confirmed consistency or treatment status. The finding remains an established restriction clause but does not\"},\"P2\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"unaided hearing loss ≥ 40 dB in the better ear (averaged over 0.5, 1, 2 and 3 KHz)\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\",\"conclusion\": \"The passage defines a restriction for unaided hearing loss ≥40 dB in the better ear. The unsigned worksheet shows 46 dB but lacks ear identification, frequency averaging, and confirmation of unaided status. No verified patient facts confirm the specific threshold requirement. The finding remains an\"}\n}\n}"
+              },
+              {
+                "role": "user",
+                "content": "The output failed structural validation: ValueError: Established findings require a verified patient fact reference. Correct only the output contract using the SAME supplied facts and original passages. Do not invent facts, quotations or identifiers. This validator provides no correct fitness outcome. Semantic consistency flags are not repair instructions."
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "6497dc87c0959147879eb416564f6584aedca5389049dc7e7f05397f4e560d82",
+          "request_bytes": 9654,
+          "status": "failed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T16:04:59.4195757Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"consistent blood pressure > 170 systolic or > 100 diastolic (treated or untreated)\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage defines a restriction for consistent hypertension (>170/100). No verified patient facts confirm persistent hypertension; the reported 179/103 is a single elevated reading without confirmed consistency or treatment status. The finding remains an established restriction clause but does not\"},\"P2\": {\"fact_fields\": [], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"unaided hearing loss ≥ 40 dB in the better ear (averaged over 0.5, 1, 2 and 3 KHz)\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage defines a restriction for unaided hearing loss ≥40 dB in the better ear. The unsigned worksheet shows 46 dB but lacks ear identification, frequency averaging, and confirmation of unaided status. No verified patient facts confirm the specific threshold requirement. The finding remains an\"}}\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 7049449200,
+            "load_duration": 3230100,
+            "prompt_eval_count": 1672,
+            "prompt_eval_cached_count": 1267,
+            "prompt_eval_duration": 367338000,
+            "eval_count": 337,
+            "eval_duration": 6660653000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1672,
+            "eval_count": 337,
+            "prompt_eval_cached_count": 1267
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Established findings require a verified patient fact reference",
+          "failure_stage": "structural_validation",
+          "seconds": 7.061180400000012
+        }
+      ],
+      "error": "ValueError: Established findings require a verified patient fact reference",
+      "seconds": 13.745581399998628
+    }
+  },
+  "support_review": "pending_independent_review"
+}

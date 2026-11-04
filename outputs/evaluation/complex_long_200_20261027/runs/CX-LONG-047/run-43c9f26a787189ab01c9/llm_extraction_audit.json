@@ -1,0 +1,102 @@
+{
+  "model": "llama3:8b",
+  "proposals": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "quote": "The nurse reviews a commercial driver's symptoms alongside information from a witness, the treating team and an older workplace form, because each source describes a different part of the story; the occupational record retains those differences and identifies completed current findings without turning a booking, a family account or a recollection into a measured patient result.",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 66,
+      "source_end": 446
+    },
+    {
+      "field": "diabetes.acutely_unwell",
+      "value": true,
+      "quote": "The current physician assessment explicitly describes the driver with established diabetes as acutely unwell with metabolically unstable diabetes, after vomiting and a measured glucose of 25 mmol/L prompted urgent assessment;",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 448,
+      "source_end": 673
+    },
+    {
+      "field": "diabetes.metabolically_unstable",
+      "value": true,
+      "quote": "The current physician assessment explicitly describes the driver with established diabetes as acutely unwell with metabolically unstable diabetes, after vomiting and a measured glucose of 25 mmol/L prompted urgent assessment;",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 448,
+      "source_end": 673
+    }
+  ],
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "rejected": [
+    {
+      "field": "diabetes.glucose",
+      "value": 25.0,
+      "quote": "after vomiting and a measured glucose of 25 mmol/L prompted urgent assessment;",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    }
+  ],
+  "authoritative_facts_modified": true,
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 824,
+      "eval_count": 330,
+      "total_duration": 5059087300
+    }
+  ],
+  "input_format": "utf-8 text",
+  "output_format": "field_dictionary_grounded_proposals_v1",
+  "accepted_fields": [
+    "diabetes.metabolically_unstable"
+  ],
+  "withheld": [
+    {
+      "field": "diabetes.glucose",
+      "value": 25.0,
+      "quote": "after vomiting and a measured glucose of 25 mmol/L prompted urgent assessment;",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "quote": "The nurse reviews a commercial driver's symptoms alongside information from a witness, the treating team and an older workplace form, because each source describes a different part of the story; the occupational record retains those differences and identifies completed current findings without turning a booking, a family account or a recollection into a measured patient result.",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 66,
+      "source_end": 446,
+      "reason": "value_not_supported_by_quote"
+    },
+    {
+      "field": "diabetes.acutely_unwell",
+      "value": true,
+      "quote": "The current physician assessment explicitly describes the driver with established diabetes as acutely unwell with metabolically unstable diabetes, after vomiting and a measured glucose of 25 mmol/L prompted urgent assessment;",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 448,
+      "source_end": 673,
+      "reason": "value_not_supported_by_quote"
+    }
+  ],
+  "grounding_policy": "exact_quote_type_range_and_field_semantics_v1",
+  "status": "completed"
+}

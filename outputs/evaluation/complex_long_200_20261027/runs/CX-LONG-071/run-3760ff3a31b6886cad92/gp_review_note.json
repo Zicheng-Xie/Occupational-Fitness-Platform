@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.2.0",
+  "case_id": "CX-LONG-071",
+  "status": "DRAFT",
+  "assessment_outcome": "temporarily_unfit",
+  "modules": [
+    {
+      "module": "vision",
+      "assessment_outcome": "insufficient_information",
+      "route": "missing_information",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "vision.diplopia.present",
+        "vision.monocular",
+        "vision.uncorrected.better_eye",
+        "vision.uncorrected.left.snellen",
+        "vision.uncorrected.right.snellen",
+        "vision.visual_field.confirmed_defect"
+      ],
+      "warnings": []
+    },
+    {
+      "module": "diabetes",
+      "assessment_outcome": "temporarily_unfit",
+      "route": "human_review",
+      "triggered_rule_ids": [
+        "DM-COM-ACUTE-UNSTABLE-001"
+      ],
+      "missing_fields": [
+        "diabetes.driving_relevant_comorbidity_status",
+        "diabetes.gestational",
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+        "diabetes.treatment_category"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    }
+  ],
+  "rule_result_sha256": "bba0a8917aae7913ed3fb6884dc98dcffaf685ad9ff2bce3bdc0aefb580be978",
+  "evidence_pack_sha256": "3734475adb6f60a38ab1f770fa6d4a08a9a7438dfe188100ec126053f3352f7d",
+  "summary": "CX-LONG-071: Temporarily unfit. 2 requested modules; 11 unresolved fact fields. This draft is occupational fitness decision support. The result is limited to the implemented criteria and is not a licensing or employment decision.",
+  "review_checklist": [
+    "Clinician: review source facts, rule applicability and every provisional conclusion.",
+    "Confirm the commercial driving task and assess conditions outside the five-module scope.",
+    "Confirm missing/unverified case fact: diabetes.driving_relevant_comorbidity_status",
+    "Confirm missing/unverified case fact: diabetes.gestational",
+    "Confirm missing/unverified case fact: diabetes.severe_hypoglycaemic_event.occurred",
+    "Confirm missing/unverified case fact: diabetes.severe_hypoglycaemic_event.weeks_since_last",
+    "Confirm missing/unverified case fact: diabetes.treatment_category",
+    "Confirm missing/unverified case fact: vision.diplopia.present",
+    "Confirm missing/unverified case fact: vision.monocular",
+    "Confirm missing/unverified case fact: vision.uncorrected.better_eye",
+    "Confirm missing/unverified case fact: vision.uncorrected.left.snellen",
+    "Confirm missing/unverified case fact: vision.uncorrected.right.snellen",
+    "Confirm missing/unverified case fact: vision.visual_field.confirmed_defect",
+    "requires_confirmation",
+    "Extraction semantic review: Possible extraction issues require confirmation",
+    "This second-pass model review does not establish clinical accuracy. A clinician must verify the original record and any flagged information.",
+    "Confirm diabetes.treatment_category (omission): Independent source reading differs from the extraction. The driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment.",
+    "Fields withheld from rule inputs: diabetes.treatment_category"
+  ],
+  "llm_commentary": null,
+  "clinician_name": null,
+  "signed_at": null,
+  "final_clinical_authorization_required": true
+}

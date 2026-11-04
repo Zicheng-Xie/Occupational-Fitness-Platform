@@ -1,0 +1,357 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-10",
+    "evidence_policy": "reference_evidence",
+    "protocol": "passage_selection",
+    "repeat": 2
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "failed",
+  "stages": {
+    "outcome_first": {
+      "status": "failed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-2dc3117e7c443462699ed5e0",
+                        "PASS-17c4f5068f374f2597cb7e8e"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver's mother has diabetes and uses insulin, but the driver says there has been no diagnosis of diabetes for him; he has recently felt thirsty and noticed intermittent blur, and a laboratory appointment has been arranged. A borrowed glucose meter produced an isolated elevated value without a verified technique or accompanying clinical assessment, so neither a diagnosis nor a treatment category has been established from the available material.\\n\\nHe describes a brief blank sensation after poor sleep but remembers the whole conversation, while a colleague says he paused before replying; there is no confirmed loss of consciousness and no specialist determination of a cause. A referral asks whether further cardiac or neurological investigation is needed and does not supply a definitive explanation or recurrence assessment.\\n\\nAn undated eye card lists 6/12 and 6/9 without identifying the eyes or correction status. The driver thinks the blur improves after resting, but current acuity, fields and the presence of true diplopia have not been established. The nurse distinguishes family history and provisional questions from confirmed patient findings.\\n\", \"verified_patient_facts\": {}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-BLK-COM-001\", \"section\": \"1.2.1\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"cardiovascular and neurological investigations \\nand referral to several specialists. People should \\nbe advised not to drive until the mechanism is \\nascertained and the corresponding standard met.\", \"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"text_sha256\": \"dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55\", \"char_start\": 0, \"char_end\": 195}, {\"source_id\": \"AFTD2022-VIS-COM-002\", \"section\": \"10.3\", \"pdf_page\": 220, \"printed_page\": 209, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person’s uncorrected visual acuity is \\nworse than 6/9 in the better eye; or\\n•\\t if the person’s uncorrected visual acuity is \\nworse than 6/18 in either eye.\", \"module\": \"vision\", \"passage_id\": \"PASS-17c4f5068f374f2597cb7e8e\", \"text_sha256\": \"598a3da216c03def0f6bcbdcd6bd036f57c5cf7a1e99d224b1fd08d5908bcc39\", \"char_start\": 0, \"char_end\": 220}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "05f68c3e0bc8d1f6dcf06abd56226adbd267af1f723c53f353b7345bd626c06f",
+          "request_bytes": 8360,
+          "status": "failed",
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T16:08:54.9031015Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"insufficient_information\",\n  \"explanation\": \"No verified patient facts exist to establish eligibility for commercial driving. The nurse note explicitly states that no diagnosis of diabetes has been established, a glucose meter reading lacks verification, and the blackout event is unconfirmed by a specialist. Visual acuity data (6/12 and 6/9) is undated and lacks correction status or eye specification, preventing an assessment against unconditional standards. Hypertension is not mentioned in verified facts. Consequently, no established restrictions can be confirmed, nor can any conditional permissions be granted due to missing evidence for all modules.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"temporary_no_driving\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline requires investigation and referral for blackout events, but verified facts do not confirm a loss of consciousness or a specific cause. Without a confirmed diagnosis, the requirement to stop driving pending ascertainment cannot be established.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-17c4f5068f374f2597cb7e8e\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline sets uncorrected visual acuity thresholds (worse than 6/9 in better eye or 6/18 in either), but the supplied data is undated, lacks correction status, and does not specify which eye was tested. Therefore, the patient's fitness against these criteria cannot be determined.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified fact establishes a diagnosis of diabetes or the use of insulin. The nurse note confirms that neither a diagnosis nor a treatment category has been established from available material, making it impossible to assess eligibility for conditional licence pathways.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified patient fact indicates the presence of hypertension. Without a confirmed diagnosis, no guideline criterion regarding cardiovascular health can be applied.\"\n    },\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified patient fact or guideline evidence regarding hearing assessment is provided. Eligibility cannot be assessed without this data.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 10988076000,
+            "load_duration": 4366200,
+            "prompt_eval_count": 1449,
+            "prompt_eval_cached_count": 1445,
+            "prompt_eval_duration": 131410000,
+            "eval_count": 769,
+            "eval_duration": 10829775000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1449,
+            "eval_count": 769,
+            "prompt_eval_cached_count": 1445
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Criterion module differs from the selected original source",
+          "failure_stage": "structural_validation",
+          "seconds": 11.004936599994835,
+          "provider_called": true
+        },
+        {
+          "number": 2,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-2dc3117e7c443462699ed5e0",
+                        "PASS-17c4f5068f374f2597cb7e8e"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver's mother has diabetes and uses insulin, but the driver says there has been no diagnosis of diabetes for him; he has recently felt thirsty and noticed intermittent blur, and a laboratory appointment has been arranged. A borrowed glucose meter produced an isolated elevated value without a verified technique or accompanying clinical assessment, so neither a diagnosis nor a treatment category has been established from the available material.\\n\\nHe describes a brief blank sensation after poor sleep but remembers the whole conversation, while a colleague says he paused before replying; there is no confirmed loss of consciousness and no specialist determination of a cause. A referral asks whether further cardiac or neurological investigation is needed and does not supply a definitive explanation or recurrence assessment.\\n\\nAn undated eye card lists 6/12 and 6/9 without identifying the eyes or correction status. The driver thinks the blur improves after resting, but current acuity, fields and the presence of true diplopia have not been established. The nurse distinguishes family history and provisional questions from confirmed patient findings.\\n\", \"verified_patient_facts\": {}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-BLK-COM-001\", \"section\": \"1.2.1\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"cardiovascular and neurological investigations \\nand referral to several specialists. People should \\nbe advised not to drive until the mechanism is \\nascertained and the corresponding standard met.\", \"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"text_sha256\": \"dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55\", \"char_start\": 0, \"char_end\": 195}, {\"source_id\": \"AFTD2022-VIS-COM-002\", \"section\": \"10.3\", \"pdf_page\": 220, \"printed_page\": 209, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person’s uncorrected visual acuity is \\nworse than 6/9 in the better eye; or\\n•\\t if the person’s uncorrected visual acuity is \\nworse than 6/18 in either eye.\", \"module\": \"vision\", \"passage_id\": \"PASS-17c4f5068f374f2597cb7e8e\", \"text_sha256\": \"598a3da216c03def0f6bcbdcd6bd036f57c5cf7a1e99d224b1fd08d5908bcc39\", \"char_start\": 0, \"char_end\": 220}]}"
+              },
+              {
+                "role": "assistant",
+                "content": "{\n  \"assessment_outcome\": \"insufficient_information\",\n  \"explanation\": \"No verified patient facts exist to establish eligibility for commercial driving. The nurse note explicitly states that no diagnosis of diabetes has been established, a glucose meter reading lacks verification, and the blackout event is unconfirmed by a specialist. Visual acuity data (6/12 and 6/9) is undated and lacks correction status or eye specification, preventing an assessment against unconditional standards. Hypertension is not mentioned in verified facts. Consequently, no established restrictions can be confirmed, nor can any conditional permissions be granted due to missing evidence for all modules.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"temporary_no_driving\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline requires investigation and referral for blackout events, but verified facts do not confirm a loss of consciousness or a specific cause. Without a confirmed diagnosis, the requirement to stop driving pending ascertainment cannot be established.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-17c4f5068f374f2597cb7e8e\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline sets uncorrected visual acuity thresholds (worse than 6/9 in better eye or 6/18 in either), but the supplied data is undated, lacks correction status, and does not specify which eye was tested. Therefore, the patient's fitness against these criteria cannot be determined.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified fact establishes a diagnosis of diabetes or the use of insulin. The nurse note confirms that neither a diagnosis nor a treatment category has been established from available material, making it impossible to assess eligibility for conditional licence pathways.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified patient fact indicates the presence of hypertension. Without a confirmed diagnosis, no guideline criterion regarding cardiovascular health can be applied.\"\n    },\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified patient fact or guideline evidence regarding hearing assessment is provided. Eligibility cannot be assessed without this data.\"\n    }\n  ]\n}"
+              },
+              {
+                "role": "user",
+                "content": "The previous output failed structural validation: ValueError: Criterion module differs from the selected original source. Correct only the output contract using the SAME original patient facts and evidence. Do not invent a source, passage, quotation or fact. The validator supplies no correct outcome. No semantic consistency flag is a repair instruction."
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "b0fe9a83e7dd375eb79f8a610b104cfec5e63b5cf3396694cf887dc9b00386eb",
+          "request_bytes": 11908,
+          "status": "failed",
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T16:09:05.917844Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"insufficient_information\",\n  \"explanation\": \"No verified patient facts exist to establish eligibility for commercial driving. The nurse note explicitly states that no diagnosis of diabetes has been established, a glucose meter reading lacks verification, and the blackout event is unconfirmed by a specialist. Visual acuity data (6/12 and 6/9) is undated and lacks correction status or eye specification, preventing an assessment against unconditional standards. Hypertension and hearing are not mentioned in verified facts. Consequently, no established restrictions can be confirmed, nor can any conditional permissions be granted due to missing evidence for all modules.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"blackout\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"temporary_no_driving\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline requires investigation and referral for blackout events, but verified facts do not confirm a loss of consciousness or a specific cause. Without a confirmed diagnosis, the requirement to stop driving pending ascertainment cannot be established.\"\n    },\n    {\n      \"module\": \"vision\",\n      \"passage_id\": \"PASS-17c4f5068f374f2597cb7e8e\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The guideline sets uncorrected visual acuity thresholds (worse than 6/9 in better eye or 6/18 in either), but the supplied data is undated, lacks correction status, and does not specify which eye was tested. Therefore, the patient's fitness against these criteria cannot be determined.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified fact establishes a diagnosis of diabetes or the use of insulin. The nurse note confirms that neither a diagnosis nor a treatment category has been established from available material, making it impossible to assess eligibility for conditional licence pathways.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified patient fact indicates the presence of hypertension. Without a confirmed diagnosis, no guideline criterion regarding cardiovascular health can be applied.\"\n    },\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\",\n      \"fact_fields\": [],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"No verified patient fact or guideline evidence regarding hearing assessment is provided. Eligibility cannot be assessed without this data.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 10990976800,
+            "load_duration": 2951200,
+            "prompt_eval_count": 2270,
+            "prompt_eval_cached_count": 1445,
+            "prompt_eval_duration": 614924000,
+            "eval_count": 754,
+            "eval_duration": 10338631000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2270,
+            "eval_count": 754,
+            "prompt_eval_cached_count": 1445
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Criterion module differs from the selected original source",
+          "failure_stage": "structural_validation",
+          "seconds": 11.01502239999536,
+          "provider_called": true
+        }
+      ],
+      "error": "ValueError: Criterion module differs from the selected original source",
+      "seconds": 22.021974499999487
+    }
+  },
+  "support_review": "pending_independent_review"
+}

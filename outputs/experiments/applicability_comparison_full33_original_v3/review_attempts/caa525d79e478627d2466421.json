@@ -1,0 +1,341 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "VAL-MIX-08",
+    "evidence_policy": "module_query",
+    "protocol": "passage_selection",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "outcome_first": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-89f66fa2b99946bf7cef1287",
+                        "PASS-0c4e5d1885b1be7db1a56f0a",
+                        "PASS-64d93951ea0cfe724a5daf99",
+                        "PASS-715342aff6b3feef5a7daef9",
+                        "PASS-c78f4b25ae544e2a61840e6a"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.treatment_category",
+                          "hearing.clinical_assessment",
+                          "hearing.audiometry.available"
+                        ]
+                      },
+                      "maxItems": 4,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver reports established type 2 diabetes. At today's medication review the GP records that diabetes is managed with tablets, with no current insulin prescription. The driver sometimes feels tired after a missed meal but has no contemporaneous glucose measurement from those periods, so the nurse does not classify the tiredness as a confirmed hypoglycaemic episode or assume that hypoglycaemia awareness has been assessed.\\n\\nClinical assessment suggests possible hearing impairment after the driver repeatedly missed spoken instructions, and audiometry has not been performed. He can follow conversation better when facing the speaker, but neither an unaided better-ear threshold nor an aided standard is documented. His employer's earlier form marked hearing satisfactory without describing a test; that form does not supply the missing audiometric measurements.\\n\\nThe driver brings an audiology appointment confirmation and an endocrinology referral, with both visits still pending. The nurse records the documented diabetes treatment and current screening concern while leaving specialist advice, monitoring completeness and quantified hearing performance open for review.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The driver reports established type 2 diabetes. \", \"The driver reports established type 2 diabetes. \", \"The driver reports established type 2 diabetes.\"]}, \"diabetes.treatment_category\": {\"value\": \"glucose_lowering_agent_non_insulin\", \"patient_quotes\": [\"At today's medication review the GP records that diabetes is managed with tablets, with no current insulin prescription. \"]}, \"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"Clinical assessment suggests possible hearing impairment after the driver repeatedly missed spoken instructions, and audiometry has not been performed. \", \"Clinical assessment suggests possible hearing impairment\"]}, \"hearing.audiometry.available\": {\"value\": false, \"patient_quotes\": [\"Clinical assessment suggests possible hearing impairment after the driver repeatedly missed spoken instructions, and audiometry has not been performed. \"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger vehicles \\nor requiring a dangerous goods driver licence – \\nrefer to definition in Table 3)\\nCompliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\\nA person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account the nature of the driving task \\nand information provided by an ENT specialist or \\naudiologist**, as to whether:\\n•\\t the standard is able to be met with a hearing \\naid***.\\nIf the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"text_sha256\": \"6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7\", \"char_start\": 0, \"char_end\": 1620}, {\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632}, {\"source_id\": \"AFTD2022-EXP-e3e1cd7604e64e7e\", \"section\": \"4.2.1\", \"pdf_page\": 117, \"printed_page\": 106, \"source_text\": \"•\\t\\nIf the standard is not able to be met with \\na hearing aid, this does not disqualify the \\nperson from driving. They should be offered \\nindividualised assessment to determine their \\neligibility for a conditional licence. This may \\ncomprise assessment by an ENT specialist \\nor audiologist* including consideration of:\\n\\t\\n−\\nthe person’s medical history – for \\nexample, childhood deafness may have \\nled to good adaptation\\n\\t\\n−\\nthe person’s driving record before and \\nsince the hearing loss \\n\\t\\n−\\nthe nature of the driving task – for \\nexample, the type of vehicle (e.g. truck, \\nbus), roads and distances to be travelled\\n\\t\\n−\\nthe ergonomics of the driving cab – for \\nexample, assistive devices such as \\nmirrors and a GPS \\n\\t\\n−\\nconcomitant medical conditions such as \\nvision impairment or cognitive impairment \\n\\t\\n−\\npractical driver assessment if required \\n(refer to Part A section 2.3.1. Practical \\ndriver assessments). The report may \\nadvise on assistive technologies as a \\nlicence condition. \\nThe driver licensing authority may consider a \\nconditional licence based on the information \\nreceived. Periodic review may include medical \\nreview and/or a practical driver assessment at \\nthe discretion of the driver licensing authority. \\nThe health professional should advise on the \\nfrequency of review as determined by the \\nnatural history of the condition. Stable conditions \\nmay not require periodic review.\\nIn some cases, noise amplification from wearing \\nhearing aids may lead to driver distraction \\nand may warrant individualised assessment as \\nabove to determine fitness to drive without the \\nhearing aid.\", \"module\": \"hearing\", \"passage_id\": \"PASS-64d93951ea0cfe724a5daf99\", \"text_sha256\": \"28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb\", \"char_start\": 0, \"char_end\": 1599}, {\"source_id\": \"AFTD2022-EXP-e3ca8efaf3d71461\", \"section\": \"3.3\", \"pdf_page\": 113, \"printed_page\": 102, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has insulin-treated diabetes.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes on whether \\nthe following criteria are met:\\n•\\t there is no recent history (generally at least \\n6 weeks) of a ‘severe hypoglycaemic event’ \\nas assessed by the specialist; and\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia \\n(refer to section 3.2.1); and\\n•\\t there are no end-organ effects that may \\naffect driving as per this publication.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\", \"text_sha256\": \"4666cf6826c41479889aad7d7073447eb3dc2f0922a39dd24a46dbed118bff5e\", \"char_start\": 0, \"char_end\": 988}, {\"source_id\": \"AFTD2022-HEAR-COM-001\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Compliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\", \"module\": \"hearing\", \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\", \"text_sha256\": \"658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb\", \"char_start\": 0, \"char_end\": 186}]}"
+              }
+            ]
+          },
+          "request_sha256": "66977d44079f0d84d29d92b448b99f9345a3f326a89eaf0300429d42cd925f02",
+          "request_bytes": 16731,
+          "status": "completed",
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T13:53:38.5332154Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"may_meet_conditional_standard\", \"explanation\": \"The driver reports established type 2 diabetes, which is managed with tablets, with no current insulin prescription. The driver sometimes feels tired after a missed meal, but this is not confirmed as a hypoglycaemic episode. The driver's employer's earlier form marked hearing satisfactory without describing a test, and the driver brings an audiology appointment confirmation and an endocrinology referral, with both visits still pending. The nurse records the documented diabetes treatment and current screening concern while leaving specialist advice, monitoring completeness and quantified hearing performance open for review. The driver's current treatment and pending specialist assessments do not meet the unconditional standard, but the driver may be considered for a conditional licence subject to periodic review, taking into account the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.\", \"criterion_checks\": [\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"], \"licence_pathway\": \"conditional\", \"finding\": \"established_restriction\", \"conclusion\": \"does_not_meet_standard\"},\n{\"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"fact_fields\": [\"hearing.clinical_assessment\", \"hearing.audiometry.available\"], \"licence_pathway\": \"conditional\", \"finding\": \"established_restriction\", \"conclusion\": \"does_not_meet_standard\"}\n] }"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 5296859600,
+            "load_duration": 3249700,
+            "prompt_eval_count": 3306,
+            "prompt_eval_cached_count": 3305,
+            "prompt_eval_duration": 37861000,
+            "eval_count": 353,
+            "eval_duration": 5229829000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3306,
+            "eval_count": 353,
+            "prompt_eval_cached_count": 3305
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "may_meet_conditional_standard",
+            "explanation": "The driver reports established type 2 diabetes, which is managed with tablets, with no current insulin prescription. The driver sometimes feels tired after a missed meal, but this is not confirmed as a hypoglycaemic episode. The driver's employer's earlier form marked hearing satisfactory without describing a test, and the driver brings an audiology appointment confirmation and an endocrinology referral, with both visits still pending. The nurse records the documented diabetes treatment and current screening concern while leaving specialist advice, monitoring completeness and quantified hearing performance open for review. The driver's current treatment and pending specialist assessments do not meet the unconditional standard, but the driver may be considered for a conditional licence subject to periodic review, taking into account the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.",
+            "source_ids": [
+              "AFTD2022-EXP-7f3c434bba3c53df",
+              "AFTD2022-EXP-42507db0424f7a27"
+            ],
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category",
+              "hearing.clinical_assessment",
+              "hearing.audiometry.available"
+            ],
+            "criterion_checks": [
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "does_not_meet_standard",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.clinical_assessment",
+                  "hearing.audiometry.available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "does_not_meet_standard",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "does_not_meet_standard",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+              "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1620,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.clinical_assessment",
+                  "hearing.audiometry.available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "does_not_meet_standard",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "conditional_prerequisites_not_established_in_checks"
+          ],
+          "seconds": 5.326101799997559,
+          "provider_called": true
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "explanation": "The driver reports established type 2 diabetes, which is managed with tablets, with no current insulin prescription. The driver sometimes feels tired after a missed meal, but this is not confirmed as a hypoglycaemic episode. The driver's employer's earlier form marked hearing satisfactory without describing a test, and the driver brings an audiology appointment confirmation and an endocrinology referral, with both visits still pending. The nurse records the documented diabetes treatment and current screening concern while leaving specialist advice, monitoring completeness and quantified hearing performance open for review. The driver's current treatment and pending specialist assessments do not meet the unconditional standard, but the driver may be considered for a conditional licence subject to periodic review, taking into account the nature of the driving task and information provided by an endocrinologist or consultant physician specialising in diabetes.",
+        "source_ids": [
+          "AFTD2022-EXP-7f3c434bba3c53df",
+          "AFTD2022-EXP-42507db0424f7a27"
+        ],
+        "fact_fields": [
+          "diabetes.present",
+          "diabetes.treatment_category",
+          "hearing.clinical_assessment",
+          "hearing.audiometry.available"
+        ],
+        "criterion_checks": [
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "does_not_meet_standard",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.clinical_assessment",
+              "hearing.audiometry.available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "does_not_meet_standard",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          }
+        ]
+      },
+      "seconds": 5.327764900001057
+    }
+  },
+  "support_review": "pending_independent_review"
+}

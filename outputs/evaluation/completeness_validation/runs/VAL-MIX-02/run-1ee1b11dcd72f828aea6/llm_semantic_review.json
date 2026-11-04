@@ -1,0 +1,294 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v10",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "f076b169a9cee75c4c9f9c3cdac5d459cc6e5089fd6589996d7f24a04044f3f8",
+  "input_facts_sha256": "5f582c5cdb33780f99dbd0dacd6e96f6df1450a99df68b96de0e8d1adf875c83",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 575,
+      "eval_count": 74,
+      "total_duration": 1567568900
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 536,
+      "eval_count": 48,
+      "total_duration": 1063108000
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 452,
+      "eval_count": 38,
+      "total_duration": 921623500
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 560,
+      "eval_count": 39,
+      "total_duration": 978855900
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 509,
+      "eval_count": 36,
+      "total_duration": 936127600
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 528,
+      "eval_count": 36,
+      "total_duration": 731081900
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 464,
+      "eval_count": 40,
+      "total_duration": 961861400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 464,
+      "eval_count": 40,
+      "total_duration": 933174600
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 512,
+      "eval_count": 36,
+      "total_duration": 949497700
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.present",
+      "kind": "omission",
+      "quote": "At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. The optometrist's signed sheet confirms the measurements; the driver believes a newer pair of glasses improves road-sign reading, but no corrected measurement has yet been entered, and the nurse does not substitute that impression for a measured corrected acuity.",
+      "explanation": "Independent source reading differs from the extraction. The patient has diabetes.",
+      "evidence": [
+        {
+          "start": 56,
+          "end": 487,
+          "quote": "At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. The optometrist's signed sheet confirms the measurements; the driver believes a newer pair of glasses improves road-sign reading, but no corrected measurement has yet been entered, and the nurse does not substitute that impression for a measured corrected acuity.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. The optometrist's signed sheet confirms the measurements; the driver believes a newer pair of glasses improves road-sign reading, but no corrected measurement has yet been entered, and the nurse does not substitute that impression for a measured corrected acuity.",
+      "explanation": "Independent source reading differs from the extraction. not_documented",
+      "evidence": [
+        {
+          "start": 56,
+          "end": 487,
+          "quote": "At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. The optometrist's signed sheet confirms the measurements; the driver believes a newer pair of glasses improves road-sign reading, but no corrected measurement has yet been entered, and the nurse does not substitute that impression for a measured corrected acuity.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.present",
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [
+    "blackout.mechanism_status",
+    "blackout.occurred",
+    "vision.uncorrected.left.snellen",
+    "vision.uncorrected.right.snellen"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {
+    "vision.uncorrected.better_eye": [
+      "vision.uncorrected.right.snellen",
+      "vision.uncorrected.left.snellen"
+    ]
+  },
+  "prompt_payload_sha256": "c5fcbf7a90f5d201af47ec444a4b0c1afdcd206a35e76a942f93ef3c8e538a53",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.present": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status"
+      ],
+      "status": "valid",
+      "request_sha256": "02c8cdc4f1397fee92178de566f0e758f9d47d12c9c602a45d34b06e83f4152f",
+      "response_schema_sha256": "a3fe9ae4fda862fca394707199a4f572e4bd10770541f36cf8eaea8cdd6f6da8"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "blackout.occurred"
+      ],
+      "status": "valid",
+      "request_sha256": "d6cccc62e07e83c48ca54dc854211ace59df1a1f1176333d2f4cf78587de7b31",
+      "response_schema_sha256": "6b6741a7f953f4fd020968731bc10584938f513eb8957b10fd82df0d3dfb8684"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "09a821a64117a598a4a7675fff2694b7214dac7a285de7f2fd633858d81ac556",
+      "response_schema_sha256": "6b6741a7f953f4fd020968731bc10584938f513eb8957b10fd82df0d3dfb8684"
+    },
+    {
+      "batch": 4,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "e32ff2dbdd851555b08f9038a77b6d9d7f8199c5cc336e86c637fcd578536ac2",
+      "response_schema_sha256": "0fcbf5a301ce11f1fccca3721bfe3d6b5b2bedd3f6edccdb9ba287083d1c3c2c"
+    },
+    {
+      "batch": 5,
+      "attempt": 2,
+      "fields": [
+        "vision.diplopia.present"
+      ],
+      "status": "valid",
+      "request_sha256": "d0497623a42ab9376e9f3c3b11875f663cbdc9729a64f62675697865c0450439",
+      "response_schema_sha256": "6b6741a7f953f4fd020968731bc10584938f513eb8957b10fd82df0d3dfb8684"
+    },
+    {
+      "batch": 6,
+      "attempt": 1,
+      "fields": [
+        "vision.uncorrected.left.snellen"
+      ],
+      "status": "valid",
+      "request_sha256": "bfbea43118aa5ad56cd453c8cb1510bb51dac74522bf9a29cd744834369f9210",
+      "response_schema_sha256": "dc1e73eab92f50d562ac222881dbdb044b5707207509a5843baf21c76d68ebfb"
+    },
+    {
+      "batch": 7,
+      "attempt": 1,
+      "fields": [
+        "vision.uncorrected.right.snellen"
+      ],
+      "status": "valid",
+      "request_sha256": "eb1ab14f670ec651ea3d76daa9c3f1b2c10ccd814c06195c59cc3a29f3b8bb92",
+      "response_schema_sha256": "dc1e73eab92f50d562ac222881dbdb044b5707207509a5843baf21c76d68ebfb"
+    },
+    {
+      "batch": 8,
+      "attempt": 1,
+      "fields": [
+        "vision.visual_field.confirmed_defect"
+      ],
+      "status": "valid",
+      "request_sha256": "77922ac57f6570df0028d19ec40559d94546de9dad8b699b9eadbe66b41a9cb9",
+      "response_schema_sha256": "6b6741a7f953f4fd020968731bc10584938f513eb8957b10fd82df0d3dfb8684"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": "under_investigation",
+      "status": "documented",
+      "quote": "The driver experienced a witnessed blackout during a break four weeks earlier. The witness describes complete loss of responsiveness followed by recovery, and the current referral explicitly states that the cause remains under investigation. The driver recalls being hot and hungry before the event, yet neither vasovagal syncope nor hypoglycaemia has been confirmed, and cardiac monitoring is still pending.",
+      "explanation": "The driver experienced a witnessed blackout during a break four weeks earlier. The witness describes complete loss of responsiveness followed by recovery, and the current referral explicitly states that the cause remains under investigation."
+    },
+    {
+      "field": "blackout.occurred",
+      "value": true,
+      "status": "documented",
+      "quote": "The driver experienced a witnessed blackout during a break four weeks earlier. The witness describes complete loss of responsiveness followed by recovery, and the current referral explicitly states that the cause remains under investigation. The driver recalls being hot and hungry before the event, yet neither vasovagal syncope nor hypoglycaemia has been confirmed, and cardiac monitoring is still pending.",
+      "explanation": "Yes, a blackout or transient loss of consciousness was explicitly reported and witnessed."
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. The optometrist's signed sheet confirms the measurements; the driver believes a newer pair of glasses improves road-sign reading, but no corrected measurement has yet been entered, and the nurse does not substitute that impression for a measured corrected acuity.",
+      "explanation": "The patient has diabetes."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "none",
+      "status": "documented",
+      "quote": "At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. The optometrist's signed sheet confirms the measurements; the driver believes a newer pair of glasses improves road-sign reading, but no corrected measurement has yet been entered, and the nurse does not substitute that impression for a measured corrected acuity.",
+      "explanation": "not_documented"
+    },
+    {
+      "field": "vision.diplopia.present",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "Not mentioned"
+    },
+    {
+      "field": "vision.uncorrected.left.snellen",
+      "value": "6/18",
+      "status": "documented",
+      "quote": "At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. The optometrist's signed sheet confirms the measurements; the driver believes a newer pair of glasses improves road-sign reading, but no corrected measurement has yet been entered, and the nurse does not substitute that impression for a measured corrected acuity.",
+      "explanation": "6/18"
+    },
+    {
+      "field": "vision.uncorrected.right.snellen",
+      "value": "6/12",
+      "status": "documented",
+      "quote": "At today's examination, uncorrected visual acuity measures 6/12 in the right eye and 6/18 in the left eye, with each eye tested separately before glasses were applied. The optometrist's signed sheet confirms the measurements; the driver believes a newer pair of glasses improves road-sign reading, but no corrected measurement has yet been entered, and the nurse does not substitute that impression for a measured corrected acuity.",
+      "explanation": "6/12"
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "Not documented"
+    }
+  ],
+  "output_facts_sha256": "30e544a351e014b2f2085e3a6f56224a64995055e3251766f8e7507de5a7dc87",
+  "facts_quarantined": true
+}

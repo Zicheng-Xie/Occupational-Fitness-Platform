@@ -1,0 +1,675 @@
+{
+  "contract": {
+    "method": "graphrag",
+    "module": "hypertension",
+    "corpus_sha256": "e81da5c99682bd8ee7ff4df7a1dbd778fbf5437e51f030870237c6d86ec7b6ab",
+    "documents": [
+      {
+        "source_id": "AFTD2022-HTN-COM-001",
+        "text_sha256": "f32e05b6b50e60e83113f948fad75c083bf67e4ceed1e35d8b27f3ce7dda8200"
+      },
+      {
+        "source_id": "AFTD2022-HTN-COM-002",
+        "text_sha256": "00955f94d8bdb683b4967c9d257d361c871fccc8646ca5c15f23b63f8e68d87a"
+      },
+      {
+        "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+        "text_sha256": "2591e87f8fd49f5c24fa467127205f65611805a64e6c59a1c7312a51192e87f8"
+      },
+      {
+        "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+        "text_sha256": "480bdd6f036e73347ca869ae2804f485ddab24fa03383aaec518b9f7e63a707a"
+      }
+    ],
+    "config": {
+      "preparation_dir": "outputs/experiments/six_method_query_preparation_v2",
+      "expected_preparation_identity": "d79c6930570f958128fbb7a881f1c407e33e45610b345a04130172b5a65d31af",
+      "baseline_dir": "outputs/experiments/shared_retrieval_v1",
+      "output": "outputs/experiments/external_graph_retrieval_v3",
+      "endpoint": "http://127.0.0.1:11434",
+      "audit_endpoint": "http://127.0.0.1:11544",
+      "expected_runtime_version": "0.40.6",
+      "graph_model": "qwen3.5:4b-q4_K_M",
+      "graph_model_digest": "91fa08b9fedfbbda924cd71febc5f6adbf31503cf7811df817dcf93bd56b08ff",
+      "embedding_model": "nomic-embed-text:latest",
+      "embedding_model_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "graph_context_length": 8192,
+      "graph_output_tokens": 4096,
+      "strict_graph_completions": true,
+      "call_timeout_seconds": 240,
+      "worker_timeout_seconds": 5400,
+      "tokenizer_cache": ".runtime/tokenizers",
+      "tokenizer_sha256": {
+        "fb374d419588a4632f3f557e76b4b70aebbca790": "446a9538cb6c348e3516120d7c08b09f57c36495e2acfffe59a5bf8b0cfb1a2d",
+        "9b5ad71b2ce5302211f9c61530b329a4922fc6a4": "223921b76ee99bde995b7ff738513eef100fb51d18c93597a113bcffe865b2a7"
+      }
+    },
+    "environment": {
+      "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+      "dependencies": [
+        [
+          "aiofiles",
+          "25.1.0"
+        ],
+        [
+          "aiohappyeyeballs",
+          "2.7.1"
+        ],
+        [
+          "aiohttp",
+          "3.14.4"
+        ],
+        [
+          "aiosignal",
+          "1.4.0"
+        ],
+        [
+          "annotated-doc",
+          "0.0.5"
+        ],
+        [
+          "annotated-types",
+          "0.8.0"
+        ],
+        [
+          "anyio",
+          "4.15.1"
+        ],
+        [
+          "asttokens",
+          "2.4.1"
+        ],
+        [
+          "attrs",
+          "26.1.0"
+        ],
+        [
+          "azure-core",
+          "1.41.0"
+        ],
+        [
+          "azure-cosmos",
+          "4.17.1"
+        ],
+        [
+          "azure-identity",
+          "1.26.0"
+        ],
+        [
+          "azure-search-documents",
+          "12.0.0"
+        ],
+        [
+          "azure-storage-blob",
+          "12.31.0"
+        ],
+        [
+          "beautifulsoup4",
+          "4.15.0"
+        ],
+        [
+          "blis",
+          "1.3.3"
+        ],
+        [
+          "boto3",
+          "1.43.109"
+        ],
+        [
+          "botocore",
+          "1.43.109"
+        ],
+        [
+          "catalogue",
+          "2.0.10"
+        ],
+        [
+          "certifi",
+          "2026.7.22"
+        ],
+        [
+          "cffi",
+          "2.1.1"
+        ],
+        [
+          "charset-normalizer",
+          "3.5.2"
+        ],
+        [
+          "click",
+          "8.5.0"
+        ],
+        [
+          "cloudpathlib",
+          "0.26.0"
+        ],
+        [
+          "cloudpickle",
+          "3.1.2"
+        ],
+        [
+          "colorama",
+          "0.4.6"
+        ],
+        [
+          "coloredlogs",
+          "15.0.1"
+        ],
+        [
+          "confection",
+          "1.3.3"
+        ],
+        [
+          "cryptography",
+          "50.0.2"
+        ],
+        [
+          "cymem",
+          "2.0.13"
+        ],
+        [
+          "defusedxml",
+          "0.7.1"
+        ],
+        [
+          "deprecation",
+          "2.1.0"
+        ],
+        [
+          "devtools",
+          "0.12.2"
+        ],
+        [
+          "distro",
+          "1.9.0"
+        ],
+        [
+          "executing",
+          "2.2.1"
+        ],
+        [
+          "fastapi",
+          "0.142.2"
+        ],
+        [
+          "fastuuid",
+          "0.14.0"
+        ],
+        [
+          "filelock",
+          "4.0.12"
+        ],
+        [
+          "flatbuffers",
+          "25.12.19"
+        ],
+        [
+          "frozenlist",
+          "1.8.0"
+        ],
+        [
+          "fsspec",
+          "2026.9.0"
+        ],
+        [
+          "graphrag",
+          "3.2.0"
+        ],
+        [
+          "graphrag-cache",
+          "3.2.0"
+        ],
+        [
+          "graphrag-chunking",
+          "3.2.0"
+        ],
+        [
+          "graphrag-common",
+          "3.2.0"
+        ],
+        [
+          "graphrag-input",
+          "3.2.0"
+        ],
+        [
+          "graphrag-llm",
+          "3.2.0"
+        ],
+        [
+          "graphrag-storage",
+          "3.2.0"
+        ],
+        [
+          "graphrag-vectors",
+          "3.2.0"
+        ],
+        [
+          "graspologic-native",
+          "1.2.5"
+        ],
+        [
+          "h11",
+          "0.16.0"
+        ],
+        [
+          "hf-xet",
+          "1.7.0"
+        ],
+        [
+          "httpcore",
+          "1.0.9"
+        ],
+        [
+          "httpx",
+          "0.28.1"
+        ],
+        [
+          "huggingface-hub",
+          "1.33.0"
+        ],
+        [
+          "humanfriendly",
+          "10.0"
+        ],
+        [
+          "idna",
+          "3.20"
+        ],
+        [
+          "importlib-metadata",
+          "8.9.0"
+        ],
+        [
+          "isodate",
+          "0.7.2"
+        ],
+        [
+          "jinja2",
+          "3.1.6"
+        ],
+        [
+          "jiter",
+          "0.17.0"
+        ],
+        [
+          "jmespath",
+          "1.1.0"
+        ],
+        [
+          "joblib",
+          "1.6.0"
+        ],
+        [
+          "json-repair",
+          "0.63.5"
+        ],
+        [
+          "jsonschema",
+          "4.26.0"
+        ],
+        [
+          "jsonschema-specifications",
+          "2025.9.1"
+        ],
+        [
+          "lance-namespace",
+          "0.13.0"
+        ],
+        [
+          "lance-namespace-urllib3-client",
+          "0.13.0"
+        ],
+        [
+          "lancedb",
+          "0.38.0"
+        ],
+        [
+          "litellm",
+          "1.100.1"
+        ],
+        [
+          "magika",
+          "0.6.3"
+        ],
+        [
+          "markdown-it-py",
+          "4.2.0"
+        ],
+        [
+          "markdownify",
+          "1.2.3"
+        ],
+        [
+          "markitdown",
+          "0.1.8"
+        ],
+        [
+          "markupsafe",
+          "3.0.4"
+        ],
+        [
+          "mdurl",
+          "0.1.2"
+        ],
+        [
+          "mpmath",
+          "1.3.0"
+        ],
+        [
+          "msal",
+          "1.39.0"
+        ],
+        [
+          "msal-extensions",
+          "1.3.1"
+        ],
+        [
+          "multidict",
+          "6.9.1"
+        ],
+        [
+          "murmurhash",
+          "1.0.15"
+        ],
+        [
+          "nest-asyncio2",
+          "1.7.3"
+        ],
+        [
+          "networkx",
+          "3.7"
+        ],
+        [
+          "nltk",
+          "3.9.4"
+        ],
+        [
+          "numpy",
+          "2.5.3"
+        ],
+        [
+          "onnxruntime",
+          "1.20.1"
+        ],
+        [
+          "openai",
+          "2.54.0"
+        ],
+        [
+          "opentelemetry-api",
+          "1.45.1"
+        ],
+        [
+          "orjson",
+          "3.13.0"
+        ],
+        [
+          "packaging",
+          "26.3"
+        ],
+        [
+          "pandas",
+          "3.0.6"
+        ],
+        [
+          "pdfminer.six",
+          "20260107"
+        ],
+        [
+          "pdfplumber",
+          "0.11.10"
+        ],
+        [
+          "pillow",
+          "12.3.0"
+        ],
+        [
+          "preshed",
+          "3.0.13"
+        ],
+        [
+          "propcache",
+          "0.5.4"
+        ],
+        [
+          "protobuf",
+          "7.36.2"
+        ],
+        [
+          "pyarrow",
+          "25.0.1"
+        ],
+        [
+          "pycparser",
+          "3.0"
+        ],
+        [
+          "pydantic",
+          "2.13.5"
+        ],
+        [
+          "pydantic-core",
+          "2.46.5"
+        ],
+        [
+          "pydantic-settings",
+          "2.15.0"
+        ],
+        [
+          "pygments",
+          "2.21.0"
+        ],
+        [
+          "pyjwt",
+          "2.15.1"
+        ],
+        [
+          "pypdfium2",
+          "5.14.0"
+        ],
+        [
+          "pyreadline3",
+          "3.5.6"
+        ],
+        [
+          "python-dateutil",
+          "2.9.0.post0"
+        ],
+        [
+          "python-dotenv",
+          "1.2.4"
+        ],
+        [
+          "pyyaml",
+          "6.0.3"
+        ],
+        [
+          "referencing",
+          "0.37.0"
+        ],
+        [
+          "regex",
+          "2026.9.29"
+        ],
+        [
+          "requests",
+          "2.34.2"
+        ],
+        [
+          "rich",
+          "15.0.0"
+        ],
+        [
+          "rpds-py",
+          "2026.9.1"
+        ],
+        [
+          "s3transfer",
+          "0.19.2"
+        ],
+        [
+          "setuptools",
+          "84.0.0"
+        ],
+        [
+          "shellingham",
+          "1.5.4"
+        ],
+        [
+          "six",
+          "1.17.0"
+        ],
+        [
+          "smart-open",
+          "8.0.2"
+        ],
+        [
+          "sniffio",
+          "1.3.1"
+        ],
+        [
+          "soupsieve",
+          "2.10"
+        ],
+        [
+          "spacy",
+          "3.8.16"
+        ],
+        [
+          "spacy-legacy",
+          "3.0.12"
+        ],
+        [
+          "spacy-loggers",
+          "1.0.5"
+        ],
+        [
+          "srsly",
+          "2.5.4"
+        ],
+        [
+          "starlette",
+          "1.7.0"
+        ],
+        [
+          "sympy",
+          "1.14.0"
+        ],
+        [
+          "textblob",
+          "0.20.1"
+        ],
+        [
+          "thinc",
+          "8.3.13"
+        ],
+        [
+          "tiktoken",
+          "0.14.0"
+        ],
+        [
+          "tokenizers",
+          "0.23.2"
+        ],
+        [
+          "toml",
+          "0.10.2"
+        ],
+        [
+          "tqdm",
+          "4.70.1"
+        ],
+        [
+          "typer",
+          "0.27.3"
+        ],
+        [
+          "typing-extensions",
+          "4.16.0"
+        ],
+        [
+          "typing-inspection",
+          "0.4.4"
+        ],
+        [
+          "tzdata",
+          "2026.5"
+        ],
+        [
+          "urllib3",
+          "2.8.0"
+        ],
+        [
+          "wasabi",
+          "1.1.3"
+        ],
+        [
+          "weasel",
+          "1.0.0"
+        ],
+        [
+          "wrapt",
+          "2.5.0"
+        ],
+        [
+          "yarl",
+          "1.25.1"
+        ],
+        [
+          "zipp",
+          "4.1.1"
+        ]
+      ],
+      "lock_sha256": "45cc57dbefae8d7d3367c72cbef50a7a07de6b539064095dfd0f8d39c738f823"
+    },
+    "worker_sha256": "36edc00ca2a25eb42ca0b8da640da8fcd002481ffef143b78f86d48c5df8a140",
+    "contract_sha256": "70e2ecab2b1b2bcc13c0e0712aadc66370f8f777cd7d3005d6025b9b8f32e353"
+  },
+  "contract_sha256": "88897c94b25424ce844c0d72cec007266f4f9bf56d61b39285bd47a4e6f7d5ac",
+  "storage_sha256": {
+    "lancedb/entity_description.lance/_indices/48c3fe5e-8ec6-492e-821e-7da73fbb3c63/auxiliary.idx": "adbd7bc9facde4f892a31ccb9b553b000437df15684bd32bfa099a506d2f7b2c",
+    "lancedb/entity_description.lance/_indices/48c3fe5e-8ec6-492e-821e-7da73fbb3c63/index.idx": "cf434d0194464868c18e7f80a131050dd107686fe6eee328bd07e4bba937de4e",
+    "lancedb/entity_description.lance/_transactions/0-b704119c-95b2-4131-9232-fff55f7b980b.txn": "036d162e0878ae4ebba3a437788c273dc4d08f08e385744f7f9f49d4514c6913",
+    "lancedb/entity_description.lance/_transactions/1-1156c564-2e5a-4808-9068-db0a7a4595a6.txn": "014e7a707af36903a03c4ae8484a51c45ae87f62d5ebc6c9ac2feadba40a10c7",
+    "lancedb/entity_description.lance/_transactions/2-56718a64-c9d2-4622-be55-3e8029d3eebb.txn": "8c31010ce29c9fbae974183cc12ec063cf4579fc701c0c09b7651fd623877067",
+    "lancedb/entity_description.lance/_transactions/3-3c55b740-8679-4fc1-b16d-5905449fc97f.txn": "71898494a5a51b339192122506f9a00901afc4e985fb811a299940643f22bfdf",
+    "lancedb/entity_description.lance/_transactions/4-5bbfd70b-af01-42cd-9d75-419e245ae827.txn": "c9d8a0213bea89091e3a3deece7238c293c4b9308de710e019786613638c3239",
+    "lancedb/entity_description.lance/_versions/18446744073709551610.manifest": "9caed319d7d3854afa01fe5a532b7c43695eb3d67a2d70c2ff4cb0df0bc0bc21",
+    "lancedb/entity_description.lance/_versions/18446744073709551611.manifest": "a38fba454ea467cc75591ccea8cdb53ece1cc3afa6e37e0c3d9e2d49f8ad2991",
+    "lancedb/entity_description.lance/_versions/18446744073709551612.manifest": "69e4cf08012bb201eb8df2cc5b3404005177d4cb16e1f36b7c2e98b529784316",
+    "lancedb/entity_description.lance/_versions/18446744073709551613.manifest": "f3bfae516be2a086fd561905d88d6146669d705496b9f8a1b2266d66360c2c02",
+    "lancedb/entity_description.lance/_versions/18446744073709551614.manifest": "74ba9a1985f6957cd4a7088db78d5ef7d0829572e31974ac6ab4587bcb817451",
+    "lancedb/entity_description.lance/_versions/latest_version_hint.json": "7340e8bcc54419e2a1e91c5b427e224167b614525b146e4b2c2f6e4c9563c05e",
+    "lancedb/entity_description.lance/data/10000001110100110000100139caaa43af8626b78f39dd6c55.lance": "23196854dcb095835ebc279a1865f9aee5584bcb5544d0e41901a80b4342257e",
+    "lancedb/entity_description.lance/data/1100110001011111001010115751da4ce8ae424c5c0b7a3980.lance": "fd92ffd752b45760f18a20672b46628cfa132c2d479fddca26c268c00e1169fe",
+    "lancedb/entity_description.lance/data/11100110011111110111010130a057413aa1af08adea49ac39.lance": "b88a13597c66336feef1b6b00bdb2fdfcfaece0127d46f6a870678cbdcbb5b39",
+    "lancedb/text_unit_text.lance/_indices/001fc0e0-c7de-47d7-8dae-812fa3aef4fd/auxiliary.idx": "431f2e59218d3e304b7b0af2c8166e5f606398f9d8ed37939a526e6d25d475f8",
+    "lancedb/text_unit_text.lance/_indices/001fc0e0-c7de-47d7-8dae-812fa3aef4fd/index.idx": "1b1aed77e72af4735c4ed943e3b062c4cdf1c18fa757109aa7f4b38aecc42cc9",
+    "lancedb/text_unit_text.lance/_transactions/0-116959ba-8a84-45ad-a77f-8609785ee791.txn": "0f7e4b244fa55555149f9b2ecd76dc3e0969e406e764a253f1727edda7b71c78",
+    "lancedb/text_unit_text.lance/_transactions/1-3960bfbc-1fab-48a3-84c0-e2e7a2d3f4be.txn": "5da32af7bca77222bdd8de330da6e104e82458119708394b26c48327edfe1de3",
+    "lancedb/text_unit_text.lance/_transactions/2-29e24339-4e50-45c6-bebf-2ce5aab4b5a3.txn": "8d62b5f7105fc9a3b7a6a4e06b9a1b1f66c0e21789dc1747cf0aebff007d8f68",
+    "lancedb/text_unit_text.lance/_transactions/3-418e3d2d-d6b1-4470-9bbc-5c3ff2508b12.txn": "aa16e41afcbbc763ea4bbd6b9f1dd4f515ee5209d0731218ca4db173530be918",
+    "lancedb/text_unit_text.lance/_versions/18446744073709551611.manifest": "d0f17bd0b9d72be3b7f2b705c19dfe61ef991532b85155624c93c4ea1e79e1f0",
+    "lancedb/text_unit_text.lance/_versions/18446744073709551612.manifest": "c35164671da53b87f81d307df9c603a3a5fc2836088a79a4491b98788268c9de",
+    "lancedb/text_unit_text.lance/_versions/18446744073709551613.manifest": "9103c12839d8fb67843734063067cfa83693eb5229c8d6c2822d4549fc6ba0e1",
+    "lancedb/text_unit_text.lance/_versions/18446744073709551614.manifest": "53e2d13a0fddabe4cbfa9105e055b0818c390327847d74efe35d6bbe5681a74a",
+    "lancedb/text_unit_text.lance/_versions/latest_version_hint.json": "99fd67c89da37e7ca5f6d62c8c814dbb3dae1ba7e760c3e8ff804a45590680b2",
+    "lancedb/text_unit_text.lance/data/10100001101011101000010191fa7e4382b412de13f30f0413.lance": "fd92ffd752b45760f18a20672b46628cfa132c2d479fddca26c268c00e1169fe",
+    "lancedb/text_unit_text.lance/data/111110101001001111110001abc1a648eb9719d0274cdd45b6.lance": "e7f2ebf01bb1c36c155cc197c9a0e730db545f66aca7ed76bf9869cf5b25ce1f",
+    "output/communities.parquet": "6ee87dd9dd4ecabf1758bdb513b1e9dc63d2576236955a3fd3c5b7266940b238",
+    "output/context.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "output/documents.parquet": "e841b7fbfcb12bfa892f5ff4c90e43062cb2e1bf1b7f2d6f911b36d4fd53f565",
+    "output/entities.parquet": "fcd8399e770af0c26118644baf9552f9403c23fa2032acd0393129b50b0d669e",
+    "output/relationships.parquet": "ba3f48e60983f3139162fe973d5de1d5c05c94a1bc32864c7187aa6a53b3d887",
+    "output/stats.json": "63a6207ad55ce508124d0e8006ff7cb5573b5ffef68eb8022f1d0a04642ebfc2",
+    "output/text_units.parquet": "37c17205292b7dedd2cd5993265917631a00289ae52e9332f4f62a5d3d72d95c",
+    "settings.json": "08484c8a85dac7a2cae7acf10ee303e8774176af859bf671b035180ebd0435a5"
+  },
+  "source_mapping_sha256": "6710173cce8d73f10de21cb3011cf28c8a0b60c70eb0d24ed7e309238ddd9ce4",
+  "completion_sha256": "c41d2d3dcbbf6564d836edbd1b193633a5d9e442f685d5d363d10e74b3a65116",
+  "construction": {
+    "seconds": 94.26993979999679,
+    "documents": 4,
+    "package": "3.2.0"
+  }
+}

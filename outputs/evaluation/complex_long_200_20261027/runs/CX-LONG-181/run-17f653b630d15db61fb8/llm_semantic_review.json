@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "0cca4f26e878c000a752d9994eef4155ca16c30ddbb0ced6af0905cfdd40940f",
+  "input_facts_sha256": "8b6d168c16e4ef26885ecd9f70e5435f1cb53f40c7f3b9a0de6be6063a842d63",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 540,
+      "eval_count": 45,
+      "total_duration": 1115459400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 648,
+      "eval_count": 133,
+      "total_duration": 2372051900
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category.",
+      "explanation": "Independent source reading differs from the extraction. The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category.",
+      "evidence": [
+        {
+          "start": 448,
+          "end": 963,
+          "quote": "The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [
+    "diabetes.present"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "9815be006a4b86ce9dfb9a501d1146b73876a339a49348a028d4e5db6f6074f9",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "8646e174d3e34a60b5806c9580f72dacacf6f9ba9322dfc50e8b7dbc31f787a7",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "948d0d55249a3fd96ffd7ddb2696249527dd4de4b23df51ce5f7a5e72154648b",
+      "response_schema_sha256": "2c49d6e3388209d3520ef1d0982c4a7748fd9c3eff7bc43bc1102e21ab5c797d"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category.",
+      "explanation": "The patient has diabetes, as stated in the nurse's note."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "glucose_lowering_agent_non_insulin",
+      "status": "documented",
+      "quote": "The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category.",
+      "explanation": "The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category."
+    }
+  ],
+  "output_facts_sha256": "83bc896d75b3c9cece2bd92dea605ec6d19a74656e2f20c9a6755a1174e01775",
+  "facts_quarantined": true
+}

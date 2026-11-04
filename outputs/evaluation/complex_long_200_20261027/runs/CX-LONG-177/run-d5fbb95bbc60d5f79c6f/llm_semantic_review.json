@@ -1,0 +1,293 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "5db50408d37aee6048916f716b4b2b312b63047d27c49bb35a45eb1b684311d2",
+  "input_facts_sha256": "2c32942f34323c9bd9a974be47606fde7fce1876b3d600cc5d1eac3955ba73e3",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 597,
+      "eval_count": 55,
+      "total_duration": 1251356300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 599,
+      "eval_count": 48,
+      "total_duration": 1151561400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 591,
+      "eval_count": 45,
+      "total_duration": 1049539400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 699,
+      "eval_count": 63,
+      "total_duration": 1343472300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 651,
+      "eval_count": 81,
+      "total_duration": 1620295100
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 648,
+      "eval_count": 72,
+      "total_duration": 1545066100
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 651,
+      "eval_count": 74,
+      "total_duration": 1508441700
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "Independent source reading differs from the extraction. The driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment.",
+      "evidence": [
+        {
+          "start": 1288,
+          "end": 1617,
+          "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+          "line_start": 9,
+          "line_end": 9,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "vision.diplopia.physiological",
+      "kind": "unsupported",
+      "quote": "The current ophthalmologist's signed examination confirms non-physiological diplopia within 19 degrees of central fixation, reproduced during the assessment even though the driver says the two overlapping road-sign images sometimes merge after blinking; ",
+      "explanation": "Independent source reading differs from the extraction. The source passages do not explicitly state whether the diplopia is physiological or non-physiological. While passage 2 mentions that the diplopia is reproduced during the assessment, it does not provide a clear indication of whether it is physiological or not.",
+      "evidence": [
+        {
+          "start": 433,
+          "end": 687,
+          "quote": "The current ophthalmologist's signed examination confirms non-physiological diplopia within 19 degrees of central fixation, reproduced during the assessment even though the driver says the two overlapping road-sign images sometimes merge after blinking; ",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "vision.diplopia.present",
+      "kind": "omission",
+      "quote": "The current ophthalmologist's signed examination confirms non-physiological diplopia within 19 degrees of central fixation, reproduced during the assessment even though the driver says the two overlapping road-sign images sometimes merge after blinking; an older note reported comfortable reading at a desk, but that earlier description neither contradicts the current reproduced double vision nor establishes that a patch or new lenses have resolved it.",
+      "explanation": "Independent source reading differs from the extraction. The patient explicitly has diplopia (double vision) as confirmed by the current ophthalmologist's signed examination, which reports non-physiological diplopia within 19 degrees of central fixation.",
+      "evidence": [
+        {
+          "start": 433,
+          "end": 887,
+          "quote": "The current ophthalmologist's signed examination confirms non-physiological diplopia within 19 degrees of central fixation, reproduced during the assessment even though the driver says the two overlapping road-sign images sometimes merge after blinking; an older note reported comfortable reading at a desk, but that earlier description neither contradicts the current reproduced double vision nor establishes that a patch or new lenses have resolved it.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.treatment_category",
+    "vision.diplopia.physiological",
+    "vision.diplopia.present"
+  ],
+  "checked_fields": [
+    "diabetes.acutely_unwell",
+    "diabetes.metabolically_unstable",
+    "diabetes.present",
+    "vision.diplopia.physiological"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes",
+    "vision"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "3bbb803cef1c1990e5b608c5f8918e3527a7dde873dbe1fb15b8d9a82df55c18",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "vision.diplopia.physiological": {
+      "value": false,
+      "status": "present",
+      "unit": null,
+      "evidence": [
+        {
+          "start": 433,
+          "end": 687,
+          "quote": "The current ophthalmologist's signed examination confirms non-physiological diplopia within 19 degrees of central fixation, reproduced during the assessment even though the driver says the two overlapping road-sign images sometimes merge after blinking; ",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "prose_explicit",
+      "derived_from": []
+    },
+    "vision.diplopia.present": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.acutely_unwell"
+      ],
+      "status": "valid",
+      "request_sha256": "06c11595e2c0d381c74ce7888a62c2487b3ad2782a5ccc0aacc0cdef5c81e88a",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.metabolically_unstable"
+      ],
+      "status": "valid",
+      "request_sha256": "043068c9c70fe49ddd96d29cc3cfdefeef37155041e41fd2945f2a6992d60fc8",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "8b8b1fbdd23ef1e8252c0fc47fe2a1b1f12c90aca0bb34b82b523a4f41a8256c",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    },
+    {
+      "batch": 4,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "73c4f427c0a951037637e59a5b51792f3634112792d7d8b16529532d538bdb98",
+      "response_schema_sha256": "9b9485a1aaafcaf6136d1c8879700f5f1ef67b1c83ba88e0072cf2d637b7e113"
+    },
+    {
+      "batch": 5,
+      "attempt": 1,
+      "fields": [
+        "vision.diplopia.physiological"
+      ],
+      "status": "valid",
+      "request_sha256": "bfff4a4edd41d4d962d739286265b5addb75d790323658a05a9e2a92fab7b1c9",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    },
+    {
+      "batch": 6,
+      "attempt": 1,
+      "fields": [
+        "vision.diplopia.present"
+      ],
+      "status": "valid",
+      "request_sha256": "f6916a21ef934952cf841ab0cc2eebc2cf24dd7d2cb0eba553efcee6c5012c85",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    },
+    {
+      "batch": 7,
+      "attempt": 1,
+      "fields": [
+        "vision.visual_field.confirmed_defect"
+      ],
+      "status": "valid",
+      "request_sha256": "42168cb5f16138dc92f54a8b57160433acb22f4da619678b8d4e291db88a54b4",
+      "response_schema_sha256": "378e433b64c46bf2299b3c920706eada0cf4613adc20eedaebefa5da277f0909"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.acutely_unwell",
+      "value": true,
+      "status": "documented",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "The patient has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment."
+    },
+    {
+      "field": "diabetes.metabolically_unstable",
+      "value": true,
+      "status": "documented",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "The patient has metabolically unstable diabetes, as confirmed by the current clinical review."
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "The patient has diabetes, as confirmed by the current clinical review."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "glucose_lowering_agent_non_insulin",
+      "status": "documented",
+      "quote": "The same current clinical review separately confirms that the driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment; an older well-visit result is present in the folder, but the current physician has not documented resolution of this separate acute condition.",
+      "explanation": "The driver has diabetes and is acutely unwell with metabolically unstable diabetes after vomiting and urgent glucose assessment."
+    },
+    {
+      "field": "vision.diplopia.physiological",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The source passages do not explicitly state whether the diplopia is physiological or non-physiological. While passage 2 mentions that the diplopia is reproduced during the assessment, it does not provide a clear indication of whether it is physiological or not."
+    },
+    {
+      "field": "vision.diplopia.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The current ophthalmologist's signed examination confirms non-physiological diplopia within 19 degrees of central fixation, reproduced during the assessment even though the driver says the two overlapping road-sign images sometimes merge after blinking; an older note reported comfortable reading at a desk, but that earlier description neither contradicts the current reproduced double vision nor establishes that a patch or new lenses have resolved it.",
+      "explanation": "The patient explicitly has diplopia (double vision) as confirmed by the current ophthalmologist's signed examination, which reports non-physiological diplopia within 19 degrees of central fixation."
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The question is about the confirmation of a visual field defect, which is separate from diplopia, reduced visual acuity, and blur. The provided source passages do not explicitly document the confirmation of a visual field defect."
+    }
+  ],
+  "output_facts_sha256": "b54a6ed65dae1f969210bce4bb70adae2e7e08797607514e1c4d04b05c7ef917",
+  "facts_quarantined": true
+}

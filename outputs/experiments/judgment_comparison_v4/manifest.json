@@ -1,0 +1,45 @@
+{
+  "config": {
+    "workflow_config": "configs/workflow.yaml",
+    "reference_evidence": "configs/experiments/reference_evidence.json",
+    "output": "outputs/experiments/judgment_comparison_v4",
+    "models": [
+      "llama3:8b",
+      "qwen3.5:4b-q4_K_M"
+    ],
+    "methods": [
+      "vector",
+      "bm25",
+      "hybrid",
+      "graph_local",
+      "lightrag",
+      "graphrag",
+      "no_evidence",
+      "reference_evidence"
+    ],
+    "repeats": 3,
+    "top_k": 5,
+    "sensitivity_k": 10,
+    "evidence_max_bytes": 9000,
+    "prompt_max_bytes": 24000,
+    "context_length": 8192,
+    "output_tokens": 1536,
+    "graph_model": "qwen3.5:4b-q4_K_M",
+    "graph_context_length": 32768,
+    "embedding_model": "nomic-embed-text",
+    "endpoint": "http://127.0.0.1:11434",
+    "external_timeout_seconds": 7200,
+    "cohorts": {
+      "engineering": "data/cases/gold/workflow_expectations.json",
+      "complex": "data/cases/gold/validation_complex_expectations.json"
+    }
+  },
+  "corpus_sha256": "e7a9fcc7293a50cb9c4f90f82aedbc7dacc95c896e4c9dca2ea447e085e11221",
+  "label_sha256": "b6de8dd8da52074eea88d64e3004573ccba29e6914f958aebd3516582b2c9187",
+  "system_sha256": "4e3a8206049cc93e6275139a275ec2851d2e4c7d495b339fbe65cfce9a3645e0",
+  "seed": 0,
+  "planned_runs": 1584,
+  "code_sha256": "dc6c60c36c489502870d896d0c9bff8161100128e1bdfb623b4ed084d1c4e0fa",
+  "clinical_review_status": "pending",
+  "production_mutation": false
+}

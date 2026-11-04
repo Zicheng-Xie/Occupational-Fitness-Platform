@@ -1,0 +1,847 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "SYN-EXT-020",
+    "evidence_policy": "reference_evidence",
+    "protocol": "applicability_first",
+    "repeat": 1
+  },
+  "results_sha256": "a51fd8c9ef6e8ed312842d7be9c34859b2f8f625dd25755a5a928de2e1512d68",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "ApplicabilityCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hearing"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-c78f4b25ae544e2a61840e6a",
+                        "PASS-30b1e9cceaecb89b9c44cf70"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "hearing.audiometry.available",
+                          "hearing.unaided_better_ear_average_db",
+                          "hearing.average_frequencies_khz",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityCheck",
+                  "type": "object"
+                },
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "hearing.audiometry.available",
+                          "hearing.unaided_better_ear_average_db",
+                          "hearing.average_frequencies_khz",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "passage_checks": {
+                  "items": {
+                    "$ref": "#/$defs/ApplicabilityCheck"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "title": "Passage Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "passage_checks"
+              ],
+              "title": "ApplicabilityReview",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once in supplied order.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied passage IDs and fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hearing\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nConfirmed four-frequency unaided hearing below the 40 dB boundary.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"possible_hearing_loss\\\"\\r\\nblackout.occurred = false\\r\\ndiabetes.present = false\\r\\nhearing.audiometry.available = true\\r\\nhearing.unaided_better_ear_average_db = 39.9\\r\\nhearing.average_frequencies_khz = [0.5, 1, 2, 3]\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"possible_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": false, \"patient_quotes\": [\"blackout.occurred = false\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"hearing.audiometry.available\": {\"value\": true, \"patient_quotes\": [\"hearing.audiometry.available = true\"]}, \"hearing.unaided_better_ear_average_db\": {\"value\": 39.9, \"patient_quotes\": [\"hearing.unaided_better_ear_average_db = 39.9\"]}, \"hearing.average_frequencies_khz\": {\"value\": [0.5, 1, 2, 3], \"patient_quotes\": [\"hearing.average_frequencies_khz = [0.5, 1, 2, 3]\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HEAR-COM-001\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Compliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\", \"module\": \"hearing\", \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\", \"text_sha256\": \"658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb\", \"char_start\": 0, \"char_end\": 186}, {\"source_id\": \"AFTD2022-HEAR-COM-002\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"A person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\", \"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"text_sha256\": \"78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a\", \"char_start\": 0, \"char_end\": 176}]}"
+              }
+            ]
+          },
+          "request_sha256": "4a29e512af5480f433e03d89898d5180bd9b208b69f5dc92e747d011d4de427d",
+          "request_bytes": 9937,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T05:34:03.616864Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passage_checks\": [\n{\"module\": \"hearing\", \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\", \"fact_fields\": [\"hearing.clinical_assessment\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence.\"},\n\n{\"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"], \"statement_type\": \"restriction\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [], \"numeric_application\": \"39.9 dB ≤ 40 dB\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition.\"}\n]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 5054077000,
+            "load_duration": 2883200,
+            "prompt_eval_count": 1600,
+            "prompt_eval_cached_count": 1599,
+            "prompt_eval_duration": 40537000,
+            "eval_count": 274,
+            "eval_duration": 4775643000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1600,
+            "eval_count": 274,
+            "prompt_eval_cached_count": 1599
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "hearing",
+                "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+                "fact_fields": [
+                  "hearing.clinical_assessment"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [],
+                "numeric_application": "Not applicable",
+                "finding": "conditional_permission",
+                "conclusion": "The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "statement_type": "restriction",
+                "applicability": "applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [],
+                "numeric_application": "39.9 dB ≤ 40 dB",
+                "finding": "established_restriction",
+                "conclusion": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+              "source_id": "AFTD2022-HEAR-COM-001",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 186,
+                  "original_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+                "fact_fields": [
+                  "hearing.clinical_assessment"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence.",
+                "source_id": "AFTD2022-HEAR-COM-001",
+                "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+              "source_id": "AFTD2022-HEAR-COM-002",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 176,
+                  "original_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition.",
+                "source_id": "AFTD2022-HEAR-COM-002",
+                "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-c78f4b25ae544e2a61840e6a:conditional_permission_without_reported_prerequisites"
+          ],
+          "seconds": 5.099995399999898
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "hearing",
+            "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+            "fact_fields": [
+              "hearing.clinical_assessment"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [],
+            "numeric_application": "Not applicable",
+            "finding": "conditional_permission",
+            "conclusion": "The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "statement_type": "restriction",
+            "applicability": "applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [],
+            "numeric_application": "39.9 dB ≤ 40 dB",
+            "finding": "established_restriction",
+            "conclusion": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+          "source_id": "AFTD2022-HEAR-COM-001",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 186,
+              "original_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+            "fact_fields": [
+              "hearing.clinical_assessment"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence.",
+            "source_id": "AFTD2022-HEAR-COM-001",
+            "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+          "source_id": "AFTD2022-HEAR-COM-002",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 176,
+              "original_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition.",
+            "source_id": "AFTD2022-HEAR-COM-002",
+            "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-c78f4b25ae544e2a61840e6a:conditional_permission_without_reported_prerequisites"
+      ],
+      "seconds": 5.099999099999877
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hearing"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-c78f4b25ae544e2a61840e6a",
+                        "PASS-30b1e9cceaecb89b9c44cf70"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "hearing.audiometry.available",
+                          "hearing.unaided_better_ear_average_db",
+                          "hearing.average_frequencies_khz",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hearing\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nConfirmed four-frequency unaided hearing below the 40 dB boundary.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"possible_hearing_loss\\\"\\r\\nblackout.occurred = false\\r\\ndiabetes.present = false\\r\\nhearing.audiometry.available = true\\r\\nhearing.unaided_better_ear_average_db = 39.9\\r\\nhearing.average_frequencies_khz = [0.5, 1, 2, 3]\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"possible_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": false, \"patient_quotes\": [\"blackout.occurred = false\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"hearing.audiometry.available\": {\"value\": true, \"patient_quotes\": [\"hearing.audiometry.available = true\"]}, \"hearing.unaided_better_ear_average_db\": {\"value\": 39.9, \"patient_quotes\": [\"hearing.unaided_better_ear_average_db = 39.9\"]}, \"hearing.average_frequencies_khz\": {\"value\": [0.5, 1, 2, 3], \"patient_quotes\": [\"hearing.average_frequencies_khz = [0.5, 1, 2, 3]\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HEAR-COM-001\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Compliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\", \"module\": \"hearing\", \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\", \"text_sha256\": \"658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb\", \"char_start\": 0, \"char_end\": 186}, {\"source_id\": \"AFTD2022-HEAR-COM-002\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"A person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\", \"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"text_sha256\": \"78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a\", \"char_start\": 0, \"char_end\": 176}], \"proposed_applicability_ledger\": [{\"module\": \"hearing\", \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\", \"fact_fields\": [\"hearing.clinical_assessment\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence.\", \"source_id\": \"AFTD2022-HEAR-COM-001\", \"referenced_patient_values\": {\"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"possible_hearing_loss\\\"\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"], \"statement_type\": \"restriction\", \"applicability\": \"applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [], \"numeric_application\": \"39.9 dB ≤ 40 dB\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition.\", \"source_id\": \"AFTD2022-HEAR-COM-002\", \"referenced_patient_values\": {\"hearing.unaided_better_ear_average_db\": {\"value\": 39.9, \"patient_quotes\": [\"hearing.unaided_better_ear_average_db = 39.9\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"3fd37e5b7de758e218e4745cdc85933466ed32a51eeef26004a1fd536c78b027\"}"
+              }
+            ]
+          },
+          "request_sha256": "651d189e21305ff15d746d7aab057b6ca23465242cad441b9d855e87a1e6b891",
+          "request_bytes": 10949,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T05:34:08.3021031Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"temporarily_unfit\", \"explanation\": \"The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition. Additionally, the patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence. Therefore, the patient is temporarily unfit to hold a commercial driver's licence.\", \"criterion_checks\": [\n{\"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"fact_fields\": [\"hearing.unaided_better_ear_average_db\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition.\"},\n{\"module\": \"hearing\", \"passage_id\": \"PASS-c78f4b25ae544e2a61840e6a\", \"fact_fields\": [\"hearing.clinical_assessment\"], \"licence_pathway\": \"conditional\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence.\"}\n]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 4637103100,
+            "load_duration": 4353100,
+            "prompt_eval_count": 2137,
+            "prompt_eval_cached_count": 1935,
+            "prompt_eval_duration": 136568000,
+            "eval_count": 279,
+            "eval_duration": 4212488000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2137,
+            "eval_count": 279,
+            "prompt_eval_cached_count": 1935
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "temporarily_unfit",
+            "explanation": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition. Additionally, the patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence. Therefore, the patient is temporarily unfit to hold a commercial driver's licence.",
+            "source_ids": [
+              "AFTD2022-HEAR-COM-001",
+              "AFTD2022-HEAR-COM-002"
+            ],
+            "fact_fields": [
+              "hearing.clinical_assessment",
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "criterion_checks": [
+              {
+                "module": "hearing",
+                "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition.",
+                "source_id": "AFTD2022-HEAR-COM-002",
+                "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+                "fact_fields": [
+                  "hearing.clinical_assessment"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence.",
+                "source_id": "AFTD2022-HEAR-COM-001",
+                "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+              "source_id": "AFTD2022-HEAR-COM-002",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 176,
+                  "original_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+                "fact_fields": [
+                  "hearing.unaided_better_ear_average_db"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition.",
+                "source_id": "AFTD2022-HEAR-COM-002",
+                "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+              "source_id": "AFTD2022-HEAR-COM-001",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 186,
+                  "original_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+                "fact_fields": [
+                  "hearing.clinical_assessment"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence.",
+                "source_id": "AFTD2022-HEAR-COM-001",
+                "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "temporary_restriction_not_established_in_checks"
+          ],
+          "seconds": 4.679618500000288
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "temporarily_unfit",
+        "explanation": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition. Additionally, the patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence. Therefore, the patient is temporarily unfit to hold a commercial driver's licence.",
+        "source_ids": [
+          "AFTD2022-HEAR-COM-001",
+          "AFTD2022-HEAR-COM-002"
+        ],
+        "fact_fields": [
+          "hearing.clinical_assessment",
+          "hearing.unaided_better_ear_average_db"
+        ],
+        "criterion_checks": [
+          {
+            "module": "hearing",
+            "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition.",
+            "source_id": "AFTD2022-HEAR-COM-002",
+            "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+            "fact_fields": [
+              "hearing.clinical_assessment"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence.",
+            "source_id": "AFTD2022-HEAR-COM-001",
+            "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+          "source_id": "AFTD2022-HEAR-COM-002",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 176,
+              "original_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-30b1e9cceaecb89b9c44cf70",
+            "fact_fields": [
+              "hearing.unaided_better_ear_average_db"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's unaided better ear average dB (39.9) is below the 40 dB boundary, which establishes an unconditional licence prohibition.",
+            "source_id": "AFTD2022-HEAR-COM-002",
+            "guideline_quote": "A person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz)."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+          "source_id": "AFTD2022-HEAR-COM-001",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "658c8e0d61ff7a066d001e669c6673a4dca8fd439d85009a8ecef07432d5ddbb",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 186,
+              "original_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-c78f4b25ae544e2a61840e6a",
+            "fact_fields": [
+              "hearing.clinical_assessment"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient's possible hearing loss requires a referral for audiometry, which may lead to a conditional licence.",
+            "source_id": "AFTD2022-HEAR-COM-001",
+            "guideline_quote": "Compliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [
+        "temporary_restriction_not_established_in_checks"
+      ],
+      "seconds": 4.679624100000183
+    }
+  },
+  "support_review": "pending_independent_review"
+}

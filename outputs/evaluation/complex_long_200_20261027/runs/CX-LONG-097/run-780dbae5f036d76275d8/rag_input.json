@@ -1,0 +1,345 @@
+{
+  "schema_version": "1.2.0",
+  "result_id": "RR-d3d2bf84f1f3c723a052",
+  "case_id": "CX-LONG-097",
+  "red_flag_result_sha256": "6863b4bce37fe8fc0c91f64f670fac32ec08329081956c380db4484a52e91bac",
+  "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+  "guideline_version": "AP-G56-22",
+  "route": "human_review",
+  "rag_requests": [
+    {
+      "request_id": "RAG-1e975ca1e182934f",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_mechanism_not_yet_ascertained",
+      "licence_context": "commercial",
+      "rag_query_key": "blackout_diagnostic_workup_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "blackout.occurred": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-63faf8fb1c42b8f8",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "category": "blackout",
+      "subcondition": "provoked_vasovagal_syncope",
+      "licence_context": "commercial",
+      "rag_query_key": "provoked_vasovagal_syncope_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "blackout.occurred": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-ff63f6226b9bfc35",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "HTN-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "htn_com_screen_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-7112e7be2294bf9a",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-NO-HISTORY-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "blk_com_no_history_001",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "blackout.occurred": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-733be2b3c8de3a97",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-006"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "blk_com_diagnosed_referral_001",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "blackout.occurred": "requires_confirmation"
+      }
+    }
+  ],
+  "indicator_context": {
+    "RAG-1e975ca1e182934f": {
+      "blackout.mechanism_status": {
+        "value": "under_investigation",
+        "status": "present",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 1316,
+            "end": 1352,
+            "quote": "the mechanism is under investigation",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          },
+          {
+            "start": 1199,
+            "end": 1354,
+            "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; ",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          },
+          {
+            "start": 1316,
+            "end": 1352,
+            "quote": "the mechanism is under investigation",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          }
+        ],
+        "method": "llm_grounded",
+        "derived_from": []
+      },
+      "blackout.occurred": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 1199,
+            "end": 1513,
+            "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      }
+    },
+    "RAG-63faf8fb1c42b8f8": {
+      "blackout.diagnosis": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "blackout.occurred": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 1199,
+            "end": 1513,
+            "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      },
+      "blackout.provoking_factor_well_defined": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "blackout.recurrence_while_driving_unlikely": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      }
+    },
+    "RAG-ff63f6226b9bfc35": {
+      "cardiovascular.blood_pressure.persistent_diastolic": {
+        "value": 100.0,
+        "status": "present",
+        "unit": "mmHg",
+        "evidence": [
+          {
+            "start": 604,
+            "end": 630,
+            "quote": "persistent BP 170/100 mmHg",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          },
+          {
+            "start": 604,
+            "end": 630,
+            "quote": "persistent BP 170/100 mmHg",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "llm_grounded",
+        "derived_from": []
+      },
+      "cardiovascular.blood_pressure.persistent_systolic": {
+        "value": 170.0,
+        "status": "present",
+        "unit": "mmHg",
+        "evidence": [
+          {
+            "start": 604,
+            "end": 630,
+            "quote": "persistent BP 170/100 mmHg",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          },
+          {
+            "start": 604,
+            "end": 630,
+            "quote": "persistent BP 170/100 mmHg",
+            "line_start": 5,
+            "line_end": 5,
+            "pdf_page": null
+          }
+        ],
+        "method": "llm_grounded",
+        "derived_from": []
+      }
+    },
+    "RAG-7112e7be2294bf9a": {
+      "blackout.occurred": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 1199,
+            "end": 1513,
+            "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      }
+    },
+    "RAG-733be2b3c8de3a97": {
+      "blackout.diagnosis": {
+        "value": null,
+        "status": "unknown",
+        "unit": null,
+        "evidence": [],
+        "method": "not_recorded",
+        "derived_from": []
+      },
+      "blackout.occurred": {
+        "value": null,
+        "status": "requires_confirmation",
+        "unit": null,
+        "evidence": [
+          {
+            "start": 1199,
+            "end": 1513,
+            "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+            "line_start": 9,
+            "line_end": 9,
+            "pdf_page": null
+          }
+        ],
+        "method": "semantic_review_withheld",
+        "derived_from": []
+      }
+    }
+  },
+  "narrative_context": {
+    "RAG-1e975ca1e182934f": [
+      {
+        "start": 1199,
+        "end": 1513,
+        "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+        "line_start": 9,
+        "line_end": 9,
+        "pdf_page": null
+      }
+    ],
+    "RAG-63faf8fb1c42b8f8": [
+      {
+        "start": 1199,
+        "end": 1513,
+        "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+        "line_start": 9,
+        "line_end": 9,
+        "pdf_page": null
+      }
+    ],
+    "RAG-ff63f6226b9bfc35": [
+      {
+        "start": 433,
+        "end": 828,
+        "quote": "After the initial arrival reading was discarded because the cuff was slipping, repeat measurements over several visits were reviewed by the treating doctor, who documents persistent BP 170/100 mmHg with the correct cuff and seated rest; the driver has no current cardiac symptoms, and a depot worker's much higher figure belongs to another person rather than a second measurement of this driver.",
+        "line_start": 5,
+        "line_end": 5,
+        "pdf_page": null
+      }
+    ],
+    "RAG-7112e7be2294bf9a": [
+      {
+        "start": 1199,
+        "end": 1513,
+        "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+        "line_start": 9,
+        "line_end": 9,
+        "pdf_page": null
+      }
+    ],
+    "RAG-733be2b3c8de3a97": [
+      {
+        "start": 1199,
+        "end": 1513,
+        "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+        "line_start": 9,
+        "line_end": 9,
+        "pdf_page": null
+      }
+    ]
+  },
+  "narrative_source_text_sha256": "fe6695864294ca0e231091ad9f4aa83ea182f97e2eed4d95cfea99ca708109e3"
+}

@@ -1,0 +1,355 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "VAL-MIX-09",
+    "evidence_policy": "reference_evidence",
+    "protocol": "passage_selection",
+    "repeat": 0
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "failed",
+  "stages": {
+    "outcome_first": {
+      "status": "failed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-3ed1a5aed97719c969e95bb9",
+                        "PASS-30b1e9cceaecb89b9c44cf70"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver reports a single home blood-pressure display of 179/103 after carrying equipment upstairs, but the cuff size is unknown and today's resting measurement has not been repeated; no clinician has established persistent hypertension. He recalls a normal value some months ago and asks which figure should be used, while the nurse records both accounts without selecting a persistent value or deriving a period of treatment control.\\n\\nAn unsigned hearing worksheet contains a number of 46 dB, but it does not identify the ear, the tested frequencies or whether a hearing aid was worn. The driver says he can usually follow conversation yet misses some radio messages in background noise, and a formal assessment is booked rather than completed.\\n\\nThe driver describes no witnessed loss of consciousness but sometimes feels light-headed when standing quickly. No current specialist conclusion explains the symptom. The note intentionally contains concerns worth retrieving guidance for, while lacking a verified persistent BP and a valid unaided better-ear average; neither numerical threshold should be treated as established by these fragments.\\n\", \"verified_patient_facts\": {}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}, {\"source_id\": \"AFTD2022-HEAR-COM-002\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"A person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\", \"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"text_sha256\": \"78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a\", \"char_start\": 0, \"char_end\": 176}]}"
+              }
+            ]
+          },
+          "request_sha256": "1d3307c7571a6d95a1d6d107ca9a3ddc260d6335a7a298ab7c0810d4eb02969a",
+          "request_bytes": 8244,
+          "status": "failed",
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T13:58:29.8283688Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"insufficient_information\", \"explanation\": \"The proposal cannot establish a conclusive assessment outcome due to the lack of verified patient facts and the absence of guideline evidence for the 'blackout' and 'diabetes' modules. The nurse note provides context, but it does not provide the necessary information to support a licensing decision.\", \"criterion_checks\": [\n    {\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"unconditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish persistent hypertension due to the unknown cuff size and the lack of a repeated resting measurement.\"},\n    {\"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"fact_fields\": [], \"licence_pathway\": \"unconditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish unaided hearing loss ≥ 40 dB in the better ear due to the lack of information on the tested frequencies and the ear being tested.\"},\n    {\"module\": \"vision\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"unconditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish any information about the driver's vision, and therefore, it cannot be concluded that the driver meets the unconditional standard.\"},\n    {\"module\": \"blackout\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"temporary_no_driving\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish a diagnosed cause for the driver's symptom of feeling light-headed when standing quickly, and therefore, it cannot be concluded that the driver is fit to drive.\"},\n    {\"module\": \"diabetes\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"conditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish any information about the driver's diabetes, and therefore, it cannot be concluded that the driver meets the conditional standard.\"}\n]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 8153533600,
+            "load_duration": 3172100,
+            "prompt_eval_count": 1341,
+            "prompt_eval_cached_count": 972,
+            "prompt_eval_duration": 174242000,
+            "eval_count": 529,
+            "eval_duration": 7576362000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1341,
+            "eval_count": 529,
+            "prompt_eval_cached_count": 972
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Criterion module differs from the selected original source",
+          "failure_stage": "structural_validation",
+          "seconds": 8.16632650000247,
+          "provider_called": true
+        },
+        {
+          "number": 2,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-3ed1a5aed97719c969e95bb9",
+                        "PASS-30b1e9cceaecb89b9c44cf70"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 0,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver reports a single home blood-pressure display of 179/103 after carrying equipment upstairs, but the cuff size is unknown and today's resting measurement has not been repeated; no clinician has established persistent hypertension. He recalls a normal value some months ago and asks which figure should be used, while the nurse records both accounts without selecting a persistent value or deriving a period of treatment control.\\n\\nAn unsigned hearing worksheet contains a number of 46 dB, but it does not identify the ear, the tested frequencies or whether a hearing aid was worn. The driver says he can usually follow conversation yet misses some radio messages in background noise, and a formal assessment is booked rather than completed.\\n\\nThe driver describes no witnessed loss of consciousness but sometimes feels light-headed when standing quickly. No current specialist conclusion explains the symptom. The note intentionally contains concerns worth retrieving guidance for, while lacking a verified persistent BP and a valid unaided better-ear average; neither numerical threshold should be treated as established by these fragments.\\n\", \"verified_patient_facts\": {}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}, {\"source_id\": \"AFTD2022-HEAR-COM-002\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"A person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\", \"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"text_sha256\": \"78ef0b09576857072cbc395e26ad22ce08bd7e94bca53ee68bf36f48facb0b6a\", \"char_start\": 0, \"char_end\": 176}]}"
+              },
+              {
+                "role": "assistant",
+                "content": "{\"assessment_outcome\": \"insufficient_information\", \"explanation\": \"The proposal cannot establish a conclusive assessment outcome due to the lack of verified patient facts and the absence of guideline evidence for the 'blackout' and 'diabetes' modules. The nurse note provides context, but it does not provide the necessary information to support a licensing decision.\", \"criterion_checks\": [\n    {\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"unconditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish persistent hypertension due to the unknown cuff size and the lack of a repeated resting measurement.\"},\n    {\"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"fact_fields\": [], \"licence_pathway\": \"unconditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish unaided hearing loss ≥ 40 dB in the better ear due to the lack of information on the tested frequencies and the ear being tested.\"},\n    {\"module\": \"vision\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"unconditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish any information about the driver's vision, and therefore, it cannot be concluded that the driver meets the unconditional standard.\"},\n    {\"module\": \"blackout\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"temporary_no_driving\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish a diagnosed cause for the driver's symptom of feeling light-headed when standing quickly, and therefore, it cannot be concluded that the driver is fit to drive.\"},\n    {\"module\": \"diabetes\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"conditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish any information about the driver's diabetes, and therefore, it cannot be concluded that the driver meets the conditional standard.\"}\n]}"
+              },
+              {
+                "role": "user",
+                "content": "The previous output failed structural validation: ValueError: Criterion module differs from the selected original source. Correct only the output contract using the SAME original patient facts and evidence. Do not invent a source, passage, quotation or fact. The validator supplies no correct outcome. No semantic consistency flag is a repair instruction."
+              }
+            ]
+          },
+          "request_sha256": "12235b3829c6768a61d682a4a6e196be8d8484851122ff7d2a91fcc39766be71",
+          "request_bytes": 10889,
+          "status": "failed",
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T13:58:37.550397Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"insufficient_information\", \"explanation\": \"The proposal cannot establish a conclusive assessment outcome due to the lack of verified patient facts and the absence of guideline evidence for the 'blackout' and 'diabetes' modules. The nurse note provides context, but it does not provide the necessary information to support a licensing decision.\", \"criterion_checks\": [\n    {\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"unconditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish persistent hypertension due to the unknown cuff size and the lack of a repeated resting measurement.\"},\n    {\"module\": \"hearing\", \"passage_id\": \"PASS-30b1e9cceaecb89b9c44cf70\", \"fact_fields\": [], \"licence_pathway\": \"unconditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish unaided hearing loss ≥ 40 dB in the better ear due to the lack of information on the tested frequencies and the ear being tested.\"},\n    {\"module\": \"vision\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"general_information\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish any information about the driver's vision, and therefore, it cannot be concluded that the driver meets the unconditional standard.\"},\n    {\"module\": \"blackout\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"temporary_no_driving\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish a diagnosed cause for the driver's symptom of feeling light-headed when standing quickly, and therefore, it cannot be concluded that the driver is fit to drive.\"},\n    {\"module\": \"diabetes\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [], \"licence_pathway\": \"conditional\", \"finding\": \"not_established\", \"conclusion\": \"The proposal cannot establish any information about the driver's diabetes, and therefore, it cannot be concluded that the driver meets the conditional standard.\"}\n]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 7689630200,
+            "load_duration": 3189600,
+            "prompt_eval_count": 1929,
+            "prompt_eval_cached_count": 1451,
+            "prompt_eval_duration": 242192000,
+            "eval_count": 522,
+            "eval_duration": 7426715000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1929,
+            "eval_count": 522,
+            "prompt_eval_cached_count": 1451
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Criterion module differs from the selected original source",
+          "failure_stage": "structural_validation",
+          "seconds": 7.721927099999448,
+          "provider_called": true
+        }
+      ],
+      "error": "ValueError: Criterion module differs from the selected original source",
+      "seconds": 15.889847700003884
+    }
+  },
+  "support_review": "pending_independent_review"
+}

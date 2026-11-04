@@ -1,0 +1,69 @@
+{
+  "status": "interrupted_after_deterministic_materialization_defect",
+  "recorded_at_utc": "2026-10-15T12:17:54.635705+00:00",
+  "writer_termination_window_utc": {
+    "after": "2026-10-15T12:16:38Z",
+    "confirmed_absent_by": "2026-10-15T12:17:54.635705+00:00",
+    "precision": "Exact process termination timestamp was not instrumented; this is a conservative observation window."
+  },
+  "experiment_identity": "4cf075e5fcb67b88ed4920919fc912e84b31a564251aa30c0e635a8de04f0108",
+  "planned_conditions": 792,
+  "complete_recorded_conditions": 81,
+  "recorded_status_counts": {
+    "completed": 78,
+    "failed": 3
+  },
+  "known_recorded_model_calls": 117,
+  "recorded_seconds": 966.5708689000094,
+  "results_sha256": "eaf604acbe41a0b8947c3a196fd539bf5a582ffe6c56c95279f994c3a59e85bc",
+  "manifest_sha256": "ff2e578b99d2dacc9ee314e7b3e258b5b9796a4fe76be916b4b8867dfcfd75a7",
+  "incomplete_or_invalid_lines_preserved": [],
+  "known_failures": [
+    {
+      "case_id": "SYN-EXT-006",
+      "model": "llama3:8b",
+      "evidence_policy": "reference_evidence",
+      "protocol": "applicability_first",
+      "repeat": 0,
+      "error": "ValueError: Applicability stage failed: ValidationError: 1 validation error for PassageProposal\ncriterion_checks.0.fact_fields\n  List should have at most 8 items after validation, not 10 [type=too_long, input_value=['cardiovascular.blood_pr...years_since_last_event'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/too_long",
+      "recorded_calls": 1
+    },
+    {
+      "case_id": "SYN-EXT-006",
+      "model": "llama3:8b",
+      "evidence_policy": "reference_evidence",
+      "protocol": "applicability_first",
+      "repeat": 1,
+      "error": "ValueError: Applicability stage failed: ValidationError: 1 validation error for PassageProposal\ncriterion_checks.0.fact_fields\n  List should have at most 8 items after validation, not 10 [type=too_long, input_value=['cardiovascular.blood_pr...years_since_last_event'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/too_long",
+      "recorded_calls": 1
+    },
+    {
+      "case_id": "SYN-EXT-006",
+      "model": "llama3:8b",
+      "evidence_policy": "reference_evidence",
+      "protocol": "applicability_first",
+      "repeat": 2,
+      "error": "ValueError: Applicability stage failed: ValidationError: 1 validation error for PassageProposal\ncriterion_checks.0.fact_fields\n  List should have at most 8 items after validation, not 10 [type=too_long, input_value=['cardiovascular.blood_pr...years_since_last_event'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/too_long",
+      "recorded_calls": 1
+    }
+  ],
+  "reason": "The first-stage parser accepts ten derived fact references after the union-cap repair, but review_locations materializes a separate model-written PassageProposal whose CriterionCheck retains an eight-field cap. The internal source-resolution bridge therefore fails deterministically.",
+  "terminated_processes": {
+    "helper_pid": 35456,
+    "helper_launcher_pid": 30640,
+    "writer_pid": 32808
+  },
+  "exact_process_command_lines_verified": true,
+  "helper_stopped_before_writer": true,
+  "terminated_processes_absent_after_stop": true,
+  "in_flight_condition_unrecorded_work": {
+    "status": "unknown",
+    "explanation": "Process termination may have interrupted an unrecorded model request or condition. Its request count, tokens, duration and outcome are unknown and are not represented by recorded prefix totals."
+  },
+  "old_output_preserved": true,
+  "old_manifest_unchanged": true,
+  "lock_files_preserved_as_interruption_evidence": true,
+  "resume_under_revised_package_permitted": false,
+  "sensitivity_model_run_started": false,
+  "production_change": false
+}

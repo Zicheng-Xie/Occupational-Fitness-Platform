@@ -1,0 +1,516 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "SYN-EXT-010",
+    "evidence_policy": "reference_evidence",
+    "protocol": "passage_selection",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "outcome_first": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-053785fed9d34a6b8da7eda1"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "diabetes.gestational",
+                          "diabetes.hypoglycaemia_awareness",
+                          "diabetes.regimen_minimises_hypoglycaemia",
+                          "diabetes.treatment_category",
+                          "diabetes.driving_relevant_comorbidity_status",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"diabetes\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nDiabetes managed by diet and exercise only; driving-relevant comorbidities explicitly assessed.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\nblackout.occurred = false\\r\\ndiabetes.present = true\\r\\ndiabetes.gestational = false\\r\\ndiabetes.acutely_unwell = false\\r\\ndiabetes.metabolically_unstable = false\\r\\ndiabetes.severe_hypoglycaemic_event.occurred = false\\r\\ndiabetes.recent_severe_hypoglycaemic_event = false\\r\\ndiabetes.hypoglycaemia_awareness = true\\r\\ndiabetes.regimen_minimises_hypoglycaemia = true\\r\\ndiabetes.driving_relevant_end_organ_effects = false\\r\\ndiabetes.treatment_category = \\\"diet_and_exercise_only\\\"\\r\\ndiabetes.driving_relevant_comorbidity_status = \\\"assessed_no_disqualifying_effect\\\"\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": false, \"patient_quotes\": [\"blackout.occurred = false\"]}, \"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"diabetes.present = true\"]}, \"diabetes.gestational\": {\"value\": false, \"patient_quotes\": [\"diabetes.gestational = false\"]}, \"diabetes.hypoglycaemia_awareness\": {\"value\": true, \"patient_quotes\": [\"diabetes.hypoglycaemia_awareness = true\"]}, \"diabetes.regimen_minimises_hypoglycaemia\": {\"value\": true, \"patient_quotes\": [\"diabetes.regimen_minimises_hypoglycaemia = true\"]}, \"diabetes.treatment_category\": {\"value\": \"diet_and_exercise_only\", \"patient_quotes\": [\"diabetes.treatment_category = \\\"diet_and_exercise_only\\\"\"]}, \"diabetes.driving_relevant_comorbidity_status\": {\"value\": \"assessed_no_disqualifying_effect\", \"patient_quotes\": [\"diabetes.driving_relevant_comorbidity_status = \\\"assessed_no_disqualifying_effect\\\"\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-DM-COM-004\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"A person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-053785fed9d34a6b8da7eda1\", \"text_sha256\": \"e87d5bc28480bb50a71749bee7186b0af2c922f6ac566d6db2a43313cad68e8c\", \"char_start\": 0, \"char_end\": 207}]}"
+              }
+            ]
+          },
+          "request_sha256": "da906d1f116e71b3c456db4ea5cda6db29dc5908898023267c0ce5cf00a36553",
+          "request_bytes": 10421,
+          "status": "completed",
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T12:52:46.8581931Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"may_meet_conditional_standard\", \"explanation\": \"The patient has diabetes managed by diet and exercise only, which does not disqualify them from driving. However, as a commercial driver, they must still meet the unconditional requirements. The patient's blood pressure, vision, and hearing are all within normal ranges, which is a positive factor. The patient's diabetes regimen minimizes the risk of hypoglycaemia, and they are aware of their condition. These factors suggest that the patient may meet the conditional standard for commercial driving, pending further review and assessment.\",\n\n\"criterion_checks\": [\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-053785fed9d34a6b8da7eda1\", \"fact_fields\": [\"diabetes.treatment_category\"], \"licence_pathway\": \"conditional\", \"finding\": \"established_restriction\", \"conclusion\": \"may_meet_conditional_standard\"},\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-053785fed9d34a6b8da7eda1\", \"fact_fields\": [\"diabetes.hypoglycaemia_awareness\", \"diabetes.regimen_minimises_hypoglycaemia\"], \"licence_pathway\": \"conditional\", \"finding\": \"established_restriction\", \"conclusion\": \"may_meet_conditional_standard\"},\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-053785fed9d34a6b8da7eda1\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"meets_unconditional_standard\"},\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-053785fed9d34a6b8da7eda1\", \"fact_fields\": [\"vision.uncorrected.right.snellen\", \"vision.uncorrected.left.snellen\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"meets_unconditional_standard\"},\n{\"module\": \"diabetes\", \"passage_id\": \"PASS-053785fed9d34a6b8da7eda1\", \"fact_fields\": [\"hearing.clinical_assessment\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"meets_unconditional_standard\"}\n] }"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 8096773500,
+            "load_duration": 2750000,
+            "prompt_eval_count": 1819,
+            "prompt_eval_cached_count": 1818,
+            "prompt_eval_duration": 36751000,
+            "eval_count": 544,
+            "eval_duration": 8039125000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1819,
+            "eval_count": 544,
+            "prompt_eval_cached_count": 1818
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "may_meet_conditional_standard",
+            "explanation": "The patient has diabetes managed by diet and exercise only, which does not disqualify them from driving. However, as a commercial driver, they must still meet the unconditional requirements. The patient's blood pressure, vision, and hearing are all within normal ranges, which is a positive factor. The patient's diabetes regimen minimizes the risk of hypoglycaemia, and they are aware of their condition. These factors suggest that the patient may meet the conditional standard for commercial driving, pending further review and assessment.",
+            "source_ids": [
+              "AFTD2022-DM-COM-004"
+            ],
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic",
+              "vision.uncorrected.right.snellen",
+              "vision.uncorrected.left.snellen",
+              "hearing.clinical_assessment",
+              "diabetes.hypoglycaemia_awareness",
+              "diabetes.regimen_minimises_hypoglycaemia",
+              "diabetes.treatment_category"
+            ],
+            "criterion_checks": [
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "may_meet_conditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.regimen_minimises_hypoglycaemia"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "may_meet_conditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "meets_unconditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "vision.uncorrected.right.snellen",
+                  "vision.uncorrected.left.snellen"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "meets_unconditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "hearing.clinical_assessment"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "meets_unconditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+              "source_id": "AFTD2022-DM-COM-004",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "e87d5bc28480bb50a71749bee7186b0af2c922f6ac566d6db2a43313cad68e8c",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 207,
+                  "original_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "may_meet_conditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+              "source_id": "AFTD2022-DM-COM-004",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "e87d5bc28480bb50a71749bee7186b0af2c922f6ac566d6db2a43313cad68e8c",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 207,
+                  "original_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.regimen_minimises_hypoglycaemia"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "may_meet_conditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+              "source_id": "AFTD2022-DM-COM-004",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "e87d5bc28480bb50a71749bee7186b0af2c922f6ac566d6db2a43313cad68e8c",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 207,
+                  "original_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "meets_unconditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+              "source_id": "AFTD2022-DM-COM-004",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "e87d5bc28480bb50a71749bee7186b0af2c922f6ac566d6db2a43313cad68e8c",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 207,
+                  "original_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "vision.uncorrected.right.snellen",
+                  "vision.uncorrected.left.snellen"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "meets_unconditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+              "source_id": "AFTD2022-DM-COM-004",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "e87d5bc28480bb50a71749bee7186b0af2c922f6ac566d6db2a43313cad68e8c",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 207,
+                  "original_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+                "fact_fields": [
+                  "hearing.clinical_assessment"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "meets_unconditional_standard",
+                "source_id": "AFTD2022-DM-COM-004",
+                "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "conditional_prerequisites_not_established_in_checks"
+          ],
+          "seconds": 8.126006899998174,
+          "provider_called": true
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "explanation": "The patient has diabetes managed by diet and exercise only, which does not disqualify them from driving. However, as a commercial driver, they must still meet the unconditional requirements. The patient's blood pressure, vision, and hearing are all within normal ranges, which is a positive factor. The patient's diabetes regimen minimizes the risk of hypoglycaemia, and they are aware of their condition. These factors suggest that the patient may meet the conditional standard for commercial driving, pending further review and assessment.",
+        "source_ids": [
+          "AFTD2022-DM-COM-004"
+        ],
+        "fact_fields": [
+          "cardiovascular.blood_pressure.persistent_systolic",
+          "cardiovascular.blood_pressure.persistent_diastolic",
+          "vision.uncorrected.right.snellen",
+          "vision.uncorrected.left.snellen",
+          "hearing.clinical_assessment",
+          "diabetes.hypoglycaemia_awareness",
+          "diabetes.regimen_minimises_hypoglycaemia",
+          "diabetes.treatment_category"
+        ],
+        "criterion_checks": [
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+            "fact_fields": [
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "may_meet_conditional_standard",
+            "source_id": "AFTD2022-DM-COM-004",
+            "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+            "fact_fields": [
+              "diabetes.hypoglycaemia_awareness",
+              "diabetes.regimen_minimises_hypoglycaemia"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "may_meet_conditional_standard",
+            "source_id": "AFTD2022-DM-COM-004",
+            "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "meets_unconditional_standard",
+            "source_id": "AFTD2022-DM-COM-004",
+            "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+            "fact_fields": [
+              "vision.uncorrected.right.snellen",
+              "vision.uncorrected.left.snellen"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "meets_unconditional_standard",
+            "source_id": "AFTD2022-DM-COM-004",
+            "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-053785fed9d34a6b8da7eda1",
+            "fact_fields": [
+              "hearing.clinical_assessment"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "meets_unconditional_standard",
+            "source_id": "AFTD2022-DM-COM-004",
+            "guideline_quote": "A person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes."
+          }
+        ]
+      },
+      "seconds": 8.127635000000737
+    }
+  },
+  "support_review": "pending_independent_review"
+}

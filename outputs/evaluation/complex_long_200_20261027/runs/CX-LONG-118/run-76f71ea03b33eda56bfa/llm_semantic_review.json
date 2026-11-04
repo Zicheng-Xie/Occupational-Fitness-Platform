@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "a09d3e9a8d180518d590905436a324cac0fa83db11d9ecb23118dc326803d2ce",
+  "input_facts_sha256": "e6859b117fd72beb2128aeb9d450d3ce37cf20f7e813454d30b22fbb1f5ee13e",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 549,
+      "eval_count": 44,
+      "total_duration": 1100776200
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 657,
+      "eval_count": 119,
+      "total_duration": 2195577000
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category.",
+      "explanation": "Independent source reading differs from the extraction. The patient has established diabetes and is currently taking glucose-lowering agents, as evidenced by the value of 5.8 mmol/L measured after eating. The current medicines cannot be reconciled from two inconsistent lists, but the patient has not required assistance with hypoglycaemia and has not experienced impaired awareness. The patient's treatment category is therefore glucose_lowering_agent_non_insulin.",
+      "evidence": [
+        {
+          "start": 442,
+          "end": 957,
+          "quote": "The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [
+    "diabetes.present"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "5ec6736621def28ad813d28f75d88c6cc3244ae6668687b5a2dca503f4dfb394",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "62a0a724253b5118280882cd9465ef558f026510ef0923d31bbc544139389bba",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "2bfde832576f8c268df475645384915c253c81ceff526cfae02fcd7cfcc12ef7",
+      "response_schema_sha256": "2c49d6e3388209d3520ef1d0982c4a7748fd9c3eff7bc43bc1102e21ab5c797d"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category.",
+      "explanation": "The patient has diabetes, as stated in the patient fact."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "glucose_lowering_agent_non_insulin",
+      "status": "documented",
+      "quote": "The driver with established diabetes reports sweating and difficulty concentrating after missing breakfast, but stayed responsive, treated himself with food and has no glucose measurement from the symptoms or evidence that assistance was required; a value of 5.8 mmol/L measured after eating is documented with its later timing, the current medicines cannot be reconciled from two inconsistent lists, and the nurse has not confirmed a severe hypoglycaemic event, impaired awareness or a specific treatment category.",
+      "explanation": "The patient has established diabetes and is currently taking glucose-lowering agents, as evidenced by the value of 5.8 mmol/L measured after eating. The current medicines cannot be reconciled from two inconsistent lists, but the patient has not required assistance with hypoglycaemia and has not experienced impaired awareness. The patient's treatment category is therefore glucose_lowering_agent_non_insulin."
+    }
+  ],
+  "output_facts_sha256": "83dd6bf805f513ca02ebf7f2b6b9360f2a38c1668a54b309f558dbba4aca3d11",
+  "facts_quarantined": true
+}

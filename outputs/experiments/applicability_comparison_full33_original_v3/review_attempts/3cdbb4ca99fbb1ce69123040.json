@@ -1,0 +1,1466 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "VAL-MIX-01",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 2
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "hearing.clinical_assessment",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "hearing.audiometry.available"
+                        ]
+                      },
+                      "maxItems": 4,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "hearing.clinical_assessment",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "hearing.audiometry.available"
+                        ]
+                      },
+                      "maxItems": 4,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver attends with a current signed GP summary and a three-week measurement log; after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. The driver recalls a much lower reading after exercise last summer, but that recollection is recorded separately from the current verified log and does not replace its persistent measurements. He denies current chest pain and has not experienced a definite blackout, although he occasionally feels light-headed when getting out of the cab.\\n\\nDuring today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. No formal audiogram is available. He brought an invoice for a hearing aid consultation rather than a completed test, and neither the better-ear average nor the required frequencies has been measured in the supplied record.\\n\\nThe driver recently changed his shift pattern and medication schedule, but there is no specialist statement confirming four weeks of control or an assessment of treatment-related symptoms. The nurse distinguishes the verified persistent pressure from those unresolved questions and from the separate hearing complaint.\\n\", \"verified_patient_facts\": {\"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss\", \"During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. \", \"During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. \"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 178.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 106.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}, \"hearing.audiometry.available\": {\"value\": false, \"patient_quotes\": [\"No formal audiogram is available. \"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-7de596b87146a1f5\", \"section\": \"2.2.3\", \"pdf_page\": 77, \"printed_page\": 66, \"source_text\": \"2.2.3. High blood pressure\\nThe cut-off blood pressure values at which \\na person is considered unfit to hold an \\nunconditional licence do not reflect usual goals \\nfor managing hypertension. Rather, they reflect \\nlevels that are likely to be associated with \\nsudden incapacity due to neurological events \\n(e.g. stroke). The cut-off points are based on \\nexpert opinion.\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based \\non the advice of an appropriate medical \\nspecialist and that these drivers are reviewed \\nperiodically by the specialist to determine \\ntheir ongoing fitness to drive (refer to Part A \\nsection 4.4. Conditional licences). In the case \\nof high blood pressure, ongoing fitness to \\ndrive may be assessed by the treating general \\npractitioner, provided this is mutually agreed by \\nthe specialist and the general practitioner. The \\ninitial recommendation of a conditional licence \\nmust, however, be based on the opinion of \\nthe specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"text_sha256\": \"3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734\", \"char_start\": 0, \"char_end\": 1037, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger vehicles \\nor requiring a dangerous goods driver licence – \\nrefer to definition in Table 3)\\nCompliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\\nA person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account the nature of the driving task \\nand information provided by an ENT specialist or \\naudiologist**, as to whether:\\n•\\t the standard is able to be met with a hearing \\naid***.\\nIf the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"text_sha256\": \"6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7\", \"char_start\": 0, \"char_end\": 1620, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"text_sha256\": \"63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876\", \"char_start\": 0, \"char_end\": 1176, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-EXP-e3e1cd7604e64e7e\", \"section\": \"4.2.1\", \"pdf_page\": 117, \"printed_page\": 106, \"source_text\": \"•\\t\\nIf the standard is not able to be met with \\na hearing aid, this does not disqualify the \\nperson from driving. They should be offered \\nindividualised assessment to determine their \\neligibility for a conditional licence. This may \\ncomprise assessment by an ENT specialist \\nor audiologist* including consideration of:\\n\\t\\n−\\nthe person’s medical history – for \\nexample, childhood deafness may have \\nled to good adaptation\\n\\t\\n−\\nthe person’s driving record before and \\nsince the hearing loss \\n\\t\\n−\\nthe nature of the driving task – for \\nexample, the type of vehicle (e.g. truck, \\nbus), roads and distances to be travelled\\n\\t\\n−\\nthe ergonomics of the driving cab – for \\nexample, assistive devices such as \\nmirrors and a GPS \\n\\t\\n−\\nconcomitant medical conditions such as \\nvision impairment or cognitive impairment \\n\\t\\n−\\npractical driver assessment if required \\n(refer to Part A section 2.3.1. Practical \\ndriver assessments). The report may \\nadvise on assistive technologies as a \\nlicence condition. \\nThe driver licensing authority may consider a \\nconditional licence based on the information \\nreceived. Periodic review may include medical \\nreview and/or a practical driver assessment at \\nthe discretion of the driver licensing authority. \\nThe health professional should advise on the \\nfrequency of review as determined by the \\nnatural history of the condition. Stable conditions \\nmay not require periodic review.\\nIn some cases, noise amplification from wearing \\nhearing aids may lead to driver distraction \\nand may warrant individualised assessment as \\nabove to determine fitness to drive without the \\nhearing aid.\", \"module\": \"hearing\", \"passage_id\": \"PASS-64d93951ea0cfe724a5daf99\", \"text_sha256\": \"28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb\", \"char_start\": 0, \"char_end\": 1599, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163, \"applicability_slot\": \"P5\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "9c64eedfced45fcbd5e63c8d2faa82d29f33c0edafa56ab6f1bf28880511e8f2",
+          "request_bytes": 16405,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:28:14.0933814Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"unconditional_requirement\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blood pressure consistently > 170 systolic or > 100 diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"The patient's verified persistent blood pressure is 178/106 mmHg, which exceeds the unconditional licence threshold of >170 systolic or >100 diastolic.\",\"finding\": \"established_restriction\", \"conclusion\": \"The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic).\"}, \"P2\": {\"fact_fields\": [\"hearing.audiometry.available\", \"hearing.clinical_assessment\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"audiometry available to confirm hearing loss >= 40 dB in better ear\", \"status\": \"not_met\", \"fact_fields\": [\"hearing.audiometry.available\"]}], \"numeric_application\": \"Not applicable; audiometry results are absent.\", \"finding\": \"information_missing\", \"conclusion\": \"Information is missing regarding the specific degree of hearing loss and whether it meets the unconditional disqualification threshold (>= 40 dB). A conditional licence cannot be considered at this stage as the prerequisite audiometry has not been completed.\"}, \"P3\": {\"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"treated with antihypertensive therapy and effective control over 4-week follow-up\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable; the patient's blood pressure (178/106 mmHg) indicates a lack of effective control, but the specific 4-week treatment status is not verified.\", \"finding\": \"information_missing\", \"conclusion\": \"Information is missing regarding the specialist confirmation of four weeks of effective treatment control. The current blood pressure suggests the condition is not effectively controlled, which is a prerequisite for a conditional licence.\"}, \"P4\": {\"fact_fields\": [\"hearing.audiometry.available\", \"hearing.clinical_assessment\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"audiometry available to assess hearing loss and potential aid usage\", \"status\": \"not_met\", \"fact_fields\": [\"hearing.audiometry.available\"]}], \"numeric_application\": \"Not applicable; audiometry results are absent.\", \"finding\": \"information_missing\", \"conclusion\": \"Information is missing regarding the specific degree of hearing loss and the ability to meet standards with a hearing aid. A conditional licence cannot be considered as the prerequisite audiometry has not been completed.\"}, \"P5\": {\"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"unconditional_requirement\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blood pressure consistently > 170 systolic or > 100 diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"The patient's verified persistent blood pressure is 178/106 mmHg, which exceeds the unconditional licence threshold of >170 systolic or >100 diastolic.\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic).\"}}}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 15814226500,
+            "load_duration": 3974900,
+            "prompt_eval_count": 3363,
+            "prompt_eval_cached_count": 3359,
+            "prompt_eval_duration": 216272000,
+            "eval_count": 1067,
+            "eval_duration": 15246911000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3363,
+            "eval_count": 1067,
+            "prompt_eval_cached_count": 3359
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "statement_type": "unconditional_requirement",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "blood pressure consistently > 170 systolic or > 100 diastolic",
+                    "status": "met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic",
+                      "cardiovascular.blood_pressure.persistent_diastolic"
+                    ]
+                  }
+                ],
+                "numeric_application": "The patient's verified persistent blood pressure is 178/106 mmHg, which exceeds the unconditional licence threshold of >170 systolic or >100 diastolic.",
+                "finding": "established_restriction",
+                "conclusion": "The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic)."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.audiometry.available",
+                  "hearing.clinical_assessment"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "audiometry available to confirm hearing loss >= 40 dB in better ear",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "hearing.audiometry.available"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable; audiometry results are absent.",
+                "finding": "information_missing",
+                "conclusion": "Information is missing regarding the specific degree of hearing loss and whether it meets the unconditional disqualification threshold (>= 40 dB). A conditional licence cannot be considered at this stage as the prerequisite audiometry has not been completed."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "treated with antihypertensive therapy and effective control over 4-week follow-up",
+                    "status": "unknown",
+                    "fact_fields": []
+                  }
+                ],
+                "numeric_application": "Not applicable; the patient's blood pressure (178/106 mmHg) indicates a lack of effective control, but the specific 4-week treatment status is not verified.",
+                "finding": "information_missing",
+                "conclusion": "Information is missing regarding the specialist confirmation of four weeks of effective treatment control. The current blood pressure suggests the condition is not effectively controlled, which is a prerequisite for a conditional licence."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+                "fact_fields": [
+                  "hearing.audiometry.available",
+                  "hearing.clinical_assessment"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "audiometry available to assess hearing loss and potential aid usage",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "hearing.audiometry.available"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable; audiometry results are absent.",
+                "finding": "information_missing",
+                "conclusion": "Information is missing regarding the specific degree of hearing loss and the ability to meet standards with a hearing aid. A conditional licence cannot be considered as the prerequisite audiometry has not been completed."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "statement_type": "unconditional_requirement",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "blood pressure consistently > 170 systolic or > 100 diastolic",
+                    "status": "met",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic",
+                      "cardiovascular.blood_pressure.persistent_diastolic"
+                    ]
+                  }
+                ],
+                "numeric_application": "The patient's verified persistent blood pressure is 178/106 mmHg, which exceeds the unconditional licence threshold of >170 systolic or >100 diastolic.",
+                "finding": "established_restriction",
+                "conclusion": "The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic)."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+              "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+              "pdf_page": 77,
+              "printed_page": 66,
+              "section": "2.2.3",
+              "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1037,
+                  "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic).",
+                "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+                "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+              "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1620,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.audiometry.available",
+                  "hearing.clinical_assessment"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "Information is missing regarding the specific degree of hearing loss and whether it meets the unconditional disqualification threshold (>= 40 dB). A conditional licence cannot be considered at this stage as the prerequisite audiometry has not been completed.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+              "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1176,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "Information is missing regarding the specialist confirmation of four weeks of effective treatment control. The current blood pressure suggests the condition is not effectively controlled, which is a prerequisite for a conditional licence.",
+                "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+              "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+              "pdf_page": 117,
+              "printed_page": 106,
+              "section": "4.2.1",
+              "text_sha256": "28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1599,
+                  "original_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+                "fact_fields": [
+                  "hearing.audiometry.available",
+                  "hearing.clinical_assessment"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "Information is missing regarding the specific degree of hearing loss and the ability to meet standards with a hearing aid. A conditional licence cannot be considered as the prerequisite audiometry has not been completed.",
+                "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+                "guideline_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+              "source_id": "AFTD2022-HTN-COM-001",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 163,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic).",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-2bdf4233f7b3fe60974d8b87:established_finding_without_reported_applicability",
+            "PASS-3ed1a5aed97719c969e95bb9:established_finding_without_reported_applicability"
+          ],
+          "seconds": 15.849308600001677
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "statement_type": "unconditional_requirement",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "blood pressure consistently > 170 systolic or > 100 diastolic",
+                "status": "met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ]
+              }
+            ],
+            "numeric_application": "The patient's verified persistent blood pressure is 178/106 mmHg, which exceeds the unconditional licence threshold of >170 systolic or >100 diastolic.",
+            "finding": "established_restriction",
+            "conclusion": "The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic)."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.audiometry.available",
+              "hearing.clinical_assessment"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "audiometry available to confirm hearing loss >= 40 dB in better ear",
+                "status": "not_met",
+                "fact_fields": [
+                  "hearing.audiometry.available"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable; audiometry results are absent.",
+            "finding": "information_missing",
+            "conclusion": "Information is missing regarding the specific degree of hearing loss and whether it meets the unconditional disqualification threshold (>= 40 dB). A conditional licence cannot be considered at this stage as the prerequisite audiometry has not been completed."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "treated with antihypertensive therapy and effective control over 4-week follow-up",
+                "status": "unknown",
+                "fact_fields": []
+              }
+            ],
+            "numeric_application": "Not applicable; the patient's blood pressure (178/106 mmHg) indicates a lack of effective control, but the specific 4-week treatment status is not verified.",
+            "finding": "information_missing",
+            "conclusion": "Information is missing regarding the specialist confirmation of four weeks of effective treatment control. The current blood pressure suggests the condition is not effectively controlled, which is a prerequisite for a conditional licence."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+            "fact_fields": [
+              "hearing.audiometry.available",
+              "hearing.clinical_assessment"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "audiometry available to assess hearing loss and potential aid usage",
+                "status": "not_met",
+                "fact_fields": [
+                  "hearing.audiometry.available"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable; audiometry results are absent.",
+            "finding": "information_missing",
+            "conclusion": "Information is missing regarding the specific degree of hearing loss and the ability to meet standards with a hearing aid. A conditional licence cannot be considered as the prerequisite audiometry has not been completed."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "statement_type": "unconditional_requirement",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "blood pressure consistently > 170 systolic or > 100 diastolic",
+                "status": "met",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ]
+              }
+            ],
+            "numeric_application": "The patient's verified persistent blood pressure is 178/106 mmHg, which exceeds the unconditional licence threshold of >170 systolic or >100 diastolic.",
+            "finding": "established_restriction",
+            "conclusion": "The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic)."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+          "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+          "pdf_page": 77,
+          "printed_page": 66,
+          "section": "2.2.3",
+          "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1037,
+              "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic).",
+            "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+            "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+          "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1620,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.audiometry.available",
+              "hearing.clinical_assessment"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "Information is missing regarding the specific degree of hearing loss and whether it meets the unconditional disqualification threshold (>= 40 dB). A conditional licence cannot be considered at this stage as the prerequisite audiometry has not been completed.",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+          "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1176,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "Information is missing regarding the specialist confirmation of four weeks of effective treatment control. The current blood pressure suggests the condition is not effectively controlled, which is a prerequisite for a conditional licence.",
+            "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+          "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+          "pdf_page": 117,
+          "printed_page": 106,
+          "section": "4.2.1",
+          "text_sha256": "28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1599,
+              "original_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-64d93951ea0cfe724a5daf99",
+            "fact_fields": [
+              "hearing.audiometry.available",
+              "hearing.clinical_assessment"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "Information is missing regarding the specific degree of hearing loss and the ability to meet standards with a hearing aid. A conditional licence cannot be considered as the prerequisite audiometry has not been completed.",
+            "source_id": "AFTD2022-EXP-e3e1cd7604e64e7e",
+            "guideline_quote": "•\t\nIf the standard is not able to be met with \na hearing aid, this does not disqualify the \nperson from driving. They should be offered \nindividualised assessment to determine their \neligibility for a conditional licence. This may \ncomprise assessment by an ENT specialist \nor audiologist* including consideration of:\n\t\n−\nthe person’s medical history – for \nexample, childhood deafness may have \nled to good adaptation\n\t\n−\nthe person’s driving record before and \nsince the hearing loss \n\t\n−\nthe nature of the driving task – for \nexample, the type of vehicle (e.g. truck, \nbus), roads and distances to be travelled\n\t\n−\nthe ergonomics of the driving cab – for \nexample, assistive devices such as \nmirrors and a GPS \n\t\n−\nconcomitant medical conditions such as \nvision impairment or cognitive impairment \n\t\n−\npractical driver assessment if required \n(refer to Part A section 2.3.1. Practical \ndriver assessments). The report may \nadvise on assistive technologies as a \nlicence condition. \nThe driver licensing authority may consider a \nconditional licence based on the information \nreceived. Periodic review may include medical \nreview and/or a practical driver assessment at \nthe discretion of the driver licensing authority. \nThe health professional should advise on the \nfrequency of review as determined by the \nnatural history of the condition. Stable conditions \nmay not require periodic review.\nIn some cases, noise amplification from wearing \nhearing aids may lead to driver distraction \nand may warrant individualised assessment as \nabove to determine fitness to drive without the \nhearing aid."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+          "source_id": "AFTD2022-HTN-COM-001",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 163,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic).",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-2bdf4233f7b3fe60974d8b87:established_finding_without_reported_applicability",
+        "PASS-3ed1a5aed97719c969e95bb9:established_finding_without_reported_applicability"
+      ],
+      "seconds": 15.849310800003877
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-2bdf4233f7b3fe60974d8b87",
+                        "PASS-89f66fa2b99946bf7cef1287",
+                        "PASS-205eea15cc36b50dfbb2b9b1",
+                        "PASS-64d93951ea0cfe724a5daf99",
+                        "PASS-3ed1a5aed97719c969e95bb9"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "hearing.clinical_assessment",
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "hearing.audiometry.available"
+                        ]
+                      },
+                      "maxItems": 4,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver attends with a current signed GP summary and a three-week measurement log; after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. The driver recalls a much lower reading after exercise last summer, but that recollection is recorded separately from the current verified log and does not replace its persistent measurements. He denies current chest pain and has not experienced a definite blackout, although he occasionally feels light-headed when getting out of the cab.\\n\\nDuring today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. No formal audiogram is available. He brought an invoice for a hearing aid consultation rather than a completed test, and neither the better-ear average nor the required frequencies has been measured in the supplied record.\\n\\nThe driver recently changed his shift pattern and medication schedule, but there is no specialist statement confirming four weeks of control or an assessment of treatment-related symptoms. The nurse distinguishes the verified persistent pressure from those unresolved questions and from the separate hearing complaint.\\n\", \"verified_patient_facts\": {\"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss\", \"During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. \", \"During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. \"]}, \"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 178.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 106.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}, \"hearing.audiometry.available\": {\"value\": false, \"patient_quotes\": [\"No formal audiogram is available. \"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-7de596b87146a1f5\", \"section\": \"2.2.3\", \"pdf_page\": 77, \"printed_page\": 66, \"source_text\": \"2.2.3. High blood pressure\\nThe cut-off blood pressure values at which \\na person is considered unfit to hold an \\nunconditional licence do not reflect usual goals \\nfor managing hypertension. Rather, they reflect \\nlevels that are likely to be associated with \\nsudden incapacity due to neurological events \\n(e.g. stroke). The cut-off points are based on \\nexpert opinion.\\nIt is a general requirement that conditional \\nlicences for commercial vehicle drivers are \\nissued by the driver licensing authority based \\non the advice of an appropriate medical \\nspecialist and that these drivers are reviewed \\nperiodically by the specialist to determine \\ntheir ongoing fitness to drive (refer to Part A \\nsection 4.4. Conditional licences). In the case \\nof high blood pressure, ongoing fitness to \\ndrive may be assessed by the treating general \\npractitioner, provided this is mutually agreed by \\nthe specialist and the general practitioner. The \\ninitial recommendation of a conditional licence \\nmust, however, be based on the opinion of \\nthe specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"text_sha256\": \"3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734\", \"char_start\": 0, \"char_end\": 1037}, {\"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"section\": \"4.3\", \"pdf_page\": 120, \"printed_page\": 109, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger vehicles \\nor requiring a dangerous goods driver licence – \\nrefer to definition in Table 3)\\nCompliance with the standard should be clinically \\nassessed initially. If the initial clinical assessment \\nindicates possible hearing loss, the person should \\nbe referred for audiometry.\\nA person is not fit to hold an unconditional licence:\\n•\\t if the person has unaided hearing loss ≥ 40 dB \\nin the better ear (averaged over the frequencies \\n0.5, 1, 2 and 3 KHz).\\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account the nature of the driving task \\nand information provided by an ENT specialist or \\naudiologist**, as to whether:\\n•\\t the standard is able to be met with a hearing \\naid***.\\nIf the standard is not able to be met with a hearing \\naid, further individualised assessment should be \\noffered. \\nA conditional licence may be considered by the \\ndriver licensing authority subject to periodic review*, \\ntaking into account:\\n•\\t the nature of the driving task; and\\n•\\t information provided by an ENT specialist or \\naudiologist**; and\\n•\\t the results of a practical driver assessment if \\nrequired. \\n* Stable conditions may not require periodic review. \\n** Refer to section 4.2. General assessment and \\nmanagement guidelines.\\n*** In some cases, noise amplification as a result of \\nwearing hearing aids may lead to driver distraction \\nand may warrant individualised assessment to \\ndetermine fitness to drive without the hearing aid \\n(refer to 4.2. General assessment and management \\nguidelines).\", \"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"text_sha256\": \"6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7\", \"char_start\": 0, \"char_end\": 1620}, {\"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nannual review, taking into account the nature \\nof the driving task and information provided \\nby the treating specialist* as to whether the \\nfollowing criteria are met:\\n•\\t the person is treated with antihypertensive \\ntherapy and effective control of \\nhypertension is achieved over a 4-week \\nfollow-up period; and\\n•\\t there are no side effects from the \\nmedication that will impair safe driving; and\\n•\\t there is no evidence of damage to target \\norgans relevant to driving.\\n* Ongoing fitness to drive for commercial \\nvehicle drivers may be assessed by the \\ntreating GP provided this is mutually agreed \\nby the specialist, GP and driver licensing \\nauthority. The initial granting of a conditional \\nlicence must, however, be based on \\ninformation provided by the specialist.\", \"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"text_sha256\": \"63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876\", \"char_start\": 0, \"char_end\": 1176}, {\"source_id\": \"AFTD2022-EXP-e3e1cd7604e64e7e\", \"section\": \"4.2.1\", \"pdf_page\": 117, \"printed_page\": 106, \"source_text\": \"•\\t\\nIf the standard is not able to be met with \\na hearing aid, this does not disqualify the \\nperson from driving. They should be offered \\nindividualised assessment to determine their \\neligibility for a conditional licence. This may \\ncomprise assessment by an ENT specialist \\nor audiologist* including consideration of:\\n\\t\\n−\\nthe person’s medical history – for \\nexample, childhood deafness may have \\nled to good adaptation\\n\\t\\n−\\nthe person’s driving record before and \\nsince the hearing loss \\n\\t\\n−\\nthe nature of the driving task – for \\nexample, the type of vehicle (e.g. truck, \\nbus), roads and distances to be travelled\\n\\t\\n−\\nthe ergonomics of the driving cab – for \\nexample, assistive devices such as \\nmirrors and a GPS \\n\\t\\n−\\nconcomitant medical conditions such as \\nvision impairment or cognitive impairment \\n\\t\\n−\\npractical driver assessment if required \\n(refer to Part A section 2.3.1. Practical \\ndriver assessments). The report may \\nadvise on assistive technologies as a \\nlicence condition. \\nThe driver licensing authority may consider a \\nconditional licence based on the information \\nreceived. Periodic review may include medical \\nreview and/or a practical driver assessment at \\nthe discretion of the driver licensing authority. \\nThe health professional should advise on the \\nfrequency of review as determined by the \\nnatural history of the condition. Stable conditions \\nmay not require periodic review.\\nIn some cases, noise amplification from wearing \\nhearing aids may lead to driver distraction \\nand may warrant individualised assessment as \\nabove to determine fitness to drive without the \\nhearing aid.\", \"module\": \"hearing\", \"passage_id\": \"PASS-64d93951ea0cfe724a5daf99\", \"text_sha256\": \"28b022186245f4c27dd6e28a05de3e5bdc987bae6a012315b34ebc1946cc52bb\", \"char_start\": 0, \"char_end\": 1599}, {\"source_id\": \"AFTD2022-HTN-COM-001\", \"section\": \"2.3.1\", \"pdf_page\": 99, \"printed_page\": 88, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has blood pressure \\nconsistently > 170 systolic or > 100 diastolic \\n(treated or untreated).\", \"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"text_sha256\": \"eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d\", \"char_start\": 0, \"char_end\": 163}], \"proposed_applicability_ledger\": [{\"module\": \"hypertension\", \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"unconditional_requirement\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blood pressure consistently > 170 systolic or > 100 diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"The patient's verified persistent blood pressure is 178/106 mmHg, which exceeds the unconditional licence threshold of >170 systolic or >100 diastolic.\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic).\", \"source_id\": \"AFTD2022-EXP-7de596b87146a1f5\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 178.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 106.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hearing\", \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\", \"fact_fields\": [\"hearing.audiometry.available\", \"hearing.clinical_assessment\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"audiometry available to confirm hearing loss >= 40 dB in better ear\", \"status\": \"not_met\", \"fact_fields\": [\"hearing.audiometry.available\"]}], \"numeric_application\": \"Not applicable; audiometry results are absent.\", \"finding\": \"information_missing\", \"conclusion\": \"Information is missing regarding the specific degree of hearing loss and whether it meets the unconditional disqualification threshold (>= 40 dB). A conditional licence cannot be considered at this stage as the prerequisite audiometry has not been completed.\", \"source_id\": \"AFTD2022-EXP-7f3c434bba3c53df\", \"referenced_patient_values\": {\"hearing.audiometry.available\": {\"value\": false, \"patient_quotes\": [\"No formal audiogram is available. \"]}, \"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss\", \"During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. \", \"During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. \"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"treated with antihypertensive therapy and effective control over 4-week follow-up\", \"status\": \"unknown\", \"fact_fields\": []}], \"numeric_application\": \"Not applicable; the patient's blood pressure (178/106 mmHg) indicates a lack of effective control, but the specific 4-week treatment status is not verified.\", \"finding\": \"information_missing\", \"conclusion\": \"Information is missing regarding the specialist confirmation of four weeks of effective treatment control. The current blood pressure suggests the condition is not effectively controlled, which is a prerequisite for a conditional licence.\", \"source_id\": \"AFTD2022-EXP-f57fef6c660a1e6d\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 178.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 106.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hearing\", \"passage_id\": \"PASS-64d93951ea0cfe724a5daf99\", \"fact_fields\": [\"hearing.audiometry.available\", \"hearing.clinical_assessment\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"audiometry available to assess hearing loss and potential aid usage\", \"status\": \"not_met\", \"fact_fields\": [\"hearing.audiometry.available\"]}], \"numeric_application\": \"Not applicable; audiometry results are absent.\", \"finding\": \"information_missing\", \"conclusion\": \"Information is missing regarding the specific degree of hearing loss and the ability to meet standards with a hearing aid. A conditional licence cannot be considered as the prerequisite audiometry has not been completed.\", \"source_id\": \"AFTD2022-EXP-e3e1cd7604e64e7e\", \"referenced_patient_values\": {\"hearing.audiometry.available\": {\"value\": false, \"patient_quotes\": [\"No formal audiogram is available. \"]}, \"hearing.clinical_assessment\": {\"value\": \"possible_hearing_loss\", \"patient_quotes\": [\"reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss\", \"During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. \", \"During today's conversation the driver reports difficulty understanding dispatch when the engine is running, and hearing screening suggests possible hearing loss. \"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"hypertension\", \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"unconditional_requirement\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blood pressure consistently > 170 systolic or > 100 diastolic\", \"status\": \"met\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"The patient's verified persistent blood pressure is 178/106 mmHg, which exceeds the unconditional licence threshold of >170 systolic or >100 diastolic.\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient meets the criteria for an established restriction on holding an unconditional licence due to persistent blood pressure (178/106 mmHg) exceeding the guideline threshold (>170 systolic or >100 diastolic).\", \"source_id\": \"AFTD2022-HTN-COM-001\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 178.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 106.0, \"patient_quotes\": [\"after reviewing repeated seated measurements, the GP documents that current persistent blood pressure is 178/106 mmHg. \", \"current persistent blood pressure is 178/106 mmHg\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"affd79961ba1f7141c5d568a1e247450a3ed17ead3573b6cc3eef8a5e5c136ea\"}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "60d4ebd4c4d675d6a3a5949d397605121aaaa604c40bfe60a1fad9c488d66023",
+          "request_bytes": 24396,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T15:28:24.8912128Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"meets_unconditional_standard\",\n  \"explanation\": \"The patient's verified persistent blood pressure (178/106 mmHg) explicitly meets the unconditional disqualification criteria (>170 systolic or >100 diastolic). While other modules (hearing, diabetes) lack sufficient data for a conditional assessment, the established restriction on the hypertension module is an unconditional failure that precludes holding an unconditional licence. The nurse note confirms these are 'verified persistent' measurements, not hypothetical or past events. Missing information in other modules does not erase this established restriction.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-3ed1a5aed97719c969e95bb9\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"established_restriction\",\n      \"conclusion\": \"The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.\"\n    },\n    {\n      \"module\": \"hearing\",\n      \"passage_id\": \"PASS-89f66fa2b99946bf7cef1287\",\n      \"fact_fields\": [\"hearing.audiometry.available\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"A formal audiogram is not available, preventing the assessment of whether hearing loss meets the unconditional threshold or if a conditional licence could be considered with aids.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-205eea15cc36b50dfbb2b9b1\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"There is no specialist statement confirming four weeks of effective treatment control, which is a prerequisite for a conditional licence.\"\n    },\n    {\n      \"module\": \"hypertension\",\n      \"passage_id\": \"PASS-2bdf4233f7b3fe60974d8b87\",\n      \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"information_missing\",\n      \"conclusion\": \"The current blood pressure (178 mmHg) indicates a lack of effective control, meaning the prerequisite for conditional eligibility (effective control over 4 weeks) is not met.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 10766105900,
+            "load_duration": 3152600,
+            "prompt_eval_count": 5467,
+            "prompt_eval_cached_count": 5463,
+            "prompt_eval_duration": 115491000,
+            "eval_count": 801,
+            "eval_duration": 10391124000
+          },
+          "token_counts": {
+            "prompt_eval_count": 5467,
+            "eval_count": 801,
+            "prompt_eval_cached_count": 5463
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "meets_unconditional_standard",
+            "explanation": "The patient's verified persistent blood pressure (178/106 mmHg) explicitly meets the unconditional disqualification criteria (>170 systolic or >100 diastolic). While other modules (hearing, diabetes) lack sufficient data for a conditional assessment, the established restriction on the hypertension module is an unconditional failure that precludes holding an unconditional licence. The nurse note confirms these are 'verified persistent' measurements, not hypothetical or past events. Missing information in other modules does not erase this established restriction.",
+            "source_ids": [
+              "AFTD2022-EXP-7de596b87146a1f5",
+              "AFTD2022-EXP-7f3c434bba3c53df",
+              "AFTD2022-EXP-f57fef6c660a1e6d",
+              "AFTD2022-HTN-COM-001"
+            ],
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic",
+              "hearing.audiometry.available"
+            ],
+            "criterion_checks": [
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.",
+                "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+                "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.audiometry.available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "A formal audiogram is not available, preventing the assessment of whether hearing loss meets the unconditional threshold or if a conditional licence could be considered with aids.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "There is no specialist statement confirming four weeks of effective treatment control, which is a prerequisite for a conditional licence.",
+                "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "The current blood pressure (178 mmHg) indicates a lack of effective control, meaning the prerequisite for conditional eligibility (effective control over 4 weeks) is not met.",
+                "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+                "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+              "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+              "pdf_page": 77,
+              "printed_page": 66,
+              "section": "2.2.3",
+              "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1037,
+                  "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.",
+                "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+                "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+              "source_id": "AFTD2022-HTN-COM-001",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 163,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.",
+                "source_id": "AFTD2022-HTN-COM-001",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+              "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+              "pdf_page": 120,
+              "printed_page": 109,
+              "section": "4.3",
+              "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1620,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+                }
+              ],
+              "check": {
+                "module": "hearing",
+                "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+                "fact_fields": [
+                  "hearing.audiometry.available"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "A formal audiogram is not available, preventing the assessment of whether hearing loss meets the unconditional threshold or if a conditional licence could be considered with aids.",
+                "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+              "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+              "pdf_page": 99,
+              "printed_page": 88,
+              "section": "2.3.1",
+              "text_sha256": "63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1176,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "There is no specialist statement confirming four weeks of effective treatment control, which is a prerequisite for a conditional licence.",
+                "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+              "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+              "pdf_page": 77,
+              "printed_page": 66,
+              "section": "2.2.3",
+              "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1037,
+                  "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "hypertension",
+                "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "The current blood pressure (178 mmHg) indicates a lack of effective control, meaning the prerequisite for conditional eligibility (effective control over 4 weeks) is not met.",
+                "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+                "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "unconditional_permission_conflicts_with_reported_restriction"
+          ],
+          "seconds": 10.796053400001256
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "meets_unconditional_standard",
+        "explanation": "The patient's verified persistent blood pressure (178/106 mmHg) explicitly meets the unconditional disqualification criteria (>170 systolic or >100 diastolic). While other modules (hearing, diabetes) lack sufficient data for a conditional assessment, the established restriction on the hypertension module is an unconditional failure that precludes holding an unconditional licence. The nurse note confirms these are 'verified persistent' measurements, not hypothetical or past events. Missing information in other modules does not erase this established restriction.",
+        "source_ids": [
+          "AFTD2022-EXP-7de596b87146a1f5",
+          "AFTD2022-EXP-7f3c434bba3c53df",
+          "AFTD2022-EXP-f57fef6c660a1e6d",
+          "AFTD2022-HTN-COM-001"
+        ],
+        "fact_fields": [
+          "cardiovascular.blood_pressure.persistent_systolic",
+          "cardiovascular.blood_pressure.persistent_diastolic",
+          "hearing.audiometry.available"
+        ],
+        "criterion_checks": [
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.",
+            "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+            "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.audiometry.available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "A formal audiogram is not available, preventing the assessment of whether hearing loss meets the unconditional threshold or if a conditional licence could be considered with aids.",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "There is no specialist statement confirming four weeks of effective treatment control, which is a prerequisite for a conditional licence.",
+            "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "The current blood pressure (178 mmHg) indicates a lack of effective control, meaning the prerequisite for conditional eligibility (effective control over 4 weeks) is not met.",
+            "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+            "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+          "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+          "pdf_page": 77,
+          "printed_page": 66,
+          "section": "2.2.3",
+          "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1037,
+              "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.",
+            "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+            "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+          "source_id": "AFTD2022-HTN-COM-001",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "eeacf5b9430b10bb961f6b727f6b4eb638baaf8aeecde7413ad4b4dea2baef7d",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 163,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-3ed1a5aed97719c969e95bb9",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's blood pressure (178/106 mmHg) exceeds the unconditional threshold (>170 systolic or >100 diastolic), establishing a restriction on holding an unconditional licence.",
+            "source_id": "AFTD2022-HTN-COM-001",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated)."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+          "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+          "pdf_page": 120,
+          "printed_page": 109,
+          "section": "4.3",
+          "text_sha256": "6e8473859fc0da184ca04aa5facff15b826e318b52c11ef29b5940fda87cabf7",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1620,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+            }
+          ],
+          "check": {
+            "module": "hearing",
+            "passage_id": "PASS-89f66fa2b99946bf7cef1287",
+            "fact_fields": [
+              "hearing.audiometry.available"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "A formal audiogram is not available, preventing the assessment of whether hearing loss meets the unconditional threshold or if a conditional licence could be considered with aids.",
+            "source_id": "AFTD2022-EXP-7f3c434bba3c53df",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger vehicles \nor requiring a dangerous goods driver licence – \nrefer to definition in Table 3)\nCompliance with the standard should be clinically \nassessed initially. If the initial clinical assessment \nindicates possible hearing loss, the person should \nbe referred for audiometry.\nA person is not fit to hold an unconditional licence:\n•\t if the person has unaided hearing loss ≥ 40 dB \nin the better ear (averaged over the frequencies \n0.5, 1, 2 and 3 KHz).\nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account the nature of the driving task \nand information provided by an ENT specialist or \naudiologist**, as to whether:\n•\t the standard is able to be met with a hearing \naid***.\nIf the standard is not able to be met with a hearing \naid, further individualised assessment should be \noffered. \nA conditional licence may be considered by the \ndriver licensing authority subject to periodic review*, \ntaking into account:\n•\t the nature of the driving task; and\n•\t information provided by an ENT specialist or \naudiologist**; and\n•\t the results of a practical driver assessment if \nrequired. \n* Stable conditions may not require periodic review. \n** Refer to section 4.2. General assessment and \nmanagement guidelines.\n*** In some cases, noise amplification as a result of \nwearing hearing aids may lead to driver distraction \nand may warrant individualised assessment to \ndetermine fitness to drive without the hearing aid \n(refer to 4.2. General assessment and management \nguidelines)."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+          "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+          "pdf_page": 99,
+          "printed_page": 88,
+          "section": "2.3.1",
+          "text_sha256": "63415fbf3fcd8f2a6c288a376e7a789749a5aa0ac6712d7512f68afcf2542876",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1176,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-205eea15cc36b50dfbb2b9b1",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "There is no specialist statement confirming four weeks of effective treatment control, which is a prerequisite for a conditional licence.",
+            "source_id": "AFTD2022-EXP-f57fef6c660a1e6d",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has blood pressure \nconsistently > 170 systolic or > 100 diastolic \n(treated or untreated).\nA conditional licence may be considered \nby the driver licensing authority subject to \nannual review, taking into account the nature \nof the driving task and information provided \nby the treating specialist* as to whether the \nfollowing criteria are met:\n•\t the person is treated with antihypertensive \ntherapy and effective control of \nhypertension is achieved over a 4-week \nfollow-up period; and\n•\t there are no side effects from the \nmedication that will impair safe driving; and\n•\t there is no evidence of damage to target \norgans relevant to driving.\n* Ongoing fitness to drive for commercial \nvehicle drivers may be assessed by the \ntreating GP provided this is mutually agreed \nby the specialist, GP and driver licensing \nauthority. The initial granting of a conditional \nlicence must, however, be based on \ninformation provided by the specialist."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+          "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+          "pdf_page": 77,
+          "printed_page": 66,
+          "section": "2.2.3",
+          "text_sha256": "3519b708b7d9651bfbf00fc366ce31fc5aea9503313d3242b7409f4644432734",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1037,
+              "original_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "hypertension",
+            "passage_id": "PASS-2bdf4233f7b3fe60974d8b87",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "The current blood pressure (178 mmHg) indicates a lack of effective control, meaning the prerequisite for conditional eligibility (effective control over 4 weeks) is not met.",
+            "source_id": "AFTD2022-EXP-7de596b87146a1f5",
+            "guideline_quote": "2.2.3. High blood pressure\nThe cut-off blood pressure values at which \na person is considered unfit to hold an \nunconditional licence do not reflect usual goals \nfor managing hypertension. Rather, they reflect \nlevels that are likely to be associated with \nsudden incapacity due to neurological events \n(e.g. stroke). The cut-off points are based on \nexpert opinion.\nIt is a general requirement that conditional \nlicences for commercial vehicle drivers are \nissued by the driver licensing authority based \non the advice of an appropriate medical \nspecialist and that these drivers are reviewed \nperiodically by the specialist to determine \ntheir ongoing fitness to drive (refer to Part A \nsection 4.4. Conditional licences). In the case \nof high blood pressure, ongoing fitness to \ndrive may be assessed by the treating general \npractitioner, provided this is mutually agreed by \nthe specialist and the general practitioner. The \ninitial recommendation of a conditional licence \nmust, however, be based on the opinion of \nthe specialist."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [
+        "unconditional_permission_conflicts_with_reported_restriction"
+      ],
+      "seconds": 10.796056099999987
+    }
+  },
+  "support_review": "pending_independent_review"
+}

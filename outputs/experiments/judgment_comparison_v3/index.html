@@ -1,0 +1,3312 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Retrieval and judgment comparison | Occupational Fitness Platform</title>
+<style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f4f6f8;color:#203142;font:14px/1.6 "Segoe UI",Arial,sans-serif}
+header{padding:25px 4vw;background:#203142;color:white}header p{color:#cbd5df;margin:4px 0}h1{font-size:28px;margin:0;letter-spacing:-.6px}main{max-width:1500px;margin:auto;padding:28px 4vw}h2{font-size:20px}a{color:#245d85}table{border-collapse:collapse;width:100%;background:white}td,th{text-align:left;padding:12px;border-bottom:1px solid #dce3e9}th{background:#eaf0f4;font-size:12px}section{margin-bottom:32px}.scroll{overflow:auto}.filters{display:flex;gap:14px;flex-wrap:wrap;margin:20px 0}label{font-size:12px;color:#607183}select{display:block;padding:9px;border:1px solid #ccd6df;border-radius:5px;background:white;max-width:230px}.cases{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}article{padding:22px;background:white;border:1px solid #dce3e9;border-radius:8px;overflow-wrap:anywhere}article h3{margin:0;font-size:18px}small{display:block;font-size:12px;font-weight:400;color:#5e7283}details{border-top:1px solid #e5eaf0;padding:10px 0}summary{cursor:pointer}blockquote,pre{white-space:pre-wrap;margin:12px 0;background:#f4f7fa;padding:13px;border-left:3px solid #a3b9ca;font-size:12px}article[hidden]{display:none}.notice{border-left:3px solid #b68732;padding:12px 18px;background:#fffaf0}@media(max-width:800px){.cases{grid-template-columns:1fr}}</style></head><body>
+<header><p>OCCUPATIONAL FITNESS PLATFORM · EXPERIMENTAL EVALUATION</p><h1>How retrieved evidence changes fitness judgments</h1></header><main><section><h2>Executive Summary</h2><p>Execution status: <b>running</b>. 24 / 1584 calls recorded.</p><p>0 of 24 recorded runs passed output and citation validation. The table reports engineering reference agreement; clinician-reviewed accuracy is unavailable.</p><p class="notice">Results may be partial while the experiment is running. Repeated calls are not independent patients. A valid source ID does not establish that the explanation follows from that source. All explanations await independent review.</p></section><section><h2>Method comparison</h2><div class="scroll"><table><thead><tr><th>Cohort</th><th>Judge model</th><th>Retrieval</th><th>Accepted / recorded</th><th>Reference agreement</th><th>Macro-F1</th><th>Excess abstentions</th><th>Mean runtime</th></tr></thead><tbody><tr><td>engineering</td><td>llama3:8b</td><td>bm25</td><td>0/3</td><td>0.0%</td><td>0.000</td><td>0</td><td>4.6s</td></tr><tr><td>engineering</td><td>llama3:8b</td><td>graph_local</td><td>0/3</td><td>0.0%</td><td>0.000</td><td>0</td><td>5.5s</td></tr><tr><td>engineering</td><td>llama3:8b</td><td>graphrag</td><td>0/3</td><td>0.0%</td><td>0.000</td><td>0</td><td>5.6s</td></tr><tr><td>engineering</td><td>llama3:8b</td><td>hybrid</td><td>0/3</td><td>0.0%</td><td>0.000</td><td>0</td><td>5.1s</td></tr><tr><td>engineering</td><td>llama3:8b</td><td>lightrag</td><td>0/3</td><td>0.0%</td><td>0.000</td><td>0</td><td>5.5s</td></tr><tr><td>engineering</td><td>llama3:8b</td><td>no_evidence</td><td>0/3</td><td>0.0%</td><td>0.000</td><td>0</td><td>2.8s</td></tr><tr><td>engineering</td><td>llama3:8b</td><td>reference_evidence</td><td>0/3</td><td>0.0%</td><td>0.000</td><td>0</td><td>4.4s</td></tr><tr><td>engineering</td><td>llama3:8b</td><td>vector</td><td>0/3</td><td>0.0%</td><td>0.000</td><td>0</td><td>9.2s</td></tr></tbody></table></div></section><section><h2>Compare a case across methods</h2><p>Select a case and model to inspect evidence and judgments side by side.</p><div class="filters"><label>Case<select data-field="case_id"><option value="">All</option><option selected>SYN-EXT-001</option></select></label><label>Judge model<select data-field="model"><option value="">All</option><option selected>llama3:8b</option></select></label><label>Retrieval method<select data-field="method"><option value="">All</option><option>bm25</option><option>graph_local</option><option>graphrag</option><option>hybrid</option><option>lightrag</option><option>no_evidence</option><option>reference_evidence</option><option>vector</option></select></label><label>Disease module<select data-field="module"><option value="">All</option><option>all</option></select></label><label>Run status<select data-field="status"><option value="">All</option><option>failed</option></select></label><label>Repeat<select data-field="repeat"><option value="">All</option><option selected>1</option><option>2</option><option>3</option></select></label><label>Error category<select data-field="error"><option value="">All</option><option>failed</option><option>reference_mismatch</option><option>excess_abstention</option><option>agreement</option></select></label></div><div class="cases"><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="vector" data-module="all" data-status="failed" data-repeat="1" data-error="failed"><h3>SYN-EXT-001 <small>vector · repeat 1</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-cd83e305301149c8 · § 10.2.9 · PDF 219</summary><blockquote>10.2.9. Practical driver assessments
+A practical driver assessment is not considered 
+to be a safe or reliable method of assessing 
+the effects of disorders of vision on driving, 
+especially the visual fields, because the driver’s 
+response to emergency situations or various 
+environmental conditions cannot be determined. 
+Information about adaptation to visual field 
+defects can be gained from visual field tests 
+such as the Esterman.
+A practical driver assessment may be helpful 
+in assessing the ability to process visual 
+information (refer to Part A section 2.3.1. 
+Practical driver assessments).</blockquote></details><details><summary>AFTD2022-EXP-7f3c434bba3c53df · § 4.3 · PDF 120</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger vehicles 
+or requiring a dangerous goods driver licence – 
+refer to definition in Table 3)
+Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.
+A person is not fit to hold an unconditional licence:
+•	 if the person has unaided hearing loss ≥ 40 dB 
+in the better ear (averaged over the frequencies 
+0.5, 1, 2 and 3 KHz).
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account the nature of the driving task 
+and information provided by an ENT specialist or 
+audiologist**, as to whether:
+•	 the standard is able to be met with a hearing 
+aid***.
+If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-BLK-COM-006 · § 1.3 · PDF 69</summary><blockquote>themselves with the information in this chapter 
+and the tabulated standards before assessing a 
+person’s fitness to drive. 
+Where a firm diagnosis has been made, the 
+standard appropriate to the condition should 
+be referred to in this publication (refer to Figure 
+6. Management of blackouts and driving). For 
+blackouts due to medical causes not covered 
+in the standard, refer to first principles (refer to 
+Part A section 2. Assessing fitness to drive – 
+general guidance). For blackouts where, after 
+investigation, it is not possible to diagnose one 
+of the conditions covered elsewhere in this 
+publication, refer to the table for blackouts of 
+uncertain nature over the page.</blockquote></details><details><summary>AFTD2022-EXP-d6142190f29b7662 · § 3.2.3 · PDF 106</summary><blockquote>Vision
+Refer to section 10. Vision and eye disorders. 
+Visual acuity should be tested annually. Retinal 
+screening should be undertaken every second 
+year if there is no retinopathy, or more frequently 
+if at high risk. Visual field testing is not required 
+unless clinically indicated.7,8
+Neuropathy and foot care
+While it can be difficult to be prescriptive 
+about neuropathy in the context of driving, it is 
+important that the severity of the condition is 
+assessed. Adequate sensation and movement 
+for the operation of foot controls is required 
+(refer to section 6. Neurological conditions and 
+section 5. Musculoskeletal conditions).
+Sleep apnoea
+Sleep apnoea is a common comorbidity 
+affecting many people with type 2 diabetes and 
+has substantial implications for road safety. The 
+treating health professional should be alert to 
+potential signs (e.g. BMI greater than 35) and 
+symptoms, and apply the Epworth Sleepiness 
+Scale as appropriate (refer to section 8. Sleep 
+disorders).
+Cardiovascular
+There are no diabetes-specific medical 
+standards for cardiovascular risk factors and 
+driver licensing. Consistent with good medical 
+practice, people with diabetes should have their 
+cardiovascular risk factors periodically assessed 
+and treated as required (refer to section 2. 
+Cardiovascular conditions).</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="vector" data-module="all" data-status="failed" data-repeat="2" data-error="failed"><h3>SYN-EXT-001 <small>vector · repeat 2</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-cd83e305301149c8 · § 10.2.9 · PDF 219</summary><blockquote>10.2.9. Practical driver assessments
+A practical driver assessment is not considered 
+to be a safe or reliable method of assessing 
+the effects of disorders of vision on driving, 
+especially the visual fields, because the driver’s 
+response to emergency situations or various 
+environmental conditions cannot be determined. 
+Information about adaptation to visual field 
+defects can be gained from visual field tests 
+such as the Esterman.
+A practical driver assessment may be helpful 
+in assessing the ability to process visual 
+information (refer to Part A section 2.3.1. 
+Practical driver assessments).</blockquote></details><details><summary>AFTD2022-EXP-7f3c434bba3c53df · § 4.3 · PDF 120</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger vehicles 
+or requiring a dangerous goods driver licence – 
+refer to definition in Table 3)
+Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.
+A person is not fit to hold an unconditional licence:
+•	 if the person has unaided hearing loss ≥ 40 dB 
+in the better ear (averaged over the frequencies 
+0.5, 1, 2 and 3 KHz).
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account the nature of the driving task 
+and information provided by an ENT specialist or 
+audiologist**, as to whether:
+•	 the standard is able to be met with a hearing 
+aid***.
+If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-BLK-COM-006 · § 1.3 · PDF 69</summary><blockquote>themselves with the information in this chapter 
+and the tabulated standards before assessing a 
+person’s fitness to drive. 
+Where a firm diagnosis has been made, the 
+standard appropriate to the condition should 
+be referred to in this publication (refer to Figure 
+6. Management of blackouts and driving). For 
+blackouts due to medical causes not covered 
+in the standard, refer to first principles (refer to 
+Part A section 2. Assessing fitness to drive – 
+general guidance). For blackouts where, after 
+investigation, it is not possible to diagnose one 
+of the conditions covered elsewhere in this 
+publication, refer to the table for blackouts of 
+uncertain nature over the page.</blockquote></details><details><summary>AFTD2022-EXP-d6142190f29b7662 · § 3.2.3 · PDF 106</summary><blockquote>Vision
+Refer to section 10. Vision and eye disorders. 
+Visual acuity should be tested annually. Retinal 
+screening should be undertaken every second 
+year if there is no retinopathy, or more frequently 
+if at high risk. Visual field testing is not required 
+unless clinically indicated.7,8
+Neuropathy and foot care
+While it can be difficult to be prescriptive 
+about neuropathy in the context of driving, it is 
+important that the severity of the condition is 
+assessed. Adequate sensation and movement 
+for the operation of foot controls is required 
+(refer to section 6. Neurological conditions and 
+section 5. Musculoskeletal conditions).
+Sleep apnoea
+Sleep apnoea is a common comorbidity 
+affecting many people with type 2 diabetes and 
+has substantial implications for road safety. The 
+treating health professional should be alert to 
+potential signs (e.g. BMI greater than 35) and 
+symptoms, and apply the Epworth Sleepiness 
+Scale as appropriate (refer to section 8. Sleep 
+disorders).
+Cardiovascular
+There are no diabetes-specific medical 
+standards for cardiovascular risk factors and 
+driver licensing. Consistent with good medical 
+practice, people with diabetes should have their 
+cardiovascular risk factors periodically assessed 
+and treated as required (refer to section 2. 
+Cardiovascular conditions).</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="vector" data-module="all" data-status="failed" data-repeat="3" data-error="failed"><h3>SYN-EXT-001 <small>vector · repeat 3</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-cd83e305301149c8 · § 10.2.9 · PDF 219</summary><blockquote>10.2.9. Practical driver assessments
+A practical driver assessment is not considered 
+to be a safe or reliable method of assessing 
+the effects of disorders of vision on driving, 
+especially the visual fields, because the driver’s 
+response to emergency situations or various 
+environmental conditions cannot be determined. 
+Information about adaptation to visual field 
+defects can be gained from visual field tests 
+such as the Esterman.
+A practical driver assessment may be helpful 
+in assessing the ability to process visual 
+information (refer to Part A section 2.3.1. 
+Practical driver assessments).</blockquote></details><details><summary>AFTD2022-EXP-7f3c434bba3c53df · § 4.3 · PDF 120</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger vehicles 
+or requiring a dangerous goods driver licence – 
+refer to definition in Table 3)
+Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.
+A person is not fit to hold an unconditional licence:
+•	 if the person has unaided hearing loss ≥ 40 dB 
+in the better ear (averaged over the frequencies 
+0.5, 1, 2 and 3 KHz).
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account the nature of the driving task 
+and information provided by an ENT specialist or 
+audiologist**, as to whether:
+•	 the standard is able to be met with a hearing 
+aid***.
+If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-BLK-COM-006 · § 1.3 · PDF 69</summary><blockquote>themselves with the information in this chapter 
+and the tabulated standards before assessing a 
+person’s fitness to drive. 
+Where a firm diagnosis has been made, the 
+standard appropriate to the condition should 
+be referred to in this publication (refer to Figure 
+6. Management of blackouts and driving). For 
+blackouts due to medical causes not covered 
+in the standard, refer to first principles (refer to 
+Part A section 2. Assessing fitness to drive – 
+general guidance). For blackouts where, after 
+investigation, it is not possible to diagnose one 
+of the conditions covered elsewhere in this 
+publication, refer to the table for blackouts of 
+uncertain nature over the page.</blockquote></details><details><summary>AFTD2022-EXP-d6142190f29b7662 · § 3.2.3 · PDF 106</summary><blockquote>Vision
+Refer to section 10. Vision and eye disorders. 
+Visual acuity should be tested annually. Retinal 
+screening should be undertaken every second 
+year if there is no retinopathy, or more frequently 
+if at high risk. Visual field testing is not required 
+unless clinically indicated.7,8
+Neuropathy and foot care
+While it can be difficult to be prescriptive 
+about neuropathy in the context of driving, it is 
+important that the severity of the condition is 
+assessed. Adequate sensation and movement 
+for the operation of foot controls is required 
+(refer to section 6. Neurological conditions and 
+section 5. Musculoskeletal conditions).
+Sleep apnoea
+Sleep apnoea is a common comorbidity 
+affecting many people with type 2 diabetes and 
+has substantial implications for road safety. The 
+treating health professional should be alert to 
+potential signs (e.g. BMI greater than 35) and 
+symptoms, and apply the Epworth Sleepiness 
+Scale as appropriate (refer to section 8. Sleep 
+disorders).
+Cardiovascular
+There are no diabetes-specific medical 
+standards for cardiovascular risk factors and 
+driver licensing. Consistent with good medical 
+practice, people with diabetes should have their 
+cardiovascular risk factors periodically assessed 
+and treated as required (refer to section 2. 
+Cardiovascular conditions).</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="bm25" data-module="all" data-status="failed" data-repeat="1" data-error="failed"><h3>SYN-EXT-001 <small>bm25 · repeat 1</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · § 10.2.1 · PDF 214</summary><blockquote>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</blockquote></details><details><summary>AFTD2022-EXP-d83c4a25c127adee · § 4.2.2 · PDF 121</summary><blockquote>The nature of the driving task
+The driver licensing authority will take into 
+consideration the nature of the driving task 
+as well as the medical condition, particularly 
+when granting a conditional licence. For 
+example, the licence status of a farmer 
+requiring a commercial vehicle licence for 
+the occasional use of a heavy vehicle may 
+be quite different from that of an interstate 
+multiple combination vehicle driver. The 
+examining health professional should bear 
+this in mind when examining a person 
+and when providing advice to the driver 
+licensing authority.
+Reporting responsibilities
+Patients should be made aware of the 
+effects of their condition on driving and 
+should be advised of their legal obligation 
+to notify the driver licensing authority where 
+driving is likely to be affected. The health 
+professional may themselves advise the 
+driver licensing authority as the situation 
+requires (refer to section 3.3 and step 6).</blockquote></details><details><summary>AFTD2022-EXP-69be58377b7c7adf · § 6.2 · PDF 72</summary><blockquote>The nature of the driving task
+The driver licensing authority will take into 
+consideration the nature of the driving task 
+as well as the medical condition, particularly 
+when granting a conditional licence. For 
+example, the licence status of a farmer 
+requiring a commercial vehicle licence for 
+the occasional use of a heavy vehicle may 
+be quite different from that of an interstate 
+multiple combination vehicle driver. The 
+examining health professional should bear 
+this in mind when examining a person 
+and when providing advice to the driver 
+licensing authority.
+Reporting responsibilities
+Patients should be made aware of the 
+effects of their condition on driving and 
+should be advised of their legal obligation 
+to notify the driver licensing authority where 
+driving is likely to be affected. The health 
+professional may themselves advise the 
+driver licensing authority as the situation 
+requires (refer to section 3.3 and step 6).</blockquote></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · § 3.3 · PDF 113</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="bm25" data-module="all" data-status="failed" data-repeat="2" data-error="failed"><h3>SYN-EXT-001 <small>bm25 · repeat 2</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · § 10.2.1 · PDF 214</summary><blockquote>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</blockquote></details><details><summary>AFTD2022-EXP-d83c4a25c127adee · § 4.2.2 · PDF 121</summary><blockquote>The nature of the driving task
+The driver licensing authority will take into 
+consideration the nature of the driving task 
+as well as the medical condition, particularly 
+when granting a conditional licence. For 
+example, the licence status of a farmer 
+requiring a commercial vehicle licence for 
+the occasional use of a heavy vehicle may 
+be quite different from that of an interstate 
+multiple combination vehicle driver. The 
+examining health professional should bear 
+this in mind when examining a person 
+and when providing advice to the driver 
+licensing authority.
+Reporting responsibilities
+Patients should be made aware of the 
+effects of their condition on driving and 
+should be advised of their legal obligation 
+to notify the driver licensing authority where 
+driving is likely to be affected. The health 
+professional may themselves advise the 
+driver licensing authority as the situation 
+requires (refer to section 3.3 and step 6).</blockquote></details><details><summary>AFTD2022-EXP-69be58377b7c7adf · § 6.2 · PDF 72</summary><blockquote>The nature of the driving task
+The driver licensing authority will take into 
+consideration the nature of the driving task 
+as well as the medical condition, particularly 
+when granting a conditional licence. For 
+example, the licence status of a farmer 
+requiring a commercial vehicle licence for 
+the occasional use of a heavy vehicle may 
+be quite different from that of an interstate 
+multiple combination vehicle driver. The 
+examining health professional should bear 
+this in mind when examining a person 
+and when providing advice to the driver 
+licensing authority.
+Reporting responsibilities
+Patients should be made aware of the 
+effects of their condition on driving and 
+should be advised of their legal obligation 
+to notify the driver licensing authority where 
+driving is likely to be affected. The health 
+professional may themselves advise the 
+driver licensing authority as the situation 
+requires (refer to section 3.3 and step 6).</blockquote></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · § 3.3 · PDF 113</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="bm25" data-module="all" data-status="failed" data-repeat="3" data-error="failed"><h3>SYN-EXT-001 <small>bm25 · repeat 3</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · § 10.2.1 · PDF 214</summary><blockquote>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</blockquote></details><details><summary>AFTD2022-EXP-d83c4a25c127adee · § 4.2.2 · PDF 121</summary><blockquote>The nature of the driving task
+The driver licensing authority will take into 
+consideration the nature of the driving task 
+as well as the medical condition, particularly 
+when granting a conditional licence. For 
+example, the licence status of a farmer 
+requiring a commercial vehicle licence for 
+the occasional use of a heavy vehicle may 
+be quite different from that of an interstate 
+multiple combination vehicle driver. The 
+examining health professional should bear 
+this in mind when examining a person 
+and when providing advice to the driver 
+licensing authority.
+Reporting responsibilities
+Patients should be made aware of the 
+effects of their condition on driving and 
+should be advised of their legal obligation 
+to notify the driver licensing authority where 
+driving is likely to be affected. The health 
+professional may themselves advise the 
+driver licensing authority as the situation 
+requires (refer to section 3.3 and step 6).</blockquote></details><details><summary>AFTD2022-EXP-69be58377b7c7adf · § 6.2 · PDF 72</summary><blockquote>The nature of the driving task
+The driver licensing authority will take into 
+consideration the nature of the driving task 
+as well as the medical condition, particularly 
+when granting a conditional licence. For 
+example, the licence status of a farmer 
+requiring a commercial vehicle licence for 
+the occasional use of a heavy vehicle may 
+be quite different from that of an interstate 
+multiple combination vehicle driver. The 
+examining health professional should bear 
+this in mind when examining a person 
+and when providing advice to the driver 
+licensing authority.
+Reporting responsibilities
+Patients should be made aware of the 
+effects of their condition on driving and 
+should be advised of their legal obligation 
+to notify the driver licensing authority where 
+driving is likely to be affected. The health 
+professional may themselves advise the 
+driver licensing authority as the situation 
+requires (refer to section 3.3 and step 6).</blockquote></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · § 3.3 · PDF 113</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="hybrid" data-module="all" data-status="failed" data-repeat="1" data-error="failed"><h3>SYN-EXT-001 <small>hybrid · repeat 1</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · § 10.2.1 · PDF 214</summary><blockquote>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</blockquote></details><details><summary>AFTD2022-EXP-7f3c434bba3c53df · § 4.3 · PDF 120</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger vehicles 
+or requiring a dangerous goods driver licence – 
+refer to definition in Table 3)
+Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.
+A person is not fit to hold an unconditional licence:
+•	 if the person has unaided hearing loss ≥ 40 dB 
+in the better ear (averaged over the frequencies 
+0.5, 1, 2 and 3 KHz).
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account the nature of the driving task 
+and information provided by an ENT specialist or 
+audiologist**, as to whether:
+•	 the standard is able to be met with a hearing 
+aid***.
+If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-EXP-5546204ae4ffe0ee · § 1.3 · PDF 71</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+Where a person with one or more blackouts 
+of undetermined mechanism does not 
+meet the standards above for a conditional 
+licence but may, in the opinion of the 
+treating specialist, be safe to drive, a 
+conditional licence may be considered by 
+the driver licensing authority, subject to at 
+least annual review:
+•	 if the driver licensing authority, after 
+considering information provided by the 
+treating specialist(s), considers that the 
+risk of a crash caused by a blackout is 
+acceptably low.</blockquote></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · § 3.3 · PDF 113</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="hybrid" data-module="all" data-status="failed" data-repeat="2" data-error="failed"><h3>SYN-EXT-001 <small>hybrid · repeat 2</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · § 10.2.1 · PDF 214</summary><blockquote>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</blockquote></details><details><summary>AFTD2022-EXP-7f3c434bba3c53df · § 4.3 · PDF 120</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger vehicles 
+or requiring a dangerous goods driver licence – 
+refer to definition in Table 3)
+Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.
+A person is not fit to hold an unconditional licence:
+•	 if the person has unaided hearing loss ≥ 40 dB 
+in the better ear (averaged over the frequencies 
+0.5, 1, 2 and 3 KHz).
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account the nature of the driving task 
+and information provided by an ENT specialist or 
+audiologist**, as to whether:
+•	 the standard is able to be met with a hearing 
+aid***.
+If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-EXP-5546204ae4ffe0ee · § 1.3 · PDF 71</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+Where a person with one or more blackouts 
+of undetermined mechanism does not 
+meet the standards above for a conditional 
+licence but may, in the opinion of the 
+treating specialist, be safe to drive, a 
+conditional licence may be considered by 
+the driver licensing authority, subject to at 
+least annual review:
+•	 if the driver licensing authority, after 
+considering information provided by the 
+treating specialist(s), considers that the 
+risk of a crash caused by a blackout is 
+acceptably low.</blockquote></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · § 3.3 · PDF 113</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="hybrid" data-module="all" data-status="failed" data-repeat="3" data-error="failed"><h3>SYN-EXT-001 <small>hybrid · repeat 3</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · § 10.2.1 · PDF 214</summary><blockquote>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</blockquote></details><details><summary>AFTD2022-EXP-7f3c434bba3c53df · § 4.3 · PDF 120</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger vehicles 
+or requiring a dangerous goods driver licence – 
+refer to definition in Table 3)
+Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.
+A person is not fit to hold an unconditional licence:
+•	 if the person has unaided hearing loss ≥ 40 dB 
+in the better ear (averaged over the frequencies 
+0.5, 1, 2 and 3 KHz).
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account the nature of the driving task 
+and information provided by an ENT specialist or 
+audiologist**, as to whether:
+•	 the standard is able to be met with a hearing 
+aid***.
+If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-EXP-5546204ae4ffe0ee · § 1.3 · PDF 71</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+Where a person with one or more blackouts 
+of undetermined mechanism does not 
+meet the standards above for a conditional 
+licence but may, in the opinion of the 
+treating specialist, be safe to drive, a 
+conditional licence may be considered by 
+the driver licensing authority, subject to at 
+least annual review:
+•	 if the driver licensing authority, after 
+considering information provided by the 
+treating specialist(s), considers that the 
+risk of a crash caused by a blackout is 
+acceptably low.</blockquote></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · § 3.3 · PDF 113</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="graph_local" data-module="all" data-status="failed" data-repeat="1" data-error="failed"><h3>SYN-EXT-001 <small>graph_local · repeat 1</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-7de596b87146a1f5 · § 2.2.3 · PDF 77</summary><blockquote>2.2.3. High blood pressure
+The cut-off blood pressure values at which 
+a person is considered unfit to hold an 
+unconditional licence do not reflect usual goals 
+for managing hypertension. Rather, they reflect 
+levels that are likely to be associated with 
+sudden incapacity due to neurological events 
+(e.g. stroke). The cut-off points are based on 
+expert opinion.
+It is a general requirement that conditional 
+licences for commercial vehicle drivers are 
+issued by the driver licensing authority based 
+on the advice of an appropriate medical 
+specialist and that these drivers are reviewed 
+periodically by the specialist to determine 
+their ongoing fitness to drive (refer to Part A 
+section 4.4. Conditional licences). In the case 
+of high blood pressure, ongoing fitness to 
+drive may be assessed by the treating general 
+practitioner, provided this is mutually agreed by 
+the specialist and the general practitioner. The 
+initial recommendation of a conditional licence 
+must, however, be based on the opinion of 
+the specialist.</blockquote></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · § 10.2.1 · PDF 214</summary><blockquote>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</blockquote></details><details><summary>AFTD2022-HEAR-COM-004 · § 4.3 · PDF 120</summary><blockquote>If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-EXP-5546204ae4ffe0ee · § 1.3 · PDF 71</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+Where a person with one or more blackouts 
+of undetermined mechanism does not 
+meet the standards above for a conditional 
+licence but may, in the opinion of the 
+treating specialist, be safe to drive, a 
+conditional licence may be considered by 
+the driver licensing authority, subject to at 
+least annual review:
+•	 if the driver licensing authority, after 
+considering information provided by the 
+treating specialist(s), considers that the 
+risk of a crash caused by a blackout is 
+acceptably low.</blockquote></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · § 3.3 · PDF 113</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="graph_local" data-module="all" data-status="failed" data-repeat="2" data-error="failed"><h3>SYN-EXT-001 <small>graph_local · repeat 2</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-7de596b87146a1f5 · § 2.2.3 · PDF 77</summary><blockquote>2.2.3. High blood pressure
+The cut-off blood pressure values at which 
+a person is considered unfit to hold an 
+unconditional licence do not reflect usual goals 
+for managing hypertension. Rather, they reflect 
+levels that are likely to be associated with 
+sudden incapacity due to neurological events 
+(e.g. stroke). The cut-off points are based on 
+expert opinion.
+It is a general requirement that conditional 
+licences for commercial vehicle drivers are 
+issued by the driver licensing authority based 
+on the advice of an appropriate medical 
+specialist and that these drivers are reviewed 
+periodically by the specialist to determine 
+their ongoing fitness to drive (refer to Part A 
+section 4.4. Conditional licences). In the case 
+of high blood pressure, ongoing fitness to 
+drive may be assessed by the treating general 
+practitioner, provided this is mutually agreed by 
+the specialist and the general practitioner. The 
+initial recommendation of a conditional licence 
+must, however, be based on the opinion of 
+the specialist.</blockquote></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · § 10.2.1 · PDF 214</summary><blockquote>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</blockquote></details><details><summary>AFTD2022-HEAR-COM-004 · § 4.3 · PDF 120</summary><blockquote>If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-EXP-5546204ae4ffe0ee · § 1.3 · PDF 71</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+Where a person with one or more blackouts 
+of undetermined mechanism does not 
+meet the standards above for a conditional 
+licence but may, in the opinion of the 
+treating specialist, be safe to drive, a 
+conditional licence may be considered by 
+the driver licensing authority, subject to at 
+least annual review:
+•	 if the driver licensing authority, after 
+considering information provided by the 
+treating specialist(s), considers that the 
+risk of a crash caused by a blackout is 
+acceptably low.</blockquote></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · § 3.3 · PDF 113</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="graph_local" data-module="all" data-status="failed" data-repeat="3" data-error="failed"><h3>SYN-EXT-001 <small>graph_local · repeat 3</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-EXP-7de596b87146a1f5 · § 2.2.3 · PDF 77</summary><blockquote>2.2.3. High blood pressure
+The cut-off blood pressure values at which 
+a person is considered unfit to hold an 
+unconditional licence do not reflect usual goals 
+for managing hypertension. Rather, they reflect 
+levels that are likely to be associated with 
+sudden incapacity due to neurological events 
+(e.g. stroke). The cut-off points are based on 
+expert opinion.
+It is a general requirement that conditional 
+licences for commercial vehicle drivers are 
+issued by the driver licensing authority based 
+on the advice of an appropriate medical 
+specialist and that these drivers are reviewed 
+periodically by the specialist to determine 
+their ongoing fitness to drive (refer to Part A 
+section 4.4. Conditional licences). In the case 
+of high blood pressure, ongoing fitness to 
+drive may be assessed by the treating general 
+practitioner, provided this is mutually agreed by 
+the specialist and the general practitioner. The 
+initial recommendation of a conditional licence 
+must, however, be based on the opinion of 
+the specialist.</blockquote></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · § 10.2.1 · PDF 214</summary><blockquote>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</blockquote></details><details><summary>AFTD2022-HEAR-COM-004 · § 4.3 · PDF 120</summary><blockquote>If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-EXP-5546204ae4ffe0ee · § 1.3 · PDF 71</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+Where a person with one or more blackouts 
+of undetermined mechanism does not 
+meet the standards above for a conditional 
+licence but may, in the opinion of the 
+treating specialist, be safe to drive, a 
+conditional licence may be considered by 
+the driver licensing authority, subject to at 
+least annual review:
+•	 if the driver licensing authority, after 
+considering information provided by the 
+treating specialist(s), considers that the 
+risk of a crash caused by a blackout is 
+acceptably low.</blockquote></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · § 3.3 · PDF 113</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="lightrag" data-module="all" data-status="failed" data-repeat="1" data-error="failed"><h3>SYN-EXT-001 <small>lightrag · repeat 1</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-BLK-COM-006 · § 1.3 · PDF 69</summary><blockquote>themselves with the information in this chapter 
+and the tabulated standards before assessing a 
+person’s fitness to drive. 
+Where a firm diagnosis has been made, the 
+standard appropriate to the condition should 
+be referred to in this publication (refer to Figure 
+6. Management of blackouts and driving). For 
+blackouts due to medical causes not covered 
+in the standard, refer to first principles (refer to 
+Part A section 2. Assessing fitness to drive – 
+general guidance). For blackouts where, after 
+investigation, it is not possible to diagnose one 
+of the conditions covered elsewhere in this 
+publication, refer to the table for blackouts of 
+uncertain nature over the page.</blockquote></details><details><summary>AFTD2022-EXP-d6142190f29b7662 · § 3.2.3 · PDF 106</summary><blockquote>Vision
+Refer to section 10. Vision and eye disorders. 
+Visual acuity should be tested annually. Retinal 
+screening should be undertaken every second 
+year if there is no retinopathy, or more frequently 
+if at high risk. Visual field testing is not required 
+unless clinically indicated.7,8
+Neuropathy and foot care
+While it can be difficult to be prescriptive 
+about neuropathy in the context of driving, it is 
+important that the severity of the condition is 
+assessed. Adequate sensation and movement 
+for the operation of foot controls is required 
+(refer to section 6. Neurological conditions and 
+section 5. Musculoskeletal conditions).
+Sleep apnoea
+Sleep apnoea is a common comorbidity 
+affecting many people with type 2 diabetes and 
+has substantial implications for road safety. The 
+treating health professional should be alert to 
+potential signs (e.g. BMI greater than 35) and 
+symptoms, and apply the Epworth Sleepiness 
+Scale as appropriate (refer to section 8. Sleep 
+disorders).
+Cardiovascular
+There are no diabetes-specific medical 
+standards for cardiovascular risk factors and 
+driver licensing. Consistent with good medical 
+practice, people with diabetes should have their 
+cardiovascular risk factors periodically assessed 
+and treated as required (refer to section 2. 
+Cardiovascular conditions).</blockquote></details><details><summary>AFTD2022-EXP-7f3c434bba3c53df · § 4.3 · PDF 120</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger vehicles 
+or requiring a dangerous goods driver licence – 
+refer to definition in Table 3)
+Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.
+A person is not fit to hold an unconditional licence:
+•	 if the person has unaided hearing loss ≥ 40 dB 
+in the better ear (averaged over the frequencies 
+0.5, 1, 2 and 3 KHz).
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account the nature of the driving task 
+and information provided by an ENT specialist or 
+audiologist**, as to whether:
+•	 the standard is able to be met with a hearing 
+aid***.
+If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-cd83e305301149c8 · § 10.2.9 · PDF 219</summary><blockquote>10.2.9. Practical driver assessments
+A practical driver assessment is not considered 
+to be a safe or reliable method of assessing 
+the effects of disorders of vision on driving, 
+especially the visual fields, because the driver’s 
+response to emergency situations or various 
+environmental conditions cannot be determined. 
+Information about adaptation to visual field 
+defects can be gained from visual field tests 
+such as the Esterman.
+A practical driver assessment may be helpful 
+in assessing the ability to process visual 
+information (refer to Part A section 2.3.1. 
+Practical driver assessments).</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="lightrag" data-module="all" data-status="failed" data-repeat="2" data-error="failed"><h3>SYN-EXT-001 <small>lightrag · repeat 2</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-BLK-COM-006 · § 1.3 · PDF 69</summary><blockquote>themselves with the information in this chapter 
+and the tabulated standards before assessing a 
+person’s fitness to drive. 
+Where a firm diagnosis has been made, the 
+standard appropriate to the condition should 
+be referred to in this publication (refer to Figure 
+6. Management of blackouts and driving). For 
+blackouts due to medical causes not covered 
+in the standard, refer to first principles (refer to 
+Part A section 2. Assessing fitness to drive – 
+general guidance). For blackouts where, after 
+investigation, it is not possible to diagnose one 
+of the conditions covered elsewhere in this 
+publication, refer to the table for blackouts of 
+uncertain nature over the page.</blockquote></details><details><summary>AFTD2022-EXP-d6142190f29b7662 · § 3.2.3 · PDF 106</summary><blockquote>Vision
+Refer to section 10. Vision and eye disorders. 
+Visual acuity should be tested annually. Retinal 
+screening should be undertaken every second 
+year if there is no retinopathy, or more frequently 
+if at high risk. Visual field testing is not required 
+unless clinically indicated.7,8
+Neuropathy and foot care
+While it can be difficult to be prescriptive 
+about neuropathy in the context of driving, it is 
+important that the severity of the condition is 
+assessed. Adequate sensation and movement 
+for the operation of foot controls is required 
+(refer to section 6. Neurological conditions and 
+section 5. Musculoskeletal conditions).
+Sleep apnoea
+Sleep apnoea is a common comorbidity 
+affecting many people with type 2 diabetes and 
+has substantial implications for road safety. The 
+treating health professional should be alert to 
+potential signs (e.g. BMI greater than 35) and 
+symptoms, and apply the Epworth Sleepiness 
+Scale as appropriate (refer to section 8. Sleep 
+disorders).
+Cardiovascular
+There are no diabetes-specific medical 
+standards for cardiovascular risk factors and 
+driver licensing. Consistent with good medical 
+practice, people with diabetes should have their 
+cardiovascular risk factors periodically assessed 
+and treated as required (refer to section 2. 
+Cardiovascular conditions).</blockquote></details><details><summary>AFTD2022-EXP-7f3c434bba3c53df · § 4.3 · PDF 120</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger vehicles 
+or requiring a dangerous goods driver licence – 
+refer to definition in Table 3)
+Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.
+A person is not fit to hold an unconditional licence:
+•	 if the person has unaided hearing loss ≥ 40 dB 
+in the better ear (averaged over the frequencies 
+0.5, 1, 2 and 3 KHz).
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account the nature of the driving task 
+and information provided by an ENT specialist or 
+audiologist**, as to whether:
+•	 the standard is able to be met with a hearing 
+aid***.
+If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-cd83e305301149c8 · § 10.2.9 · PDF 219</summary><blockquote>10.2.9. Practical driver assessments
+A practical driver assessment is not considered 
+to be a safe or reliable method of assessing 
+the effects of disorders of vision on driving, 
+especially the visual fields, because the driver’s 
+response to emergency situations or various 
+environmental conditions cannot be determined. 
+Information about adaptation to visual field 
+defects can be gained from visual field tests 
+such as the Esterman.
+A practical driver assessment may be helpful 
+in assessing the ability to process visual 
+information (refer to Part A section 2.3.1. 
+Practical driver assessments).</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="lightrag" data-module="all" data-status="failed" data-repeat="3" data-error="failed"><h3>SYN-EXT-001 <small>lightrag · repeat 3</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-BLK-COM-006 · § 1.3 · PDF 69</summary><blockquote>themselves with the information in this chapter 
+and the tabulated standards before assessing a 
+person’s fitness to drive. 
+Where a firm diagnosis has been made, the 
+standard appropriate to the condition should 
+be referred to in this publication (refer to Figure 
+6. Management of blackouts and driving). For 
+blackouts due to medical causes not covered 
+in the standard, refer to first principles (refer to 
+Part A section 2. Assessing fitness to drive – 
+general guidance). For blackouts where, after 
+investigation, it is not possible to diagnose one 
+of the conditions covered elsewhere in this 
+publication, refer to the table for blackouts of 
+uncertain nature over the page.</blockquote></details><details><summary>AFTD2022-EXP-d6142190f29b7662 · § 3.2.3 · PDF 106</summary><blockquote>Vision
+Refer to section 10. Vision and eye disorders. 
+Visual acuity should be tested annually. Retinal 
+screening should be undertaken every second 
+year if there is no retinopathy, or more frequently 
+if at high risk. Visual field testing is not required 
+unless clinically indicated.7,8
+Neuropathy and foot care
+While it can be difficult to be prescriptive 
+about neuropathy in the context of driving, it is 
+important that the severity of the condition is 
+assessed. Adequate sensation and movement 
+for the operation of foot controls is required 
+(refer to section 6. Neurological conditions and 
+section 5. Musculoskeletal conditions).
+Sleep apnoea
+Sleep apnoea is a common comorbidity 
+affecting many people with type 2 diabetes and 
+has substantial implications for road safety. The 
+treating health professional should be alert to 
+potential signs (e.g. BMI greater than 35) and 
+symptoms, and apply the Epworth Sleepiness 
+Scale as appropriate (refer to section 8. Sleep 
+disorders).
+Cardiovascular
+There are no diabetes-specific medical 
+standards for cardiovascular risk factors and 
+driver licensing. Consistent with good medical 
+practice, people with diabetes should have their 
+cardiovascular risk factors periodically assessed 
+and treated as required (refer to section 2. 
+Cardiovascular conditions).</blockquote></details><details><summary>AFTD2022-EXP-7f3c434bba3c53df · § 4.3 · PDF 120</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger vehicles 
+or requiring a dangerous goods driver licence – 
+refer to definition in Table 3)
+Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.
+A person is not fit to hold an unconditional licence:
+•	 if the person has unaided hearing loss ≥ 40 dB 
+in the better ear (averaged over the frequencies 
+0.5, 1, 2 and 3 KHz).
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account the nature of the driving task 
+and information provided by an ENT specialist or 
+audiologist**, as to whether:
+•	 the standard is able to be met with a hearing 
+aid***.
+If the standard is not able to be met with a hearing 
+aid, further individualised assessment should be 
+offered. 
+A conditional licence may be considered by the 
+driver licensing authority subject to periodic review*, 
+taking into account:
+•	 the nature of the driving task; and
+•	 information provided by an ENT specialist or 
+audiologist**; and
+•	 the results of a practical driver assessment if 
+required. 
+* Stable conditions may not require periodic review. 
+** Refer to section 4.2. General assessment and 
+management guidelines.
+*** In some cases, noise amplification as a result of 
+wearing hearing aids may lead to driver distraction 
+and may warrant individualised assessment to 
+determine fitness to drive without the hearing aid 
+(refer to 4.2. General assessment and management 
+guidelines).</blockquote></details><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-cd83e305301149c8 · § 10.2.9 · PDF 219</summary><blockquote>10.2.9. Practical driver assessments
+A practical driver assessment is not considered 
+to be a safe or reliable method of assessing 
+the effects of disorders of vision on driving, 
+especially the visual fields, because the driver’s 
+response to emergency situations or various 
+environmental conditions cannot be determined. 
+Information about adaptation to visual field 
+defects can be gained from visual field tests 
+such as the Esterman.
+A practical driver assessment may be helpful 
+in assessing the ability to process visual 
+information (refer to Part A section 2.3.1. 
+Practical driver assessments).</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="graphrag" data-module="all" data-status="failed" data-repeat="1" data-error="failed"><h3>SYN-EXT-001 <small>graphrag · repeat 1</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-BLK-COM-002 · § 1.2.2 · PDF 68</summary><blockquote>1.2.2. Vasovagal syncope5
+The most common cause of transient loss of 
+consciousness is vasovagal syncope (‘fainting’). 
+Where this has been triggered by a well-defined 
+provoking factor or a situation that is unlikely 
+to recur while driving (e.g. prolonged standing, 
+venepuncture or emotional situation), it is not 
+necessary to restrict driving. However, vasovagal 
+syncope may also result from other causes 
+that are not so benign. In such cases, fitness 
+to drive should be assessed according to the 
+cardiovascular conditions standards for syncope 
+(refer to section 2. Cardiovascular conditions).</blockquote></details><details><summary>AFTD2022-DM-COM-002 · § 3.2.1 · PDF 105</summary><blockquote>Non-driving period after a ‘severe 
+hypoglycaemic event’
+If a severe hypoglycaemic event occurs (as 
+defined in section 3.2.1. Hypoglycaemia), the 
+person should not drive for a significant period 
+of time and will need to be urgently assessed. 
+The minimum period of time before returning 
+to drive is generally six weeks because it often 
+takes many weeks for patterns of glucose 
+control and behaviour to be re-established and 
+for any temporary ‘impaired hypoglycaemia 
+awareness’ to resolve (see below). The non-
+driving period will depend on factors such 
+as identifying the reason for the episode, the 
+specialist’s opinion and the type of motor vehicle 
+licence. The specialist’s recommendation for 
+returning to driving should be based on the 
+patient’s behaviour and objective measures of 
+glycaemic control (documented blood glucose) 
+over a reasonable interval. 
+Impaired hypoglycaemic awareness 10–14</blockquote></details><details><summary>AFTD2022-EXP-d83c4a25c127adee · § 4.2.2 · PDF 121</summary><blockquote>The nature of the driving task
+The driver licensing authority will take into 
+consideration the nature of the driving task 
+as well as the medical condition, particularly 
+when granting a conditional licence. For 
+example, the licence status of a farmer 
+requiring a commercial vehicle licence for 
+the occasional use of a heavy vehicle may 
+be quite different from that of an interstate 
+multiple combination vehicle driver. The 
+examining health professional should bear 
+this in mind when examining a person 
+and when providing advice to the driver 
+licensing authority.
+Reporting responsibilities
+Patients should be made aware of the 
+effects of their condition on driving and 
+should be advised of their legal obligation 
+to notify the driver licensing authority where 
+driving is likely to be affected. The health 
+professional may themselves advise the 
+driver licensing authority as the situation 
+requires (refer to section 3.3 and step 6).</blockquote></details><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-59e2fd52c2d21514 · § 10.2.8 · PDF 219</summary><blockquote>assessment performed by an ophthalmologist or 
+optometrist when making its licensing decision.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="graphrag" data-module="all" data-status="failed" data-repeat="2" data-error="failed"><h3>SYN-EXT-001 <small>graphrag · repeat 2</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-BLK-COM-002 · § 1.2.2 · PDF 68</summary><blockquote>1.2.2. Vasovagal syncope5
+The most common cause of transient loss of 
+consciousness is vasovagal syncope (‘fainting’). 
+Where this has been triggered by a well-defined 
+provoking factor or a situation that is unlikely 
+to recur while driving (e.g. prolonged standing, 
+venepuncture or emotional situation), it is not 
+necessary to restrict driving. However, vasovagal 
+syncope may also result from other causes 
+that are not so benign. In such cases, fitness 
+to drive should be assessed according to the 
+cardiovascular conditions standards for syncope 
+(refer to section 2. Cardiovascular conditions).</blockquote></details><details><summary>AFTD2022-DM-COM-002 · § 3.2.1 · PDF 105</summary><blockquote>Non-driving period after a ‘severe 
+hypoglycaemic event’
+If a severe hypoglycaemic event occurs (as 
+defined in section 3.2.1. Hypoglycaemia), the 
+person should not drive for a significant period 
+of time and will need to be urgently assessed. 
+The minimum period of time before returning 
+to drive is generally six weeks because it often 
+takes many weeks for patterns of glucose 
+control and behaviour to be re-established and 
+for any temporary ‘impaired hypoglycaemia 
+awareness’ to resolve (see below). The non-
+driving period will depend on factors such 
+as identifying the reason for the episode, the 
+specialist’s opinion and the type of motor vehicle 
+licence. The specialist’s recommendation for 
+returning to driving should be based on the 
+patient’s behaviour and objective measures of 
+glycaemic control (documented blood glucose) 
+over a reasonable interval. 
+Impaired hypoglycaemic awareness 10–14</blockquote></details><details><summary>AFTD2022-EXP-d83c4a25c127adee · § 4.2.2 · PDF 121</summary><blockquote>The nature of the driving task
+The driver licensing authority will take into 
+consideration the nature of the driving task 
+as well as the medical condition, particularly 
+when granting a conditional licence. For 
+example, the licence status of a farmer 
+requiring a commercial vehicle licence for 
+the occasional use of a heavy vehicle may 
+be quite different from that of an interstate 
+multiple combination vehicle driver. The 
+examining health professional should bear 
+this in mind when examining a person 
+and when providing advice to the driver 
+licensing authority.
+Reporting responsibilities
+Patients should be made aware of the 
+effects of their condition on driving and 
+should be advised of their legal obligation 
+to notify the driver licensing authority where 
+driving is likely to be affected. The health 
+professional may themselves advise the 
+driver licensing authority as the situation 
+requires (refer to section 3.3 and step 6).</blockquote></details><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-59e2fd52c2d21514 · § 10.2.8 · PDF 219</summary><blockquote>assessment performed by an ophthalmologist or 
+optometrist when making its licensing decision.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="graphrag" data-module="all" data-status="failed" data-repeat="3" data-error="failed"><h3>SYN-EXT-001 <small>graphrag · repeat 3</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-BLK-COM-002 · § 1.2.2 · PDF 68</summary><blockquote>1.2.2. Vasovagal syncope5
+The most common cause of transient loss of 
+consciousness is vasovagal syncope (‘fainting’). 
+Where this has been triggered by a well-defined 
+provoking factor or a situation that is unlikely 
+to recur while driving (e.g. prolonged standing, 
+venepuncture or emotional situation), it is not 
+necessary to restrict driving. However, vasovagal 
+syncope may also result from other causes 
+that are not so benign. In such cases, fitness 
+to drive should be assessed according to the 
+cardiovascular conditions standards for syncope 
+(refer to section 2. Cardiovascular conditions).</blockquote></details><details><summary>AFTD2022-DM-COM-002 · § 3.2.1 · PDF 105</summary><blockquote>Non-driving period after a ‘severe 
+hypoglycaemic event’
+If a severe hypoglycaemic event occurs (as 
+defined in section 3.2.1. Hypoglycaemia), the 
+person should not drive for a significant period 
+of time and will need to be urgently assessed. 
+The minimum period of time before returning 
+to drive is generally six weeks because it often 
+takes many weeks for patterns of glucose 
+control and behaviour to be re-established and 
+for any temporary ‘impaired hypoglycaemia 
+awareness’ to resolve (see below). The non-
+driving period will depend on factors such 
+as identifying the reason for the episode, the 
+specialist’s opinion and the type of motor vehicle 
+licence. The specialist’s recommendation for 
+returning to driving should be based on the 
+patient’s behaviour and objective measures of 
+glycaemic control (documented blood glucose) 
+over a reasonable interval. 
+Impaired hypoglycaemic awareness 10–14</blockquote></details><details><summary>AFTD2022-EXP-d83c4a25c127adee · § 4.2.2 · PDF 121</summary><blockquote>The nature of the driving task
+The driver licensing authority will take into 
+consideration the nature of the driving task 
+as well as the medical condition, particularly 
+when granting a conditional licence. For 
+example, the licence status of a farmer 
+requiring a commercial vehicle licence for 
+the occasional use of a heavy vehicle may 
+be quite different from that of an interstate 
+multiple combination vehicle driver. The 
+examining health professional should bear 
+this in mind when examining a person 
+and when providing advice to the driver 
+licensing authority.
+Reporting responsibilities
+Patients should be made aware of the 
+effects of their condition on driving and 
+should be advised of their legal obligation 
+to notify the driver licensing authority where 
+driving is likely to be affected. The health 
+professional may themselves advise the 
+driver licensing authority as the situation 
+requires (refer to section 3.3 and step 6).</blockquote></details><details><summary>AFTD2022-EXP-f57fef6c660a1e6d · § 2.3.1 · PDF 99</summary><blockquote>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+annual review, taking into account the nature 
+of the driving task and information provided 
+by the treating specialist* as to whether the 
+following criteria are met:
+•	 the person is treated with antihypertensive 
+therapy and effective control of 
+hypertension is achieved over a 4-week 
+follow-up period; and
+•	 there are no side effects from the 
+medication that will impair safe driving; and
+•	 there is no evidence of damage to target 
+organs relevant to driving.
+* Ongoing fitness to drive for commercial 
+vehicle drivers may be assessed by the 
+treating GP provided this is mutually agreed 
+by the specialist, GP and driver licensing 
+authority. The initial granting of a conditional 
+licence must, however, be based on 
+information provided by the specialist.</blockquote></details><details><summary>AFTD2022-EXP-59e2fd52c2d21514 · § 10.2.8 · PDF 219</summary><blockquote>assessment performed by an ophthalmologist or 
+optometrist when making its licensing decision.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="no_evidence" data-module="all" data-status="failed" data-repeat="1" data-error="failed"><h3>SYN-EXT-001 <small>no_evidence · repeat 1</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><p>No evidence supplied.</p></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="no_evidence" data-module="all" data-status="failed" data-repeat="2" data-error="failed"><h3>SYN-EXT-001 <small>no_evidence · repeat 2</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><p>No evidence supplied.</p></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="no_evidence" data-module="all" data-status="failed" data-repeat="3" data-error="failed"><h3>SYN-EXT-001 <small>no_evidence · repeat 3</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><p>No evidence supplied.</p></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="reference_evidence" data-module="all" data-status="failed" data-repeat="1" data-error="failed"><h3>SYN-EXT-001 <small>reference_evidence · repeat 1</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-HTN-COM-001 · § 2.3.1 · PDF 99</summary><blockquote>A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).</blockquote></details><details><summary>AFTD2022-VIS-COM-002 · § 10.3 · PDF 220</summary><blockquote>A person is not fit to hold an unconditional 
+licence:
+•	 if the person’s uncorrected visual acuity is 
+worse than 6/9 in the better eye; or
+•	 if the person’s uncorrected visual acuity is 
+worse than 6/18 in either eye.</blockquote></details><details><summary>AFTD2022-HEAR-COM-001 · § 4.3 · PDF 120</summary><blockquote>Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.</blockquote></details><details><summary>AFTD2022-BLK-COM-001 · § 1.2.1 · PDF 68</summary><blockquote>cardiovascular and neurological investigations 
+and referral to several specialists. People should 
+be advised not to drive until the mechanism is 
+ascertained and the corresponding standard met.</blockquote></details><details><summary>AFTD2022-DM-COM-004 · § 3.3 · PDF 112</summary><blockquote>A person with diabetes treated by diet and 
+exercise alone may drive without licence 
+restriction. They should he reviewed by their 
+treating doctor periodically regarding the 
+progression of their diabetes.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="reference_evidence" data-module="all" data-status="failed" data-repeat="2" data-error="failed"><h3>SYN-EXT-001 <small>reference_evidence · repeat 2</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-HTN-COM-001 · § 2.3.1 · PDF 99</summary><blockquote>A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).</blockquote></details><details><summary>AFTD2022-VIS-COM-002 · § 10.3 · PDF 220</summary><blockquote>A person is not fit to hold an unconditional 
+licence:
+•	 if the person’s uncorrected visual acuity is 
+worse than 6/9 in the better eye; or
+•	 if the person’s uncorrected visual acuity is 
+worse than 6/18 in either eye.</blockquote></details><details><summary>AFTD2022-HEAR-COM-001 · § 4.3 · PDF 120</summary><blockquote>Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.</blockquote></details><details><summary>AFTD2022-BLK-COM-001 · § 1.2.1 · PDF 68</summary><blockquote>cardiovascular and neurological investigations 
+and referral to several specialists. People should 
+be advised not to drive until the mechanism is 
+ascertained and the corresponding standard met.</blockquote></details><details><summary>AFTD2022-DM-COM-004 · § 3.3 · PDF 112</summary><blockquote>A person with diabetes treated by diet and 
+exercise alone may drive without licence 
+restriction. They should he reviewed by their 
+treating doctor periodically regarding the 
+progression of their diabetes.</blockquote></details></article><article data-case="SYN-EXT-001" data-model="llama3:8b" data-method="reference_evidence" data-module="all" data-status="failed" data-repeat="3" data-error="failed"><h3>SYN-EXT-001 <small>reference_evidence · repeat 3</small></h3><p>llama3:8b · all · failed</p><p>Reference: <b>meets_unconditional_standard</b><br>Proposal: <b>Unavailable</b></p><p>ValueError: Model cited a source or patient fact that was not supplied</p><p>Citations: None</p><details><summary>Original note and frozen facts</summary><blockquote>SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT
+Commercial driver assessment.
+Complete normal screening across all five pilot modules.
+
+Structured assessment addendum (explicit documented facts; no inferred values):
+cardiovascular.blood_pressure.persistent_systolic = 120
+cardiovascular.blood_pressure.persistent_diastolic = 80
+vision.uncorrected.right.snellen = &quot;6/6&quot;
+vision.uncorrected.left.snellen = &quot;6/6&quot;
+vision.visual_field.confirmed_defect = false
+vision.diplopia.present = false
+vision.monocular = false
+hearing.clinical_assessment = &quot;no_hearing_loss&quot;
+blackout.occurred = false
+diabetes.present = false
+</blockquote><pre>{
+  &quot;cardiovascular.blood_pressure.persistent_systolic&quot;: {
+    &quot;value&quot;: 120,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_systolic = 120&quot;
+    ]
+  },
+  &quot;cardiovascular.blood_pressure.persistent_diastolic&quot;: {
+    &quot;value&quot;: 80.0,
+    &quot;patient_quotes&quot;: [
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;,
+      &quot;cardiovascular.blood_pressure.persistent_diastolic = 80&quot;
+    ]
+  },
+  &quot;vision.uncorrected.right.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.left.snellen&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  },
+  &quot;vision.uncorrected.better_eye&quot;: {
+    &quot;value&quot;: &quot;6/6&quot;,
+    &quot;patient_quotes&quot;: [
+      &quot;vision.uncorrected.right.snellen = \&quot;6/6\&quot;&quot;,
+      &quot;vision.uncorrected.left.snellen = \&quot;6/6\&quot;&quot;
+    ]
+  }
+}</pre></details><h4>Evidence actually supplied to the judge</h4><details><summary>AFTD2022-HTN-COM-001 · § 2.3.1 · PDF 99</summary><blockquote>A person is not fit to hold an unconditional 
+licence:
+•	 if the person has blood pressure 
+consistently &gt; 170 systolic or &gt; 100 diastolic 
+(treated or untreated).</blockquote></details><details><summary>AFTD2022-VIS-COM-002 · § 10.3 · PDF 220</summary><blockquote>A person is not fit to hold an unconditional 
+licence:
+•	 if the person’s uncorrected visual acuity is 
+worse than 6/9 in the better eye; or
+•	 if the person’s uncorrected visual acuity is 
+worse than 6/18 in either eye.</blockquote></details><details><summary>AFTD2022-HEAR-COM-001 · § 4.3 · PDF 120</summary><blockquote>Compliance with the standard should be clinically 
+assessed initially. If the initial clinical assessment 
+indicates possible hearing loss, the person should 
+be referred for audiometry.</blockquote></details><details><summary>AFTD2022-BLK-COM-001 · § 1.2.1 · PDF 68</summary><blockquote>cardiovascular and neurological investigations 
+and referral to several specialists. People should 
+be advised not to drive until the mechanism is 
+ascertained and the corresponding standard met.</blockquote></details><details><summary>AFTD2022-DM-COM-004 · § 3.3 · PDF 112</summary><blockquote>A person with diabetes treated by diet and 
+exercise alone may drive without licence 
+restriction. They should he reviewed by their 
+treating doctor periodically regarding the 
+progression of their diabetes.</blockquote></details></article></div></section><section><h2>Audit and reproducibility</h2><p><a href="summary.json">Metrics and paired transitions</a> · <a href="summary.csv">Summary CSV</a> · <a href="results.jsonl">Raw judgments</a> · <a href="retrieval.json">Retrieval results</a> · <a href="label_audit.json">Label audit</a> · <a href="upstream_audit.json">Upstream fact review audit</a> · <a href="disease_metrics.json">Disease metrics</a> · <a href="costs.json">Cost audit</a> · <a href="label_consistent_sensitivity.json">Label sensitivity</a> · <a href="retrieval_review.csv">Evidence review worksheet</a> · <a href="corpus.json">Frozen source corpus</a> · <a href="labels.json">Provisional labels</a> · <a href="manifest.json">Configuration manifest</a> · <a href="review_queue.json">Review queue</a></p><p>Formal workflow and deterministic rule results are unchanged. Figure reading-order exclusions and unresolved section references are recorded in the corpus.</p></section></main><script>function filterCases(){const filters=[...document.querySelectorAll("select")];document.querySelectorAll("article").forEach(a=>{a.hidden=filters.some(f=>f.value&&a.dataset[f.dataset.field==="case_id"?"case":f.dataset.field]!==f.value)})}document.querySelectorAll("select").forEach(s=>s.addEventListener("change",filterCases));filterCases();</script></body></html>

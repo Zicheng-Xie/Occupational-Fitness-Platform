@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "8bf1fe8b765233af09b8089c603f0b0a76258d6903205bd054ea2cb9bebf7881",
+  "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 608,
+      "eval_count": 39,
+      "total_duration": 1009121000
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 612,
+      "eval_count": 61,
+      "total_duration": 1293322100
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "hearing.audiometry.available",
+      "kind": "omission",
+      "quote": "The audiologist's current signed report documents an unaided better-ear average of 39 dB over 0.5, 1, 2 and 3 kHz, with no aid worn during the measurements and audiometry explicitly completed; the driver sometimes turns the volume up for traffic updates in a noisy loading area, but the nurse separates that environmental complaint from the identified ear, frequencies and unaided testing conditions in the report.",
+      "explanation": "Independent source reading differs from the extraction. A formal audiogram is available.",
+      "evidence": [
+        {
+          "start": 442,
+          "end": 856,
+          "quote": "The audiologist's current signed report documents an unaided better-ear average of 39 dB over 0.5, 1, 2 and 3 kHz, with no aid worn during the measurements and audiometry explicitly completed; the driver sometimes turns the volume up for traffic updates in a noisy loading area, but the nurse separates that environmental complaint from the identified ear, frequencies and unaided testing conditions in the report.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "kind": "omission",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. A screening impression of possible hearing_loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold.",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 64,
+          "quote": "Synthetic nurse note for software testing. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "hearing.audiometry.available",
+    "hearing.clinical_assessment"
+  ],
+  "checked_fields": [],
+  "manual_review_required": true,
+  "review_modules": [
+    "hearing"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "1d035d4119c3be7c62c69b3be97692eb0efb2e5ac7748246adaa1e63132b621b",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "hearing.audiometry.available": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "hearing.clinical_assessment": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "hearing.audiometry.available"
+      ],
+      "status": "valid",
+      "request_sha256": "2ec05a5743ca7290039d40f3fbc948b1989460b3d6f3ac81ba1c72378b317ecf",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "hearing.clinical_assessment"
+      ],
+      "status": "valid",
+      "request_sha256": "46e798dc253d5442823da886168602698fc46bba6bd4158129d5d49939441afa",
+      "response_schema_sha256": "c2050be29729ba8b9985ec2b67eb5ce72d1db509cc6b2a9a77317ef7aa9dfe44"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "hearing.audiometry.available",
+      "value": true,
+      "status": "documented",
+      "quote": "The audiologist's current signed report documents an unaided better-ear average of 39 dB over 0.5, 1, 2 and 3 kHz, with no aid worn during the measurements and audiometry explicitly completed; the driver sometimes turns the volume up for traffic updates in a noisy loading area, but the nurse separates that environmental complaint from the identified ear, frequencies and unaided testing conditions in the report.",
+      "explanation": "A formal audiogram is available."
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": "possible_hearing_loss",
+      "status": "documented",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "A screening impression of possible hearing_loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold."
+    }
+  ],
+  "output_facts_sha256": "2aec24297e0510242d837303bcf052e601776ea1687b5f5ff9d0ae560a0d3c81",
+  "facts_quarantined": true
+}

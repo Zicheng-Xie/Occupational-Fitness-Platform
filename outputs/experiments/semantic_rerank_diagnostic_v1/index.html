@@ -1,0 +1,542 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Semantic reranking diagnostic | Occupational Fitness Platform</title><style>body{font:14px/1.6 Arial,sans-serif;margin:0;background:#f3f6f8;color:#24384a}main{max-width:1200px;margin:30px auto;padding:0 24px}section,header{padding:24px;background:white;border:1px solid #dce4ea;border-radius:8px;margin-bottom:20px}h1{font-size:27px}h2{font-size:19px}table{border-collapse:collapse;width:100%;font-size:12px}td,th{text-align:left;padding:9px;border-bottom:1px solid #dce4ea}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f8fa;padding:14px}a{color:#236082}summary{cursor:pointer;padding:10px 0}</style><main><header><h1>Semantic reranking: observed failure mechanisms</h1><p>Occupational Fitness Platform · Experimental development evidence</p><p>Keep v3 as the preferred seventh method. These observations generate hypotheses; they do not establish clinical accuracy or isolate the effect of any single passage/header.</p><p><a href="diagnostics.json">Exact scores, rankings and source text</a> · <a href="brief.txt">English brief</a> · <a href="manifest.json">Provenance</a></p></header><section><h2>Topical score differs from predicate applicability</h2><p>For under-investigation blackout queries, section 1.2.4 about undetermined mechanism after extensive investigation scores above the source advising no driving until the mechanism is ascertained. Acute metabolic-instability advice also scores below routine diabetes-treatment passages.</p><p>Observational mechanism hypothesis; no controlled prompt, content-format or predicate intervention was run.</p></section><section><h2>Formatting and surrounding commercial context can affect native scores</h2><p>For SYN-EXT-018, the canonical diplopia source has sigmoid 0.12765262532179067, while the longer commercial-table original containing that same criterion scores 0.8578872059303786. Visual-field originals score up to 0.9184802440252811 despite the query documenting no confirmed field defect.</p><p>The passages differ in length and context as well as headers, so this observation does not isolate the causal contribution of formatting.</p></section><section><h2>Coverage protection succeeds at Top10 but does not protect Top5 order</h2><p>Both semantic variants retain 100% source coverage at Top10. The primary blend demotes four formerly fully-covered query scopes below rank five, leaving 83.70% average Top5 coverage compared with v3 92.59%.</p><p>Paired retrieval observation with fixed corpus/query/candidate inputs; not a demonstrated clinical judgment effect.</p></section><section><h2>SYN-EXT-003 / blackout</h2><pre>blackout commercial driving medical fitness standard | blackout mechanism status = &quot;under_investigation&quot; | blackout occurred = true | blackout.mechanism_status = &quot;under_investigation&quot; | blackout.occurred = true</pre><p>Engineering reference sources: AFTD2022-BLK-COM-001</p><table><tr><th>Original source</th><th>Native sigmoid</th><th>v3 rank</th><th>v5 rank</th><th>Native rank</th></tr><tr><td>AFTD2022-EXP-bbf242d555576d02</td><td>0.7969253718105298</td><td>1</td><td>1</td><td>3</td></tr><tr><td>AFTD2022-EXP-3a8e08652c83a2d0</td><td>0.915356041864219</td><td>2</td><td>2</td><td>1</td></tr><tr><td>AFTD2022-EXP-2332d9548f2abd01</td><td>0.8253083097313677</td><td>3</td><td>3</td><td>2</td></tr><tr><td>AFTD2022-EXP-05643c50d6cf5973</td><td>0.5891255347614328</td><td>4</td><td>6</td><td>7</td></tr><tr><td>AFTD2022-BLK-COM-006</td><td>0.6581978338852327</td><td>5</td><td>5</td><td>5</td></tr><tr><td>AFTD2022-EXP-5546204ae4ffe0ee</td><td>0.7833262058913498</td><td>6</td><td>4</td><td>4</td></tr></table><details><summary>AFTD2022-EXP-bbf242d555576d02 · Section 1.3 · PDF 70</summary><p><a href="evidence_guide.pdf#page=70">Open original guideline page</a> · Printed page 59</p><pre>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person should not drive for 5 
+years following a single blackout of 
+undetermined nature.
+A person should not drive for 10 years 
+following two or more blackouts of 
+undetermined nature separated by a 24-
+hour period.
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has experienced blackouts 
+that cannot be diagnosed as syncope, 
+seizure or another condition.
+If there has been a single blackout or more 
+than one blackout within a 24-hour period, 
+a conditional licence may be considered 
+by the driver licensing authority subject to 
+at least annual review, taking into account 
+information provided by an appropriate 
+specialist as to whether the following 
+criterion is met:
+•	 there have been no further blackouts for 
+at least 5 years.
+If there have been two or more blackouts 
+separated by at least 24 hours, a 
+conditional licence may be considered by 
+the driver licensing authority subject to at 
+least annual review, taking into account 
+information provided by an appropriate 
+specialist as to whether the following 
+criterion is met:
+•	 there have been no further blackouts for 
+at least 10 years.</pre></details><details><summary>AFTD2022-EXP-3a8e08652c83a2d0 · Section 1.2.4 · PDF 69</summary><p><a href="evidence_guide.pdf#page=69">Open original guideline page</a> · Printed page 58</p><pre>1.2.4. Blackouts of undetermined 
+mechanism
+If, despite extensive investigation, the 
+mechanism of a blackout cannot be determined, 
+fitness to drive should be assessed according 
+to section 1.3. Medical standards for licensing. 
+The standards for blackout of undetermined 
+mechanism are similar to those for seizure.</pre></details><details><summary>AFTD2022-EXP-2332d9548f2abd01 · Section 1.2.3 · PDF 68</summary><p><a href="evidence_guide.pdf#page=68">Open original guideline page</a> · Printed page 57</p><pre>1.2.3. Blackouts due to medical 
+causes not covered in the standards
+If the cause of the blackout is determined 
+to be a medical condition not covered in 
+the standards, then first principles regarding 
+fitness to drive should be applied (refer to 
+Part A section 2. Assessing fitness to drive 
+– general guidance). Considerations include 
+the likelihood of recurrence of blackout and 
+the treatability of the condition as well as the 
+nature of the driving task. There should also be 
+an appropriate review period. A more stringent 
+approach should be considered for commercial 
+vehicle drivers.</pre></details><details><summary>AFTD2022-EXP-05643c50d6cf5973 · Section 1.2.1 · PDF 68</summary><p><a href="evidence_guide.pdf#page=68">Open original guideline page</a> · Printed page 57</p><pre>cardiovascular and neurological investigations 
+and referral to several specialists. People should 
+be advised not to drive until the mechanism is 
+ascertained and the corresponding standard met.
+Some drivers may attribute a crash or driving 
+mishap to a ‘blackout’ to excuse an event 
+that occurred for some other reason such as 
+inattention or distraction (e.g. a mobile phone 
+conversation). There will also be a small 
+proportion of cases in which a clear cause 
+cannot be established.</pre></details><details><summary>AFTD2022-BLK-COM-006 · Section 1.3 · PDF 69</summary><p><a href="evidence_guide.pdf#page=69">Open original guideline page</a> · Printed page 58</p><pre>themselves with the information in this chapter 
+and the tabulated standards before assessing a 
+person’s fitness to drive. 
+Where a firm diagnosis has been made, the 
+standard appropriate to the condition should 
+be referred to in this publication (refer to Figure 
+6. Management of blackouts and driving). For 
+blackouts due to medical causes not covered 
+in the standard, refer to first principles (refer to 
+Part A section 2. Assessing fitness to drive – 
+general guidance). For blackouts where, after 
+investigation, it is not possible to diagnose one 
+of the conditions covered elsewhere in this 
+publication, refer to the table for blackouts of 
+uncertain nature over the page.</pre></details><details><summary>AFTD2022-EXP-5546204ae4ffe0ee · Section 1.3 · PDF 71</summary><p><a href="evidence_guide.pdf#page=71">Open original guideline page</a> · Printed page 60</p><pre>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+Where a person with one or more blackouts 
+of undetermined mechanism does not 
+meet the standards above for a conditional 
+licence but may, in the opinion of the 
+treating specialist, be safe to drive, a 
+conditional licence may be considered by 
+the driver licensing authority, subject to at 
+least annual review:
+•	 if the driver licensing authority, after 
+considering information provided by the 
+treating specialist(s), considers that the 
+risk of a crash caused by a blackout is 
+acceptably low.</pre></details></section><section><h2>SYN-EXT-018 / vision</h2><pre>vision commercial driving medical fitness standard | vision diplopia physiological = false | vision diplopia present = true | vision diplopia within 20 degrees = true | vision monocular = false | vision uncorrected better eye = &quot;6/6&quot; | vision uncorrected left snellen = &quot;6/6&quot; | vision uncorrected right snellen = &quot;6/6&quot; | vision visual field confirmed defect = false | vision.diplopia.physiological = false | vision.diplopia.present = true | vision.diplopia.within_20_degrees = true | vision.monocular = false | vision.uncorrected.right.snellen = &quot;6/6&quot; | vision.uncorrected.left.snellen = &quot;6/6&quot; | vision.visual_field.confirmed_defect = false</pre><p>Engineering reference sources: AFTD2022-VIS-COM-007</p><table><tr><th>Original source</th><th>Native sigmoid</th><th>v3 rank</th><th>v5 rank</th><th>Native rank</th></tr><tr><td>AFTD2022-EXP-a09b64ac70a92828</td><td>0.8515829016098734</td><td>1</td><td>2</td><td>4</td></tr><tr><td>AFTD2022-EXP-117af1818c65d4ad</td><td>0.9184802440252811</td><td>2</td><td>1</td><td>1</td></tr><tr><td>AFTD2022-EXP-896156b1ec73be6c</td><td>0.5889482356182837</td><td>3</td><td>5</td><td>7</td></tr><tr><td>AFTD2022-EXP-adb72bb1f206f023</td><td>0.7880943290824391</td><td>4</td><td>3</td><td>5</td></tr><tr><td>AFTD2022-VIS-COM-007</td><td>0.12765262532179067</td><td>5</td><td>None</td><td>None</td></tr><tr><td>AFTD2022-EXP-a5934e81e0aee450</td><td>0.8716934649427494</td><td>7</td><td>4</td><td>2</td></tr><tr><td>AFTD2022-EXP-15bc1b265985cecd</td><td>0.8578872059303786</td><td>10</td><td>6</td><td>3</td></tr></table><details><summary>AFTD2022-EXP-a09b64ac70a92828 · Section 10.3 · PDF 220</summary><p><a href="evidence_guide.pdf#page=220">Open original guideline page</a> · Printed page 209</p><pre>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person’s uncorrected visual acuity is 
+worse than 6/9 in the better eye; or
+•	 if the person’s uncorrected visual acuity is 
+worse than 6/18 in either eye.
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+periodic review if the standard is met with 
+corrective lenses*.
+If the person’s vision is worse than 6/18 in 
+the worse eye, a conditional licence may be 
+considered by the driver licensing authority 
+subject to periodic review, provided the 
+visual acuity in the better eye is 6/9 (with or 
+without corrective lenses*) according to the 
+treating optometrist or ophthalmologist. 
+The driver licensing authority will take into 
+account:
+•	 the nature of the driving task; and
+•	 the nature of any underlying disorder; and
+•	 any other restriction advised by the 
+optometrist or ophthalmologist.
+* Refer to section 10.2.7. Orthokeratology 
+therapy for information on meeting the 
+standard using orthokeratology therapy.</pre></details><details><summary>AFTD2022-EXP-117af1818c65d4ad · Section 10.3 · PDF 221</summary><p><a href="evidence_guide.pdf#page=221">Open original guideline page</a> · Printed page 210</p><pre>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has any visual field defect.
+A conditional licence may be considered 
+by the driver licensing authority subject 
+to annual review, taking into account the 
+nature of the driving task and information 
+provided by the treating optometrist or 
+ophthalmologist as to whether the following 
+criteria are met:
+•	 the binocular visual field has an extent of 
+at least 140 degrees within 10 degrees 
+above and below the horizontal midline; 
+and
+•	 the person has no significant visual 
+field loss (scotoma, hemianopia, 
+quadrantanopia) that is likely to impede 
+driving performance; and
+•	 the visual field loss is static and unlikely to 
+progress rapidly.
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person is monocular.
+A conditional licence may be considered 
+by the driver licensing authority subject to 
+2-yearly review, taking into account the 
+nature of the driving task and information 
+provided by the treating optometrist or 
+ophthalmologist, as to whether the following 
+criteria are met:
+•	 the visual acuity in the remaining eye is 
+6/9 or better, with or without correction; 
+and
+•	 the visual field in the remaining eye has a 
+horizontal extent of at least 140 degrees 
+within 10 degrees above and below the 
+horizontal midline; and
+•	 there is no other significant visual field 
+loss that is likely to impede driving 
+performance.</pre></details><details><summary>AFTD2022-EXP-896156b1ec73be6c · Section 10.2.1 · PDF 214</summary><p><a href="evidence_guide.pdf#page=214">Open original guideline page</a> · Printed page 203</p><pre>Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Refer to optomertrist or ophthalmologist 
+for clinical assessment with regard to 
+driving task (also refer to 10.2.1)
+No
+No
+No
+Yes
+Not fit to hold an unconditional or 
+conditional licence
+ditional licence
+ye at least 6/24 
+tter eye at least 
+vate
+With one or both eyes at least 
+6/12
+Commercial
+•	 Better eye at least 6/9
+•	 Worse eye at least 6/18
+Corrected visual acuity (with glasses)</pre></details><details><summary>AFTD2022-EXP-adb72bb1f206f023 · Section 10.2.2 · PDF 215</summary><p><a href="evidence_guide.pdf#page=215">Open original guideline page</a> · Printed page 204</p><pre>10.2.2. Visual fields3–6,8–13
+For the purposes of this publication, visual 
+fields are defined as a measure of the extent 
+of peripheral (side) vision. Normal visual field is: 
+60 degrees nasally, 100 degrees temporally, 75 
+degrees inferiorly and 60 degrees superiorly. 
+The binocular field extends the horizontal extent 
+from 160 to 200 degrees, with the central 120 
+degrees overlapping and providing the potential 
+for stereopsis. 
+Visual fields may be reduced due to a range 
+of neurological conditions (e.g. stroke, multiple 
+sclerosis) as well by ocular diseases (e.g. 
+glaucoma), or injuries, resulting in hemionopia, 
+quadrantanopia or monocularity. 
+Peripheral vision assists the driver to be aware 
+of the total driving environment. Once alerted, 
+the central fovea area is moved to identify 
+the importance of the information. Therefore, 
+peripheral vision loss that is incomplete will 
+still allow awareness; this includes small areas 
+of loss and patchy loss. Additionally, affected 
+drivers can adapt to the defect by scanning 
+regularly and effectively and can have good 
+awareness. Patients with visual field defects 
+who have full intellectual/cognitive capacity 
+are more able to adapt, but those with such 
+impairments will have decreased awareness and 
+are therefore not safe to drive.
+A longstanding field defect, such as from 
+childhood, may lead to visual adaptation. Such 
+defects need to be assessed by an optometrist 
+or ophthalmologist for a conditional licence 
+to be considered. They should be managed 
+as an exceptional case to the standard, with 
+consideration for duration and evidence of visual 
+adaptation, whether the location of the defect is 
+an area that may already be blocked by the car 
+door on the passenger side (i.e. the inferior field 
+on the left side without central field loss), driver 
+safety record and the nature of the driving task.</pre></details><details><summary>AFTD2022-VIS-COM-007 · Section 10.3 · PDF 222</summary><p><a href="evidence_guide.pdf#page=222">Open original guideline page</a> · Printed page 211</p><pre>A person is not fit to hold an unconditional 
+licence or a conditional licence:
+•	 if the person experiences any diplopia 
+(other than physiological diplopia) within 
+20 degrees from central fixation.</pre></details><details><summary>AFTD2022-EXP-a5934e81e0aee450 · Section 10.2.2 · PDF 216</summary><p><a href="evidence_guide.pdf#page=216">Open original guideline page</a> · Printed page 205</p><pre>•	
+any central loss that is an extension of 
+a hemianopia or quadrantanopia of size 
+greater than three missed points.
+Methods of measuring visual fields are limited in 
+their ability to resemble the demands of the real-
+world driving environment where drivers are free 
+to move their eyes as required and must sustain 
+their visual function in variable conditions. 
+Additional factors to be considered by the driver 
+licensing authority in assessing patients with 
+defects in visual fields therefore include, but are 
+not limited to, the following:
+•	
+kinetic fields conducted on a Goldman
+•	
+binocular Esterman visual fields conducted 
+without fixation monitoring, often referred to 
+as a roving Esterman (two consecutive tests 
+must be performed with no more than one 
+false-positive allowed) – the test should be 
+in the numeric field format when it is printed 
+out or sent for an opinion
+•	
+contrast sensitivity and glare susceptibility
+•	
+medical history; duration and prognosis; 
+if the condition is progressive; rate of 
+progression/deterioration; effectiveness of 
+treatment/management
+•	
+driving record before and since the 
+occurrence of the defect
+•	
+the nature of the driving task – for example, 
+type of vehicle (truck, bus, etc.), roads 
+and distances to be travelled concomitant 
+medical conditions such as cognitive 
+impairment or impaired rotation of the neck.
+There is no flexibility in this regard for 
+commercial vehicle drivers. 
+Monocular vision (one-eyed driver)
+Monocular drivers have a reduction of visual 
+fields due to the nose obstructing the medial 
+visual field. They also have no stereoscopic 
+vision and may have other deficits in 
+visual functions.</pre></details><details><summary>AFTD2022-EXP-15bc1b265985cecd · Section 10.3 · PDF 222</summary><p><a href="evidence_guide.pdf#page=222">Open original guideline page</a> · Printed page 211</p><pre>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence or a conditional licence:
+•	 if the person experiences any diplopia 
+(other than physiological diplopia) within 
+20 degrees from central fixation.</pre></details></section><section><h2>VAL-MIX-06 / blackout</h2><pre>blackout commercial driving medical fitness standard | blackout mechanism status = &quot;under_investigation&quot; | blackout occurred = true | the mechanism is under investigation | The current physician referral states that the mechanism is under investigation.  | The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. </pre><p>Engineering reference sources: AFTD2022-BLK-COM-001</p><table><tr><th>Original source</th><th>Native sigmoid</th><th>v3 rank</th><th>v5 rank</th><th>Native rank</th></tr><tr><td>AFTD2022-EXP-bbf242d555576d02</td><td>0.844152226954479</td><td>1</td><td>1</td><td>2</td></tr><tr><td>AFTD2022-EXP-3a8e08652c83a2d0</td><td>0.9133679324357356</td><td>2</td><td>2</td><td>1</td></tr><tr><td>AFTD2022-EXP-05643c50d6cf5973</td><td>0.3072540769048613</td><td>3</td><td>8</td><td>10</td></tr><tr><td>AFTD2022-EXP-2332d9548f2abd01</td><td>0.8003801309118019</td><td>4</td><td>3</td><td>4</td></tr><tr><td>AFTD2022-BLK-COM-006</td><td>0.777637773340701</td><td>5</td><td>5</td><td>5</td></tr><tr><td>AFTD2022-EXP-5546204ae4ffe0ee</td><td>0.8288002879954212</td><td>6</td><td>4</td><td>3</td></tr></table><details><summary>AFTD2022-EXP-bbf242d555576d02 · Section 1.3 · PDF 70</summary><p><a href="evidence_guide.pdf#page=70">Open original guideline page</a> · Printed page 59</p><pre>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+A person should not drive for 5 
+years following a single blackout of 
+undetermined nature.
+A person should not drive for 10 years 
+following two or more blackouts of 
+undetermined nature separated by a 24-
+hour period.
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has experienced blackouts 
+that cannot be diagnosed as syncope, 
+seizure or another condition.
+If there has been a single blackout or more 
+than one blackout within a 24-hour period, 
+a conditional licence may be considered 
+by the driver licensing authority subject to 
+at least annual review, taking into account 
+information provided by an appropriate 
+specialist as to whether the following 
+criterion is met:
+•	 there have been no further blackouts for 
+at least 5 years.
+If there have been two or more blackouts 
+separated by at least 24 hours, a 
+conditional licence may be considered by 
+the driver licensing authority subject to at 
+least annual review, taking into account 
+information provided by an appropriate 
+specialist as to whether the following 
+criterion is met:
+•	 there have been no further blackouts for 
+at least 10 years.</pre></details><details><summary>AFTD2022-EXP-3a8e08652c83a2d0 · Section 1.2.4 · PDF 69</summary><p><a href="evidence_guide.pdf#page=69">Open original guideline page</a> · Printed page 58</p><pre>1.2.4. Blackouts of undetermined 
+mechanism
+If, despite extensive investigation, the 
+mechanism of a blackout cannot be determined, 
+fitness to drive should be assessed according 
+to section 1.3. Medical standards for licensing. 
+The standards for blackout of undetermined 
+mechanism are similar to those for seizure.</pre></details><details><summary>AFTD2022-EXP-05643c50d6cf5973 · Section 1.2.1 · PDF 68</summary><p><a href="evidence_guide.pdf#page=68">Open original guideline page</a> · Printed page 57</p><pre>cardiovascular and neurological investigations 
+and referral to several specialists. People should 
+be advised not to drive until the mechanism is 
+ascertained and the corresponding standard met.
+Some drivers may attribute a crash or driving 
+mishap to a ‘blackout’ to excuse an event 
+that occurred for some other reason such as 
+inattention or distraction (e.g. a mobile phone 
+conversation). There will also be a small 
+proportion of cases in which a clear cause 
+cannot be established.</pre></details><details><summary>AFTD2022-EXP-2332d9548f2abd01 · Section 1.2.3 · PDF 68</summary><p><a href="evidence_guide.pdf#page=68">Open original guideline page</a> · Printed page 57</p><pre>1.2.3. Blackouts due to medical 
+causes not covered in the standards
+If the cause of the blackout is determined 
+to be a medical condition not covered in 
+the standards, then first principles regarding 
+fitness to drive should be applied (refer to 
+Part A section 2. Assessing fitness to drive 
+– general guidance). Considerations include 
+the likelihood of recurrence of blackout and 
+the treatability of the condition as well as the 
+nature of the driving task. There should also be 
+an appropriate review period. A more stringent 
+approach should be considered for commercial 
+vehicle drivers.</pre></details><details><summary>AFTD2022-BLK-COM-006 · Section 1.3 · PDF 69</summary><p><a href="evidence_guide.pdf#page=69">Open original guideline page</a> · Printed page 58</p><pre>themselves with the information in this chapter 
+and the tabulated standards before assessing a 
+person’s fitness to drive. 
+Where a firm diagnosis has been made, the 
+standard appropriate to the condition should 
+be referred to in this publication (refer to Figure 
+6. Management of blackouts and driving). For 
+blackouts due to medical causes not covered 
+in the standard, refer to first principles (refer to 
+Part A section 2. Assessing fitness to drive – 
+general guidance). For blackouts where, after 
+investigation, it is not possible to diagnose one 
+of the conditions covered elsewhere in this 
+publication, refer to the table for blackouts of 
+uncertain nature over the page.</pre></details><details><summary>AFTD2022-EXP-5546204ae4ffe0ee · Section 1.3 · PDF 71</summary><p><a href="evidence_guide.pdf#page=71">Open original guideline page</a> · Printed page 60</p><pre>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods 
+driver licence – refer to definition in Table 3)
+Where a person with one or more blackouts 
+of undetermined mechanism does not 
+meet the standards above for a conditional 
+licence but may, in the opinion of the 
+treating specialist, be safe to drive, a 
+conditional licence may be considered by 
+the driver licensing authority, subject to at 
+least annual review:
+•	 if the driver licensing authority, after 
+considering information provided by the 
+treating specialist(s), considers that the 
+risk of a crash caused by a blackout is 
+acceptably low.</pre></details></section><section><h2>VAL-MIX-07 / diabetes</h2><pre>diabetes commercial driving medical fitness standard | diabetes acutely unwell = true | diabetes metabolically unstable = true | diabetes present = true | The patient has confirmed type 2 diabetes and is acutely unwell at the current assessment.  | The treating physician&#x27;s signed note explicitly documents metabolically unstable diabetes after reviewing current observations and laboratory results;  | metabolically unstable diabetes | The patient has confirmed type 2 diabetes</pre><p>Engineering reference sources: AFTD2022-DM-COM-003</p><table><tr><th>Original source</th><th>Native sigmoid</th><th>v3 rank</th><th>v5 rank</th><th>Native rank</th></tr><tr><td>AFTD2022-EXP-42507db0424f7a27</td><td>0.9530133603823691</td><td>1</td><td>1</td><td>1</td></tr><tr><td>AFTD2022-DM-COM-003</td><td>0.3843920630588741</td><td>2</td><td>6</td><td>None</td></tr><tr><td>AFTD2022-EXP-758d10f29d7875e9</td><td>0.8444090059229068</td><td>3</td><td>2</td><td>4</td></tr><tr><td>AFTD2022-DM-COM-008</td><td>0.8352149025818176</td><td>4</td><td>4</td><td>5</td></tr><tr><td>AFTD2022-EXP-e3ca8efaf3d71461</td><td>0.929696150018054</td><td>5</td><td>3</td><td>2</td></tr><tr><td>AFTD2022-EXP-d6142190f29b7662</td><td>0.870156561979502</td><td>6</td><td>5</td><td>3</td></tr></table><details><summary>AFTD2022-EXP-42507db0424f7a27 · Section 3.3 · PDF 112</summary><p><a href="evidence_guide.pdf#page=112">Open original guideline page</a> · Printed page 101</p><pre>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person with diabetes treated by diet and 
+exercise alone may drive without licence 
+restriction. They should he reviewed by their 
+treating doctor periodically regarding the 
+progression of their diabetes.
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has non–insulin treated 
+diabetes mellitus and is being treated with 
+glucose-lowering agents other than insulin.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes* on whether 
+the following criteria are met:
+•	 there is no recent history of a ‘severe 
+hypoglycaemic event’ as assessed by the 
+specialist; and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia; 
+and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 there is an absence of end-organ 
+effects that may affect driving as per this 
+publication.
+* For a commercial driver with type 2 diabetes 
+who is being treated with metformin alone, the 
+annual review for a conditional licence may 
+be undertaken by the driver’s treating doctor 
+upon mutual agreement of the treating doctor, 
+specialist and driver licensing authority. The 
+initial granting of a conditional licence must, 
+however, be based on information provided by 
+the specialist.</pre></details><details><summary>AFTD2022-DM-COM-003 · Section 3.2.2 · PDF 106</summary><p><a href="evidence_guide.pdf#page=106">Open original guideline page</a> · Printed page 95</p><pre>3.2.2. Acute hyperglycaemia
+While acute hyperglycaemia may affect some 
+aspects of brain function, there is not enough 
+evidence to determine the regular effects on 
+driving performance and related crash risk. Each 
+person with diabetes should be counselled 
+about managing their diabetes during days 
+when they are unwell and should be advised 
+not to drive if they are acutely unwell with 
+metabolically unstable diabetes.</pre></details><details><summary>AFTD2022-EXP-758d10f29d7875e9 · Section 3.3.2 · PDF 110</summary><p><a href="evidence_guide.pdf#page=110">Open original guideline page</a> · Printed page 99</p><pre>Commercial vehicle drivers treated by glucose-
+lowering agents other than insulin must have 
+at least an annual review by an appropriate 
+specialist to monitor the progression of their 
+condition. However, in the case of type 2 
+diabetes managed by metformin alone, ongoing 
+fitness to drive may be assessed by the treating 
+general practitioner by mutual agreement with 
+the specialist. The initial recommendation of 
+a conditional licence must be based on the 
+opinion of an endocrinologist or consultant 
+physician specialising in diabetes.
+In areas where access to specialists may be 
+difficult, the driver licensing authority may agree 
+to a process in which:
+•	
+initial assessment and advice for the 
+conditional licence is provided by a 
+specialist (endocrinologist or consultant 
+physician specialising in diabetes)
+•	
+ongoing periodic review for the conditional 
+licence is provided by the treating general 
+practitioner, with the cooperation of the 
+specialist.
+Where appropriate and available, the use 
+of telemedicine technologies such as 
+videoconferencing is encouraged as a means of 
+facilitating access to specialist opinion (refer to 
+Part A section 3.3.5. Role of medical specialists).</pre></details><details><summary>AFTD2022-DM-COM-008 · Section 3.3 · PDF 113</summary><p><a href="evidence_guide.pdf#page=113">Open original guideline page</a> · Printed page 102</p><pre>Insulin-
+treated 
+diabetes 
+(except 
+gestational 
+diabetes)
+
+Commercial standards
+
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</pre></details><details><summary>AFTD2022-EXP-e3ca8efaf3d71461 · Section 3.3 · PDF 113</summary><p><a href="evidence_guide.pdf#page=113">Open original guideline page</a> · Printed page 102</p><pre>Commercial standards
+(Drivers of heavy vehicles, public passenger 
+vehicles or requiring a dangerous goods driver 
+licence – refer to definition in Table 3)
+A person is not fit to hold an unconditional 
+licence:
+•	 if the person has insulin-treated diabetes.
+A conditional licence may be considered 
+by the driver licensing authority subject to at 
+least annual review, taking into consideration 
+the nature of the driving task and information 
+provided by an endocrinologist or consultant 
+physician specialising in diabetes on whether 
+the following criteria are met:
+•	 there is no recent history (generally at least 
+6 weeks) of a ‘severe hypoglycaemic event’ 
+as assessed by the specialist; and
+•	 the person is following a treatment regimen 
+that minimises the risk of hypoglycaemia; 
+and
+•	 the person experiences early warning 
+symptoms (awareness) of hypoglycaemia 
+(refer to section 3.2.1); and
+•	 there are no end-organ effects that may 
+affect driving as per this publication.</pre></details><details><summary>AFTD2022-EXP-d6142190f29b7662 · Section 3.2.3 · PDF 106</summary><p><a href="evidence_guide.pdf#page=106">Open original guideline page</a> · Printed page 95</p><pre>Vision
+Refer to section 10. Vision and eye disorders. 
+Visual acuity should be tested annually. Retinal 
+screening should be undertaken every second 
+year if there is no retinopathy, or more frequently 
+if at high risk. Visual field testing is not required 
+unless clinically indicated.7,8
+Neuropathy and foot care
+While it can be difficult to be prescriptive 
+about neuropathy in the context of driving, it is 
+important that the severity of the condition is 
+assessed. Adequate sensation and movement 
+for the operation of foot controls is required 
+(refer to section 6. Neurological conditions and 
+section 5. Musculoskeletal conditions).
+Sleep apnoea
+Sleep apnoea is a common comorbidity 
+affecting many people with type 2 diabetes and 
+has substantial implications for road safety. The 
+treating health professional should be alert to 
+potential signs (e.g. BMI greater than 35) and 
+symptoms, and apply the Epworth Sleepiness 
+Scale as appropriate (refer to section 8. Sleep 
+disorders).
+Cardiovascular
+There are no diabetes-specific medical 
+standards for cardiovascular risk factors and 
+driver licensing. Consistent with good medical 
+practice, people with diabetes should have their 
+cardiovascular risk factors periodically assessed 
+and treated as required (refer to section 2. 
+Cardiovascular conditions).</pre></details></section><section><h2>Stop further tuning on this batch</h2><p>One- or two-position adjacent promotions would not generally reach the remaining v3 missing references at ranks7-10. Unconditional native promotion has demonstrated predicate mismatches. Exact literal whole-clause consolidation was already evaluated among v2 variants without improving the retained v3 result. No further source-specific, case-specific or weight-grid tuning is justified on these observed failures.</p><h2>Next study — not implemented</h2><ol><li>Independently annotate clause applicability predicates and temporal states, blinded to patient expected source IDs.</li><li>Build held-out query/clause pairs for affirmation, negation, current versus historical states and under-investigation versus resolved mechanism.</li><li>Evaluate predicate entailment separately from topical similarity and citation validity.</li><li>Freeze one globally bounded adjacent-promotion/consolidation policy before the held-out evaluation; retain the full v3 Top10 footprint and whole-original budget.</li><li>Report relevance and applicability errors separately, and only run downstream judgments after that independent validation.</li></ol><p>33 observed development cases; 77 module queries, 45 labeled scopes; no sealed holdout and no clinical accuracy claim.</p></section></main></html>

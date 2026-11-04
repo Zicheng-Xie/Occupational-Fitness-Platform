@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "ed6fe46e01ccbaaf70420f2b0d115e70a07ce1b69995c1dd39373d7ed49bdec7",
+  "input_facts_sha256": "40a0f615329ac8dd97c726c744e39d99217523e216898f7846971e65caf0817d",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 597,
+      "eval_count": 78,
+      "total_duration": 1616484200
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 601,
+      "eval_count": 61,
+      "total_duration": 1300871300
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "hearing.clinical_assessment",
+      "kind": "omission",
+      "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+      "explanation": "Independent source reading differs from the extraction. A screening impression of possible hearing loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold.",
+      "evidence": [
+        {
+          "start": 442,
+          "end": 893,
+          "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "hearing.clinical_assessment"
+  ],
+  "checked_fields": [
+    "hearing.audiometry.available"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "hearing"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "563d9a6baff5c0fe4439cdcf273e2ea1802324a1929f356929256ea7632905a2",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "hearing.clinical_assessment": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "hearing.audiometry.available"
+      ],
+      "status": "valid",
+      "request_sha256": "b11f7b4cfb5ecebb13ff4db210af7c2231dff4b0a0cb6d06d6e00edf4a8f9275",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "hearing.clinical_assessment"
+      ],
+      "status": "valid",
+      "request_sha256": "a7601a1f0736fa46dd0f3f98e9507ac0409a359515e1288170d5f32a70772da4",
+      "response_schema_sha256": "c2050be29729ba8b9985ec2b67eb5ce72d1db509cc6b2a9a77317ef7aa9dfe44"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "hearing.audiometry.available",
+      "value": false,
+      "status": "documented",
+      "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+      "explanation": "The question is about the availability of a formal audiogram, not the quality or interpretation of the test. The answer is documented false because the notes explicitly state that audiometry has not been performed, and no audiogram is available."
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": "possible_hearing_loss",
+      "status": "documented",
+      "quote": "The current nurse assessment records possible hearing loss after the driver repeatedly asks for spoken instructions to be repeated, while the driver explains that he can hear a television at home and an older employer form called his hearing satisfactory; audiometry has not been performed, the ENT appointment is booked rather than completed, and no quantified unaided threshold or qualified aided assessment is available to resolve the disagreement.",
+      "explanation": "A screening impression of possible hearing loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold."
+    }
+  ],
+  "output_facts_sha256": "9ca56554af26979d4d4537c22fe758282d790b429599a28edd63569d9a640a15",
+  "facts_quarantined": true
+}

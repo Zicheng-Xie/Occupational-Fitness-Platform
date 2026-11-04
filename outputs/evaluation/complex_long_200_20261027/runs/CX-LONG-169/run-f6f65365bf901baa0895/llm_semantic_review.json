@@ -1,0 +1,211 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "40ebd1695359269e876bfea46ff97841921e466e99f1647067ac4e4913e3d514",
+  "input_facts_sha256": "60353c4117bd27a14afcf5c7f54e7f9c6be8a4cd08561210b05510a0005ffe26",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 600,
+      "eval_count": 95,
+      "total_duration": 1815889800
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 604,
+      "eval_count": 61,
+      "total_duration": 1277817400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 545,
+      "eval_count": 42,
+      "total_duration": 881566300
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "hearing.audiometry.available",
+      "kind": "omission",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. The question is about the availability of a formal audiogram, not the quality or interpretation of the audiogram. The answer is based on the direct evidence provided in the source passages. The audiogram is not explicitly mentioned as unavailable or not performed in any of the passages. Therefore, the answer is documented as true.",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 64,
+          "quote": "Synthetic nurse note for software testing. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "kind": "contradiction",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "Independent source reading differs from the extraction. A screening impression of possible hearing_loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold.",
+      "evidence": [
+        {
+          "start": 0,
+          "end": 64,
+          "quote": "Synthetic nurse note for software testing. No real patient data.",
+          "line_start": 1,
+          "line_end": 1,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "hearing.hearing_aid_used",
+      "kind": "unsupported",
+      "quote": "uses hearing aids",
+      "explanation": "Independent source reading differs from the extraction. There is no mention of hearing aids in the provided passages.",
+      "evidence": [
+        {
+          "start": 688,
+          "end": 705,
+          "quote": "uses hearing aids",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "hearing.audiometry.available",
+    "hearing.clinical_assessment",
+    "hearing.hearing_aid_used"
+  ],
+  "checked_fields": [
+    "hearing.clinical_assessment",
+    "hearing.hearing_aid_used"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "hearing"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "d468bc226067de7cc4073dee515c97b7a54992dd869c1efaf5a7a5fb21675ff2",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "hearing.audiometry.available": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "hearing.clinical_assessment": {
+      "value": "no_hearing_loss",
+      "status": "present",
+      "unit": null,
+      "evidence": [
+        {
+          "start": 494,
+          "end": 509,
+          "quote": "no hearing loss",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        },
+        {
+          "start": 436,
+          "end": 509,
+          "quote": "The current clinician's recorded hearing assessment finds no hearing loss",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "llm_grounded",
+      "derived_from": []
+    },
+    "hearing.hearing_aid_used": {
+      "value": true,
+      "status": "present",
+      "unit": null,
+      "evidence": [
+        {
+          "start": 688,
+          "end": 705,
+          "quote": "uses hearing aids",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "regex",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "hearing.audiometry.available"
+      ],
+      "status": "valid",
+      "request_sha256": "1db26af67d39e186bf28f55250c4d989f9cb5a0680cf851ebeffe820a85d5f44",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "hearing.clinical_assessment"
+      ],
+      "status": "valid",
+      "request_sha256": "2fe755fa580980a73d63d3eed62751d5f5e5e833b56a8d5a05ad78f51db8a48b",
+      "response_schema_sha256": "c2050be29729ba8b9985ec2b67eb5ce72d1db509cc6b2a9a77317ef7aa9dfe44"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "hearing.hearing_aid_used"
+      ],
+      "status": "valid",
+      "request_sha256": "8826d4e4137f72949fc85e207ca9f630498fb2e062ce6c786fcca29a83df332d",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "hearing.audiometry.available",
+      "value": true,
+      "status": "documented",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "The question is about the availability of a formal audiogram, not the quality or interpretation of the audiogram. The answer is based on the direct evidence provided in the source passages. The audiogram is not explicitly mentioned as unavailable or not performed in any of the passages. Therefore, the answer is documented as true."
+    },
+    {
+      "field": "hearing.clinical_assessment",
+      "value": "possible_hearing_loss",
+      "status": "documented",
+      "quote": "Synthetic nurse note for software testing. No real patient data.",
+      "explanation": "A screening impression of possible hearing_loss is a documented classification possible_hearing_loss, not confirmation of a measured hearing threshold."
+    },
+    {
+      "field": "hearing.hearing_aid_used",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "There is no mention of hearing aids in the provided passages."
+    }
+  ],
+  "output_facts_sha256": "ff7dea81db320495829b9f5b1f241475b3bf0c7b1529fbbad911dada7eae549e",
+  "facts_quarantined": true
+}

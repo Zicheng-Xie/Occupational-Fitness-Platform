@@ -1,0 +1,330 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "SYN-EXT-008",
+    "evidence_policy": "reference_evidence",
+    "protocol": "passage_selection",
+    "repeat": 2
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "outcome_first": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "blackout"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-a1eb49f152b573688d112731"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "blackout.mechanism_status",
+                          "blackout.diagnosis",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"blackout\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nA blackout is diagnosed as hypoglycaemia; assess the cause under the diabetes chapter.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\nblackout.occurred = true\\r\\ndiabetes.present = false\\r\\nblackout.mechanism_status = \\\"diagnosed\\\"\\r\\nblackout.diagnosis = \\\"hypoglycaemia\\\"\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": true, \"patient_quotes\": [\"blackout.occurred = true\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"blackout.mechanism_status\": {\"value\": \"diagnosed\", \"patient_quotes\": [\"blackout.mechanism_status = \\\"diagnosed\\\"\"]}, \"blackout.diagnosis\": {\"value\": \"hypoglycaemia\", \"patient_quotes\": [\"blackout.diagnosis = \\\"hypoglycaemia\\\"\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-BLK-COM-006\", \"section\": \"1.3\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"themselves with the information in this chapter \\nand the tabulated standards before assessing a \\nperson’s fitness to drive. \\nWhere a firm diagnosis has been made, the \\nstandard appropriate to the condition should \\nbe referred to in this publication (refer to Figure \\n6. Management of blackouts and driving). For \\nblackouts due to medical causes not covered \\nin the standard, refer to first principles (refer to \\nPart A section 2. Assessing fitness to drive – \\ngeneral guidance). For blackouts where, after \\ninvestigation, it is not possible to diagnose one \\nof the conditions covered elsewhere in this \\npublication, refer to the table for blackouts of \\nuncertain nature over the page.\", \"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"text_sha256\": \"d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574\", \"char_start\": 0, \"char_end\": 684}]}"
+              }
+            ]
+          },
+          "request_sha256": "e9095964a5064fcf65999200ac91ca7fbc22c23e7028271cbb9b548cd129fceb",
+          "request_bytes": 9860,
+          "status": "completed",
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T12:46:48.1230931Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"may_meet_conditional_standard\", \"explanation\": \"The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence. However, the patient's diabetes status is false, indicating that the patient does not have diabetes. Therefore, the patient may meet the conditional standard for driving with a diagnosed hypoglycaemia, but further investigation and stabilisation are required to confirm the patient's fitness to drive.\", \"criterion_checks\": [\n    {\"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"fact_fields\": [\"blackout.occurred\"], \"licence_pathway\": \"conditional\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence.\"},\n    {\"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"fact_fields\": [\"blackout.diagnosis\"], \"licence_pathway\": \"conditional\", \"finding\": \"established_restriction\", \"conclusion\": \"The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence.\"}\n] }"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 4174907800,
+            "load_duration": 3370200,
+            "prompt_eval_count": 1676,
+            "prompt_eval_cached_count": 1675,
+            "prompt_eval_duration": 35111000,
+            "eval_count": 281,
+            "eval_duration": 4118426999
+          },
+          "token_counts": {
+            "prompt_eval_count": 1676,
+            "eval_count": 281,
+            "prompt_eval_cached_count": 1675
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "may_meet_conditional_standard",
+            "explanation": "The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence. However, the patient's diabetes status is false, indicating that the patient does not have diabetes. Therefore, the patient may meet the conditional standard for driving with a diagnosed hypoglycaemia, but further investigation and stabilisation are required to confirm the patient's fitness to drive.",
+            "source_ids": [
+              "AFTD2022-BLK-COM-006"
+            ],
+            "fact_fields": [
+              "blackout.occurred",
+              "blackout.diagnosis"
+            ],
+            "criterion_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [
+                  "blackout.occurred"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence.",
+                "source_id": "AFTD2022-BLK-COM-006",
+                "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [
+                  "blackout.diagnosis"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence.",
+                "source_id": "AFTD2022-BLK-COM-006",
+                "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-a1eb49f152b573688d112731",
+              "source_id": "AFTD2022-BLK-COM-006",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.3",
+              "text_sha256": "d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 684,
+                  "original_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [
+                  "blackout.occurred"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence.",
+                "source_id": "AFTD2022-BLK-COM-006",
+                "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-a1eb49f152b573688d112731",
+              "source_id": "AFTD2022-BLK-COM-006",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.3",
+              "text_sha256": "d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 684,
+                  "original_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [
+                  "blackout.diagnosis"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence.",
+                "source_id": "AFTD2022-BLK-COM-006",
+                "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "conditional_prerequisites_not_established_in_checks"
+          ],
+          "seconds": 4.204212499997084,
+          "provider_called": true
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "explanation": "The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence. However, the patient's diabetes status is false, indicating that the patient does not have diabetes. Therefore, the patient may meet the conditional standard for driving with a diagnosed hypoglycaemia, but further investigation and stabilisation are required to confirm the patient's fitness to drive.",
+        "source_ids": [
+          "AFTD2022-BLK-COM-006"
+        ],
+        "fact_fields": [
+          "blackout.occurred",
+          "blackout.diagnosis"
+        ],
+        "criterion_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-a1eb49f152b573688d112731",
+            "fact_fields": [
+              "blackout.occurred"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence.",
+            "source_id": "AFTD2022-BLK-COM-006",
+            "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-a1eb49f152b573688d112731",
+            "fact_fields": [
+              "blackout.diagnosis"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The patient's blackout is diagnosed as hypoglycaemia, which is a medical cause covered in the guideline evidence.",
+            "source_id": "AFTD2022-BLK-COM-006",
+            "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+          }
+        ]
+      },
+      "seconds": 4.205994300002203
+    }
+  },
+  "support_review": "pending_independent_review"
+}

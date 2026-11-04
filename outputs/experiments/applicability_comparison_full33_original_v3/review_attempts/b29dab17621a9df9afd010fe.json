@@ -1,0 +1,343 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "SYN-EXT-018",
+    "evidence_policy": "module_query",
+    "protocol": "passage_selection",
+    "repeat": 2
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "outcome_first": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "vision"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-0175e075ee12f85aae49b3aa",
+                        "PASS-90a92f6fe426cfec4f4d7889",
+                        "PASS-4621b2e17806a7f42c0c6b4e",
+                        "PASS-48ca7f596942100fcaa8bd07",
+                        "PASS-8da032d63c954c0ce3d82598"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.diplopia.present",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "vision.diplopia.within_20_degrees",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only verified_patient_facts as established facts; nurse_note provides context,\nnot permission to promote uncertain, negated, historical or other-person findings.\nOnly keys in verified_patient_facts may be cited as fact_fields. A field mentioned\nin nurse_note but absent from verified_patient_facts remains unverified. Do not\nassume an unverified negative finding or declare an unassessed module normal.\nUse only supplied original guideline_evidence. Do not invent licensing standards.\nMissing information is not normal. Do not infer blackout from tiredness alone.\nReturn assessment_outcome, explanation and criterion_checks. Cite only supplied passage IDs and verified fields in those checks. A reference to non-insulin treatment\nalone does not establish that all conditional licence qualifications are met.\nWhen multiple modules are assessed, distinguish an established restrictive criterion\nfrom an unresolved module; explain both rather than hiding established findings.\nWith no guideline evidence, abstain if a standard cannot be established; empty source_ids\nare allowed only in that control. This proposal is not a clinical licensing decision.\n\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\nRecord short criterion_checks linking a verified patient finding to a specific\nguideline clause. These are auditable findings, not a request for private reasoning.\nFor every check, select one supplied passage_id. The application retrieves its\ncomplete original source_text and text location without model transcription.\nThe full passage, including qualifications, remains the basis for the check.\nUse only requested modules, supplied passage IDs and verified fact fields. A selected passage describes a criterion; selecting it does not establish that\nthe patient's criterion is met. Explicitly\ndistinguish established_restriction, conditional_permission, not_established and\ninformation_missing. Established restrictions require at least one verified fact.\nFor each check, state whether the clause concerns unconditional licensing,\nconditional licensing, both pathways, temporary no-driving, or general information.\nDo not apply an undiagnosed-blackout investigation rule when verified facts establish\na diagnosed cause; use the applicable supplied cause-specific evidence or abstain.\nThe application resolves passage_id to source_id and derives citation lists from explicit checks;\ndo not repeat source_ids or fact_fields as top-level lists. A proposed\nconditional permission does not override an independently established restriction.\nDo not use unverified original-note claims to fill missing verified facts. Do not\ntreat the failure to establish a conditional licence as proof of a permanent ban.\nReturn the same provisional outcome and explanation plus 1 to 5 criterion_checks.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"vision\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nNon-physiological diplopia within twenty degrees of central fixation is documented.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = true\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\nblackout.occurred = false\\r\\ndiabetes.present = false\\r\\nvision.diplopia.physiological = false\\r\\nvision.diplopia.within_20_degrees = true\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.diplopia.present\": {\"value\": true, \"patient_quotes\": [\"vision.diplopia.present = true\", \"vision.diplopia.present = true\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": false, \"patient_quotes\": [\"blackout.occurred = false\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"vision.diplopia.within_20_degrees\": {\"value\": true, \"patient_quotes\": [\"vision.diplopia.within_20_degrees = true\", \"vision.diplopia.within_20_degrees = true\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-896156b1ec73be6c\", \"section\": \"10.2.1\", \"pdf_page\": 214, \"printed_page\": 203, \"source_text\": \"Commercial\\n•\\t Better eye at least 6/9\\n•\\t Worse eye at least 6/18\\nRefer to optomertrist or ophthalmologist \\nfor clinical assessment with regard to \\ndriving task (also refer to 10.2.1)\\nNo\\nNo\\nNo\\nYes\\nNot fit to hold an unconditional or \\nconditional licence\\nditional licence\\nye at least 6/24 \\ntter eye at least \\nvate\\nWith one or both eyes at least \\n6/12\\nCommercial\\n•\\t Better eye at least 6/9\\n•\\t Worse eye at least 6/18\\nCorrected visual acuity (with glasses)\", \"module\": \"vision\", \"passage_id\": \"PASS-0175e075ee12f85aae49b3aa\", \"text_sha256\": \"818136fbde77e2e02674efc07cb5fa9a3b217d261630312f625b3821c3a34c71\", \"char_start\": 0, \"char_end\": 452}, {\"source_id\": \"AFTD2022-EXP-a09b64ac70a92828\", \"section\": \"10.3\", \"pdf_page\": 220, \"printed_page\": 209, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person’s uncorrected visual acuity is \\nworse than 6/9 in the better eye; or\\n•\\t if the person’s uncorrected visual acuity is \\nworse than 6/18 in either eye.\\nA conditional licence may be considered \\nby the driver licensing authority subject to \\nperiodic review if the standard is met with \\ncorrective lenses*.\\nIf the person’s vision is worse than 6/18 in \\nthe worse eye, a conditional licence may be \\nconsidered by the driver licensing authority \\nsubject to periodic review, provided the \\nvisual acuity in the better eye is 6/9 (with or \\nwithout corrective lenses*) according to the \\ntreating optometrist or ophthalmologist. \\nThe driver licensing authority will take into \\naccount:\\n•\\t the nature of the driving task; and\\n•\\t the nature of any underlying disorder; and\\n•\\t any other restriction advised by the \\noptometrist or ophthalmologist.\\n* Refer to section 10.2.7. Orthokeratology \\ntherapy for information on meeting the \\nstandard using orthokeratology therapy.\", \"module\": \"vision\", \"passage_id\": \"PASS-90a92f6fe426cfec4f4d7889\", \"text_sha256\": \"1561bd1c8d843335489a8cc083ba404911ec96db4967950f2b6cda5b096312d4\", \"char_start\": 0, \"char_end\": 1183}, {\"source_id\": \"AFTD2022-EXP-0fe8bf8cdf4b51c6\", \"section\": \"10.2.3\", \"pdf_page\": 217, \"printed_page\": 206, \"source_text\": \"10.2.3. Diplopia\\nPeople suffering from all but minor forms of \\ndiplopia are generally not fit to drive. Any person \\nwho reports or is suspected of experiencing \\ndiplopia within 20 degrees from central fixation \\nshould be referred for assessment by an \\noptometrist or ophthalmologist. For diplopia \\nmanaged with an occluder, a three-month non-\\ndriving period applies in order to re-establish \\ndepth perception.\", \"module\": \"vision\", \"passage_id\": \"PASS-4621b2e17806a7f42c0c6b4e\", \"text_sha256\": \"6dcadd2f37b0018e89c8643f4667dc37fc1b272c70f0389ecab1fc9a8033cfa2\", \"char_start\": 0, \"char_end\": 409}, {\"source_id\": \"AFTD2022-EXP-adb72bb1f206f023\", \"section\": \"10.2.2\", \"pdf_page\": 215, \"printed_page\": 204, \"source_text\": \"10.2.2. Visual fields3–6,8–13\\nFor the purposes of this publication, visual \\nfields are defined as a measure of the extent \\nof peripheral (side) vision. Normal visual field is: \\n60 degrees nasally, 100 degrees temporally, 75 \\ndegrees inferiorly and 60 degrees superiorly. \\nThe binocular field extends the horizontal extent \\nfrom 160 to 200 degrees, with the central 120 \\ndegrees overlapping and providing the potential \\nfor stereopsis. \\nVisual fields may be reduced due to a range \\nof neurological conditions (e.g. stroke, multiple \\nsclerosis) as well by ocular diseases (e.g. \\nglaucoma), or injuries, resulting in hemionopia, \\nquadrantanopia or monocularity. \\nPeripheral vision assists the driver to be aware \\nof the total driving environment. Once alerted, \\nthe central fovea area is moved to identify \\nthe importance of the information. Therefore, \\nperipheral vision loss that is incomplete will \\nstill allow awareness; this includes small areas \\nof loss and patchy loss. Additionally, affected \\ndrivers can adapt to the defect by scanning \\nregularly and effectively and can have good \\nawareness. Patients with visual field defects \\nwho have full intellectual/cognitive capacity \\nare more able to adapt, but those with such \\nimpairments will have decreased awareness and \\nare therefore not safe to drive.\\nA longstanding field defect, such as from \\nchildhood, may lead to visual adaptation. Such \\ndefects need to be assessed by an optometrist \\nor ophthalmologist for a conditional licence \\nto be considered. They should be managed \\nas an exceptional case to the standard, with \\nconsideration for duration and evidence of visual \\nadaptation, whether the location of the defect is \\nan area that may already be blocked by the car \\ndoor on the passenger side (i.e. the inferior field \\non the left side without central field loss), driver \\nsafety record and the nature of the driving task.\", \"module\": \"vision\", \"passage_id\": \"PASS-48ca7f596942100fcaa8bd07\", \"text_sha256\": \"e3577e9125f8b357450802fcb0818cc328e5a6f80e1dbfdd1eca9267d160578d\", \"char_start\": 0, \"char_end\": 1885}, {\"source_id\": \"AFTD2022-VIS-COM-007\", \"section\": \"10.3\", \"pdf_page\": 222, \"printed_page\": 211, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence or a conditional licence:\\n•\\t if the person experiences any diplopia \\n(other than physiological diplopia) within \\n20 degrees from central fixation.\", \"module\": \"vision\", \"passage_id\": \"PASS-8da032d63c954c0ce3d82598\", \"text_sha256\": \"23c939289597aecf602313c3e6274cea12bbe4853136c812693bacd460a63883\", \"char_start\": 0, \"char_end\": 200}]}"
+              }
+            ]
+          },
+          "request_sha256": "7238255a6d58772da7afb7fc21ea37a08a0c594303d8dbaa2c72657ba34fe404",
+          "request_bytes": 14803,
+          "status": "completed",
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T13:16:55.9901857Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"may_meet_conditional_standard\", \"explanation\": \"The patient's uncorrected visual acuity in both eyes is 6/6, which meets the unconditional standard. However, the patient's diplopia is within 20 degrees of central fixation, which is a restrictive criterion. According to the guideline evidence, a person with diplopia within 20 degrees from central fixation is not fit to hold an unconditional or conditional licence. Therefore, the patient may meet a conditional standard, pending further assessment and review by an optometrist or ophthalmologist.\", \"criterion_checks\": [\n{\"module\": \"vision\", \"passage_id\": \"PASS-4621b2e17806a7f42c0c6b4e\", \"fact_fields\": [\"vision.diplopia.present\", \"vision.diplopia.within_20_degrees\"], \"licence_pathway\": \"conditional\", \"finding\": \"established_restriction\", \"conclusion\": \"not fit to hold an unconditional or conditional licence\"},\n{\"module\": \"vision\", \"passage_id\": \"PASS-0175e075ee12f85aae49b3aa\", \"fact_fields\": [\"vision.uncorrected.right.snellen\", \"vision.uncorrected.left.snellen\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"meets unconditional standard\"}\n]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 4611709700,
+            "load_duration": 3637200,
+            "prompt_eval_count": 3099,
+            "prompt_eval_cached_count": 3098,
+            "prompt_eval_duration": 41174000,
+            "eval_count": 303,
+            "eval_duration": 4544575000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3099,
+            "eval_count": 303,
+            "prompt_eval_cached_count": 3098
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "may_meet_conditional_standard",
+            "explanation": "The patient's uncorrected visual acuity in both eyes is 6/6, which meets the unconditional standard. However, the patient's diplopia is within 20 degrees of central fixation, which is a restrictive criterion. According to the guideline evidence, a person with diplopia within 20 degrees from central fixation is not fit to hold an unconditional or conditional licence. Therefore, the patient may meet a conditional standard, pending further assessment and review by an optometrist or ophthalmologist.",
+            "source_ids": [
+              "AFTD2022-EXP-896156b1ec73be6c",
+              "AFTD2022-EXP-0fe8bf8cdf4b51c6"
+            ],
+            "fact_fields": [
+              "vision.uncorrected.right.snellen",
+              "vision.uncorrected.left.snellen",
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "criterion_checks": [
+              {
+                "module": "vision",
+                "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "not fit to hold an unconditional or conditional licence",
+                "source_id": "AFTD2022-EXP-0fe8bf8cdf4b51c6",
+                "guideline_quote": "10.2.3. Diplopia\nPeople suffering from all but minor forms of \ndiplopia are generally not fit to drive. Any person \nwho reports or is suspected of experiencing \ndiplopia within 20 degrees from central fixation \nshould be referred for assessment by an \noptometrist or ophthalmologist. For diplopia \nmanaged with an occluder, a three-month non-\ndriving period applies in order to re-establish \ndepth perception."
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-0175e075ee12f85aae49b3aa",
+                "fact_fields": [
+                  "vision.uncorrected.right.snellen",
+                  "vision.uncorrected.left.snellen"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "meets unconditional standard",
+                "source_id": "AFTD2022-EXP-896156b1ec73be6c",
+                "guideline_quote": "Commercial\n•\t Better eye at least 6/9\n•\t Worse eye at least 6/18\nRefer to optomertrist or ophthalmologist \nfor clinical assessment with regard to \ndriving task (also refer to 10.2.1)\nNo\nNo\nNo\nYes\nNot fit to hold an unconditional or \nconditional licence\nditional licence\nye at least 6/24 \ntter eye at least \nvate\nWith one or both eyes at least \n6/12\nCommercial\n•\t Better eye at least 6/9\n•\t Worse eye at least 6/18\nCorrected visual acuity (with glasses)"
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+              "source_id": "AFTD2022-EXP-0fe8bf8cdf4b51c6",
+              "pdf_page": 217,
+              "printed_page": 206,
+              "section": "10.2.3",
+              "text_sha256": "6dcadd2f37b0018e89c8643f4667dc37fc1b272c70f0389ecab1fc9a8033cfa2",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 409,
+                  "original_quote": "10.2.3. Diplopia\nPeople suffering from all but minor forms of \ndiplopia are generally not fit to drive. Any person \nwho reports or is suspected of experiencing \ndiplopia within 20 degrees from central fixation \nshould be referred for assessment by an \noptometrist or ophthalmologist. For diplopia \nmanaged with an occluder, a three-month non-\ndriving period applies in order to re-establish \ndepth perception."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "not fit to hold an unconditional or conditional licence",
+                "source_id": "AFTD2022-EXP-0fe8bf8cdf4b51c6",
+                "guideline_quote": "10.2.3. Diplopia\nPeople suffering from all but minor forms of \ndiplopia are generally not fit to drive. Any person \nwho reports or is suspected of experiencing \ndiplopia within 20 degrees from central fixation \nshould be referred for assessment by an \noptometrist or ophthalmologist. For diplopia \nmanaged with an occluder, a three-month non-\ndriving period applies in order to re-establish \ndepth perception."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-0175e075ee12f85aae49b3aa",
+              "source_id": "AFTD2022-EXP-896156b1ec73be6c",
+              "pdf_page": 214,
+              "printed_page": 203,
+              "section": "10.2.1",
+              "text_sha256": "818136fbde77e2e02674efc07cb5fa9a3b217d261630312f625b3821c3a34c71",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 452,
+                  "original_quote": "Commercial\n•\t Better eye at least 6/9\n•\t Worse eye at least 6/18\nRefer to optomertrist or ophthalmologist \nfor clinical assessment with regard to \ndriving task (also refer to 10.2.1)\nNo\nNo\nNo\nYes\nNot fit to hold an unconditional or \nconditional licence\nditional licence\nye at least 6/24 \ntter eye at least \nvate\nWith one or both eyes at least \n6/12\nCommercial\n•\t Better eye at least 6/9\n•\t Worse eye at least 6/18\nCorrected visual acuity (with glasses)"
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-0175e075ee12f85aae49b3aa",
+                "fact_fields": [
+                  "vision.uncorrected.right.snellen",
+                  "vision.uncorrected.left.snellen"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "meets unconditional standard",
+                "source_id": "AFTD2022-EXP-896156b1ec73be6c",
+                "guideline_quote": "Commercial\n•\t Better eye at least 6/9\n•\t Worse eye at least 6/18\nRefer to optomertrist or ophthalmologist \nfor clinical assessment with regard to \ndriving task (also refer to 10.2.1)\nNo\nNo\nNo\nYes\nNot fit to hold an unconditional or \nconditional licence\nditional licence\nye at least 6/24 \ntter eye at least \nvate\nWith one or both eyes at least \n6/12\nCommercial\n•\t Better eye at least 6/9\n•\t Worse eye at least 6/18\nCorrected visual acuity (with glasses)"
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "conditional_prerequisites_not_established_in_checks"
+          ],
+          "seconds": 4.640878300000622,
+          "provider_called": true
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "explanation": "The patient's uncorrected visual acuity in both eyes is 6/6, which meets the unconditional standard. However, the patient's diplopia is within 20 degrees of central fixation, which is a restrictive criterion. According to the guideline evidence, a person with diplopia within 20 degrees from central fixation is not fit to hold an unconditional or conditional licence. Therefore, the patient may meet a conditional standard, pending further assessment and review by an optometrist or ophthalmologist.",
+        "source_ids": [
+          "AFTD2022-EXP-896156b1ec73be6c",
+          "AFTD2022-EXP-0fe8bf8cdf4b51c6"
+        ],
+        "fact_fields": [
+          "vision.uncorrected.right.snellen",
+          "vision.uncorrected.left.snellen",
+          "vision.diplopia.present",
+          "vision.diplopia.within_20_degrees"
+        ],
+        "criterion_checks": [
+          {
+            "module": "vision",
+            "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+            "fact_fields": [
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "not fit to hold an unconditional or conditional licence",
+            "source_id": "AFTD2022-EXP-0fe8bf8cdf4b51c6",
+            "guideline_quote": "10.2.3. Diplopia\nPeople suffering from all but minor forms of \ndiplopia are generally not fit to drive. Any person \nwho reports or is suspected of experiencing \ndiplopia within 20 degrees from central fixation \nshould be referred for assessment by an \noptometrist or ophthalmologist. For diplopia \nmanaged with an occluder, a three-month non-\ndriving period applies in order to re-establish \ndepth perception."
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-0175e075ee12f85aae49b3aa",
+            "fact_fields": [
+              "vision.uncorrected.right.snellen",
+              "vision.uncorrected.left.snellen"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "meets unconditional standard",
+            "source_id": "AFTD2022-EXP-896156b1ec73be6c",
+            "guideline_quote": "Commercial\n•\t Better eye at least 6/9\n•\t Worse eye at least 6/18\nRefer to optomertrist or ophthalmologist \nfor clinical assessment with regard to \ndriving task (also refer to 10.2.1)\nNo\nNo\nNo\nYes\nNot fit to hold an unconditional or \nconditional licence\nditional licence\nye at least 6/24 \ntter eye at least \nvate\nWith one or both eyes at least \n6/12\nCommercial\n•\t Better eye at least 6/9\n•\t Worse eye at least 6/18\nCorrected visual acuity (with glasses)"
+          }
+        ]
+      },
+      "seconds": 4.642841100001533
+    }
+  },
+  "support_review": "pending_independent_review"
+}

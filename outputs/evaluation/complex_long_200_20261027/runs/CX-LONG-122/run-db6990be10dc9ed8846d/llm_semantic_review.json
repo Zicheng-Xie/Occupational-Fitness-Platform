@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "d9dee1f6b501c24ac5405f1cd72751589c52d4a0d7adb6260088a5cce908b8bc",
+  "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 655,
+      "eval_count": 59,
+      "total_duration": 1414194300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 616,
+      "eval_count": 59,
+      "total_duration": 1278850300
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "blackout.mechanism_status",
+      "kind": "omission",
+      "quote": "The hospital discharge report confirms that the driver's documented loss of consciousness was caused by hypoglycaemia after investigation, rather than remaining of undetermined nature; the current referral therefore names hypoglycaemia as the diagnosis, but the diabetes treatment history, recurrence risk and return-to-driving specialist advice are not attached, and a glucose value obtained after treatment cannot supply the missing longitudinal assessment.",
+      "explanation": "Independent source reading differs from the extraction. The cause of the blackout was investigated and found to be caused by hypoglycaemia, so the mechanism status is documented.",
+      "evidence": [
+        {
+          "start": 460,
+          "end": 919,
+          "quote": "The hospital discharge report confirms that the driver's documented loss of consciousness was caused by hypoglycaemia after investigation, rather than remaining of undetermined nature; the current referral therefore names hypoglycaemia as the diagnosis, but the diabetes treatment history, recurrence risk and return-to-driving specialist advice are not attached, and a glucose value obtained after treatment cannot supply the missing longitudinal assessment.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "blackout.mechanism_status"
+  ],
+  "checked_fields": [],
+  "manual_review_required": true,
+  "review_modules": [
+    "blackout"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "c94c1103a4991c0a70518ba4756d67f872c8c3274cec46f7a623d9df03f15faa",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "blackout.mechanism_status": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status"
+      ],
+      "status": "valid",
+      "request_sha256": "58d1c057aef3f7ce4fdd12f98e36ea0e2e4293d3d9e30dc100a00de4ab346871",
+      "response_schema_sha256": "91ed9342bc3afe4439594ed36a6c0504d60da4ae4dff961851177256a22d051a"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "blackout.occurred"
+      ],
+      "status": "valid",
+      "request_sha256": "505a2a3f828cd5d116f2eae865a3691ffce20c03b7ed7cb4378defeecd6c088f",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": "diagnosed",
+      "status": "documented",
+      "quote": "The hospital discharge report confirms that the driver's documented loss of consciousness was caused by hypoglycaemia after investigation, rather than remaining of undetermined nature; the current referral therefore names hypoglycaemia as the diagnosis, but the diabetes treatment history, recurrence risk and return-to-driving specialist advice are not attached, and a glucose value obtained after treatment cannot supply the missing longitudinal assessment.",
+      "explanation": "The cause of the blackout was investigated and found to be caused by hypoglycaemia, so the mechanism status is documented."
+    },
+    {
+      "field": "blackout.occurred",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The question is about the explicit reporting or witnessing of a blackout or transient loss of consciousness, which is not mentioned in any of the source passages."
+    }
+  ],
+  "output_facts_sha256": "5f9609f43b6cb2d11c546826cb3883dae2d143f7fbfb50f10ee0f5ae9d1889e0",
+  "facts_quarantined": true
+}

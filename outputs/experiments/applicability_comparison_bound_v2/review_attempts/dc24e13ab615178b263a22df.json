@@ -1,0 +1,1202 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "VAL-MIX-04",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 1
+  },
+  "results_sha256": "3577e23854a46d1f3c9f6ce95942515c990d1f776fc630ec22ca2b81856d90be",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.treatment_category",
+                          "diabetes.gestational",
+                          "vision.diplopia.present",
+                          "vision.diplopia.physiological",
+                          "vision.diplopia.within_20_degrees"
+                        ]
+                      },
+                      "maxItems": 6,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.treatment_category",
+                          "diabetes.gestational",
+                          "vision.diplopia.present",
+                          "vision.diplopia.physiological",
+                          "vision.diplopia.within_20_degrees"
+                        ]
+                      },
+                      "maxItems": 6,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver has established diabetes. The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. The driver has been adjusting meal times around split shifts and sometimes receives a sensor warning before feeling symptoms, but there is no documented recent episode requiring another person's assistance and no complete assessment of hypoglycaemia awareness in the material provided.\\n\\nThe ophthalmologist confirms non-physiological diplopia following a recent examination. Diplopia is present within 20 degrees of central fixation. The driver says the double image is more noticeable after prolonged night driving, yet the specialist reproduced it during daytime testing, so its absence during a short nursing interview is not treated as proof that the documented finding has resolved.\\n\\nA change of lenses has been proposed but not assessed, and the nurse has no updated specialist decision about the visual symptoms or the diabetes monitoring plan. The two confirmed findings are recorded independently; neither a successful lens adjustment nor adequate glucose control has been assumed.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The driver has established diabetes. \", \"The driver has established diabetes. \", \"The driver has established diabetes.\"]}, \"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. \"]}, \"diabetes.gestational\": {\"value\": false, \"patient_quotes\": [\"The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. \"]}, \"vision.diplopia.present\": {\"value\": true, \"patient_quotes\": [\"The ophthalmologist confirms non-physiological diplopia following a recent examination. \", \"The ophthalmologist confirms non-physiological diplopia following a recent examination.\"]}, \"vision.diplopia.physiological\": {\"value\": false, \"patient_quotes\": [\"The ophthalmologist confirms non-physiological diplopia following a recent examination. \"]}, \"vision.diplopia.within_20_degrees\": {\"value\": true, \"patient_quotes\": [\"Diplopia is present within 20 degrees of central fixation. \"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-VIS-COM-007\", \"section\": \"10.3\", \"pdf_page\": 222, \"printed_page\": 211, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence or a conditional licence:\\n•\\t if the person experiences any diplopia \\n(other than physiological diplopia) within \\n20 degrees from central fixation.\", \"module\": \"vision\", \"passage_id\": \"PASS-8da032d63c954c0ce3d82598\", \"text_sha256\": \"23c939289597aecf602313c3e6274cea12bbe4853136c812693bacd460a63883\", \"char_start\": 0, \"char_end\": 200, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-DM-COM-010\", \"section\": \"3.2.4\", \"pdf_page\": 107, \"printed_page\": 96, \"source_text\": \"3.2.4. Gestational diabetes mellitus\\nThe standards in this chapter apply to diabetes \\nmellitus as a chronic condition. The self-limiting \\ncondition known as gestational diabetes \\nmellitus does not affect licensing. However, \\nconsideration should be given to short-term \\nfitness to drive in women with gestational \\ndiabetes mellitus treated with insulin, although \\nsevere hypoglycaemia in this condition is rare. \\nAffected women should be counselled to \\nrecognise symptoms and to restrict driving when \\nsymptoms occur.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\", \"text_sha256\": \"8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f\", \"char_start\": 0, \"char_end\": 517, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-EXP-0fe8bf8cdf4b51c6\", \"section\": \"10.2.3\", \"pdf_page\": 217, \"printed_page\": 206, \"source_text\": \"10.2.3. Diplopia\\nPeople suffering from all but minor forms of \\ndiplopia are generally not fit to drive. Any person \\nwho reports or is suspected of experiencing \\ndiplopia within 20 degrees from central fixation \\nshould be referred for assessment by an \\noptometrist or ophthalmologist. For diplopia \\nmanaged with an occluder, a three-month non-\\ndriving period applies in order to re-establish \\ndepth perception.\", \"module\": \"vision\", \"passage_id\": \"PASS-4621b2e17806a7f42c0c6b4e\", \"text_sha256\": \"6dcadd2f37b0018e89c8643f4667dc37fc1b272c70f0389ecab1fc9a8033cfa2\", \"char_start\": 0, \"char_end\": 409, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-EXP-15bc1b265985cecd\", \"section\": \"10.3\", \"pdf_page\": 222, \"printed_page\": 211, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence or a conditional licence:\\n•\\t if the person experiences any diplopia \\n(other than physiological diplopia) within \\n20 degrees from central fixation.\", \"module\": \"vision\", \"passage_id\": \"PASS-da2e4385968b94cb8417dceb\", \"text_sha256\": \"323bd6983ae70667d5998212e9244d3f62917df24ada7fc90d45c1292afceb26\", \"char_start\": 0, \"char_end\": 357, \"applicability_slot\": \"P5\"}]}"
+              }
+            ]
+          },
+          "request_sha256": "0a920c96a24b8e2c960145e90054eb88fa64f2f6357a5cf7b5660a220ecd4fdf",
+          "request_bytes": 13477,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T06:58:10.8131486Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n    \"passages\": {\n        \"P1\": {\n            \"fact_fields\": [\n                \"vision.diplopia.present\",\n                \"vision.diplopia.within_20_degrees\"\n            ],\n            \"statement_type\": \"restriction\",\n            \"applicability\": \"not_applicable\",\n            \"licence_pathway\": \"conditional\",\n            \"prerequisites\": [\n                {\n                    \"requirement\": \"vision.diplopia.within_20_degrees\",\n                    \"status\": \"met\",\n                    \"fact_fields\": [\"vision.diplopia.within_20_degrees\"]\n                }\n            ],\n            \"numeric_application\": \"Not applicable\",\n            \"finding\": \"established_restriction\",\n            \"conclusion\": \"The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.\"\n        },\n        \"P2\": {\n            \"fact_fields\": [\n                \"diabetes.gestational\"\n            ],\n            \"statement_type\": \"conditional_opportunity\",\n            \"applicability\": \"not_applicable\",\n            \"licence_pathway\": \"unconditional\",\n            \"prerequisites\": [\n                {\n                    \"requirement\": \"diabetes.gestational\",\n                    \"status\": \"not_met\",\n                    \"fact_fields\": [\"diabetes.gestational\"]\n                }\n            ],\n            \"numeric_application\": \"Not applicable\",\n            \"finding\": \"not_established\",\n            \"conclusion\": \"The driver's gestational diabetes does not affect their licensing.\"\n        },\n        \"P3\": {\n            \"fact_fields\": [\n                \"vision.diplopia.present\",\n                \"vision.diplopia.within_20_degrees\"\n            ],\n            \"statement_type\": \"restriction\",\n            \"applicability\": \"not_applicable\",\n            \"licence_pathway\": \"conditional\",\n            \"prerequisites\": [\n                {\n                    \"requirement\": \"vision.diplopia.within_20_degrees\",\n                    \"status\": \"met\",\n                    \"fact_fields\": [\"vision.diplopia.within_20_degrees\"]\n                }\n            ],\n            \"numeric_application\": \"Not applicable\",\n            \"finding\": \"established_restriction\",\n            \"conclusion\": \"The driver's diplopia within 20 degrees of central fixation makes them not fit to drive.\"\n        },\n        \"P4\": {\n            \"fact_fields\": [\n                \"diabetes.treatment_category\"\n            ],\n            \"statement_type\": \"conditional_opportunity\",\n            \"applicability\": \"not_applicable\",\n            \"licence_pathway\": \"conditional\",\n            \"prerequisites\": [\n                {\n                    \"requirement\": \"diabetes.treatment_category\",\n                    \"status\": \"met\",\n                    \"fact_fields\": [\"diabetes.treatment_category\"]\n                }\n            ],\n            \"numeric_application\": \"Not applicable\",\n            \"finding\": \"conditional_permission\",\n            \"conclusion\": \"The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review.\"\n        },\n        \"P5\": {\n            \"fact_fields\": [\n                \"vision.diplopia.present\",\n                \"vision.diplopia.within_20_degrees\"\n            ],\n            \"statement_type\": \"restriction\",\n            \"applicability\": \"not_applicable\",\n            \"licence_pathway\": \"conditional\",\n            \"prerequisites\": [\n                {\n                    \"requirement\": \"vision.diplopia.within_20_degrees\",\n                    \"status\": \"met\",\n                    \"fact_fields\": [\"vision.diplopia.within_20_degrees\"]\n                }\n            ],\n            \"numeric_application\": \"Not applicable\",\n            \"finding\": \"established_restriction\",\n            \"conclusion\": \"The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.\"\n        }\n    }\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 15869978700,
+            "load_duration": 9487100,
+            "prompt_eval_count": 2506,
+            "prompt_eval_cached_count": 2505,
+            "prompt_eval_duration": 75295000,
+            "eval_count": 844,
+            "eval_duration": 15029307000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2506,
+            "eval_count": 844,
+            "prompt_eval_cached_count": 2505
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "vision",
+                "passage_id": "PASS-8da032d63c954c0ce3d82598",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "statement_type": "restriction",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "vision.diplopia.within_20_degrees",
+                    "status": "met",
+                    "fact_fields": [
+                      "vision.diplopia.within_20_degrees"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "diabetes.gestational",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "diabetes.gestational"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "not_established",
+                "conclusion": "The driver's gestational diabetes does not affect their licensing."
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "statement_type": "restriction",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "vision.diplopia.within_20_degrees",
+                    "status": "met",
+                    "fact_fields": [
+                      "vision.diplopia.within_20_degrees"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to drive."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "diabetes.treatment_category",
+                    "status": "met",
+                    "fact_fields": [
+                      "diabetes.treatment_category"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "conditional_permission",
+                "conclusion": "The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review."
+              },
+              {
+                "module": "vision",
+                "passage_id": "PASS-da2e4385968b94cb8417dceb",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "statement_type": "restriction",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "vision.diplopia.within_20_degrees",
+                    "status": "met",
+                    "fact_fields": [
+                      "vision.diplopia.within_20_degrees"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-8da032d63c954c0ce3d82598",
+              "source_id": "AFTD2022-VIS-COM-007",
+              "pdf_page": 222,
+              "printed_page": 211,
+              "section": "10.3",
+              "text_sha256": "23c939289597aecf602313c3e6274cea12bbe4853136c812693bacd460a63883",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 200,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-8da032d63c954c0ce3d82598",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.",
+                "source_id": "AFTD2022-VIS-COM-007",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-e888644b6aa4ff004889caaf",
+              "source_id": "AFTD2022-DM-COM-010",
+              "pdf_page": 107,
+              "printed_page": 96,
+              "section": "3.2.4",
+              "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 517,
+                  "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "not_established",
+                "conclusion": "The driver's gestational diabetes does not affect their licensing.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+              "source_id": "AFTD2022-EXP-0fe8bf8cdf4b51c6",
+              "pdf_page": 217,
+              "printed_page": 206,
+              "section": "10.2.3",
+              "text_sha256": "6dcadd2f37b0018e89c8643f4667dc37fc1b272c70f0389ecab1fc9a8033cfa2",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 409,
+                  "original_quote": "10.2.3. Diplopia\nPeople suffering from all but minor forms of \ndiplopia are generally not fit to drive. Any person \nwho reports or is suspected of experiencing \ndiplopia within 20 degrees from central fixation \nshould be referred for assessment by an \noptometrist or ophthalmologist. For diplopia \nmanaged with an occluder, a three-month non-\ndriving period applies in order to re-establish \ndepth perception."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to drive.",
+                "source_id": "AFTD2022-EXP-0fe8bf8cdf4b51c6",
+                "guideline_quote": "10.2.3. Diplopia\nPeople suffering from all but minor forms of \ndiplopia are generally not fit to drive. Any person \nwho reports or is suspected of experiencing \ndiplopia within 20 degrees from central fixation \nshould be referred for assessment by an \noptometrist or ophthalmologist. For diplopia \nmanaged with an occluder, a three-month non-\ndriving period applies in order to re-establish \ndepth perception."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-da2e4385968b94cb8417dceb",
+              "source_id": "AFTD2022-EXP-15bc1b265985cecd",
+              "pdf_page": 222,
+              "printed_page": 211,
+              "section": "10.3",
+              "text_sha256": "323bd6983ae70667d5998212e9244d3f62917df24ada7fc90d45c1292afceb26",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 357,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-da2e4385968b94cb8417dceb",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.",
+                "source_id": "AFTD2022-EXP-15bc1b265985cecd",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-8da032d63c954c0ce3d82598:established_finding_without_reported_applicability",
+            "PASS-4621b2e17806a7f42c0c6b4e:established_finding_without_reported_applicability",
+            "PASS-0c4e5d1885b1be7db1a56f0a:established_finding_without_reported_applicability",
+            "PASS-da2e4385968b94cb8417dceb:established_finding_without_reported_applicability"
+          ],
+          "seconds": 15.89867249999952
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "vision",
+            "passage_id": "PASS-8da032d63c954c0ce3d82598",
+            "fact_fields": [
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "statement_type": "restriction",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "vision.diplopia.within_20_degrees",
+                "status": "met",
+                "fact_fields": [
+                  "vision.diplopia.within_20_degrees"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.gestational"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "diabetes.gestational",
+                "status": "not_met",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "not_established",
+            "conclusion": "The driver's gestational diabetes does not affect their licensing."
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+            "fact_fields": [
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "statement_type": "restriction",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "vision.diplopia.within_20_degrees",
+                "status": "met",
+                "fact_fields": [
+                  "vision.diplopia.within_20_degrees"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to drive."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.treatment_category"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "diabetes.treatment_category",
+                "status": "met",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "conditional_permission",
+            "conclusion": "The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review."
+          },
+          {
+            "module": "vision",
+            "passage_id": "PASS-da2e4385968b94cb8417dceb",
+            "fact_fields": [
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "statement_type": "restriction",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "vision.diplopia.within_20_degrees",
+                "status": "met",
+                "fact_fields": [
+                  "vision.diplopia.within_20_degrees"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-8da032d63c954c0ce3d82598",
+          "source_id": "AFTD2022-VIS-COM-007",
+          "pdf_page": 222,
+          "printed_page": 211,
+          "section": "10.3",
+          "text_sha256": "23c939289597aecf602313c3e6274cea12bbe4853136c812693bacd460a63883",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 200,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-8da032d63c954c0ce3d82598",
+            "fact_fields": [
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.",
+            "source_id": "AFTD2022-VIS-COM-007",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-e888644b6aa4ff004889caaf",
+          "source_id": "AFTD2022-DM-COM-010",
+          "pdf_page": 107,
+          "printed_page": 96,
+          "section": "3.2.4",
+          "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 517,
+              "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.gestational"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "not_established",
+            "conclusion": "The driver's gestational diabetes does not affect their licensing.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+          "source_id": "AFTD2022-EXP-0fe8bf8cdf4b51c6",
+          "pdf_page": 217,
+          "printed_page": 206,
+          "section": "10.2.3",
+          "text_sha256": "6dcadd2f37b0018e89c8643f4667dc37fc1b272c70f0389ecab1fc9a8033cfa2",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 409,
+              "original_quote": "10.2.3. Diplopia\nPeople suffering from all but minor forms of \ndiplopia are generally not fit to drive. Any person \nwho reports or is suspected of experiencing \ndiplopia within 20 degrees from central fixation \nshould be referred for assessment by an \noptometrist or ophthalmologist. For diplopia \nmanaged with an occluder, a three-month non-\ndriving period applies in order to re-establish \ndepth perception."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-4621b2e17806a7f42c0c6b4e",
+            "fact_fields": [
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to drive.",
+            "source_id": "AFTD2022-EXP-0fe8bf8cdf4b51c6",
+            "guideline_quote": "10.2.3. Diplopia\nPeople suffering from all but minor forms of \ndiplopia are generally not fit to drive. Any person \nwho reports or is suspected of experiencing \ndiplopia within 20 degrees from central fixation \nshould be referred for assessment by an \noptometrist or ophthalmologist. For diplopia \nmanaged with an occluder, a three-month non-\ndriving period applies in order to re-establish \ndepth perception."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+          "source_id": "AFTD2022-EXP-42507db0424f7a27",
+          "pdf_page": 112,
+          "printed_page": 101,
+          "section": "3.3",
+          "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1632,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-da2e4385968b94cb8417dceb",
+          "source_id": "AFTD2022-EXP-15bc1b265985cecd",
+          "pdf_page": 222,
+          "printed_page": 211,
+          "section": "10.3",
+          "text_sha256": "323bd6983ae70667d5998212e9244d3f62917df24ada7fc90d45c1292afceb26",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 357,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-da2e4385968b94cb8417dceb",
+            "fact_fields": [
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.",
+            "source_id": "AFTD2022-EXP-15bc1b265985cecd",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods \ndriver licence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-8da032d63c954c0ce3d82598:established_finding_without_reported_applicability",
+        "PASS-4621b2e17806a7f42c0c6b4e:established_finding_without_reported_applicability",
+        "PASS-0c4e5d1885b1be7db1a56f0a:established_finding_without_reported_applicability",
+        "PASS-da2e4385968b94cb8417dceb:established_finding_without_reported_applicability"
+      ],
+      "seconds": 15.898678499999733
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "hypertension",
+                        "vision",
+                        "hearing",
+                        "blackout",
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-8da032d63c954c0ce3d82598",
+                        "PASS-e888644b6aa4ff004889caaf",
+                        "PASS-4621b2e17806a7f42c0c6b4e",
+                        "PASS-0c4e5d1885b1be7db1a56f0a",
+                        "PASS-da2e4385968b94cb8417dceb"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "diabetes.present",
+                          "diabetes.treatment_category",
+                          "diabetes.gestational",
+                          "vision.diplopia.present",
+                          "vision.diplopia.physiological",
+                          "vision.diplopia.within_20_degrees"
+                        ]
+                      },
+                      "maxItems": 6,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"hypertension\", \"vision\", \"hearing\", \"blackout\", \"diabetes\"], \"nurse_note\": \"Synthetic validation nurse note. No real patient data.\\n\\nThe driver has established diabetes. The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. The driver has been adjusting meal times around split shifts and sometimes receives a sensor warning before feeling symptoms, but there is no documented recent episode requiring another person's assistance and no complete assessment of hypoglycaemia awareness in the material provided.\\n\\nThe ophthalmologist confirms non-physiological diplopia following a recent examination. Diplopia is present within 20 degrees of central fixation. The driver says the double image is more noticeable after prolonged night driving, yet the specialist reproduced it during daytime testing, so its absence during a short nursing interview is not treated as proof that the documented finding has resolved.\\n\\nA change of lenses has been proposed but not assessed, and the nurse has no updated specialist decision about the visual symptoms or the diabetes monitoring plan. The two confirmed findings are recorded independently; neither a successful lens adjustment nor adequate glucose control has been assumed.\\n\", \"verified_patient_facts\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"The driver has established diabetes. \", \"The driver has established diabetes. \", \"The driver has established diabetes.\"]}, \"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. \"]}, \"diabetes.gestational\": {\"value\": false, \"patient_quotes\": [\"The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. \"]}, \"vision.diplopia.present\": {\"value\": true, \"patient_quotes\": [\"The ophthalmologist confirms non-physiological diplopia following a recent examination. \", \"The ophthalmologist confirms non-physiological diplopia following a recent examination.\"]}, \"vision.diplopia.physiological\": {\"value\": false, \"patient_quotes\": [\"The ophthalmologist confirms non-physiological diplopia following a recent examination. \"]}, \"vision.diplopia.within_20_degrees\": {\"value\": true, \"patient_quotes\": [\"Diplopia is present within 20 degrees of central fixation. \"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-VIS-COM-007\", \"section\": \"10.3\", \"pdf_page\": 222, \"printed_page\": 211, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence or a conditional licence:\\n•\\t if the person experiences any diplopia \\n(other than physiological diplopia) within \\n20 degrees from central fixation.\", \"module\": \"vision\", \"passage_id\": \"PASS-8da032d63c954c0ce3d82598\", \"text_sha256\": \"23c939289597aecf602313c3e6274cea12bbe4853136c812693bacd460a63883\", \"char_start\": 0, \"char_end\": 200}, {\"source_id\": \"AFTD2022-DM-COM-010\", \"section\": \"3.2.4\", \"pdf_page\": 107, \"printed_page\": 96, \"source_text\": \"3.2.4. Gestational diabetes mellitus\\nThe standards in this chapter apply to diabetes \\nmellitus as a chronic condition. The self-limiting \\ncondition known as gestational diabetes \\nmellitus does not affect licensing. However, \\nconsideration should be given to short-term \\nfitness to drive in women with gestational \\ndiabetes mellitus treated with insulin, although \\nsevere hypoglycaemia in this condition is rare. \\nAffected women should be counselled to \\nrecognise symptoms and to restrict driving when \\nsymptoms occur.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\", \"text_sha256\": \"8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f\", \"char_start\": 0, \"char_end\": 517}, {\"source_id\": \"AFTD2022-EXP-0fe8bf8cdf4b51c6\", \"section\": \"10.2.3\", \"pdf_page\": 217, \"printed_page\": 206, \"source_text\": \"10.2.3. Diplopia\\nPeople suffering from all but minor forms of \\ndiplopia are generally not fit to drive. Any person \\nwho reports or is suspected of experiencing \\ndiplopia within 20 degrees from central fixation \\nshould be referred for assessment by an \\noptometrist or ophthalmologist. For diplopia \\nmanaged with an occluder, a three-month non-\\ndriving period applies in order to re-establish \\ndepth perception.\", \"module\": \"vision\", \"passage_id\": \"PASS-4621b2e17806a7f42c0c6b4e\", \"text_sha256\": \"6dcadd2f37b0018e89c8643f4667dc37fc1b272c70f0389ecab1fc9a8033cfa2\", \"char_start\": 0, \"char_end\": 409}, {\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632}, {\"source_id\": \"AFTD2022-EXP-15bc1b265985cecd\", \"section\": \"10.3\", \"pdf_page\": 222, \"printed_page\": 211, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods \\ndriver licence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence or a conditional licence:\\n•\\t if the person experiences any diplopia \\n(other than physiological diplopia) within \\n20 degrees from central fixation.\", \"module\": \"vision\", \"passage_id\": \"PASS-da2e4385968b94cb8417dceb\", \"text_sha256\": \"323bd6983ae70667d5998212e9244d3f62917df24ada7fc90d45c1292afceb26\", \"char_start\": 0, \"char_end\": 357}], \"proposed_applicability_ledger\": [{\"module\": \"vision\", \"passage_id\": \"PASS-8da032d63c954c0ce3d82598\", \"fact_fields\": [\"vision.diplopia.present\", \"vision.diplopia.within_20_degrees\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"vision.diplopia.within_20_degrees\", \"status\": \"met\", \"fact_fields\": [\"vision.diplopia.within_20_degrees\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.\", \"source_id\": \"AFTD2022-VIS-COM-007\", \"referenced_patient_values\": {\"vision.diplopia.present\": {\"value\": true, \"patient_quotes\": [\"The ophthalmologist confirms non-physiological diplopia following a recent examination. \", \"The ophthalmologist confirms non-physiological diplopia following a recent examination.\"]}, \"vision.diplopia.within_20_degrees\": {\"value\": true, \"patient_quotes\": [\"Diplopia is present within 20 degrees of central fixation. \"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\", \"fact_fields\": [\"diabetes.gestational\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"diabetes.gestational\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.gestational\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"not_established\", \"conclusion\": \"The driver's gestational diabetes does not affect their licensing.\", \"source_id\": \"AFTD2022-DM-COM-010\", \"referenced_patient_values\": {\"diabetes.gestational\": {\"value\": false, \"patient_quotes\": [\"The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. \"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"vision\", \"passage_id\": \"PASS-4621b2e17806a7f42c0c6b4e\", \"fact_fields\": [\"vision.diplopia.present\", \"vision.diplopia.within_20_degrees\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"vision.diplopia.within_20_degrees\", \"status\": \"met\", \"fact_fields\": [\"vision.diplopia.within_20_degrees\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The driver's diplopia within 20 degrees of central fixation makes them not fit to drive.\", \"source_id\": \"AFTD2022-EXP-0fe8bf8cdf4b51c6\", \"referenced_patient_values\": {\"vision.diplopia.present\": {\"value\": true, \"patient_quotes\": [\"The ophthalmologist confirms non-physiological diplopia following a recent examination. \", \"The ophthalmologist confirms non-physiological diplopia following a recent examination.\"]}, \"vision.diplopia.within_20_degrees\": {\"value\": true, \"patient_quotes\": [\"Diplopia is present within 20 degrees of central fixation. \"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.treatment_category\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"diabetes.treatment_category\", \"status\": \"met\", \"fact_fields\": [\"diabetes.treatment_category\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"conditional_permission\", \"conclusion\": \"The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review.\", \"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"referenced_patient_values\": {\"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"The current specialist letter confirms that diabetes is managed with insulin and that the diabetes is not gestational. \"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"vision\", \"passage_id\": \"PASS-da2e4385968b94cb8417dceb\", \"fact_fields\": [\"vision.diplopia.present\", \"vision.diplopia.within_20_degrees\"], \"statement_type\": \"restriction\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"vision.diplopia.within_20_degrees\", \"status\": \"met\", \"fact_fields\": [\"vision.diplopia.within_20_degrees\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.\", \"source_id\": \"AFTD2022-EXP-15bc1b265985cecd\", \"referenced_patient_values\": {\"vision.diplopia.present\": {\"value\": true, \"patient_quotes\": [\"The ophthalmologist confirms non-physiological diplopia following a recent examination. \", \"The ophthalmologist confirms non-physiological diplopia following a recent examination.\"]}, \"vision.diplopia.within_20_degrees\": {\"value\": true, \"patient_quotes\": [\"Diplopia is present within 20 degrees of central fixation. \"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"870b2cae1c21999c77a283fc3967f23d1d2e26dd2da443ad8a1774892323a5ff\"}"
+              }
+            ]
+          },
+          "request_sha256": "2e2d4473c3e175f8ff61cb9b7a835ebe3a3470f9edc9109b97e850be0217ccfc",
+          "request_bytes": 18380,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T06:58:16.7906501Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"may_meet_conditional_standard\", \"explanation\": \"The driver has established diabetes and is managed with insulin, which may be considered for a conditional licence, subject to annual review. However, the driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence. Therefore, the driver may be considered for a conditional licence, but only after the diplopia is resolved or managed.\", \"criterion_checks\": [\n{\"module\": \"vision\", \"passage_id\": \"PASS-8da032d63c954c0ce3d82598\", \"fact_fields\": [\"vision.diplopia.present\", \"vision.diplopia.within_20_degrees\"], \"licence_pathway\": \"conditional\", \"finding\": \"established_restriction\", \"conclusion\": \"The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.treatment_category\"], \"licence_pathway\": \"conditional\", \"finding\": \"conditional_permission\", \"conclusion\": \"The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review.\"}\n]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 5942364700,
+            "load_duration": 7021100,
+            "prompt_eval_count": 3890,
+            "prompt_eval_cached_count": 2642,
+            "prompt_eval_duration": 615231000,
+            "eval_count": 294,
+            "eval_duration": 4677477000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3890,
+            "eval_count": 294,
+            "prompt_eval_cached_count": 2642
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "may_meet_conditional_standard",
+            "explanation": "The driver has established diabetes and is managed with insulin, which may be considered for a conditional licence, subject to annual review. However, the driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence. Therefore, the driver may be considered for a conditional licence, but only after the diplopia is resolved or managed.",
+            "source_ids": [
+              "AFTD2022-VIS-COM-007",
+              "AFTD2022-EXP-42507db0424f7a27"
+            ],
+            "fact_fields": [
+              "diabetes.treatment_category",
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "criterion_checks": [
+              {
+                "module": "vision",
+                "passage_id": "PASS-8da032d63c954c0ce3d82598",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.",
+                "source_id": "AFTD2022-VIS-COM-007",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-8da032d63c954c0ce3d82598",
+              "source_id": "AFTD2022-VIS-COM-007",
+              "pdf_page": 222,
+              "printed_page": 211,
+              "section": "10.3",
+              "text_sha256": "23c939289597aecf602313c3e6274cea12bbe4853136c812693bacd460a63883",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 200,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+                }
+              ],
+              "check": {
+                "module": "vision",
+                "passage_id": "PASS-8da032d63c954c0ce3d82598",
+                "fact_fields": [
+                  "vision.diplopia.present",
+                  "vision.diplopia.within_20_degrees"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "established_restriction",
+                "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.",
+                "source_id": "AFTD2022-VIS-COM-007",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [],
+          "seconds": 5.967348899999706
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "explanation": "The driver has established diabetes and is managed with insulin, which may be considered for a conditional licence, subject to annual review. However, the driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence. Therefore, the driver may be considered for a conditional licence, but only after the diplopia is resolved or managed.",
+        "source_ids": [
+          "AFTD2022-VIS-COM-007",
+          "AFTD2022-EXP-42507db0424f7a27"
+        ],
+        "fact_fields": [
+          "diabetes.treatment_category",
+          "vision.diplopia.present",
+          "vision.diplopia.within_20_degrees"
+        ],
+        "criterion_checks": [
+          {
+            "module": "vision",
+            "passage_id": "PASS-8da032d63c954c0ce3d82598",
+            "fact_fields": [
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.",
+            "source_id": "AFTD2022-VIS-COM-007",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-8da032d63c954c0ce3d82598",
+          "source_id": "AFTD2022-VIS-COM-007",
+          "pdf_page": 222,
+          "printed_page": 211,
+          "section": "10.3",
+          "text_sha256": "23c939289597aecf602313c3e6274cea12bbe4853136c812693bacd460a63883",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 200,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+            }
+          ],
+          "check": {
+            "module": "vision",
+            "passage_id": "PASS-8da032d63c954c0ce3d82598",
+            "fact_fields": [
+              "vision.diplopia.present",
+              "vision.diplopia.within_20_degrees"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "established_restriction",
+            "conclusion": "The driver's diplopia within 20 degrees of central fixation makes them not fit to hold an unconditional licence or a conditional licence.",
+            "source_id": "AFTD2022-VIS-COM-007",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence or a conditional licence:\n•\t if the person experiences any diplopia \n(other than physiological diplopia) within \n20 degrees from central fixation."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+          "source_id": "AFTD2022-EXP-42507db0424f7a27",
+          "pdf_page": 112,
+          "printed_page": 101,
+          "section": "3.3",
+          "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1632,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The driver's insulin-treated diabetes may be considered for a conditional licence, subject to annual review.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [],
+      "seconds": 5.96735930000068
+    }
+  },
+  "support_review": "pending_independent_review"
+}

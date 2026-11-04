@@ -1,0 +1,138 @@
+{
+  "model": "llama3:8b",
+  "proposals": [
+    {
+      "field": "vision.uncorrected.right.snellen",
+      "value": "6/12",
+      "quote": "uncorrected visual acuity of 6/12 in the right eye",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 495,
+      "source_end": 545
+    },
+    {
+      "field": "vision.corrected.right.snellen",
+      "value": "6/6",
+      "quote": "corrected visual acuity of 6/6 in the right eye",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 585,
+      "source_end": 632
+    },
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "quote": "the driver has diabetes",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 1417,
+      "source_end": 1440
+    }
+  ],
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "rejected": [
+    {
+      "field": "vision.uncorrected.left.snellen",
+      "value": "6/18",
+      "quote": "uncorrected visual acuity of 6/18 in the left eye",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    },
+    {
+      "field": "vision.corrected.left.snellen",
+      "value": "6/9",
+      "quote": "corrected visual acuity of 6/9 in the left eye",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    },
+    {
+      "field": "diabetes.acutely_unwell",
+      "value": true,
+      "quote": "the driver is acutely unwell with metabolically unstable diabetes",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    }
+  ],
+  "authoritative_facts_modified": true,
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 1283,
+      "eval_count": 355,
+      "total_duration": 5569672100
+    }
+  ],
+  "input_format": "utf-8 text",
+  "output_format": "field_dictionary_grounded_proposals_v1",
+  "accepted_fields": [
+    "diabetes.present"
+  ],
+  "withheld": [
+    {
+      "field": "vision.uncorrected.left.snellen",
+      "value": "6/18",
+      "quote": "uncorrected visual acuity of 6/18 in the left eye",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    },
+    {
+      "field": "vision.corrected.left.snellen",
+      "value": "6/9",
+      "quote": "corrected visual acuity of 6/9 in the left eye",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    },
+    {
+      "field": "diabetes.acutely_unwell",
+      "value": true,
+      "quote": "the driver is acutely unwell with metabolically unstable diabetes",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    },
+    {
+      "field": "vision.uncorrected.right.snellen",
+      "value": "6/12",
+      "quote": "uncorrected visual acuity of 6/12 in the right eye",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 495,
+      "source_end": 545,
+      "reason": "value_not_supported_by_quote"
+    },
+    {
+      "field": "vision.corrected.right.snellen",
+      "value": "6/6",
+      "quote": "corrected visual acuity of 6/6 in the right eye",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 585,
+      "source_end": 632,
+      "reason": "value_not_supported_by_quote"
+    }
+  ],
+  "grounding_policy": "exact_quote_type_range_and_field_semantics_v1",
+  "status": "completed"
+}

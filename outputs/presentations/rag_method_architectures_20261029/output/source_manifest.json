@@ -1,0 +1,270 @@
+{
+  "reference_style_page": 4,
+  "reference_sha256": "56c10013ec914b1a5806283c014eae9d1989d7aab0b978037810123ee32a7e7e",
+  "reference_content_used": false,
+  "palette": {
+    "navy": "#071C35",
+    "ink": "#10253F",
+    "teal": "#13A6A6",
+    "cyan": "#46B1E1",
+    "pale": "#DFF7F5",
+    "blue": "#4E95D9",
+    "orange": "#EE945E",
+    "peach": "#F6C6AD",
+    "cream": "#FFF2D8",
+    "grey": "#EAF0F6",
+    "arrow": "#D8E1EA",
+    "outline": "#104862",
+    "white": "#FFFFFF"
+  },
+  "font": "Calibri bold",
+  "slide_size_css_px": [
+    1280,
+    720
+  ],
+  "slides": [
+    {
+      "name": "method_03_architecture",
+      "method": "3",
+      "kind": "Architecture",
+      "title": "Method 3 \u00b7 Hybrid RRF",
+      "sources": [
+        "tools/run_shared_retrieval.py: rank_method",
+        "src/occupational_fitness_rag/retrieval/fusion.py: reciprocal_rank_fusion",
+        "tools/refine_complex_retrieval.py: run",
+        "src/occupational_fitness_rag/evaluation/retrieval_refinement.py"
+      ]
+    },
+    {
+      "name": "method_03_logic_flow",
+      "method": "3",
+      "kind": "Logic flow",
+      "title": "Method 3 \u00b7 Hybrid RRF",
+      "sources": [
+        "tools/run_shared_retrieval.py: rank_method",
+        "src/occupational_fitness_rag/retrieval/bm25.py: rank_bm25",
+        "src/occupational_fitness_rag/retrieval/fusion.py",
+        "src/occupational_fitness_rag/evaluation/retrieval_refinement.py: literal_facets, fuse_views, refine_ranking"
+      ]
+    },
+    {
+      "name": "method_04_architecture",
+      "method": "4",
+      "kind": "Architecture",
+      "title": "Method 4 \u00b7 Source graph-assisted retrieval",
+      "sources": [
+        "tools/run_shared_retrieval.py: rank_method(method=\"graph_local\")",
+        "src/occupational_fitness_rag/retrieval/graph_local.py: expand_local_graph",
+        "configs/rules/austroads_commercial_v1.yaml",
+        "tools/refine_complex_retrieval.py: run"
+      ]
+    },
+    {
+      "name": "method_04_logic_flow",
+      "method": "4",
+      "kind": "Logic flow",
+      "title": "Method 4 \u00b7 Source graph-assisted retrieval",
+      "sources": [
+        "src/occupational_fitness_rag/retrieval/graph_local.py: expand_local_graph",
+        "tools/run_shared_retrieval.py: rank_method",
+        "src/occupational_fitness_rag/evaluation/retrieval_refinement.py"
+      ]
+    },
+    {
+      "name": "method_07_architecture",
+      "method": "7",
+      "kind": "Architecture",
+      "title": "Method 7 \u00b7 Criterion coverage allocation V6",
+      "sources": [
+        "src/occupational_fitness_rag/evaluation/planned_hybrid.py: plan_query, execute_plan",
+        "src/occupational_fitness_rag/evaluation/guarded_hybrid.py: rank_channels",
+        "src/occupational_fitness_rag/evaluation/prefix_allocation.py: allocate_prefix",
+        "tools/recover_complex_ten_adapters.py: repair",
+        "tools/refine_complex_retrieval.py: run"
+      ]
+    },
+    {
+      "name": "method_07_logic_flow",
+      "method": "7",
+      "kind": "Logic flow",
+      "title": "Method 7 \u00b7 Criterion coverage allocation V6",
+      "sources": [
+        "src/occupational_fitness_rag/evaluation/planned_hybrid.py",
+        "tools/run_scope88_shared_retrieval.py: deduplicate_channels",
+        "src/occupational_fitness_rag/evaluation/guarded_hybrid.py",
+        "src/occupational_fitness_rag/evaluation/prefix_allocation.py",
+        "tools/refine_complex_retrieval.py"
+      ]
+    },
+    {
+      "name": "method_09_architecture",
+      "method": "9",
+      "kind": "Architecture",
+      "title": "Method 9 \u00b7 Neo4j frontier and criterion transfer",
+      "sources": [
+        "tools/complex_native_worker.py: neo",
+        "tools/run_neo4j_strategies.py: GRAPH_QUERY",
+        "src/occupational_fitness_rag/evaluation/neo4j_strategies.py: native_rrf, rank",
+        "src/occupational_fitness_rag/evaluation/neo4j_criterion_transfer.py: transfer",
+        "tools/refine_complex_retrieval.py: run"
+      ]
+    },
+    {
+      "name": "method_09_logic_flow",
+      "method": "9",
+      "kind": "Logic flow",
+      "title": "Method 9 \u00b7 Neo4j frontier and criterion transfer",
+      "sources": [
+        "tools/complex_native_worker.py: neo",
+        "tools/neo4j_extension_worker.py: lexical_query",
+        "tools/run_neo4j_strategies.py: GRAPH_QUERY",
+        "src/occupational_fitness_rag/evaluation/neo4j_strategies.py",
+        "src/occupational_fitness_rag/evaluation/neo4j_criterion_transfer.py"
+      ]
+    },
+    {
+      "name": "method_10_architecture",
+      "method": "10",
+      "kind": "Architecture",
+      "title": "Method 10 \u00b7 PageIndex and RRF predicate navigation",
+      "sources": [
+        "tools/complex_native_worker.py: tree",
+        "tools/pageindex_extension_worker.py: map_native_tree, request_body",
+        "tools/run_scope88_tree.py: ranking_body, call",
+        "tools/refine_complex_retrieval.py: run"
+      ]
+    },
+    {
+      "name": "method_10_logic_flow",
+      "method": "10",
+      "kind": "Logic flow",
+      "title": "Method 10 \u00b7 PageIndex and RRF predicate navigation",
+      "sources": [
+        "tools/complex_native_worker.py: tree",
+        "tools/run_scope88_tree.py: ranking_body, normalized_branch, call",
+        "tools/run_pageindex_strict_cardinality.py: parse_strict",
+        "tools/pageindex_extension_worker.py: request_body"
+      ]
+    },
+    {
+      "name": "shared_refinement",
+      "method": "3 / 4 / 7 / 9 / 10",
+      "kind": "Shared refinement logic",
+      "title": "Current experiment \u00b7 Protected evidence allocation",
+      "sources": [
+        "tools/refine_complex_retrieval.py: prepare, run",
+        "src/occupational_fitness_rag/evaluation/retrieval_refinement.py: literal_facets, fuse_views, literal_parent_closure, refine_ranking",
+        "tools/report_complex_refinement.py: packet_replay",
+        "src/occupational_fitness_rag/evaluation/retrieval_prefix_search.py: joint_prefix"
+      ]
+    },
+    {
+      "name": "code_map",
+      "method": "3 / 4 / 7 / 9 / 10",
+      "kind": "Implementation map",
+      "title": "Code references for the five methods",
+      "sources": [
+        "tools/run_shared_retrieval.py",
+        "src/occupational_fitness_rag/retrieval/graph_local.py",
+        "src/occupational_fitness_rag/evaluation/prefix_allocation.py",
+        "src/occupational_fitness_rag/evaluation/neo4j_criterion_transfer.py",
+        "tools/complex_native_worker.py",
+        "tools/run_scope88_tree.py",
+        "tools/refine_complex_retrieval.py",
+        "src/occupational_fitness_rag/evaluation/retrieval_refinement.py"
+      ]
+    }
+  ],
+  "source_files": [
+    {
+      "file": "tools/run_shared_retrieval.py",
+      "sha256": "935fc1d04e4aa5cd8d08d9d5eb829cab7d779274ffd6de53f12533f01decc118"
+    },
+    {
+      "file": "src/occupational_fitness_rag/retrieval/fusion.py",
+      "sha256": "190d9102e8458ed8e609bbceb9ca8bce916a1599bb4f2eb7e6f4d45b68898e21"
+    },
+    {
+      "file": "tools/refine_complex_retrieval.py",
+      "sha256": "4a738cce5cd36c8ceb9656b18cb5d071834589685569f2d7b3e24ed4d28664e4"
+    },
+    {
+      "file": "src/occupational_fitness_rag/evaluation/retrieval_refinement.py",
+      "sha256": "081298378eb97f04e013128b3352494112fe4cd2df937931e3955d616199ca54"
+    },
+    {
+      "file": "src/occupational_fitness_rag/retrieval/bm25.py",
+      "sha256": "bfa3811e86ac6748e82d32a668a0c344081e0390beb900d460943e79e5c38f44"
+    },
+    {
+      "file": "src/occupational_fitness_rag/retrieval/graph_local.py",
+      "sha256": "28d2f4740db0d90db3dc8046884b8ec0d0b61a709a5514a98d8e9764f1595290"
+    },
+    {
+      "file": "configs/rules/austroads_commercial_v1.yaml",
+      "sha256": "dc343b805de7faf1719bb7d34e4396b568c05abdd59413d0c44f0527b1b407d6"
+    },
+    {
+      "file": "src/occupational_fitness_rag/evaluation/planned_hybrid.py",
+      "sha256": "aadc64c909f558ad15f725490e3d21fad3ba1d85e888c5b838224ddd00f60b7e"
+    },
+    {
+      "file": "src/occupational_fitness_rag/evaluation/guarded_hybrid.py",
+      "sha256": "e0816dc464249e57ba9344d03a343756cd20d0cf6dabfd9c7f5b870ddc83f25b"
+    },
+    {
+      "file": "src/occupational_fitness_rag/evaluation/prefix_allocation.py",
+      "sha256": "560167c2bbbefcf1925e6f89d658dfdba29a0cb1c5ff6d7dfa5e325805adbefb"
+    },
+    {
+      "file": "tools/recover_complex_ten_adapters.py",
+      "sha256": "6fc0086a4b5d354aaddd4f44147ca80e8a74b8cc8dc40984105a0edd3aabd9db"
+    },
+    {
+      "file": "tools/run_scope88_shared_retrieval.py",
+      "sha256": "62d049abd87a446d53bf7688313f2d390505ca9b0a2f28e823e89c6d7105cc06"
+    },
+    {
+      "file": "tools/complex_native_worker.py",
+      "sha256": "80f3d562ee2e8d74bed7e2cb6bb0cf75dee3b1d59dd7dbfb56a02f8f208e4c28"
+    },
+    {
+      "file": "tools/run_neo4j_strategies.py",
+      "sha256": "d433c1cc023a3d6677612260e9df5c9f055e98d6a3eabafc2359219f8fb2f383"
+    },
+    {
+      "file": "src/occupational_fitness_rag/evaluation/neo4j_strategies.py",
+      "sha256": "c0825a55ff7f2f50e353382505ba39c647e309133d46a0e76aba507bb2c1542d"
+    },
+    {
+      "file": "src/occupational_fitness_rag/evaluation/neo4j_criterion_transfer.py",
+      "sha256": "fe64f8c48702b97f6e73eefbf2ebede62d4b887be236cbf797cd7cd6783314dc"
+    },
+    {
+      "file": "tools/neo4j_extension_worker.py",
+      "sha256": "6eb095a8daec3d0f149f6dd88389bd1d7d2b513806f8d67c3406c8b72d98f9a5"
+    },
+    {
+      "file": "tools/pageindex_extension_worker.py",
+      "sha256": "2df9638416fea9d870ba8489aeac3c6ad309a200cb7b77203c4a715d1f12f6be"
+    },
+    {
+      "file": "tools/run_scope88_tree.py",
+      "sha256": "547bcd589f376af9c2cb15b72f00cec7f47b2345fe7fcea5604f253abb69db4f"
+    },
+    {
+      "file": "tools/run_pageindex_strict_cardinality.py",
+      "sha256": "0ec602686721469a36368e12b52c28b02114917254bb97a60715cc24aa315715"
+    },
+    {
+      "file": "tools/report_complex_refinement.py",
+      "sha256": "870d3da33a04c0e38a901851a930ae66d14769ff4609ee1997862e66a037e297"
+    },
+    {
+      "file": "src/occupational_fitness_rag/evaluation/retrieval_prefix_search.py",
+      "sha256": "052ce1e94b1dc257a20e313045968c95c3d2e902c403ab20e9b3c01c2a48b69b"
+    }
+  ],
+  "diagram_count": 10,
+  "appendices": 2
+}

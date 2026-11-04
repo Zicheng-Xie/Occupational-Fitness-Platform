@@ -1,0 +1,241 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v10",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "2acf6d137bd99a1b119afe7621804d1e81bef3af6c811b66a3197f5297edb276",
+  "input_facts_sha256": "3b2eeaff13378bf8c7484fb4b249c8513e534b24aadf3d3a10264c2ae0ac0bfa",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 554,
+      "eval_count": 42,
+      "total_duration": 1110406000
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 515,
+      "eval_count": 48,
+      "total_duration": 1136841300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 431,
+      "eval_count": 37,
+      "total_duration": 1034587300
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 539,
+      "eval_count": 37,
+      "total_duration": 982366100
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 558,
+      "eval_count": 38,
+      "total_duration": 808591400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 488,
+      "eval_count": 45,
+      "total_duration": 1101264100
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 491,
+      "eval_count": 35,
+      "total_duration": 913582700
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.",
+      "explanation": "Independent source reading differs from the extraction. not_documented",
+      "evidence": [
+        {
+          "start": 56,
+          "end": 461,
+          "quote": "The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.",
+          "line_start": 3,
+          "line_end": 3,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "vision.diplopia.present",
+      "kind": "omission",
+      "quote": "The optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.",
+      "explanation": "Independent source reading differs from the extraction. The patient explicitly has diplopia (double vision).",
+      "evidence": [
+        {
+          "start": 463,
+          "end": 818,
+          "quote": "The optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.treatment_category",
+    "vision.diplopia.present"
+  ],
+  "checked_fields": [
+    "blackout.mechanism_status",
+    "blackout.occurred",
+    "vision.visual_field.confirmed_defect"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes",
+    "vision"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "67d44f21bc8f0b5535d599dad126ae13fb2c5a650b37edccfc4ceadc5c1af76b",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "vision.diplopia.present": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "blackout.mechanism_status"
+      ],
+      "status": "valid",
+      "request_sha256": "df1aec016e4c952c323c9144d2d3e740b6aa255917a3582f10f3c64d21265ae6",
+      "response_schema_sha256": "a3fe9ae4fda862fca394707199a4f572e4bd10770541f36cf8eaea8cdd6f6da8"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "blackout.occurred"
+      ],
+      "status": "valid",
+      "request_sha256": "ad8443299617b2110a41ffd1a631200af785c8fb69ee249fe104f8861ef7e528",
+      "response_schema_sha256": "6b6741a7f953f4fd020968731bc10584938f513eb8957b10fd82df0d3dfb8684"
+    },
+    {
+      "batch": 3,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "633887752a547e573ebeb371e8787fe0ab8011e44db63f63d7f8487716caebff",
+      "response_schema_sha256": "6b6741a7f953f4fd020968731bc10584938f513eb8957b10fd82df0d3dfb8684"
+    },
+    {
+      "batch": 4,
+      "attempt": 2,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "ff4e029e493a8249b95c6c2f6114fe18c96adfb66ef97ca4d432374ec78c8e8b",
+      "response_schema_sha256": "0fcbf5a301ce11f1fccca3721bfe3d6b5b2bedd3f6edccdb9ba287083d1c3c2c"
+    },
+    {
+      "batch": 5,
+      "attempt": 1,
+      "fields": [
+        "vision.diplopia.present"
+      ],
+      "status": "valid",
+      "request_sha256": "0b9b5a28322de4413940e03a1bd539b85bc3735bc9cbea8615c92be1b914216e",
+      "response_schema_sha256": "6b6741a7f953f4fd020968731bc10584938f513eb8957b10fd82df0d3dfb8684"
+    },
+    {
+      "batch": 6,
+      "attempt": 1,
+      "fields": [
+        "vision.visual_field.confirmed_defect"
+      ],
+      "status": "valid",
+      "request_sha256": "76e8c5cda3cfb4aef3f9bfb0a15403068e61dc2460096dd3ed2f49775439bbe5",
+      "response_schema_sha256": "6b6741a7f953f4fd020968731bc10584938f513eb8957b10fd82df0d3dfb8684"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "blackout.mechanism_status",
+      "value": "under_investigation",
+      "status": "documented",
+      "quote": "The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.",
+      "explanation": "under_investigation"
+    },
+    {
+      "field": "blackout.occurred",
+      "value": true,
+      "status": "documented",
+      "quote": "The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.",
+      "explanation": "Yes, a blackout or transient loss of consciousness was explicitly reported and witnessed."
+    },
+    {
+      "field": "diabetes.present",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "Not documented"
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "none",
+      "status": "documented",
+      "quote": "The driver had transient loss of consciousness while seated after a delivery, with a colleague documenting failure to respond and a brief gap in recall. The current physician referral states that the mechanism is under investigation. An emergency differential mentions arrhythmia and seizure without confirming either, and a glucose measurement obtained after food cannot establish the cause of the event.",
+      "explanation": "not_documented"
+    },
+    {
+      "field": "vision.diplopia.present",
+      "value": false,
+      "status": "documented",
+      "quote": "The optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.",
+      "explanation": "The patient explicitly has diplopia (double vision)."
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "value": true,
+      "status": "documented",
+      "quote": "The optometrist confirms a visual field defect on a separate current signed assessment. The driver describes occasionally noticing vehicles late on the left, although central letters remain clear; a specialist has not yet documented whether the defect is stable, its complete binocular horizontal extent or whether other significant field loss is present.",
+      "explanation": "Yes"
+    }
+  ],
+  "output_facts_sha256": "ab42860445d4eaada6754f7ace8dc9ac19780d0645e34f63d47d5fa79360b8cc",
+  "facts_quarantined": true
+}

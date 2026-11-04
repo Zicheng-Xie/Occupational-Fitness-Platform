@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "e21e6177f06e42b78ce378e4f2691515686022a5991e8a41317f620621115680",
+  "input_facts_sha256": "6502951d147af371e7f7492bcb840c8df0a9e6011e603e712f8dff1d7aeea3f6",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 623,
+      "eval_count": 53,
+      "total_duration": 1155552400
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 626,
+      "eval_count": 83,
+      "total_duration": 1557733200
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "vision.diplopia.present",
+      "kind": "unsupported",
+      "quote": "no diplopia",
+      "explanation": "Independent source reading differs from the extraction. The question is about the explicit presence of diplopia, which is not mentioned in any of the source passages.",
+      "evidence": [
+        {
+          "start": 762,
+          "end": 773,
+          "quote": "no diplopia",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "kind": "unsupported",
+      "quote": "no visual field defect",
+      "explanation": "Independent source reading differs from the extraction. The question is about the confirmation of a visual field defect, which is not explicitly mentioned in the source passages. The passages do not provide any information about the driver's visual field, only mentioning visual acuity and the absence of diplopia and visual field defect.",
+      "evidence": [
+        {
+          "start": 738,
+          "end": 760,
+          "quote": "no visual field defect",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "vision.diplopia.present",
+    "vision.visual_field.confirmed_defect"
+  ],
+  "checked_fields": [
+    "vision.diplopia.present",
+    "vision.visual_field.confirmed_defect"
+  ],
+  "manual_review_required": true,
+  "review_modules": [
+    "vision"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "7df51393968453845e9991a652ca515bd9a9468d3270f6cd28d31de1ddd49401",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "vision.diplopia.present": {
+      "value": false,
+      "status": "present",
+      "unit": null,
+      "evidence": [
+        {
+          "start": 762,
+          "end": 773,
+          "quote": "no diplopia",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "regex",
+      "derived_from": []
+    },
+    "vision.visual_field.confirmed_defect": {
+      "value": false,
+      "status": "present",
+      "unit": null,
+      "evidence": [
+        {
+          "start": 738,
+          "end": 760,
+          "quote": "no visual field defect",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        },
+        {
+          "start": 738,
+          "end": 760,
+          "quote": "no visual field defect",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "method": "llm_grounded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "vision.diplopia.present"
+      ],
+      "status": "valid",
+      "request_sha256": "df5fb2beedb054dc09407cea2a36e275f3324befe197fcd82b01057a1311e659",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "vision.visual_field.confirmed_defect"
+      ],
+      "status": "valid",
+      "request_sha256": "67666a5196ceff1c5a3bc3313916001d5db0f5ccd1a77f8145cb69ec6b532aaa",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "vision.diplopia.present",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The question is about the explicit presence of diplopia, which is not mentioned in any of the source passages."
+    },
+    {
+      "field": "vision.visual_field.confirmed_defect",
+      "value": null,
+      "status": "not_documented",
+      "quote": "",
+      "explanation": "The question is about the confirmation of a visual field defect, which is not explicitly mentioned in the source passages. The passages do not provide any information about the driver's visual field, only mentioning visual acuity and the absence of diplopia and visual field defect."
+    }
+  ],
+  "output_facts_sha256": "5bef12cc83fde9b5471a2928ca6d79b02c0580bc31d317a4a5f3f86d83a860be",
+  "facts_quarantined": true
+}

@@ -1,0 +1,20 @@
+{
+  "primary_candidate": "planned_hybrid_v5_semantic_025",
+  "variants": [
+    {
+      "method": "planned_hybrid_v5_semantic_025",
+      "semantic_weight": 0.25
+    },
+    {
+      "method": "planned_hybrid_v5_semantic_050",
+      "semantic_weight": 0.5
+    }
+  ],
+  "formula": "0.85*((1-w)*61/(60+prior_rank)+w*native_sigmoid)+0.15*novel_corpus_atoms/M",
+  "prior_rank": "v3 Top10 rank; otherwise original query RRF Top20 rank",
+  "native_missing_policy": "explicit zero, not a new native call or inferred clinical truth",
+  "source_budget": 10,
+  "guard": "full actual v3 Top10 original-source footprint",
+  "mmr": false,
+  "selection_stage": "adaptive hypothesis after v3/v4 development results; prespecified before native Flag performance scoring; not sealed holdout"
+}

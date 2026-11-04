@@ -1,0 +1,114 @@
+{
+  "old_failed_record_id": "8c984a40c3ed7c09e229757fb78b467edd4c41de48377ca2df8aaa5cfbc038d6",
+  "old_failure_sha256": "f9c897124dda84f8550ad68303ecc246054481db29722aa7d6e8ebd0977d4e32",
+  "old_error": "ValueError: Established applicability has no original patient quotation",
+  "old_failed_record_preserved": true,
+  "same_original_note_and_ranked_evidence": true,
+  "conditions": 4,
+  "reference_contract_failures": 0,
+  "clinical_accuracy_claim": false,
+  "interpretation": "Reference structure now passes for this regression. Model conclusions can still be wrong; consistency warnings remain visible.",
+  "repair_path_evidence": "Bounded repair and immutable manual retry are covered by unit tests. These four natural model conditions passed reference validation on their first new call.",
+  "rows": [
+    {
+      "id": "4ae8ea03127d1ce1fe82f8aaf8f9f37d71cb1b97aa2db206e4ff2d60add5afbc",
+      "condition": {
+        "dataset": "refinement",
+        "query_id": "7f6b7e0ec1869004c7777f403811f73ccf7f44e6b205274df77522a92d5f18f9",
+        "method": "pageindex_rrf_predicate_navigation",
+        "top_k": 10,
+        "model": "llama3:8b",
+        "evidence_mode": "strict_topk"
+      },
+      "status": "requires_review",
+      "fitness": "no",
+      "outcome": "may_meet_conditional_standard",
+      "seconds": 15.42459190000045,
+      "model_calls": 1,
+      "supplied_originals": 10,
+      "validation_warnings": [
+        "Fitness answer conflicts with the model outcome category"
+      ],
+      "actual_prompt_tokens": 5741,
+      "configured_context": 8192,
+      "clinical_review_status": "pending"
+    },
+    {
+      "id": "0408cc96537f69d45b62bed00b2099cd42741e3f6f09310526f01feefa50fbc0",
+      "condition": {
+        "dataset": "refinement",
+        "query_id": "7f6b7e0ec1869004c7777f403811f73ccf7f44e6b205274df77522a92d5f18f9",
+        "method": "pageindex_rrf_predicate_navigation",
+        "top_k": 5,
+        "model": "llama3:8b",
+        "evidence_mode": "strict_topk"
+      },
+      "status": "requires_review",
+      "fitness": "undetermined",
+      "outcome": "may_meet_conditional_standard",
+      "seconds": 10.675388199999361,
+      "model_calls": 1,
+      "supplied_originals": 5,
+      "validation_warnings": [
+        "Fitness answer conflicts with the model outcome category"
+      ],
+      "actual_prompt_tokens": 3449,
+      "configured_context": 8192,
+      "clinical_review_status": "pending"
+    },
+    {
+      "id": "b9de6ce5c0fd55ff03f3fb1a78b5e2ee49e04c3e62110e367fd78daac596c38a",
+      "condition": {
+        "dataset": "refinement",
+        "query_id": "7f6b7e0ec1869004c7777f403811f73ccf7f44e6b205274df77522a92d5f18f9",
+        "method": "pageindex_rrf_predicate_navigation",
+        "top_k": 10,
+        "model": "qwen3.5:4b-q4_K_M",
+        "evidence_mode": "strict_topk"
+      },
+      "status": "completed",
+      "fitness": "undetermined",
+      "outcome": "insufficient_information",
+      "seconds": 14.099421500000972,
+      "model_calls": 1,
+      "supplied_originals": 10,
+      "validation_warnings": [],
+      "actual_prompt_tokens": 6319,
+      "configured_context": 32768,
+      "clinical_review_status": "pending"
+    },
+    {
+      "id": "7598e1f6e9996d08aeea4577ccdd8377e5ea06e7a96dc3664156b57d56a58f33",
+      "condition": {
+        "dataset": "refinement",
+        "query_id": "7f6b7e0ec1869004c7777f403811f73ccf7f44e6b205274df77522a92d5f18f9",
+        "method": "pageindex_rrf_predicate_navigation",
+        "top_k": 5,
+        "model": "qwen3.5:4b-q4_K_M",
+        "evidence_mode": "strict_topk"
+      },
+      "status": "requires_review",
+      "fitness": "yes",
+      "outcome": "meets_unconditional_standard",
+      "seconds": 9.44016510000074,
+      "model_calls": 1,
+      "supplied_originals": 5,
+      "validation_warnings": [
+        "Model outcome has no matching established criterion check",
+        "Affirmative proposal requires review of unresolved section references"
+      ],
+      "actual_prompt_tokens": 3783,
+      "configured_context": 32768,
+      "clinical_review_status": "pending"
+    }
+  ],
+  "implementation": {
+    "src/occupational_fitness_rag/evaluation/retrieval_judgment.py": "0039f3cdd73496f4ad0f017127ac473644795b1c1760f1a8d02b108ebb092693",
+    "tools/serve_retrieval_judgments.py": "6193959a2b8fc3d66e9cfcb2827e59c67958fd54d36e7f07c6ed38b1c5907a14",
+    "src/occupational_fitness_rag/web/static/retrieval_judgment.js": "9bb66fbca22dd041d91c80b7f124528d7b3fec0267f89701889d4ae1065e0a27",
+    "tests/test_retrieval_judgment.py": "7d48696d84db5706b27a284c3c98bd195c48ade35dbd172f85821fc4eb4f3e74",
+    "tests/retrieval_judgment_client.test.cjs": "02009a8f46433616916a0941ac73428b1e7665647373d94dd337629d85aa515c",
+    "docs/retrieval_model_judgment.md": "982f64893fdfb5a260d0a212a8783c562cb3e58fb4b2bbe999a38cfa08d4e39e",
+    "tools/validate_review_citation_repair.py": "fe575314deb7542aa58f3b9f1525b9da7da247e9995bf68313d74edc2a95e111"
+  }
+}

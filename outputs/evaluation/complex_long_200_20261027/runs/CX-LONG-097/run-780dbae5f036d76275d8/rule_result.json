@@ -1,0 +1,1454 @@
+{
+  "schema_version": "1.3.0",
+  "result_id": "RR-d3d2bf84f1f3c723a052",
+  "case_id": "CX-LONG-097",
+  "case_sha256": "9baf108e967e5bc994e34cbde34e6aa7ddce122929e6a44dfb29679eff03a1d6",
+  "source": {
+    "type": "nurse_note",
+    "source_file": "CX-LONG-097.txt"
+  },
+  "assessment_context": {
+    "framework": "Austroads",
+    "licence_context": "commercial",
+    "job_title": null,
+    "modules_requested": [
+      "hypertension",
+      "blackout"
+    ]
+  },
+  "ruleset": {
+    "ruleset_id": "austroads-commercial",
+    "ruleset_version": "1.2.0",
+    "ruleset_sha256": "cae808a441f7956628cd772c819097e8c273cf44d56116155082c67a76ad3aaa",
+    "guideline_version": "AP-G56-22",
+    "status": "pending_clinical_review"
+  },
+  "route": "human_review",
+  "assessment_outcome": "insufficient_information",
+  "outcome_label": "Insufficient information / Human review required",
+  "has_red_flag": false,
+  "red_flags": [],
+  "triggered_rules": [
+    {
+      "rule_id": "HTN-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "rule_result": "triggered",
+      "assessment_outcome": "meets_unconditional_standard",
+      "reason": "Recorded persistent pressures do not exceed the hypertension threshold; this finding covers hypertension only.",
+      "observed_facts": {
+        "cardiovascular.blood_pressure.persistent_diastolic": {
+          "value": 100.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            },
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "cardiovascular.blood_pressure.persistent_systolic": {
+          "value": 170.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            },
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "source_evidence": [
+        "persistent BP 170/100 mmHg"
+      ],
+      "rag_query_key": "htn_com_screen_001"
+    }
+  ],
+  "missing_information": [
+    {
+      "field": "blackout.occurred",
+      "status": "requires_confirmation",
+      "category": "blackout",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "source_evidence": [
+        "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending."
+      ],
+      "rag_query_key": "blackout_diagnostic_workup_commercial"
+    },
+    {
+      "field": "blackout.occurred",
+      "status": "requires_confirmation",
+      "category": "blackout",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "source_evidence": [
+        "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending."
+      ],
+      "rag_query_key": "provoked_vasovagal_syncope_commercial"
+    },
+    {
+      "field": "blackout.occurred",
+      "status": "requires_confirmation",
+      "category": "blackout",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "BLK-COM-NO-HISTORY-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "source_evidence": [
+        "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending."
+      ],
+      "rag_query_key": "blk_com_no_history_001"
+    },
+    {
+      "field": "blackout.occurred",
+      "status": "requires_confirmation",
+      "category": "blackout",
+      "reason": "Required information is unknown, conflicting or requires confirmation.",
+      "required_by_rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-006"
+      ],
+      "source_evidence": [
+        "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending."
+      ],
+      "rag_query_key": "blk_com_diagnosed_referral_001"
+    }
+  ],
+  "modules": [
+    {
+      "module": "hypertension",
+      "assessment_outcome": "meets_unconditional_standard",
+      "route": "fast_path",
+      "triggered_rule_ids": [
+        "HTN-COM-SCREEN-001"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "module": "blackout",
+      "assessment_outcome": "insufficient_information",
+      "route": "human_review",
+      "triggered_rule_ids": [],
+      "missing_fields": [
+        "blackout.occurred"
+      ],
+      "warnings": [
+        "Extraction semantic review requires human confirmation before this draft is used."
+      ]
+    }
+  ],
+  "rules_evaluated": [
+    {
+      "rule_id": "HTN-COM-UNCONDITIONAL-001",
+      "module": "hypertension",
+      "category": "cardiovascular",
+      "subcondition": "hypertension",
+      "result": "not_triggered",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "rag_query_key": "hypertension_commercial_unconditional",
+      "observed_facts": {
+        "cardiovascular.blood_pressure.persistent_diastolic": {
+          "value": 100.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            },
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "cardiovascular.blood_pressure.persistent_systolic": {
+          "value": 170.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            },
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "any": [
+            {
+              "field": "cardiovascular.blood_pressure.persistent_systolic",
+              "operator": ">",
+              "expected": 170,
+              "observed": 170.0,
+              "status": "present",
+              "truth": false
+            },
+            {
+              "field": "cardiovascular.blood_pressure.persistent_diastolic",
+              "operator": ">",
+              "expected": 100,
+              "observed": 100.0,
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "HTN-COM-CONDITIONAL-001",
+      "module": "hypertension",
+      "category": "cardiovascular",
+      "subcondition": "hypertension_conditional",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-HTN-COM-002"
+      ],
+      "rag_query_key": "hypertension_commercial_conditional",
+      "observed_facts": {
+        "cardiovascular.hypertension.antihypertensive_therapy": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.controlled_for_4_weeks": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.driving_impairing_medication_side_effects": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.initial_specialist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "cardiovascular.hypertension.target_organ_damage_relevant_to_driving": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "dependency": "HTN-COM-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "dependency": "HTN-COM-UNCONDITIONAL-001",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_mechanism_not_yet_ascertained",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "rag_query_key": "blackout_diagnostic_workup_commercial",
+      "observed_facts": {
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1199,
+              "end": 1354,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; ",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": null,
+          "status": "requires_confirmation",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1199,
+              "end": 1513,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "semantic_review_withheld",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "blackout.occurred"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "blackout.occurred",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "requires_confirmation",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            },
+            {
+              "all": [
+                {
+                  "field": "blackout.occurred",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "requires_confirmation",
+                  "truth": null
+                },
+                {
+                  "field": "blackout.mechanism_status",
+                  "operator": "in",
+                  "expected": [
+                    "not_investigated",
+                    "under_investigation"
+                  ],
+                  "observed": "under_investigation",
+                  "status": "present",
+                  "truth": true
+                }
+              ],
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "provoked_vasovagal_syncope",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "rag_query_key": "provoked_vasovagal_syncope_commercial",
+      "observed_facts": {
+        "blackout.diagnosis": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": null,
+          "status": "requires_confirmation",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1199,
+              "end": 1513,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "semantic_review_withheld",
+          "derived_from": []
+        },
+        "blackout.provoking_factor_well_defined": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.recurrence_while_driving_unlikely": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "blackout.occurred"
+      ],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "blackout.occurred",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "requires_confirmation",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            },
+            {
+              "all": [
+                {
+                  "field": "blackout.diagnosis",
+                  "operator": "==",
+                  "expected": "vasovagal_syncope",
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "blackout.provoking_factor_well_defined",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                },
+                {
+                  "field": "blackout.recurrence_while_driving_unlikely",
+                  "operator": "==",
+                  "expected": true,
+                  "observed": null,
+                  "status": "unknown",
+                  "truth": null
+                }
+              ],
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-UNCERTAIN-UNCONDITIONAL-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_uncertain_nature",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-003"
+      ],
+      "rag_query_key": "blackout_uncertain_commercial",
+      "observed_facts": {
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1199,
+              "end": 1354,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; ",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": null,
+          "status": "requires_confirmation",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1199,
+              "end": 1513,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "semantic_review_withheld",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            }
+          ],
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-SINGLE-WAIT-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "single_or_clustered_uncertain_blackout",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-004"
+      ],
+      "rag_query_key": "blackout_uncertain_single_commercial",
+      "observed_facts": {
+        "blackout.episodes_separated_by_24h_count": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1199,
+              "end": 1354,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; ",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": null,
+          "status": "requires_confirmation",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1199,
+              "end": 1513,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "semantic_review_withheld",
+          "derived_from": []
+        },
+        "blackout.years_since_last_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-RECURRENT-WAIT-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "recurrent_uncertain_blackout",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-005"
+      ],
+      "rag_query_key": "blackout_uncertain_recurrent_commercial",
+      "observed_facts": {
+        "blackout.episodes_separated_by_24h_count": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1199,
+              "end": 1354,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; ",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": null,
+          "status": "requires_confirmation",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1199,
+              "end": 1513,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "semantic_review_withheld",
+          "derived_from": []
+        },
+        "blackout.years_since_last_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-CONDITIONAL-ELIGIBILITY-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "uncertain_blackout_conditional_eligibility",
+      "result": "not_applicable",
+      "assessment_outcome": null,
+      "reason": "Predicate is false or rule is not applicable.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-004",
+        "AFTD2022-BLK-COM-005"
+      ],
+      "rag_query_key": "blackout_uncertain_conditional_commercial",
+      "observed_facts": {
+        "blackout.appropriate_specialist_information_available": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.episodes_separated_by_24h_count": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.mechanism_status": {
+          "value": "under_investigation",
+          "status": "present",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1199,
+              "end": 1354,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; ",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            },
+            {
+              "start": 1316,
+              "end": 1352,
+              "quote": "the mechanism is under investigation",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": null,
+          "status": "requires_confirmation",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1199,
+              "end": 1513,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "semantic_review_withheld",
+          "derived_from": []
+        },
+        "blackout.years_since_last_event": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            },
+            {
+              "field": "blackout.mechanism_status",
+              "operator": "==",
+              "expected": "undetermined_after_investigation",
+              "observed": "under_investigation",
+              "status": "present",
+              "truth": false
+            }
+          ],
+          "truth": false
+        }
+      }
+    },
+    {
+      "rule_id": "HTN-COM-SCREEN-001",
+      "module": "hypertension",
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "result": "triggered",
+      "assessment_outcome": "meets_unconditional_standard",
+      "reason": "Recorded persistent pressures do not exceed the hypertension threshold; this finding covers hypertension only.",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "rag_query_key": "htn_com_screen_001",
+      "observed_facts": {
+        "cardiovascular.blood_pressure.persistent_diastolic": {
+          "value": 100.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            },
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        },
+        "cardiovascular.blood_pressure.persistent_systolic": {
+          "value": 170.0,
+          "status": "present",
+          "unit": "mmHg",
+          "evidence": [
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            },
+            {
+              "start": 604,
+              "end": 630,
+              "quote": "persistent BP 170/100 mmHg",
+              "line_start": 5,
+              "line_end": 5,
+              "pdf_page": null
+            }
+          ],
+          "method": "llm_grounded",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "all": [
+            {
+              "field": "cardiovascular.blood_pressure.persistent_systolic",
+              "operator": "<=",
+              "expected": 170,
+              "observed": 170.0,
+              "status": "present",
+              "truth": true
+            },
+            {
+              "field": "cardiovascular.blood_pressure.persistent_diastolic",
+              "operator": "<=",
+              "expected": 100,
+              "observed": 100.0,
+              "status": "present",
+              "truth": true
+            }
+          ],
+          "truth": true
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-NO-HISTORY-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "rag_query_key": "blk_com_no_history_001",
+      "observed_facts": {
+        "blackout.occurred": {
+          "value": null,
+          "status": "requires_confirmation",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1199,
+              "end": 1513,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "semantic_review_withheld",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "blackout.occurred"
+      ],
+      "condition_trace": {
+        "gate": {},
+        "predicate": {
+          "field": "blackout.occurred",
+          "operator": "==",
+          "expected": false,
+          "observed": null,
+          "status": "requires_confirmation",
+          "truth": null
+        }
+      }
+    },
+    {
+      "rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
+      "module": "blackout",
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "result": "unknown",
+      "assessment_outcome": null,
+      "reason": "Required facts are unknown or unconfirmed.",
+      "source_ids": [
+        "AFTD2022-BLK-COM-006"
+      ],
+      "rag_query_key": "blk_com_diagnosed_referral_001",
+      "observed_facts": {
+        "blackout.diagnosis": {
+          "value": null,
+          "status": "unknown",
+          "unit": null,
+          "evidence": [],
+          "method": "not_recorded",
+          "derived_from": []
+        },
+        "blackout.occurred": {
+          "value": null,
+          "status": "requires_confirmation",
+          "unit": null,
+          "evidence": [
+            {
+              "start": 1199,
+              "end": 1513,
+              "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+              "line_start": 9,
+              "line_end": 9,
+              "pdf_page": null
+            }
+          ],
+          "method": "semantic_review_withheld",
+          "derived_from": []
+        }
+      },
+      "missing_fields": [
+        "blackout.occurred"
+      ],
+      "condition_trace": {
+        "gate": {
+          "field": "blackout.occurred",
+          "operator": "==",
+          "expected": true,
+          "observed": null,
+          "status": "requires_confirmation",
+          "truth": null
+        },
+        "predicate": {
+          "all": [
+            {
+              "field": "blackout.occurred",
+              "operator": "==",
+              "expected": true,
+              "observed": null,
+              "status": "requires_confirmation",
+              "truth": null
+            },
+            {
+              "field": "blackout.diagnosis",
+              "operator": "in",
+              "expected": [
+                "hypoglycaemia",
+                "seizure",
+                "cardiac_syncope",
+                "sleep_disorder",
+                "other"
+              ],
+              "observed": null,
+              "status": "unknown",
+              "truth": null
+            }
+          ],
+          "truth": null
+        }
+      }
+    }
+  ],
+  "processing_warnings": [
+    {
+      "code": "SEMANTIC_REVIEW_REQUIRES_CONFIRMATION",
+      "message": "requires_confirmation",
+      "requires_human_review": true
+    }
+  ],
+  "requires_human_review": true,
+  "rag_requests": [
+    {
+      "request_id": "RAG-1e975ca1e182934f",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-UNDIAGNOSED-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_mechanism_not_yet_ascertained",
+      "licence_context": "commercial",
+      "rag_query_key": "blackout_diagnostic_workup_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "blackout.occurred": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-63faf8fb1c42b8f8",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-VASOVAGAL-EXCEPTION-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-002"
+      ],
+      "category": "blackout",
+      "subcondition": "provoked_vasovagal_syncope",
+      "licence_context": "commercial",
+      "rag_query_key": "provoked_vasovagal_syncope_commercial",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "blackout.occurred": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-ff63f6226b9bfc35",
+      "request_type": "triggered_rule_evidence",
+      "rule_id": "HTN-COM-SCREEN-001",
+      "source_ids": [
+        "AFTD2022-HTN-COM-001"
+      ],
+      "category": "cardiovascular",
+      "subcondition": "hypertension_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "htn_com_screen_001",
+      "ambiguity_reasons": [],
+      "fact_context": {}
+    },
+    {
+      "request_id": "RAG-7112e7be2294bf9a",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-NO-HISTORY-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-001"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "blk_com_no_history_001",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "blackout.occurred": "requires_confirmation"
+      }
+    },
+    {
+      "request_id": "RAG-733be2b3c8de3a97",
+      "request_type": "missing_information_guidance",
+      "rule_id": "BLK-COM-DIAGNOSED-REFERRAL-001",
+      "source_ids": [
+        "AFTD2022-BLK-COM-006"
+      ],
+      "category": "blackout",
+      "subcondition": "blackout_screen",
+      "licence_context": "commercial",
+      "rag_query_key": "blk_com_diagnosed_referral_001",
+      "ambiguity_reasons": [
+        "requires_confirmation"
+      ],
+      "fact_context": {
+        "blackout.occurred": "requires_confirmation"
+      }
+    }
+  ],
+  "internal_metadata": {
+    "rule_engine_contract": "internal",
+    "narrative_context_version": 2,
+    "narrative_context": {
+      "RAG-1e975ca1e182934f": [
+        {
+          "start": 1199,
+          "end": 1513,
+          "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+          "line_start": 9,
+          "line_end": 9,
+          "pdf_page": null
+        }
+      ],
+      "RAG-63faf8fb1c42b8f8": [
+        {
+          "start": 1199,
+          "end": 1513,
+          "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+          "line_start": 9,
+          "line_end": 9,
+          "pdf_page": null
+        }
+      ],
+      "RAG-ff63f6226b9bfc35": [
+        {
+          "start": 433,
+          "end": 828,
+          "quote": "After the initial arrival reading was discarded because the cuff was slipping, repeat measurements over several visits were reviewed by the treating doctor, who documents persistent BP 170/100 mmHg with the correct cuff and seated rest; the driver has no current cardiac symptoms, and a depot worker's much higher figure belongs to another person rather than a second measurement of this driver.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ],
+      "RAG-7112e7be2294bf9a": [
+        {
+          "start": 1199,
+          "end": 1513,
+          "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+          "line_start": 9,
+          "line_end": 9,
+          "pdf_page": null
+        }
+      ],
+      "RAG-733be2b3c8de3a97": [
+        {
+          "start": 1199,
+          "end": 1513,
+          "quote": "A separate current referral documents a witnessed blackout with loss of consciousness during a break and states that the mechanism is under investigation; the driver remembers feeling hot before the event, but neither a benign faint nor a metabolic cause has been confirmed, and cardiac monitoring remains pending.",
+          "line_start": 9,
+          "line_end": 9,
+          "pdf_page": null
+        }
+      ]
+    },
+    "narrative_source_text_sha256": "fe6695864294ca0e231091ad9f4aa83ea182f97e2eed4d95cfea99ca708109e3"
+  }
+}

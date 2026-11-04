@@ -1,0 +1,1092 @@
+{
+  "condition": {
+    "model": "llama3:8b",
+    "case_id": "SYN-EXT-009",
+    "evidence_policy": "reference_evidence",
+    "protocol": "applicability_first",
+    "repeat": 1
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "completed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "diabetes.present",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "diabetes.present",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"blackout\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nThe report contains no blackout history information.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\ndiabetes.present = false\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-BLK-COM-001\", \"section\": \"1.2.1\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"cardiovascular and neurological investigations \\nand referral to several specialists. People should \\nbe advised not to drive until the mechanism is \\nascertained and the corresponding standard met.\", \"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"text_sha256\": \"dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55\", \"char_start\": 0, \"char_end\": 195, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-BLK-COM-003\", \"section\": \"1.3\", \"pdf_page\": 70, \"printed_page\": 59, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has experienced blackouts \\nthat cannot be diagnosed as syncope, \\nseizure or another condition.\", \"module\": \"blackout\", \"passage_id\": \"PASS-326a5910523554d86efa9f47\", \"text_sha256\": \"2a4cd0409e88aaf1c7ad208d84640971b8e0793c738d869d949acb17d0803295\", \"char_start\": 0, \"char_end\": 166, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-BLK-COM-006\", \"section\": \"1.3\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"themselves with the information in this chapter \\nand the tabulated standards before assessing a \\nperson’s fitness to drive. \\nWhere a firm diagnosis has been made, the \\nstandard appropriate to the condition should \\nbe referred to in this publication (refer to Figure \\n6. Management of blackouts and driving). For \\nblackouts due to medical causes not covered \\nin the standard, refer to first principles (refer to \\nPart A section 2. Assessing fitness to drive – \\ngeneral guidance). For blackouts where, after \\ninvestigation, it is not possible to diagnose one \\nof the conditions covered elsewhere in this \\npublication, refer to the table for blackouts of \\nuncertain nature over the page.\", \"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"text_sha256\": \"d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574\", \"char_start\": 0, \"char_end\": 684, \"applicability_slot\": \"P3\"}]}"
+              }
+            ]
+          },
+          "request_sha256": "a551d255d9bb3f0e650765ebf0a617baf786c40e1c5ac72486fd84d7850c48fb",
+          "request_bytes": 10313,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T12:49:16.1661964Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n    \"passages\": {\n        \"P1\": {\n            \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"],\n            \"statement_type\": \"conditional_opportunity\",\n            \"applicability\": \"not_applicable\",\n            \"licence_pathway\": \"unconditional\",\n            \"prerequisites\": [\n                {\"requirement\": \"cardiovascular and neurological investigations\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}\n            ],\n            \"numeric_application\": \"Not applicable\",\n            \"finding\": \"established_restriction\",\n            \"conclusion\": \"The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.\"\n        },\n        \"P2\": {\n            \"fact_fields\": [\"vision.uncorrected.right.snellen\", \"vision.uncorrected.left.snellen\"],\n            \"statement_type\": \"conditional_opportunity\",\n            \"applicability\": \"not_applicable\",\n            \"licence_pathway\": \"unconditional\",\n            \"prerequisites\": [\n                {\"requirement\": \"blackouts that cannot be diagnosed as syncope, seizure or another condition\", \"status\": \"unknown\", \"fact_fields\": [\"vision.uncorrected.right.snellen\", \"vision.uncorrected.left.snellen\"]}\n            ],\n            \"numeric_application\": \"Not applicable\",\n            \"finding\": \"established_restriction\",\n            \"conclusion\": \"The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.\"\n        },\n        \"P3\": {\n            \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"],\n            \"statement_type\": \"conditional_opportunity\",\n            \"applicability\": \"not_applicable\",\n            \"licence_pathway\": \"unconditional\",\n            \"prerequisites\": [\n                {\"requirement\": \"cardiovascular and neurological investigations\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}\n            ],\n            \"numeric_application\": \"Not applicable\",\n            \"finding\": \"established_restriction\",\n            \"conclusion\": \"The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.\"\n        }\n    }\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 8919624300,
+            "load_duration": 3681100,
+            "prompt_eval_count": 1726,
+            "prompt_eval_cached_count": 1725,
+            "prompt_eval_duration": 36455000,
+            "eval_count": 561,
+            "eval_duration": 8612122000
+          },
+          "token_counts": {
+            "prompt_eval_count": 1726,
+            "eval_count": 561,
+            "prompt_eval_cached_count": 1725
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "cardiovascular and neurological investigations",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic",
+                      "cardiovascular.blood_pressure.persistent_diastolic"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-326a5910523554d86efa9f47",
+                "fact_fields": [
+                  "vision.uncorrected.right.snellen",
+                  "vision.uncorrected.left.snellen"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "blackouts that cannot be diagnosed as syncope, seizure or another condition",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "vision.uncorrected.right.snellen",
+                      "vision.uncorrected.left.snellen"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "unconditional",
+                "prerequisites": [
+                  {
+                    "requirement": "cardiovascular and neurological investigations",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "cardiovascular.blood_pressure.persistent_systolic",
+                      "cardiovascular.blood_pressure.persistent_diastolic"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+              "source_id": "AFTD2022-BLK-COM-001",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.1",
+              "text_sha256": "dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 195,
+                  "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+                "source_id": "AFTD2022-BLK-COM-001",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-326a5910523554d86efa9f47",
+              "source_id": "AFTD2022-BLK-COM-003",
+              "pdf_page": 70,
+              "printed_page": 59,
+              "section": "1.3",
+              "text_sha256": "2a4cd0409e88aaf1c7ad208d84640971b8e0793c738d869d949acb17d0803295",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 166,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-326a5910523554d86efa9f47",
+                "fact_fields": [
+                  "vision.uncorrected.right.snellen",
+                  "vision.uncorrected.left.snellen"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+                "source_id": "AFTD2022-BLK-COM-003",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-a1eb49f152b573688d112731",
+              "source_id": "AFTD2022-BLK-COM-006",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.3",
+              "text_sha256": "d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 684,
+                  "original_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+                "source_id": "AFTD2022-BLK-COM-006",
+                "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-2dc3117e7c443462699ed5e0:established_finding_without_reported_applicability",
+            "PASS-326a5910523554d86efa9f47:established_finding_without_reported_applicability",
+            "PASS-a1eb49f152b573688d112731:established_finding_without_reported_applicability"
+          ],
+          "seconds": 8.950172000000748
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "cardiovascular and neurological investigations",
+                "status": "unknown",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-326a5910523554d86efa9f47",
+            "fact_fields": [
+              "vision.uncorrected.right.snellen",
+              "vision.uncorrected.left.snellen"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "blackouts that cannot be diagnosed as syncope, seizure or another condition",
+                "status": "unknown",
+                "fact_fields": [
+                  "vision.uncorrected.right.snellen",
+                  "vision.uncorrected.left.snellen"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-a1eb49f152b573688d112731",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "unconditional",
+            "prerequisites": [
+              {
+                "requirement": "cardiovascular and neurological investigations",
+                "status": "unknown",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+          "source_id": "AFTD2022-BLK-COM-001",
+          "pdf_page": 68,
+          "printed_page": 57,
+          "section": "1.2.1",
+          "text_sha256": "dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 195,
+              "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+            "source_id": "AFTD2022-BLK-COM-001",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-326a5910523554d86efa9f47",
+          "source_id": "AFTD2022-BLK-COM-003",
+          "pdf_page": 70,
+          "printed_page": 59,
+          "section": "1.3",
+          "text_sha256": "2a4cd0409e88aaf1c7ad208d84640971b8e0793c738d869d949acb17d0803295",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 166,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-326a5910523554d86efa9f47",
+            "fact_fields": [
+              "vision.uncorrected.right.snellen",
+              "vision.uncorrected.left.snellen"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+            "source_id": "AFTD2022-BLK-COM-003",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-a1eb49f152b573688d112731",
+          "source_id": "AFTD2022-BLK-COM-006",
+          "pdf_page": 69,
+          "printed_page": 58,
+          "section": "1.3",
+          "text_sha256": "d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 684,
+              "original_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-a1eb49f152b573688d112731",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+            "source_id": "AFTD2022-BLK-COM-006",
+            "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-2dc3117e7c443462699ed5e0:established_finding_without_reported_applicability",
+        "PASS-326a5910523554d86efa9f47:established_finding_without_reported_applicability",
+        "PASS-a1eb49f152b573688d112731:established_finding_without_reported_applicability"
+      ],
+      "seconds": 8.950173799999902
+    },
+    "aggregation": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "llama3:8b",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "blackout"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-2dc3117e7c443462699ed5e0",
+                        "PASS-326a5910523554d86efa9f47",
+                        "PASS-a1eb49f152b573688d112731"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "diabetes.present",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"blackout\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nThe report contains no blackout history information.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\ndiabetes.present = false\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"diabetes.present\": {\"value\": false, \"patient_quotes\": [\"diabetes.present = false\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-BLK-COM-001\", \"section\": \"1.2.1\", \"pdf_page\": 68, \"printed_page\": 57, \"source_text\": \"cardiovascular and neurological investigations \\nand referral to several specialists. People should \\nbe advised not to drive until the mechanism is \\nascertained and the corresponding standard met.\", \"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"text_sha256\": \"dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55\", \"char_start\": 0, \"char_end\": 195}, {\"source_id\": \"AFTD2022-BLK-COM-003\", \"section\": \"1.3\", \"pdf_page\": 70, \"printed_page\": 59, \"source_text\": \"A person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has experienced blackouts \\nthat cannot be diagnosed as syncope, \\nseizure or another condition.\", \"module\": \"blackout\", \"passage_id\": \"PASS-326a5910523554d86efa9f47\", \"text_sha256\": \"2a4cd0409e88aaf1c7ad208d84640971b8e0793c738d869d949acb17d0803295\", \"char_start\": 0, \"char_end\": 166}, {\"source_id\": \"AFTD2022-BLK-COM-006\", \"section\": \"1.3\", \"pdf_page\": 69, \"printed_page\": 58, \"source_text\": \"themselves with the information in this chapter \\nand the tabulated standards before assessing a \\nperson’s fitness to drive. \\nWhere a firm diagnosis has been made, the \\nstandard appropriate to the condition should \\nbe referred to in this publication (refer to Figure \\n6. Management of blackouts and driving). For \\nblackouts due to medical causes not covered \\nin the standard, refer to first principles (refer to \\nPart A section 2. Assessing fitness to drive – \\ngeneral guidance). For blackouts where, after \\ninvestigation, it is not possible to diagnose one \\nof the conditions covered elsewhere in this \\npublication, refer to the table for blackouts of \\nuncertain nature over the page.\", \"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"text_sha256\": \"d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574\", \"char_start\": 0, \"char_end\": 684}], \"proposed_applicability_ledger\": [{\"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"cardiovascular and neurological investigations\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.\", \"source_id\": \"AFTD2022-BLK-COM-001\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-326a5910523554d86efa9f47\", \"fact_fields\": [\"vision.uncorrected.right.snellen\", \"vision.uncorrected.left.snellen\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"blackouts that cannot be diagnosed as syncope, seizure or another condition\", \"status\": \"unknown\", \"fact_fields\": [\"vision.uncorrected.right.snellen\", \"vision.uncorrected.left.snellen\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.\", \"source_id\": \"AFTD2022-BLK-COM-003\", \"referenced_patient_values\": {\"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"unconditional\", \"prerequisites\": [{\"requirement\": \"cardiovascular and neurological investigations\", \"status\": \"unknown\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.\", \"source_id\": \"AFTD2022-BLK-COM-006\", \"referenced_patient_values\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"ebb33a61362cea5f2619aff9cee86c7624082b65429a20a3abcdd5ec1a15027b\"}"
+              }
+            ]
+          },
+          "request_sha256": "6d70a38a69a92c14ddfebc643cb12b348940f78c913ef93d7222512388d46945",
+          "request_bytes": 13402,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "llama3:8b",
+            "created_at": "2026-10-15T12:49:22.9062519Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"assessment_outcome\": \"may_meet_conditional_standard\", \"explanation\": \"The patient's verified facts do not meet the unconditional licensing pathway, but the patient's cardiovascular and blood pressure values are within the normal range. The patient's vision and hearing assessments are also normal. However, the patient's blackout history is unknown, which is a prerequisite for unconditional licensing. Therefore, the patient may meet a conditional standard, pending further investigation and diagnosis of the blackout mechanism.\", \"criterion_checks\": [\n{\"module\": \"blackout\", \"passage_id\": \"PASS-2dc3117e7c443462699ed5e0\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-326a5910523554d86efa9f47\", \"fact_fields\": [\"vision.uncorrected.right.snellen\", \"vision.uncorrected.left.snellen\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.\"}, {\"module\": \"blackout\", \"passage_id\": \"PASS-a1eb49f152b573688d112731\", \"fact_fields\": [\"cardiovascular.blood_pressure.persistent_systolic\", \"cardiovascular.blood_pressure.persistent_diastolic\"], \"licence_pathway\": \"unconditional\", \"finding\": \"established_restriction\", \"conclusion\": \"The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.\"}\n]}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 6724299200,
+            "load_duration": 3999400,
+            "prompt_eval_count": 2655,
+            "prompt_eval_cached_count": 1887,
+            "prompt_eval_duration": 374944000,
+            "eval_count": 415,
+            "eval_duration": 6042807000
+          },
+          "token_counts": {
+            "prompt_eval_count": 2655,
+            "eval_count": 415,
+            "prompt_eval_cached_count": 1887
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "assessment_outcome": "may_meet_conditional_standard",
+            "explanation": "The patient's verified facts do not meet the unconditional licensing pathway, but the patient's cardiovascular and blood pressure values are within the normal range. The patient's vision and hearing assessments are also normal. However, the patient's blackout history is unknown, which is a prerequisite for unconditional licensing. Therefore, the patient may meet a conditional standard, pending further investigation and diagnosis of the blackout mechanism.",
+            "source_ids": [
+              "AFTD2022-BLK-COM-001",
+              "AFTD2022-BLK-COM-003",
+              "AFTD2022-BLK-COM-006"
+            ],
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic",
+              "vision.uncorrected.right.snellen",
+              "vision.uncorrected.left.snellen"
+            ],
+            "criterion_checks": [
+              {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+                "source_id": "AFTD2022-BLK-COM-001",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-326a5910523554d86efa9f47",
+                "fact_fields": [
+                  "vision.uncorrected.right.snellen",
+                  "vision.uncorrected.left.snellen"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+                "source_id": "AFTD2022-BLK-COM-003",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+              },
+              {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+                "source_id": "AFTD2022-BLK-COM-006",
+                "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+              "source_id": "AFTD2022-BLK-COM-001",
+              "pdf_page": 68,
+              "printed_page": 57,
+              "section": "1.2.1",
+              "text_sha256": "dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 195,
+                  "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+                "source_id": "AFTD2022-BLK-COM-001",
+                "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-326a5910523554d86efa9f47",
+              "source_id": "AFTD2022-BLK-COM-003",
+              "pdf_page": 70,
+              "printed_page": 59,
+              "section": "1.3",
+              "text_sha256": "2a4cd0409e88aaf1c7ad208d84640971b8e0793c738d869d949acb17d0803295",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 166,
+                  "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-326a5910523554d86efa9f47",
+                "fact_fields": [
+                  "vision.uncorrected.right.snellen",
+                  "vision.uncorrected.left.snellen"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+                "source_id": "AFTD2022-BLK-COM-003",
+                "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+              },
+              "support_review": "pending_independent_review"
+            },
+            {
+              "passage_id": "PASS-a1eb49f152b573688d112731",
+              "source_id": "AFTD2022-BLK-COM-006",
+              "pdf_page": 69,
+              "printed_page": 58,
+              "section": "1.3",
+              "text_sha256": "d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 684,
+                  "original_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+                }
+              ],
+              "check": {
+                "module": "blackout",
+                "passage_id": "PASS-a1eb49f152b573688d112731",
+                "fact_fields": [
+                  "cardiovascular.blood_pressure.persistent_systolic",
+                  "cardiovascular.blood_pressure.persistent_diastolic"
+                ],
+                "licence_pathway": "unconditional",
+                "finding": "established_restriction",
+                "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+                "source_id": "AFTD2022-BLK-COM-006",
+                "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+              },
+              "support_review": "pending_independent_review"
+            }
+          ],
+          "output_consistency_flags": [
+            "conditional_prerequisites_not_established_in_checks"
+          ],
+          "seconds": 6.737709299999551
+        }
+      ],
+      "answer": {
+        "assessment_outcome": "may_meet_conditional_standard",
+        "explanation": "The patient's verified facts do not meet the unconditional licensing pathway, but the patient's cardiovascular and blood pressure values are within the normal range. The patient's vision and hearing assessments are also normal. However, the patient's blackout history is unknown, which is a prerequisite for unconditional licensing. Therefore, the patient may meet a conditional standard, pending further investigation and diagnosis of the blackout mechanism.",
+        "source_ids": [
+          "AFTD2022-BLK-COM-001",
+          "AFTD2022-BLK-COM-003",
+          "AFTD2022-BLK-COM-006"
+        ],
+        "fact_fields": [
+          "cardiovascular.blood_pressure.persistent_systolic",
+          "cardiovascular.blood_pressure.persistent_diastolic",
+          "vision.uncorrected.right.snellen",
+          "vision.uncorrected.left.snellen"
+        ],
+        "criterion_checks": [
+          {
+            "module": "blackout",
+            "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+            "source_id": "AFTD2022-BLK-COM-001",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-326a5910523554d86efa9f47",
+            "fact_fields": [
+              "vision.uncorrected.right.snellen",
+              "vision.uncorrected.left.snellen"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+            "source_id": "AFTD2022-BLK-COM-003",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+          },
+          {
+            "module": "blackout",
+            "passage_id": "PASS-a1eb49f152b573688d112731",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+            "source_id": "AFTD2022-BLK-COM-006",
+            "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+          "source_id": "AFTD2022-BLK-COM-001",
+          "pdf_page": 68,
+          "printed_page": 57,
+          "section": "1.2.1",
+          "text_sha256": "dd23a937a5e99db2c2440ffc7ef66d4003092af008384c56d49be31234941a55",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 195,
+              "original_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-2dc3117e7c443462699ed5e0",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+            "source_id": "AFTD2022-BLK-COM-001",
+            "guideline_quote": "cardiovascular and neurological investigations \nand referral to several specialists. People should \nbe advised not to drive until the mechanism is \nascertained and the corresponding standard met."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-326a5910523554d86efa9f47",
+          "source_id": "AFTD2022-BLK-COM-003",
+          "pdf_page": 70,
+          "printed_page": 59,
+          "section": "1.3",
+          "text_sha256": "2a4cd0409e88aaf1c7ad208d84640971b8e0793c738d869d949acb17d0803295",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 166,
+              "original_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-326a5910523554d86efa9f47",
+            "fact_fields": [
+              "vision.uncorrected.right.snellen",
+              "vision.uncorrected.left.snellen"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+            "source_id": "AFTD2022-BLK-COM-003",
+            "guideline_quote": "A person is not fit to hold an unconditional \nlicence:\n•\t if the person has experienced blackouts \nthat cannot be diagnosed as syncope, \nseizure or another condition."
+          },
+          "support_review": "pending_independent_review"
+        },
+        {
+          "passage_id": "PASS-a1eb49f152b573688d112731",
+          "source_id": "AFTD2022-BLK-COM-006",
+          "pdf_page": 69,
+          "printed_page": 58,
+          "section": "1.3",
+          "text_sha256": "d7a6ad8dd8992110bf369465f78225c9783db872080526349c67d7aa07caf574",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 684,
+              "original_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+            }
+          ],
+          "check": {
+            "module": "blackout",
+            "passage_id": "PASS-a1eb49f152b573688d112731",
+            "fact_fields": [
+              "cardiovascular.blood_pressure.persistent_systolic",
+              "cardiovascular.blood_pressure.persistent_diastolic"
+            ],
+            "licence_pathway": "unconditional",
+            "finding": "established_restriction",
+            "conclusion": "The passage discusses the licensing pathway for blackouts, but the patient's verified facts do not meet the prerequisites for unconditional licensing.",
+            "source_id": "AFTD2022-BLK-COM-006",
+            "guideline_quote": "themselves with the information in this chapter \nand the tabulated standards before assessing a \nperson’s fitness to drive. \nWhere a firm diagnosis has been made, the \nstandard appropriate to the condition should \nbe referred to in this publication (refer to Figure \n6. Management of blackouts and driving). For \nblackouts due to medical causes not covered \nin the standard, refer to first principles (refer to \nPart A section 2. Assessing fitness to drive – \ngeneral guidance). For blackouts where, after \ninvestigation, it is not possible to diagnose one \nof the conditions covered elsewhere in this \npublication, refer to the table for blackouts of \nuncertain nature over the page."
+          },
+          "support_review": "pending_independent_review"
+        }
+      ],
+      "output_consistency_flags": [
+        "conditional_prerequisites_not_established_in_checks"
+      ],
+      "seconds": 6.737711699999636
+    }
+  },
+  "support_review": "pending_independent_review"
+}

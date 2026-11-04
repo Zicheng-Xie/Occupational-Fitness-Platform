@@ -211,6 +211,41 @@ def benchmark(args):
     return report
 
 
+def judgment_comparison(args):
+    from occupational_fitness_rag.evaluation.judgment_comparison import run_comparison
+
+    return run_comparison(args.config, args.output, args.resume, args.stage, args.limit)
+
+
+def judgment_diagnostics(args):
+    from occupational_fitness_rag.evaluation.judgment_diagnostics import run_diagnostics
+
+    return run_diagnostics(args.config, args.resume, args.max_calls)
+
+
+def passage_comparison(args):
+    from occupational_fitness_rag.evaluation.passage_comparison import run_comparison
+
+    return run_comparison(
+        args.config,
+        resume=args.resume,
+        max_conditions=args.max_conditions,
+        retrieval_only=args.retrieval_only,
+    )
+
+
+def review_corpus(args):
+    from occupational_fitness_rag.evaluation.corpus_quality import build_reviewed_corpus
+
+    return build_reviewed_corpus(args.review)
+
+
+def applicability_comparison(args):
+    from occupational_fitness_rag.evaluation.applicability_comparison import run_comparison
+
+    return run_comparison(args.config, resume=args.resume, max_conditions=args.max_conditions)
+
+
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
@@ -219,6 +254,46 @@ def main():
         description="Traceable five-module commercial-driver assessment workflow",
     )
     sub = parser.add_subparsers(dest="command", required=True)
+    comparison = sub.add_parser(
+        "judgment-comparison", help="Isolated paired retrieval-to-judgment experiment"
+    )
+    comparison.add_argument("--config", default="configs/experiments/judgment_comparison.yaml")
+    comparison.add_argument("--output")
+    comparison.add_argument("--resume", action="store_true")
+    comparison.add_argument(
+        "--stage", choices=["corpus", "freeze", "retrieval", "all"], default="all"
+    )
+    comparison.add_argument("--limit", type=int)
+    comparison.set_defaults(func=judgment_comparison)
+    diagnostics = sub.add_parser(
+        "judgment-diagnostics", help="Isolated frozen-input evidence-contract diagnostics"
+    )
+    diagnostics.add_argument("--config", default="configs/experiments/judgment_diagnostics.yaml")
+    diagnostics.add_argument("--resume", action="store_true")
+    diagnostics.add_argument("--max-calls", type=int)
+    diagnostics.set_defaults(func=judgment_diagnostics)
+    passages = sub.add_parser(
+        "passage-comparison", help="Isolated module-query and immutable-passage comparison"
+    )
+    passages.add_argument("--config", default="configs/experiments/passage_comparison_clean.yaml")
+    passages.add_argument("--resume", action="store_true")
+    passages.add_argument("--max-conditions", type=int)
+    passages.add_argument("--retrieval-only", action="store_true")
+    passages.set_defaults(func=passage_comparison)
+    corpus_review = sub.add_parser(
+        "review-corpus", help="Build a separate corpus after pinned layout-quality review"
+    )
+    corpus_review.add_argument("--review", default="configs/experiments/corpus_quality_review.json")
+    corpus_review.set_defaults(func=review_corpus)
+    applicability = sub.add_parser(
+        "applicability-comparison", help="Isolated two-stage clause-applicability comparison"
+    )
+    applicability.add_argument(
+        "--config", default="configs/experiments/applicability_comparison_bound.yaml"
+    )
+    applicability.add_argument("--resume", action="store_true")
+    applicability.add_argument("--max-conditions", type=int)
+    applicability.set_defaults(func=applicability_comparison)
     for name, help_text, func in [
         (
             "build-knowledge",

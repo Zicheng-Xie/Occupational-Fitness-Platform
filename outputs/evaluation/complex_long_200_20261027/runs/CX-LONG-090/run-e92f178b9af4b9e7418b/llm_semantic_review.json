@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "independent_source_review_v12",
+  "system_prompt_sha256": "d334e5975b7479c586ae5f6daf3f1dd535fb94340b344567c77f41371b9f5dc8",
+  "source_text_sha256": "b7e0c5b79d968ba805fb9717c56895e1963f84dee64f26078f78250f87432aa7",
+  "input_facts_sha256": "becde000dbb7dd37cd081b056f200ce50d6851d5f0df9f3c6a6f7c1d29dcf772",
+  "model": "llama3:8b",
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 548,
+      "eval_count": 52,
+      "total_duration": 1246726800
+    },
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 656,
+      "eval_count": 67,
+      "total_duration": 1398144700
+    }
+  ],
+  "attempts": [],
+  "issues": [
+    {
+      "field": "diabetes.present",
+      "kind": "omission",
+      "quote": "The endocrinologist's current signed assessment confirms insulin-treated diabetes with three months of glucose monitoring records, preserved hypoglycaemia awareness, a regimen designed to minimise hypoglycaemia and no driving-relevant end-organ effects; specialist information is available and explicitly records no recent severe hypoglycaemic event and no history of such an event, while the driver is currently neither acutely unwell nor metabolically unstable and the old diet-only plan predates the documented treatment change.",
+      "explanation": "Independent source reading differs from the extraction. The patient has insulin-treated diabetes, which is documented in the endocrinologist's current signed assessment.",
+      "evidence": [
+        {
+          "start": 436,
+          "end": 967,
+          "quote": "The endocrinologist's current signed assessment confirms insulin-treated diabetes with three months of glucose monitoring records, preserved hypoglycaemia awareness, a regimen designed to minimise hypoglycaemia and no driving-relevant end-organ effects; specialist information is available and explicitly records no recent severe hypoglycaemic event and no history of such an event, while the driver is currently neither acutely unwell nor metabolically unstable and the old diet-only plan predates the documented treatment change.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "kind": "omission",
+      "quote": "The endocrinologist's current signed assessment confirms insulin-treated diabetes with three months of glucose monitoring records, preserved hypoglycaemia awareness, a regimen designed to minimise hypoglycaemia and no driving-relevant end-organ effects; specialist information is available and explicitly records no recent severe hypoglycaemic event and no history of such an event, while the driver is currently neither acutely unwell nor metabolically unstable and the old diet-only plan predates the documented treatment change.",
+      "explanation": "Independent source reading differs from the extraction. The driver has insulin-treated diabetes with a regimen designed to minimize hypoglycaemia, and there is no history of severe hypoglycaemic event.",
+      "evidence": [
+        {
+          "start": 436,
+          "end": 967,
+          "quote": "The endocrinologist's current signed assessment confirms insulin-treated diabetes with three months of glucose monitoring records, preserved hypoglycaemia awareness, a regimen designed to minimise hypoglycaemia and no driving-relevant end-organ effects; specialist information is available and explicitly records no recent severe hypoglycaemic event and no history of such an event, while the driver is currently neither acutely unwell nor metabolically unstable and the old diet-only plan predates the documented treatment change.",
+          "line_start": 5,
+          "line_end": 5,
+          "pdf_page": null
+        }
+      ]
+    }
+  ],
+  "quarantined_fields": [
+    "diabetes.present",
+    "diabetes.treatment_category"
+  ],
+  "checked_fields": [],
+  "manual_review_required": true,
+  "review_modules": [
+    "diabetes"
+  ],
+  "accuracy_verified": false,
+  "replacement_values_allowed": false,
+  "derived_fields_checked_through_dependencies": {},
+  "prompt_payload_sha256": "286d54b7c28490aed71a98dae952fd3a0d1ca9e8646ce3b6769fd8e3378078fc",
+  "review_mode": "fixed_keys_and_source_passage_ids",
+  "status": "requires_confirmation",
+  "original_facts": {
+    "diabetes.present": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    },
+    "diabetes.treatment_category": {
+      "value": null,
+      "status": "unknown",
+      "unit": null,
+      "evidence": [],
+      "method": "not_recorded",
+      "derived_from": []
+    }
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "attempt": 1,
+      "fields": [
+        "diabetes.present"
+      ],
+      "status": "valid",
+      "request_sha256": "e6488cc4339102d33ff8b5148bc97a647d3ca493eaaff8e39a1dfdba9236bd2b",
+      "response_schema_sha256": "dac2998807a179dbe96d7826fa101932e91bfcba7140de69f25c374b52ef4078"
+    },
+    {
+      "batch": 2,
+      "attempt": 1,
+      "fields": [
+        "diabetes.treatment_category"
+      ],
+      "status": "valid",
+      "request_sha256": "b65a05596e073e4a64c2825351af892bfe1c161f4dd234ed75181508a07e867a",
+      "response_schema_sha256": "2c49d6e3388209d3520ef1d0982c4a7748fd9c3eff7bc43bc1102e21ab5c797d"
+    }
+  ],
+  "source_observations": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "status": "documented",
+      "quote": "The endocrinologist's current signed assessment confirms insulin-treated diabetes with three months of glucose monitoring records, preserved hypoglycaemia awareness, a regimen designed to minimise hypoglycaemia and no driving-relevant end-organ effects; specialist information is available and explicitly records no recent severe hypoglycaemic event and no history of such an event, while the driver is currently neither acutely unwell nor metabolically unstable and the old diet-only plan predates the documented treatment change.",
+      "explanation": "The patient has insulin-treated diabetes, which is documented in the endocrinologist's current signed assessment."
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "insulin",
+      "status": "documented",
+      "quote": "The endocrinologist's current signed assessment confirms insulin-treated diabetes with three months of glucose monitoring records, preserved hypoglycaemia awareness, a regimen designed to minimise hypoglycaemia and no driving-relevant end-organ effects; specialist information is available and explicitly records no recent severe hypoglycaemic event and no history of such an event, while the driver is currently neither acutely unwell nor metabolically unstable and the old diet-only plan predates the documented treatment change.",
+      "explanation": "The driver has insulin-treated diabetes with a regimen designed to minimize hypoglycaemia, and there is no history of severe hypoglycaemic event."
+    }
+  ],
+  "output_facts_sha256": "cb6670c9c9556d426146117a5042d384a75b8b93af68e26ce1e7c95cd1e2d98c",
+  "facts_quarantined": true
+}

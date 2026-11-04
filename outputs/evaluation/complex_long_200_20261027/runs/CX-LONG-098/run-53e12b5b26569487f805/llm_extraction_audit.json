@@ -1,0 +1,79 @@
+{
+  "model": "llama3:8b",
+  "proposals": [
+    {
+      "field": "diabetes.present",
+      "value": true,
+      "quote": "The current GP and medication review confirm established type 2 diabetes",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 448,
+      "source_end": 520
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "diet_and_exercise_only",
+      "quote": "managed by diet and exercise alone",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 521,
+      "source_end": 555
+    }
+  ],
+  "model_digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+  "rejected": [
+    {
+      "field": "diabetes.driving_relevant_comorbidity_status",
+      "value": "assessed_no_disqualifying_effect",
+      "quote": "The driver mentions that an uncle uses injections, but those medicines belong to the uncle, and a previous referral proposing tablets was never implemented as a current treatment change.",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    }
+  ],
+  "authoritative_facts_modified": true,
+  "calls": [
+    {
+      "model": "llama3:8b",
+      "done_reason": "stop",
+      "prompt_eval_count": 828,
+      "eval_count": 200,
+      "total_duration": 3149166800
+    }
+  ],
+  "input_format": "utf-8 text",
+  "output_format": "field_dictionary_grounded_proposals_v1",
+  "accepted_fields": [
+    "diabetes.present"
+  ],
+  "withheld": [
+    {
+      "field": "diabetes.driving_relevant_comorbidity_status",
+      "value": "assessed_no_disqualifying_effect",
+      "quote": "The driver mentions that an uncle uses injections, but those medicines belong to the uncle, and a previous referral proposing tablets was never implemented as a current treatment change.",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "reason": "unknown_field_or_quote_not_in_segment"
+    },
+    {
+      "field": "diabetes.treatment_category",
+      "value": "diet_and_exercise_only",
+      "quote": "managed by diet and exercise alone",
+      "subject": "patient",
+      "certainty": "explicit",
+      "temporality": "current",
+      "status": "requires_confirmation",
+      "source_start": 521,
+      "source_end": 555,
+      "reason": "value_not_supported_by_quote"
+    }
+  ],
+  "grounding_policy": "exact_quote_type_range_and_field_semantics_v1",
+  "status": "completed"
+}

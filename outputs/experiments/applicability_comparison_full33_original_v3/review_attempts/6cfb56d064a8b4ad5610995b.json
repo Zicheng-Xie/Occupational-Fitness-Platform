@@ -1,0 +1,1188 @@
+{
+  "condition": {
+    "model": "qwen3.5:4b-q4_K_M",
+    "case_id": "SYN-EXT-014",
+    "evidence_policy": "module_query",
+    "protocol": "applicability_first",
+    "repeat": 0
+  },
+  "results_sha256": "db04a867e32674e42330c7c3eb1b13dcb363ecbee6feeab1fd96812e77cc63e2",
+  "status": "failed",
+  "stages": {
+    "applicability": {
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "passages": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "P1": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P2": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P3": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P4": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    },
+                    "P5": {
+                      "$ref": "#/$defs/ApplicabilityEntry"
+                    }
+                  },
+                  "required": [
+                    "P1",
+                    "P2",
+                    "P3",
+                    "P4",
+                    "P5"
+                  ]
+                }
+              },
+              "required": [
+                "passages"
+              ],
+              "$defs": {
+                "Prerequisite": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "title": "Requirement",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "met",
+                        "not_met",
+                        "unknown"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "diabetes.gestational",
+                          "diabetes.acutely_unwell",
+                          "diabetes.severe_hypoglycaemic_event.occurred",
+                          "diabetes.hypoglycaemia_awareness",
+                          "diabetes.regimen_minimises_hypoglycaemia",
+                          "diabetes.driving_relevant_end_organ_effects",
+                          "diabetes.treatment_category",
+                          "diabetes.glucose_monitoring_records_months",
+                          "diabetes.specialist_information_available",
+                          "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "requirement",
+                    "status",
+                    "fact_fields"
+                  ],
+                  "title": "Prerequisite",
+                  "type": "object"
+                },
+                "ApplicabilityEntry": {
+                  "additionalProperties": false,
+                  "description": "Only interpretive fields are model-written; the program binds source identity.",
+                  "properties": {
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "diabetes.gestational",
+                          "diabetes.acutely_unwell",
+                          "diabetes.severe_hypoglycaemic_event.occurred",
+                          "diabetes.hypoglycaemia_awareness",
+                          "diabetes.regimen_minimises_hypoglycaemia",
+                          "diabetes.driving_relevant_end_organ_effects",
+                          "diabetes.treatment_category",
+                          "diabetes.glucose_monitoring_records_months",
+                          "diabetes.specialist_information_available",
+                          "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "statement_type": {
+                      "enum": [
+                        "restriction",
+                        "conditional_opportunity",
+                        "unconditional_requirement",
+                        "investigation_advice",
+                        "background",
+                        "multiple_clauses"
+                      ],
+                      "title": "Statement Type",
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "enum": [
+                        "applicable",
+                        "not_applicable",
+                        "uncertain"
+                      ],
+                      "title": "Applicability",
+                      "type": "string"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "prerequisites": {
+                      "items": {
+                        "$ref": "#/$defs/Prerequisite"
+                      },
+                      "maxItems": 5,
+                      "title": "Prerequisites",
+                      "type": "array"
+                    },
+                    "numeric_application": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "title": "Numeric Application",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 300,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fact_fields",
+                    "statement_type",
+                    "applicability",
+                    "licence_pathway",
+                    "prerequisites",
+                    "numeric_application",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "ApplicabilityEntry",
+                  "type": "object"
+                }
+              }
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You record concise, auditable applicability findings for an experimental\ncommercial-driver assessment in English. Do not produce an overall fitness outcome\nin this stage. Evaluate EVERY supplied passage exactly once. Return the required\npassages object with keys P1, P2 and so on. Each key is already bound to one original\npassage by the application's applicability_slot metadata; do not output or change\nmodule names or passage identifiers. Evaluate the text assigned to that slot.\nThese findings are model proposals, not established clinical facts.\n\nOnly verified_patient_facts establish patient findings. Use their exact stored\nvalues: false is an explicit negative, zero is a value, absent or null is unknown.\nThe nurse note gives context only. Do not promote a historical, family, negated,\nuncertain or unverified statement to a current verified patient finding. A diagnosis\nalready established is different from an undiagnosed symptom under investigation.\nDo not infer loss of consciousness from tiredness alone.\n\nFor each complete original passage:\n- Identify the statement type and the licensing pathway it actually discusses.\n  A referral or a possible conditional licence is not an established prohibition\n  or permission. Excluding unconditional licensing alone does not exclude both\n  pathways and does not by itself establish a current temporary driving hold.\n- State whether its patient conditions apply, do not apply, or remain uncertain.\n  Read negative values, treatment category, current/historical status and diagnosed\n  cause explicitly. An applicable passage may still have unmet prerequisites.\n- Record each material prerequisite as met, not_met or unknown, referencing only\n  supplied verified fields. Combine closely related requirements if necessary;\n  never omit an unknown qualification to turn a possibility into permission.\n- For quantitative criteria, describe the comparison using the exact supplied\n  patient value, units and inequality in the original passage; do not round a\n  boundary, invent a measurement, or import an external threshold. If no comparison\n  is relevant write 'Not applicable'. If units or measurements are absent say so.\n- Distinguish established_restriction, conditional_permission, not_established and\n  information_missing. A conditional_permission requires affirmative support for\n  all relevant prerequisites. A treatment name alone is insufficient. A restriction\n  needs an applicable restrictive clause and verified supporting patient facts.\n\nSelect only supplied verified fact fields. Keep each conclusion concise.\nDo not copy the passage or provide private reasoning. The application resolves the\nunchanged original text and patient values; it does not verify your interpretation.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"diabetes\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nSevere hypoglycaemic event six weeks ago; current specialist assessment documents that the recent-event criterion is satisfied.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\nblackout.occurred = false\\r\\ndiabetes.present = true\\r\\ndiabetes.gestational = false\\r\\ndiabetes.acutely_unwell = false\\r\\ndiabetes.metabolically_unstable = false\\r\\ndiabetes.severe_hypoglycaemic_event.occurred = true\\r\\ndiabetes.recent_severe_hypoglycaemic_event = false\\r\\ndiabetes.hypoglycaemia_awareness = true\\r\\ndiabetes.regimen_minimises_hypoglycaemia = true\\r\\ndiabetes.driving_relevant_end_organ_effects = false\\r\\ndiabetes.treatment_category = \\\"insulin\\\"\\r\\ndiabetes.glucose_monitoring_records_months = 3\\r\\ndiabetes.specialist_information_available = true\\r\\ndiabetes.severe_hypoglycaemic_event.weeks_since_last = 6\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": false, \"patient_quotes\": [\"blackout.occurred = false\"]}, \"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"diabetes.present = true\", \"diabetes.present = true\"]}, \"diabetes.gestational\": {\"value\": false, \"patient_quotes\": [\"diabetes.gestational = false\", \"diabetes.gestational = false\"]}, \"diabetes.acutely_unwell\": {\"value\": false, \"patient_quotes\": [\"diabetes.acutely_unwell = false\", \"diabetes.acutely_unwell = false\"]}, \"diabetes.severe_hypoglycaemic_event.occurred\": {\"value\": true, \"patient_quotes\": [\"diabetes.severe_hypoglycaemic_event.occurred = true\", \"diabetes.severe_hypoglycaemic_event.occurred = true\"]}, \"diabetes.hypoglycaemia_awareness\": {\"value\": true, \"patient_quotes\": [\"diabetes.hypoglycaemia_awareness = true\"]}, \"diabetes.regimen_minimises_hypoglycaemia\": {\"value\": true, \"patient_quotes\": [\"diabetes.regimen_minimises_hypoglycaemia = true\"]}, \"diabetes.driving_relevant_end_organ_effects\": {\"value\": false, \"patient_quotes\": [\"diabetes.driving_relevant_end_organ_effects = false\"]}, \"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"diabetes.treatment_category = \\\"insulin\\\"\"]}, \"diabetes.glucose_monitoring_records_months\": {\"value\": 3, \"patient_quotes\": [\"diabetes.glucose_monitoring_records_months = 3\"]}, \"diabetes.specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"diabetes.specialist_information_available = true\"]}, \"diabetes.severe_hypoglycaemic_event.weeks_since_last\": {\"value\": 6.0, \"patient_quotes\": [\"diabetes.severe_hypoglycaemic_event.weeks_since_last = 6\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last = 6\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-e3ca8efaf3d71461\", \"section\": \"3.3\", \"pdf_page\": 113, \"printed_page\": 102, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has insulin-treated diabetes.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes on whether \\nthe following criteria are met:\\n•\\t there is no recent history (generally at least \\n6 weeks) of a ‘severe hypoglycaemic event’ \\nas assessed by the specialist; and\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia \\n(refer to section 3.2.1); and\\n•\\t there are no end-organ effects that may \\naffect driving as per this publication.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\", \"text_sha256\": \"4666cf6826c41479889aad7d7073447eb3dc2f0922a39dd24a46dbed118bff5e\", \"char_start\": 0, \"char_end\": 988, \"applicability_slot\": \"P1\"}, {\"source_id\": \"AFTD2022-DM-COM-010\", \"section\": \"3.2.4\", \"pdf_page\": 107, \"printed_page\": 96, \"source_text\": \"3.2.4. Gestational diabetes mellitus\\nThe standards in this chapter apply to diabetes \\nmellitus as a chronic condition. The self-limiting \\ncondition known as gestational diabetes \\nmellitus does not affect licensing. However, \\nconsideration should be given to short-term \\nfitness to drive in women with gestational \\ndiabetes mellitus treated with insulin, although \\nsevere hypoglycaemia in this condition is rare. \\nAffected women should be counselled to \\nrecognise symptoms and to restrict driving when \\nsymptoms occur.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\", \"text_sha256\": \"8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f\", \"char_start\": 0, \"char_end\": 517, \"applicability_slot\": \"P2\"}, {\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632, \"applicability_slot\": \"P3\"}, {\"source_id\": \"AFTD2022-DM-COM-008\", \"section\": \"3.3\", \"pdf_page\": 113, \"printed_page\": 102, \"source_text\": \"A conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes on whether \\nthe following criteria are met:\\n•\\t there is no recent history (generally at least \\n6 weeks) of a ‘severe hypoglycaemic event’ \\nas assessed by the specialist; and\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia \\n(refer to section 3.2.1); and\\n•\\t there are no end-organ effects that may \\naffect driving as per this publication.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-9369751aaa54e854051988c9\", \"text_sha256\": \"eb5eeaab23d2d51445f18bbcbf9e72dd9b472061317b753187c271bdf353cc53\", \"char_start\": 0, \"char_end\": 729, \"applicability_slot\": \"P4\"}, {\"source_id\": \"AFTD2022-EXP-513404205a2966cb\", \"section\": \"3.1.1\", \"pdf_page\": 103, \"printed_page\": 92, \"source_text\": \"3.1.1. Effects of diabetes on driving1–3\\nDiabetes may affect a person’s ability to drive, \\neither through a ‘severe hypoglycaemic event’ \\nor from end-organ effects on relevant functions, \\nincluding effects on vision, the heart and the \\nperipheral nerves and vasculature of the \\nextremities, particularly the feet. In people with \\ntype 2 diabetes, sleep apnoea is also more \\ncommon (refer to section 8. Sleep disorders). \\nThe main hazard in people with insulin-treated \\ndiabetes is the unexpected occurrence of \\nhypoglycaemia.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-6444d1a6ef6cf250e5db4601\", \"text_sha256\": \"e54978fbff5a6bdcd13e37a563e3681d39e1119e9bc572d38bf130bbddafcd29\", \"char_start\": 0, \"char_end\": 525, \"applicability_slot\": \"P5\"}]}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "b107dfca0365ff03c3339d6c263f58d0b2c7e179f18146c12d6bb8950f598278",
+          "request_bytes": 18072,
+          "status": "completed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T14:51:20.7804389Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\"passages\": {\"P1\": {\"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\", \"diabetes.severe_hypoglycaemic_event.occurred\", \"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"insulin_treated_diabetes\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"]}, {\"requirement\": \"no_recent_severe_hypoglycaemia\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.severe_hypoglycaemic_event.occurred\", \"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"]}, {\"requirement\": \"specialist_assessment_confirms_no_recent_severe_hypoglycaemia\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"]}], \"numeric_application\": \"6 weeks < 6 weeks (not met)\",\"finding\": \"conditional_permission\", \"conclusion\": \"The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since \"\n}, \"P2\": {\"fact_fields\": [\"diabetes.gestational\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"gestational_diabetes\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.gestational\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient does not have gestational diabetes (value: false). This passage applies only to women with gestational diabetes treated with insulin.\"}, \"P3\": {\"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"non_insulin_treated_diabetes\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient is treated with insulin. This passage applies to non-insulin treated diabetes mellitus.\"}, \"P4\": {\"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\", \"diabetes.severe_hypoglycaemic_event.occurred\", \"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"insulin_treated_diabetes\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"]}, {\"requirement\": \"no_recent_severe_hypoglycaemia\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.severe_hypoglycaemic_event.occurred\", \"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"]}, {\"requirement\": \"specialist_assessment_confirms_no_recent_severe_hypoglycaemia\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"]}], \"numeric_application\": \"6 weeks < 6 weeks (not met)\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since \"},\"P5\": {\"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"insulin_treated_diabetes\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient has insulin-treated diabetes. This passage describes the main hazard in people with insulin-treated diabetes.\"}}}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 21351215600,
+            "load_duration": 5964400,
+            "prompt_eval_count": 3756,
+            "prompt_eval_cached_count": 0,
+            "prompt_eval_duration": 1343079000,
+            "eval_count": 1382,
+            "eval_duration": 19804030000
+          },
+          "token_counts": {
+            "prompt_eval_count": 3756,
+            "eval_count": 1382,
+            "prompt_eval_cached_count": 0
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "answer": {
+            "passage_checks": [
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-715342aff6b3feef5a7daef9",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category",
+                  "diabetes.severe_hypoglycaemic_event.occurred",
+                  "diabetes.regimen_minimises_hypoglycaemia",
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.driving_relevant_end_organ_effects",
+                  "diabetes.specialist_information_available",
+                  "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "insulin_treated_diabetes",
+                    "status": "met",
+                    "fact_fields": [
+                      "diabetes.present",
+                      "diabetes.treatment_category"
+                    ]
+                  },
+                  {
+                    "requirement": "no_recent_severe_hypoglycaemia",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "diabetes.severe_hypoglycaemic_event.occurred",
+                      "diabetes.regimen_minimises_hypoglycaemia",
+                      "diabetes.hypoglycaemia_awareness",
+                      "diabetes.driving_relevant_end_organ_effects",
+                      "diabetes.specialist_information_available",
+                      "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                    ]
+                  },
+                  {
+                    "requirement": "specialist_assessment_confirms_no_recent_severe_hypoglycaemia",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "diabetes.regimen_minimises_hypoglycaemia",
+                      "diabetes.hypoglycaemia_awareness",
+                      "diabetes.driving_relevant_end_organ_effects",
+                      "diabetes.specialist_information_available",
+                      "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                    ]
+                  }
+                ],
+                "numeric_application": "6 weeks < 6 weeks (not met)",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since "
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "gestational_diabetes",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "diabetes.gestational"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "information_missing",
+                "conclusion": "The patient does not have gestational diabetes (value: false). This passage applies only to women with gestational diabetes treated with insulin."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "non_insulin_treated_diabetes",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "diabetes.present",
+                      "diabetes.treatment_category"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "information_missing",
+                "conclusion": "The patient is treated with insulin. This passage applies to non-insulin treated diabetes mellitus."
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-9369751aaa54e854051988c9",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category",
+                  "diabetes.severe_hypoglycaemic_event.occurred",
+                  "diabetes.regimen_minimises_hypoglycaemia",
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.driving_relevant_end_organ_effects",
+                  "diabetes.specialist_information_available",
+                  "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "insulin_treated_diabetes",
+                    "status": "met",
+                    "fact_fields": [
+                      "diabetes.present",
+                      "diabetes.treatment_category"
+                    ]
+                  },
+                  {
+                    "requirement": "no_recent_severe_hypoglycaemia",
+                    "status": "not_met",
+                    "fact_fields": [
+                      "diabetes.severe_hypoglycaemic_event.occurred",
+                      "diabetes.regimen_minimises_hypoglycaemia",
+                      "diabetes.hypoglycaemia_awareness",
+                      "diabetes.driving_relevant_end_organ_effects",
+                      "diabetes.specialist_information_available",
+                      "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                    ]
+                  },
+                  {
+                    "requirement": "specialist_assessment_confirms_no_recent_severe_hypoglycaemia",
+                    "status": "unknown",
+                    "fact_fields": [
+                      "diabetes.regimen_minimises_hypoglycaemia",
+                      "diabetes.hypoglycaemia_awareness",
+                      "diabetes.driving_relevant_end_organ_effects",
+                      "diabetes.specialist_information_available",
+                      "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                    ]
+                  }
+                ],
+                "numeric_application": "6 weeks < 6 weeks (not met)",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since "
+              },
+              {
+                "module": "diabetes",
+                "passage_id": "PASS-6444d1a6ef6cf250e5db4601",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ],
+                "statement_type": "conditional_opportunity",
+                "applicability": "not_applicable",
+                "licence_pathway": "conditional",
+                "prerequisites": [
+                  {
+                    "requirement": "insulin_treated_diabetes",
+                    "status": "met",
+                    "fact_fields": [
+                      "diabetes.present",
+                      "diabetes.treatment_category"
+                    ]
+                  }
+                ],
+                "numeric_application": "Not applicable",
+                "finding": "information_missing",
+                "conclusion": "The patient has insulin-treated diabetes. This passage describes the main hazard in people with insulin-treated diabetes."
+              }
+            ]
+          },
+          "criterion_locations": [
+            {
+              "passage_id": "PASS-715342aff6b3feef5a7daef9",
+              "source_id": "AFTD2022-EXP-e3ca8efaf3d71461",
+              "pdf_page": 113,
+              "printed_page": 102,
+              "section": "3.3",
+              "text_sha256": "4666cf6826c41479889aad7d7073447eb3dc2f0922a39dd24a46dbed118bff5e",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 988,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has insulin-treated diabetes.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes on whether \nthe following criteria are met:\n•\t there is no recent history (generally at least \n6 weeks) of a ‘severe hypoglycaemic event’ \nas assessed by the specialist; and\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia \n(refer to section 3.2.1); and\n•\t there are no end-organ effects that may \naffect driving as per this publication."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-715342aff6b3feef5a7daef9",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category",
+                  "diabetes.severe_hypoglycaemic_event.occurred",
+                  "diabetes.regimen_minimises_hypoglycaemia",
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.driving_relevant_end_organ_effects",
+                  "diabetes.specialist_information_available",
+                  "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since ",
+                "source_id": "AFTD2022-EXP-e3ca8efaf3d71461",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has insulin-treated diabetes.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes on whether \nthe following criteria are met:\n•\t there is no recent history (generally at least \n6 weeks) of a ‘severe hypoglycaemic event’ \nas assessed by the specialist; and\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia \n(refer to section 3.2.1); and\n•\t there are no end-organ effects that may \naffect driving as per this publication."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-e888644b6aa4ff004889caaf",
+              "source_id": "AFTD2022-DM-COM-010",
+              "pdf_page": 107,
+              "printed_page": 96,
+              "section": "3.2.4",
+              "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 517,
+                  "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-e888644b6aa4ff004889caaf",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "The patient does not have gestational diabetes (value: false). This passage applies only to women with gestational diabetes treated with insulin.",
+                "source_id": "AFTD2022-DM-COM-010",
+                "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+              "source_id": "AFTD2022-EXP-42507db0424f7a27",
+              "pdf_page": 112,
+              "printed_page": 101,
+              "section": "3.3",
+              "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 1632,
+                  "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "The patient is treated with insulin. This passage applies to non-insulin treated diabetes mellitus.",
+                "source_id": "AFTD2022-EXP-42507db0424f7a27",
+                "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-9369751aaa54e854051988c9",
+              "source_id": "AFTD2022-DM-COM-008",
+              "pdf_page": 113,
+              "printed_page": 102,
+              "section": "3.3",
+              "text_sha256": "eb5eeaab23d2d51445f18bbcbf9e72dd9b472061317b753187c271bdf353cc53",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 729,
+                  "original_quote": "A conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes on whether \nthe following criteria are met:\n•\t there is no recent history (generally at least \n6 weeks) of a ‘severe hypoglycaemic event’ \nas assessed by the specialist; and\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia \n(refer to section 3.2.1); and\n•\t there are no end-organ effects that may \naffect driving as per this publication."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-9369751aaa54e854051988c9",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category",
+                  "diabetes.severe_hypoglycaemic_event.occurred",
+                  "diabetes.regimen_minimises_hypoglycaemia",
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.driving_relevant_end_organ_effects",
+                  "diabetes.specialist_information_available",
+                  "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "conditional_permission",
+                "conclusion": "The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since ",
+                "source_id": "AFTD2022-DM-COM-008",
+                "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes on whether \nthe following criteria are met:\n•\t there is no recent history (generally at least \n6 weeks) of a ‘severe hypoglycaemic event’ \nas assessed by the specialist; and\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia \n(refer to section 3.2.1); and\n•\t there are no end-organ effects that may \naffect driving as per this publication."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            },
+            {
+              "passage_id": "PASS-6444d1a6ef6cf250e5db4601",
+              "source_id": "AFTD2022-EXP-513404205a2966cb",
+              "pdf_page": 103,
+              "printed_page": 92,
+              "section": "3.1.1",
+              "text_sha256": "e54978fbff5a6bdcd13e37a563e3681d39e1119e9bc572d38bf130bbddafcd29",
+              "offset_unit": "python_unicode_code_points",
+              "anchor_scope": "complete_original_knowledge_unit",
+              "spans": [
+                {
+                  "char_start": 0,
+                  "char_end": 525,
+                  "original_quote": "3.1.1. Effects of diabetes on driving1–3\nDiabetes may affect a person’s ability to drive, \neither through a ‘severe hypoglycaemic event’ \nor from end-organ effects on relevant functions, \nincluding effects on vision, the heart and the \nperipheral nerves and vasculature of the \nextremities, particularly the feet. In people with \ntype 2 diabetes, sleep apnoea is also more \ncommon (refer to section 8. Sleep disorders). \nThe main hazard in people with insulin-treated \ndiabetes is the unexpected occurrence of \nhypoglycaemia."
+                }
+              ],
+              "check": {
+                "module": "diabetes",
+                "passage_id": "PASS-6444d1a6ef6cf250e5db4601",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ],
+                "licence_pathway": "conditional",
+                "finding": "information_missing",
+                "conclusion": "The patient has insulin-treated diabetes. This passage describes the main hazard in people with insulin-treated diabetes.",
+                "source_id": "AFTD2022-EXP-513404205a2966cb",
+                "guideline_quote": "3.1.1. Effects of diabetes on driving1–3\nDiabetes may affect a person’s ability to drive, \neither through a ‘severe hypoglycaemic event’ \nor from end-organ effects on relevant functions, \nincluding effects on vision, the heart and the \nperipheral nerves and vasculature of the \nextremities, particularly the feet. In people with \ntype 2 diabetes, sleep apnoea is also more \ncommon (refer to section 8. Sleep disorders). \nThe main hazard in people with insulin-treated \ndiabetes is the unexpected occurrence of \nhypoglycaemia."
+              },
+              "support_review": "pending_independent_review",
+              "check_origin": "unverified_stage_one_model_proposal"
+            }
+          ],
+          "ledger_consistency_flags": [
+            "PASS-715342aff6b3feef5a7daef9:conditional_permission_with_unestablished_prerequisite",
+            "PASS-9369751aaa54e854051988c9:conditional_permission_with_unestablished_prerequisite"
+          ],
+          "seconds": 21.394816499996523
+        }
+      ],
+      "answer": {
+        "passage_checks": [
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-715342aff6b3feef5a7daef9",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category",
+              "diabetes.severe_hypoglycaemic_event.occurred",
+              "diabetes.regimen_minimises_hypoglycaemia",
+              "diabetes.hypoglycaemia_awareness",
+              "diabetes.driving_relevant_end_organ_effects",
+              "diabetes.specialist_information_available",
+              "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "insulin_treated_diabetes",
+                "status": "met",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ]
+              },
+              {
+                "requirement": "no_recent_severe_hypoglycaemia",
+                "status": "not_met",
+                "fact_fields": [
+                  "diabetes.severe_hypoglycaemic_event.occurred",
+                  "diabetes.regimen_minimises_hypoglycaemia",
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.driving_relevant_end_organ_effects",
+                  "diabetes.specialist_information_available",
+                  "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                ]
+              },
+              {
+                "requirement": "specialist_assessment_confirms_no_recent_severe_hypoglycaemia",
+                "status": "unknown",
+                "fact_fields": [
+                  "diabetes.regimen_minimises_hypoglycaemia",
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.driving_relevant_end_organ_effects",
+                  "diabetes.specialist_information_available",
+                  "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                ]
+              }
+            ],
+            "numeric_application": "6 weeks < 6 weeks (not met)",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since "
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.gestational"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "gestational_diabetes",
+                "status": "not_met",
+                "fact_fields": [
+                  "diabetes.gestational"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "information_missing",
+            "conclusion": "The patient does not have gestational diabetes (value: false). This passage applies only to women with gestational diabetes treated with insulin."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "non_insulin_treated_diabetes",
+                "status": "not_met",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "information_missing",
+            "conclusion": "The patient is treated with insulin. This passage applies to non-insulin treated diabetes mellitus."
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-9369751aaa54e854051988c9",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category",
+              "diabetes.severe_hypoglycaemic_event.occurred",
+              "diabetes.regimen_minimises_hypoglycaemia",
+              "diabetes.hypoglycaemia_awareness",
+              "diabetes.driving_relevant_end_organ_effects",
+              "diabetes.specialist_information_available",
+              "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "insulin_treated_diabetes",
+                "status": "met",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ]
+              },
+              {
+                "requirement": "no_recent_severe_hypoglycaemia",
+                "status": "not_met",
+                "fact_fields": [
+                  "diabetes.severe_hypoglycaemic_event.occurred",
+                  "diabetes.regimen_minimises_hypoglycaemia",
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.driving_relevant_end_organ_effects",
+                  "diabetes.specialist_information_available",
+                  "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                ]
+              },
+              {
+                "requirement": "specialist_assessment_confirms_no_recent_severe_hypoglycaemia",
+                "status": "unknown",
+                "fact_fields": [
+                  "diabetes.regimen_minimises_hypoglycaemia",
+                  "diabetes.hypoglycaemia_awareness",
+                  "diabetes.driving_relevant_end_organ_effects",
+                  "diabetes.specialist_information_available",
+                  "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+                ]
+              }
+            ],
+            "numeric_application": "6 weeks < 6 weeks (not met)",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since "
+          },
+          {
+            "module": "diabetes",
+            "passage_id": "PASS-6444d1a6ef6cf250e5db4601",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category"
+            ],
+            "statement_type": "conditional_opportunity",
+            "applicability": "not_applicable",
+            "licence_pathway": "conditional",
+            "prerequisites": [
+              {
+                "requirement": "insulin_treated_diabetes",
+                "status": "met",
+                "fact_fields": [
+                  "diabetes.present",
+                  "diabetes.treatment_category"
+                ]
+              }
+            ],
+            "numeric_application": "Not applicable",
+            "finding": "information_missing",
+            "conclusion": "The patient has insulin-treated diabetes. This passage describes the main hazard in people with insulin-treated diabetes."
+          }
+        ]
+      },
+      "criterion_locations": [
+        {
+          "passage_id": "PASS-715342aff6b3feef5a7daef9",
+          "source_id": "AFTD2022-EXP-e3ca8efaf3d71461",
+          "pdf_page": 113,
+          "printed_page": 102,
+          "section": "3.3",
+          "text_sha256": "4666cf6826c41479889aad7d7073447eb3dc2f0922a39dd24a46dbed118bff5e",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 988,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has insulin-treated diabetes.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes on whether \nthe following criteria are met:\n•\t there is no recent history (generally at least \n6 weeks) of a ‘severe hypoglycaemic event’ \nas assessed by the specialist; and\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia \n(refer to section 3.2.1); and\n•\t there are no end-organ effects that may \naffect driving as per this publication."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-715342aff6b3feef5a7daef9",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category",
+              "diabetes.severe_hypoglycaemic_event.occurred",
+              "diabetes.regimen_minimises_hypoglycaemia",
+              "diabetes.hypoglycaemia_awareness",
+              "diabetes.driving_relevant_end_organ_effects",
+              "diabetes.specialist_information_available",
+              "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since ",
+            "source_id": "AFTD2022-EXP-e3ca8efaf3d71461",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has insulin-treated diabetes.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes on whether \nthe following criteria are met:\n•\t there is no recent history (generally at least \n6 weeks) of a ‘severe hypoglycaemic event’ \nas assessed by the specialist; and\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia \n(refer to section 3.2.1); and\n•\t there are no end-organ effects that may \naffect driving as per this publication."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-e888644b6aa4ff004889caaf",
+          "source_id": "AFTD2022-DM-COM-010",
+          "pdf_page": 107,
+          "printed_page": 96,
+          "section": "3.2.4",
+          "text_sha256": "8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 517,
+              "original_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-e888644b6aa4ff004889caaf",
+            "fact_fields": [
+              "diabetes.gestational"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "The patient does not have gestational diabetes (value: false). This passage applies only to women with gestational diabetes treated with insulin.",
+            "source_id": "AFTD2022-DM-COM-010",
+            "guideline_quote": "3.2.4. Gestational diabetes mellitus\nThe standards in this chapter apply to diabetes \nmellitus as a chronic condition. The self-limiting \ncondition known as gestational diabetes \nmellitus does not affect licensing. However, \nconsideration should be given to short-term \nfitness to drive in women with gestational \ndiabetes mellitus treated with insulin, although \nsevere hypoglycaemia in this condition is rare. \nAffected women should be counselled to \nrecognise symptoms and to restrict driving when \nsymptoms occur."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+          "source_id": "AFTD2022-EXP-42507db0424f7a27",
+          "pdf_page": 112,
+          "printed_page": 101,
+          "section": "3.3",
+          "text_sha256": "799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 1632,
+              "original_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-0c4e5d1885b1be7db1a56f0a",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "The patient is treated with insulin. This passage applies to non-insulin treated diabetes mellitus.",
+            "source_id": "AFTD2022-EXP-42507db0424f7a27",
+            "guideline_quote": "Commercial standards\n(Drivers of heavy vehicles, public passenger \nvehicles or requiring a dangerous goods driver \nlicence – refer to definition in Table 3)\nA person with diabetes treated by diet and \nexercise alone may drive without licence \nrestriction. They should he reviewed by their \ntreating doctor periodically regarding the \nprogression of their diabetes.\nA person is not fit to hold an unconditional \nlicence:\n•\t if the person has non–insulin treated \ndiabetes mellitus and is being treated with \nglucose-lowering agents other than insulin.\nA conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes* on whether \nthe following criteria are met:\n•\t there is no recent history of a ‘severe \nhypoglycaemic event’ as assessed by the \nspecialist; and\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia; \nand\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t there is an absence of end-organ \neffects that may affect driving as per this \npublication.\n* For a commercial driver with type 2 diabetes \nwho is being treated with metformin alone, the \nannual review for a conditional licence may \nbe undertaken by the driver’s treating doctor \nupon mutual agreement of the treating doctor, \nspecialist and driver licensing authority. The \ninitial granting of a conditional licence must, \nhowever, be based on information provided by \nthe specialist."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-9369751aaa54e854051988c9",
+          "source_id": "AFTD2022-DM-COM-008",
+          "pdf_page": 113,
+          "printed_page": 102,
+          "section": "3.3",
+          "text_sha256": "eb5eeaab23d2d51445f18bbcbf9e72dd9b472061317b753187c271bdf353cc53",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 729,
+              "original_quote": "A conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes on whether \nthe following criteria are met:\n•\t there is no recent history (generally at least \n6 weeks) of a ‘severe hypoglycaemic event’ \nas assessed by the specialist; and\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia \n(refer to section 3.2.1); and\n•\t there are no end-organ effects that may \naffect driving as per this publication."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-9369751aaa54e854051988c9",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category",
+              "diabetes.severe_hypoglycaemic_event.occurred",
+              "diabetes.regimen_minimises_hypoglycaemia",
+              "diabetes.hypoglycaemia_awareness",
+              "diabetes.driving_relevant_end_organ_effects",
+              "diabetes.specialist_information_available",
+              "diabetes.severe_hypoglycaemic_event.weeks_since_last"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "conditional_permission",
+            "conclusion": "The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since ",
+            "source_id": "AFTD2022-DM-COM-008",
+            "guideline_quote": "A conditional licence may be considered \nby the driver licensing authority subject to at \nleast annual review, taking into consideration \nthe nature of the driving task and information \nprovided by an endocrinologist or consultant \nphysician specialising in diabetes on whether \nthe following criteria are met:\n•\t there is no recent history (generally at least \n6 weeks) of a ‘severe hypoglycaemic event’ \nas assessed by the specialist; and\n•\t the person is following a treatment regimen \nthat minimises the risk of hypoglycaemia; \nand\n•\t the person experiences early warning \nsymptoms (awareness) of hypoglycaemia \n(refer to section 3.2.1); and\n•\t there are no end-organ effects that may \naffect driving as per this publication."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        },
+        {
+          "passage_id": "PASS-6444d1a6ef6cf250e5db4601",
+          "source_id": "AFTD2022-EXP-513404205a2966cb",
+          "pdf_page": 103,
+          "printed_page": 92,
+          "section": "3.1.1",
+          "text_sha256": "e54978fbff5a6bdcd13e37a563e3681d39e1119e9bc572d38bf130bbddafcd29",
+          "offset_unit": "python_unicode_code_points",
+          "anchor_scope": "complete_original_knowledge_unit",
+          "spans": [
+            {
+              "char_start": 0,
+              "char_end": 525,
+              "original_quote": "3.1.1. Effects of diabetes on driving1–3\nDiabetes may affect a person’s ability to drive, \neither through a ‘severe hypoglycaemic event’ \nor from end-organ effects on relevant functions, \nincluding effects on vision, the heart and the \nperipheral nerves and vasculature of the \nextremities, particularly the feet. In people with \ntype 2 diabetes, sleep apnoea is also more \ncommon (refer to section 8. Sleep disorders). \nThe main hazard in people with insulin-treated \ndiabetes is the unexpected occurrence of \nhypoglycaemia."
+            }
+          ],
+          "check": {
+            "module": "diabetes",
+            "passage_id": "PASS-6444d1a6ef6cf250e5db4601",
+            "fact_fields": [
+              "diabetes.present",
+              "diabetes.treatment_category"
+            ],
+            "licence_pathway": "conditional",
+            "finding": "information_missing",
+            "conclusion": "The patient has insulin-treated diabetes. This passage describes the main hazard in people with insulin-treated diabetes.",
+            "source_id": "AFTD2022-EXP-513404205a2966cb",
+            "guideline_quote": "3.1.1. Effects of diabetes on driving1–3\nDiabetes may affect a person’s ability to drive, \neither through a ‘severe hypoglycaemic event’ \nor from end-organ effects on relevant functions, \nincluding effects on vision, the heart and the \nperipheral nerves and vasculature of the \nextremities, particularly the feet. In people with \ntype 2 diabetes, sleep apnoea is also more \ncommon (refer to section 8. Sleep disorders). \nThe main hazard in people with insulin-treated \ndiabetes is the unexpected occurrence of \nhypoglycaemia."
+          },
+          "support_review": "pending_independent_review",
+          "check_origin": "unverified_stage_one_model_proposal"
+        }
+      ],
+      "ledger_consistency_flags": [
+        "PASS-715342aff6b3feef5a7daef9:conditional_permission_with_unestablished_prerequisite",
+        "PASS-9369751aaa54e854051988c9:conditional_permission_with_unestablished_prerequisite"
+      ],
+      "seconds": 21.394818400003714
+    },
+    "aggregation": {
+      "status": "failed",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "stream": false,
+            "format": {
+              "$defs": {
+                "PassageCheck": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "module": {
+                      "enum": [
+                        "diabetes"
+                      ],
+                      "title": "Module",
+                      "type": "string"
+                    },
+                    "passage_id": {
+                      "title": "Passage Id",
+                      "type": "string",
+                      "enum": [
+                        "PASS-715342aff6b3feef5a7daef9",
+                        "PASS-e888644b6aa4ff004889caaf",
+                        "PASS-0c4e5d1885b1be7db1a56f0a",
+                        "PASS-9369751aaa54e854051988c9",
+                        "PASS-6444d1a6ef6cf250e5db4601"
+                      ]
+                    },
+                    "fact_fields": {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "cardiovascular.blood_pressure.persistent_systolic",
+                          "cardiovascular.blood_pressure.persistent_diastolic",
+                          "vision.uncorrected.right.snellen",
+                          "vision.uncorrected.left.snellen",
+                          "vision.visual_field.confirmed_defect",
+                          "vision.diplopia.present",
+                          "vision.monocular",
+                          "hearing.clinical_assessment",
+                          "blackout.occurred",
+                          "diabetes.present",
+                          "diabetes.gestational",
+                          "diabetes.acutely_unwell",
+                          "diabetes.severe_hypoglycaemic_event.occurred",
+                          "diabetes.hypoglycaemia_awareness",
+                          "diabetes.regimen_minimises_hypoglycaemia",
+                          "diabetes.driving_relevant_end_organ_effects",
+                          "diabetes.treatment_category",
+                          "diabetes.glucose_monitoring_records_months",
+                          "diabetes.specialist_information_available",
+                          "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+                          "vision.uncorrected.better_eye"
+                        ]
+                      },
+                      "maxItems": 8,
+                      "title": "Fact Fields",
+                      "type": "array"
+                    },
+                    "licence_pathway": {
+                      "enum": [
+                        "unconditional",
+                        "conditional",
+                        "both",
+                        "temporary_no_driving",
+                        "general_information"
+                      ],
+                      "title": "Licence Pathway",
+                      "type": "string"
+                    },
+                    "finding": {
+                      "enum": [
+                        "established_restriction",
+                        "conditional_permission",
+                        "not_established",
+                        "information_missing"
+                      ],
+                      "title": "Finding",
+                      "type": "string"
+                    },
+                    "conclusion": {
+                      "maxLength": 500,
+                      "minLength": 1,
+                      "title": "Conclusion",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "module",
+                    "passage_id",
+                    "fact_fields",
+                    "licence_pathway",
+                    "finding",
+                    "conclusion"
+                  ],
+                  "title": "PassageCheck",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "assessment_outcome": {
+                  "enum": [
+                    "meets_unconditional_standard",
+                    "may_meet_conditional_standard",
+                    "temporarily_unfit",
+                    "does_not_meet_standard",
+                    "insufficient_information"
+                  ],
+                  "title": "Assessment Outcome",
+                  "type": "string"
+                },
+                "explanation": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "title": "Explanation",
+                  "type": "string"
+                },
+                "criterion_checks": {
+                  "items": {
+                    "$ref": "#/$defs/PassageCheck"
+                  },
+                  "maxItems": 5,
+                  "minItems": 1,
+                  "title": "Criterion Checks",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "assessment_outcome",
+                "explanation",
+                "criterion_checks"
+              ],
+              "title": "PassageProposal",
+              "type": "object"
+            },
+            "keep_alive": "10m",
+            "options": {
+              "temperature": 0,
+              "seed": 0,
+              "num_ctx": 8192,
+              "num_predict": 2048
+            },
+            "messages": [
+              {
+                "role": "system",
+                "content": "You propose an experimental commercial-driver fitness assessment in English.\nUse only supplied verified_patient_facts and original guideline_evidence. The nurse\nnote gives context, not permission to promote unverified or negated findings.\nMissing information is not normal. This is not a clinical licensing decision.\nApply the following output-category meanings to the supplied original evidence:\n- meets_unconditional_standard: the applicable unconditional requirements are supported;\n  do not infer that unknown patient findings are normal.\n- may_meet_conditional_standard: the evidence allows a conditional standard and the\n  patient facts establish the relevant prerequisites, not just a treatment name.\n- temporarily_unfit: an applicable current restriction requires stopping driving\n  pending investigation, recovery or stabilisation. Unknown information in another\n  module does not erase an already established current restriction.\n- does_not_meet_standard: supplied applicable evidence explicitly excludes both\n  unconditional AND conditional current eligibility. Failure of an unconditional\n  criterion alone does not prove failure of every conditional pathway. This\n  category does not itself mean permanent disqualification.\n- insufficient_information: no stronger supported restrictive conclusion can be\n  established and required facts or applicable guideline evidence are missing.\n\n\n\nThis is the aggregation stage. An independent preceding call recorded a proposed\napplicability ledger for every supplied original passage. Read the SAME original\nfacts and passages again. The ledger is fallible: never treat its findings as new\npatient facts or as a verified clinical authority. Return your own final criterion\nchecks, outcome and concise explanation. If a ledger interpretation is wrong,\ncorrect your final check against the ORIGINAL passage and explain the disagreement.\nThe stored preceding ledger remains unchanged for independent review.\n\nUse the exact scope of each applicable original clause. Distinguish failure of an\nunconditional criterion, exclusion of both pathways, and an explicit current\nno-driving instruction. A mere referral or missing conditional prerequisite does\nnot create a temporary prohibition. Unknown findings do not establish normality,\nand an unresolved unrelated module does not erase an established restriction.\nDo not grant a conditional standard from a possibility or a treatment label when\nrequired qualifications remain unknown. Do not apply an investigation-only rule to\nan already diagnosed cause. Do not apply a negated condition to this patient.\n\nReturn assessment_outcome, explanation and 1 to 5 criterion_checks using supplied\npassage_id, module, fact_fields, licence_pathway, finding and conclusion. Cite only\nsupplied original passages and verified fields. The application resolves the original\ntext for your FINAL checks. It never converts ledger flags or reference labels into\nthe outcome. These checks are your own proposal, not a copy asserted to be verified.\n"
+              },
+              {
+                "role": "user",
+                "content": "{\"licence_context\": \"commercial\", \"modules\": [\"diabetes\"], \"nurse_note\": \"SYNTHETIC VALIDATION FIXTURE — NOT A REAL PATIENT\\r\\nCommercial driver assessment.\\r\\nSevere hypoglycaemic event six weeks ago; current specialist assessment documents that the recent-event criterion is satisfied.\\r\\n\\r\\nStructured assessment addendum (explicit documented facts; no inferred values):\\r\\ncardiovascular.blood_pressure.persistent_systolic = 120\\r\\ncardiovascular.blood_pressure.persistent_diastolic = 80\\r\\nvision.uncorrected.right.snellen = \\\"6/6\\\"\\r\\nvision.uncorrected.left.snellen = \\\"6/6\\\"\\r\\nvision.visual_field.confirmed_defect = false\\r\\nvision.diplopia.present = false\\r\\nvision.monocular = false\\r\\nhearing.clinical_assessment = \\\"no_hearing_loss\\\"\\r\\nblackout.occurred = false\\r\\ndiabetes.present = true\\r\\ndiabetes.gestational = false\\r\\ndiabetes.acutely_unwell = false\\r\\ndiabetes.metabolically_unstable = false\\r\\ndiabetes.severe_hypoglycaemic_event.occurred = true\\r\\ndiabetes.recent_severe_hypoglycaemic_event = false\\r\\ndiabetes.hypoglycaemia_awareness = true\\r\\ndiabetes.regimen_minimises_hypoglycaemia = true\\r\\ndiabetes.driving_relevant_end_organ_effects = false\\r\\ndiabetes.treatment_category = \\\"insulin\\\"\\r\\ndiabetes.glucose_monitoring_records_months = 3\\r\\ndiabetes.specialist_information_available = true\\r\\ndiabetes.severe_hypoglycaemic_event.weeks_since_last = 6\\r\\n\", \"verified_patient_facts\": {\"cardiovascular.blood_pressure.persistent_systolic\": {\"value\": 120, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_systolic = 120\"]}, \"cardiovascular.blood_pressure.persistent_diastolic\": {\"value\": 80, \"patient_quotes\": [\"cardiovascular.blood_pressure.persistent_diastolic = 80\"]}, \"vision.uncorrected.right.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\"]}, \"vision.uncorrected.left.snellen\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}, \"vision.visual_field.confirmed_defect\": {\"value\": false, \"patient_quotes\": [\"vision.visual_field.confirmed_defect = false\"]}, \"vision.diplopia.present\": {\"value\": false, \"patient_quotes\": [\"vision.diplopia.present = false\"]}, \"vision.monocular\": {\"value\": false, \"patient_quotes\": [\"vision.monocular = false\"]}, \"hearing.clinical_assessment\": {\"value\": \"no_hearing_loss\", \"patient_quotes\": [\"hearing.clinical_assessment = \\\"no_hearing_loss\\\"\"]}, \"blackout.occurred\": {\"value\": false, \"patient_quotes\": [\"blackout.occurred = false\"]}, \"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"diabetes.present = true\", \"diabetes.present = true\"]}, \"diabetes.gestational\": {\"value\": false, \"patient_quotes\": [\"diabetes.gestational = false\", \"diabetes.gestational = false\"]}, \"diabetes.acutely_unwell\": {\"value\": false, \"patient_quotes\": [\"diabetes.acutely_unwell = false\", \"diabetes.acutely_unwell = false\"]}, \"diabetes.severe_hypoglycaemic_event.occurred\": {\"value\": true, \"patient_quotes\": [\"diabetes.severe_hypoglycaemic_event.occurred = true\", \"diabetes.severe_hypoglycaemic_event.occurred = true\"]}, \"diabetes.hypoglycaemia_awareness\": {\"value\": true, \"patient_quotes\": [\"diabetes.hypoglycaemia_awareness = true\"]}, \"diabetes.regimen_minimises_hypoglycaemia\": {\"value\": true, \"patient_quotes\": [\"diabetes.regimen_minimises_hypoglycaemia = true\"]}, \"diabetes.driving_relevant_end_organ_effects\": {\"value\": false, \"patient_quotes\": [\"diabetes.driving_relevant_end_organ_effects = false\"]}, \"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"diabetes.treatment_category = \\\"insulin\\\"\"]}, \"diabetes.glucose_monitoring_records_months\": {\"value\": 3, \"patient_quotes\": [\"diabetes.glucose_monitoring_records_months = 3\"]}, \"diabetes.specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"diabetes.specialist_information_available = true\"]}, \"diabetes.severe_hypoglycaemic_event.weeks_since_last\": {\"value\": 6.0, \"patient_quotes\": [\"diabetes.severe_hypoglycaemic_event.weeks_since_last = 6\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last = 6\"]}, \"vision.uncorrected.better_eye\": {\"value\": \"6/6\", \"patient_quotes\": [\"vision.uncorrected.right.snellen = \\\"6/6\\\"\", \"vision.uncorrected.left.snellen = \\\"6/6\\\"\"]}}, \"guideline_evidence\": [{\"source_id\": \"AFTD2022-EXP-e3ca8efaf3d71461\", \"section\": \"3.3\", \"pdf_page\": 113, \"printed_page\": 102, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has insulin-treated diabetes.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes on whether \\nthe following criteria are met:\\n•\\t there is no recent history (generally at least \\n6 weeks) of a ‘severe hypoglycaemic event’ \\nas assessed by the specialist; and\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia \\n(refer to section 3.2.1); and\\n•\\t there are no end-organ effects that may \\naffect driving as per this publication.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\", \"text_sha256\": \"4666cf6826c41479889aad7d7073447eb3dc2f0922a39dd24a46dbed118bff5e\", \"char_start\": 0, \"char_end\": 988}, {\"source_id\": \"AFTD2022-DM-COM-010\", \"section\": \"3.2.4\", \"pdf_page\": 107, \"printed_page\": 96, \"source_text\": \"3.2.4. Gestational diabetes mellitus\\nThe standards in this chapter apply to diabetes \\nmellitus as a chronic condition. The self-limiting \\ncondition known as gestational diabetes \\nmellitus does not affect licensing. However, \\nconsideration should be given to short-term \\nfitness to drive in women with gestational \\ndiabetes mellitus treated with insulin, although \\nsevere hypoglycaemia in this condition is rare. \\nAffected women should be counselled to \\nrecognise symptoms and to restrict driving when \\nsymptoms occur.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\", \"text_sha256\": \"8499e71512aec0eb89dca54bbf02a9ba1570e783118d3a618c3e9a303377ac3f\", \"char_start\": 0, \"char_end\": 517}, {\"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"section\": \"3.3\", \"pdf_page\": 112, \"printed_page\": 101, \"source_text\": \"Commercial standards\\n(Drivers of heavy vehicles, public passenger \\nvehicles or requiring a dangerous goods driver \\nlicence – refer to definition in Table 3)\\nA person with diabetes treated by diet and \\nexercise alone may drive without licence \\nrestriction. They should he reviewed by their \\ntreating doctor periodically regarding the \\nprogression of their diabetes.\\nA person is not fit to hold an unconditional \\nlicence:\\n•\\t if the person has non–insulin treated \\ndiabetes mellitus and is being treated with \\nglucose-lowering agents other than insulin.\\nA conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes* on whether \\nthe following criteria are met:\\n•\\t there is no recent history of a ‘severe \\nhypoglycaemic event’ as assessed by the \\nspecialist; and\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia; \\nand\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t there is an absence of end-organ \\neffects that may affect driving as per this \\npublication.\\n* For a commercial driver with type 2 diabetes \\nwho is being treated with metformin alone, the \\nannual review for a conditional licence may \\nbe undertaken by the driver’s treating doctor \\nupon mutual agreement of the treating doctor, \\nspecialist and driver licensing authority. The \\ninitial granting of a conditional licence must, \\nhowever, be based on information provided by \\nthe specialist.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"text_sha256\": \"799a65fbb9228848866b4880928d239e0bafb97842ddb3eb834ae112776df2de\", \"char_start\": 0, \"char_end\": 1632}, {\"source_id\": \"AFTD2022-DM-COM-008\", \"section\": \"3.3\", \"pdf_page\": 113, \"printed_page\": 102, \"source_text\": \"A conditional licence may be considered \\nby the driver licensing authority subject to at \\nleast annual review, taking into consideration \\nthe nature of the driving task and information \\nprovided by an endocrinologist or consultant \\nphysician specialising in diabetes on whether \\nthe following criteria are met:\\n•\\t there is no recent history (generally at least \\n6 weeks) of a ‘severe hypoglycaemic event’ \\nas assessed by the specialist; and\\n•\\t the person is following a treatment regimen \\nthat minimises the risk of hypoglycaemia; \\nand\\n•\\t the person experiences early warning \\nsymptoms (awareness) of hypoglycaemia \\n(refer to section 3.2.1); and\\n•\\t there are no end-organ effects that may \\naffect driving as per this publication.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-9369751aaa54e854051988c9\", \"text_sha256\": \"eb5eeaab23d2d51445f18bbcbf9e72dd9b472061317b753187c271bdf353cc53\", \"char_start\": 0, \"char_end\": 729}, {\"source_id\": \"AFTD2022-EXP-513404205a2966cb\", \"section\": \"3.1.1\", \"pdf_page\": 103, \"printed_page\": 92, \"source_text\": \"3.1.1. Effects of diabetes on driving1–3\\nDiabetes may affect a person’s ability to drive, \\neither through a ‘severe hypoglycaemic event’ \\nor from end-organ effects on relevant functions, \\nincluding effects on vision, the heart and the \\nperipheral nerves and vasculature of the \\nextremities, particularly the feet. In people with \\ntype 2 diabetes, sleep apnoea is also more \\ncommon (refer to section 8. Sleep disorders). \\nThe main hazard in people with insulin-treated \\ndiabetes is the unexpected occurrence of \\nhypoglycaemia.\", \"module\": \"diabetes\", \"passage_id\": \"PASS-6444d1a6ef6cf250e5db4601\", \"text_sha256\": \"e54978fbff5a6bdcd13e37a563e3681d39e1119e9bc572d38bf130bbddafcd29\", \"char_start\": 0, \"char_end\": 525}], \"proposed_applicability_ledger\": [{\"module\": \"diabetes\", \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\", \"diabetes.severe_hypoglycaemic_event.occurred\", \"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"insulin_treated_diabetes\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"]}, {\"requirement\": \"no_recent_severe_hypoglycaemia\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.severe_hypoglycaemic_event.occurred\", \"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"]}, {\"requirement\": \"specialist_assessment_confirms_no_recent_severe_hypoglycaemia\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"]}], \"numeric_application\": \"6 weeks < 6 weeks (not met)\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since \", \"source_id\": \"AFTD2022-EXP-e3ca8efaf3d71461\", \"referenced_patient_values\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"diabetes.present = true\", \"diabetes.present = true\"]}, \"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"diabetes.treatment_category = \\\"insulin\\\"\"]}, \"diabetes.severe_hypoglycaemic_event.occurred\": {\"value\": true, \"patient_quotes\": [\"diabetes.severe_hypoglycaemic_event.occurred = true\", \"diabetes.severe_hypoglycaemic_event.occurred = true\"]}, \"diabetes.regimen_minimises_hypoglycaemia\": {\"value\": true, \"patient_quotes\": [\"diabetes.regimen_minimises_hypoglycaemia = true\"]}, \"diabetes.hypoglycaemia_awareness\": {\"value\": true, \"patient_quotes\": [\"diabetes.hypoglycaemia_awareness = true\"]}, \"diabetes.driving_relevant_end_organ_effects\": {\"value\": false, \"patient_quotes\": [\"diabetes.driving_relevant_end_organ_effects = false\"]}, \"diabetes.specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"diabetes.specialist_information_available = true\"]}, \"diabetes.severe_hypoglycaemic_event.weeks_since_last\": {\"value\": 6.0, \"patient_quotes\": [\"diabetes.severe_hypoglycaemic_event.weeks_since_last = 6\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last = 6\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-e888644b6aa4ff004889caaf\", \"fact_fields\": [\"diabetes.gestational\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"gestational_diabetes\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.gestational\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient does not have gestational diabetes (value: false). This passage applies only to women with gestational diabetes treated with insulin.\", \"source_id\": \"AFTD2022-DM-COM-010\", \"referenced_patient_values\": {\"diabetes.gestational\": {\"value\": false, \"patient_quotes\": [\"diabetes.gestational = false\", \"diabetes.gestational = false\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-0c4e5d1885b1be7db1a56f0a\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"non_insulin_treated_diabetes\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient is treated with insulin. This passage applies to non-insulin treated diabetes mellitus.\", \"source_id\": \"AFTD2022-EXP-42507db0424f7a27\", \"referenced_patient_values\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"diabetes.present = true\", \"diabetes.present = true\"]}, \"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"diabetes.treatment_category = \\\"insulin\\\"\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-9369751aaa54e854051988c9\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\", \"diabetes.severe_hypoglycaemic_event.occurred\", \"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"insulin_treated_diabetes\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"]}, {\"requirement\": \"no_recent_severe_hypoglycaemia\", \"status\": \"not_met\", \"fact_fields\": [\"diabetes.severe_hypoglycaemic_event.occurred\", \"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"]}, {\"requirement\": \"specialist_assessment_confirms_no_recent_severe_hypoglycaemia\", \"status\": \"unknown\", \"fact_fields\": [\"diabetes.regimen_minimises_hypoglycaemia\", \"diabetes.hypoglycaemia_awareness\", \"diabetes.driving_relevant_end_organ_effects\", \"diabetes.specialist_information_available\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last\"]}], \"numeric_application\": \"6 weeks < 6 weeks (not met)\", \"finding\": \"conditional_permission\", \"conclusion\": \"The patient has insulin-treated diabetes. While the specialist information is available and the regimen minimizes hypoglycaemia, the patient experienced a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event for a conditional licence. Since \", \"source_id\": \"AFTD2022-DM-COM-008\", \"referenced_patient_values\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"diabetes.present = true\", \"diabetes.present = true\"]}, \"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"diabetes.treatment_category = \\\"insulin\\\"\"]}, \"diabetes.severe_hypoglycaemic_event.occurred\": {\"value\": true, \"patient_quotes\": [\"diabetes.severe_hypoglycaemic_event.occurred = true\", \"diabetes.severe_hypoglycaemic_event.occurred = true\"]}, \"diabetes.regimen_minimises_hypoglycaemia\": {\"value\": true, \"patient_quotes\": [\"diabetes.regimen_minimises_hypoglycaemia = true\"]}, \"diabetes.hypoglycaemia_awareness\": {\"value\": true, \"patient_quotes\": [\"diabetes.hypoglycaemia_awareness = true\"]}, \"diabetes.driving_relevant_end_organ_effects\": {\"value\": false, \"patient_quotes\": [\"diabetes.driving_relevant_end_organ_effects = false\"]}, \"diabetes.specialist_information_available\": {\"value\": true, \"patient_quotes\": [\"diabetes.specialist_information_available = true\"]}, \"diabetes.severe_hypoglycaemic_event.weeks_since_last\": {\"value\": 6.0, \"patient_quotes\": [\"diabetes.severe_hypoglycaemic_event.weeks_since_last = 6\", \"diabetes.severe_hypoglycaemic_event.weeks_since_last = 6\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}, {\"module\": \"diabetes\", \"passage_id\": \"PASS-6444d1a6ef6cf250e5db4601\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"], \"statement_type\": \"conditional_opportunity\", \"applicability\": \"not_applicable\", \"licence_pathway\": \"conditional\", \"prerequisites\": [{\"requirement\": \"insulin_treated_diabetes\", \"status\": \"met\", \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"]}], \"numeric_application\": \"Not applicable\", \"finding\": \"information_missing\", \"conclusion\": \"The patient has insulin-treated diabetes. This passage describes the main hazard in people with insulin-treated diabetes.\", \"source_id\": \"AFTD2022-EXP-513404205a2966cb\", \"referenced_patient_values\": {\"diabetes.present\": {\"value\": true, \"patient_quotes\": [\"diabetes.present = true\", \"diabetes.present = true\"]}, \"diabetes.treatment_category\": {\"value\": \"insulin\", \"patient_quotes\": [\"diabetes.treatment_category = \\\"insulin\\\"\"]}}, \"interpretation_status\": \"unverified_model_proposal\"}], \"ledger_sha256\": \"d52eb044134a500111a4c5a3c23ee729e5400e5ca5ce4bd349bbdc34e58ea09d\"}"
+              }
+            ],
+            "think": false
+          },
+          "request_sha256": "530eba14d26056083398aa568c9b677bf231d27769fc51a0ae409cf68e8f91de",
+          "request_bytes": 26427,
+          "status": "failed",
+          "provider_called": true,
+          "raw_response": {
+            "model": "qwen3.5:4b-q4_K_M",
+            "created_at": "2026-10-15T14:51:35.8778161Z",
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"assessment_outcome\": \"temporarily_unfit\",\n  \"explanation\": \"The patient has insulin-treated diabetes and experienced a severe hypoglycaemic event exactly 6 weeks ago. Guideline evidence (PASS-715342aff6b3feef5a7daef9) explicitly states that for an unconditional licence, a person is not fit if they have insulin-treated diabetes. For a conditional licence, the guideline requires 'generally at least 6 weeks' since a severe hypoglycaemic event. The patient's event occurred 6 weeks ago; this does not satisfy the 'at least 6 weeks' prerequisite (which implies >6 weeks or strictly greater than the threshold). Furthermore, the nurse note explicitly documents that the 'recent-event criterion is satisfied', which contradicts the guideline requirement for a conditional licence in this specific timeframe. The nurse note acts as a current restriction confirming the patient remains unfit pending further investigation/recovery, overriding the possibility of a conditional standard based on the ledger's incomplete numeric check.\",\n  \"criterion_checks\": [\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\",\n      \"fact_fields\": [\"diabetes.present\", \"diabetes.treatment_category\"],\n      \"licence_pathway\": \"unconditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The patient has insulin-treated diabetes (PASS-715342aff6b3feef5a7daef9), which explicitly excludes them from holding an unconditional licence.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\",\n      \"fact_fields\": [\"diabetes.severe_hypoglycaemic_event.weeks_since_last\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The patient had a severe hypoglycaemic event 6 weeks ago. The guideline requires 'generally at least 6 weeks' since such an event. A duration of exactly 6 weeks fails to meet the 'at least' threshold required for conditional eligibility.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\",\n      \"fact_fields\": [\"diabetes.severe_hypoglycaemic_event.occurred\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"The patient experienced a severe hypoglycaemic event (PASS-715342aff6b3feef5a7daef9), which is a prerequisite for exclusion from conditional licensing if the time criterion is not met.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\",\n      \"fact_fields\": [\"diabetes.regimen_minimises_hypoglycaemia\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"While the regimen minimizes hypoglycaemia (PASS-715342aff6b3feef5a7daef9), this criterion cannot compensate for the failure to meet the time-based restriction on severe hypoglycaemic events.\"\n    },\n    {\n      \"module\": \"diabetes\",\n      \"passage_id\": \"PASS-715342aff6b3feef5a7daef9\",\n      \"fact_fields\": [\"diabetes.hypoglycaemia_awareness\"],\n      \"licence_pathway\": \"conditional\",\n      \"finding\": \"not_established\",\n      \"conclusion\": \"While the patient has hypoglycaemia awareness (PASS-715342aff6b3feef5a7daef9), this criterion cannot compensate for the failure to meet the time-based restriction on severe hypoglycaemic events.\"\n    }\n  ]\n}"
+            },
+            "done": true,
+            "done_reason": "stop",
+            "total_duration": 15058623300,
+            "load_duration": 3406000,
+            "prompt_eval_count": 6318,
+            "prompt_eval_cached_count": 0,
+            "prompt_eval_duration": 2148212000,
+            "eval_count": 945,
+            "eval_duration": 12673661000
+          },
+          "token_counts": {
+            "prompt_eval_count": 6318,
+            "eval_count": 945,
+            "prompt_eval_cached_count": 0
+          },
+          "context_truncation_status": "Token counts alone do not prove the absence of silent truncation",
+          "error": "ValueError: Measured prompt tokens leave insufficient context reserve",
+          "failure_stage": "provider_response",
+          "seconds": 15.094533800001955
+        }
+      ],
+      "error": "ValueError: Measured prompt tokens leave insufficient context reserve",
+      "seconds": 15.09453609999764
+    }
+  },
+  "support_review": "pending_independent_review"
+}

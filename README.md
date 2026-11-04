@@ -1,5 +1,11 @@
 # Occupational Fitness Platform
 
+> **Branch identity — `red-flag` (audit: 2026-11-05).** Historical v0.4.0 Red Flag boundary; its audited head is an ancestor of main.
+>
+> Audited implementation: [`4080c420`](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/4080c420142e8472537895067976d57ca6539266). This README keeps that branch's own setup and implementation details. For the current integrated application, use [main](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/tree/main); see the [branch relationship diagram and code matrix](https://github.com/Zicheng-Xie/Occupational-Fitness-Platform/blob/main/docs/branches.md). History counts in that guide are pinned before these documentation-only updates.
+>
+> This historical snapshot does not include independent semantic-review or clinical-PDF-form modules.
+
 A traceable assessment platform for occupational health teams and commercial-driver reviews. Software **0.4.0**, canonical `WorkflowRuleResult` schema **1.3.0** (supporting artifacts are independently versioned), guideline baseline **AP-G56-22**.
 
 The platform uses local **Llama 3 8B** to propose structured facts, validates their source quotations, types and meaning, runs deterministic rules, and links each assessment to guideline evidence through **Chroma, nomic-embed-text and BM25/RRF**.

@@ -1,5 +1,61 @@
 # Occupational Fitness Platform
 
+A traceable local assessment workspace for occupational-health teams and commercial-driver reviews. It combines **grounded case intake and deterministic Red Flag rules** with **guideline evidence retrieval and auditable draft reports** across five assessment domains.
+
+**Software 0.7.1** · **Austroads AP-G56-22** · **Local Ollama / Qwen3 14B** · **DRAFT / clinical review pending**
+
+[Quick start](#getting-started) · [Modules & technology](#modules-and-technology) · [Measured progress](#measured-progress) · [Runbook](docs/runbook.md) · [Assessment records](outputs/index.html)
+
+## Engineering architecture
+
+![Two-module architecture: grounded case intake and Red Flag rules feed exact guideline binding or hybrid RAG, then traceable draft reports and clinician review. Isolated research retains separate artifacts.](docs/assets/platform-architecture.svg)
+
+[Open the full-size architecture](docs/assets/platform-architecture.svg). The diagram follows the current GitHub workflow: fast cases bind exact sources; other cases select exact binding or semantic RAG after deterministic routing. Research routes run in separate experiment configurations.
+
+## Modules and technology
+
+Implementation status checked against GitHub `main` on **2026-11-04**. Paths below are relative to `src/occupational_fitness_rag/` unless rooted at another repository directory.
+
+| Module / capability | What it does | Technology stack | Current progress / implementation |
+|---|---|---|---|
+| **01 · Case intake & Red Flag** | Turns clinical notes into source-linked facts, checks meaning, evaluates applicability and missing information, and emits rule outcomes and retrieval requests | Python ≥3.11; PyMuPDF; Ollama / Qwen3 14B; Pydantic 2; YAML rules | Implemented local workflow; `case_intake/`, `red_flag.py`, `rules/`, `schemas/`, `pipeline/workflow.py`. Model route classification is disabled by default; evidence-mode selection is enabled. |
+| **02 · Guideline evidence & reporting** | Binds required original sources; selects exact evidence or scoped semantic retrieval; produces citation-linked drafts | Chroma; nomic-embed-text; BM25; reciprocal-rank fusion (RRF); HTML / Markdown / JSON | Implemented exact and hybrid paths; `retrieval/`, `indexing/`, `pipeline/austroads_rag.py`, `reporting/`. Evidence retrieval supplies guidance without replacing deterministic rule outcomes. |
+| Browser workspace & API | Accepts notes/files, exposes clinical forms, queues assessments and serves saved reports | FastAPI; Uvicorn; HTML / CSS / JavaScript | Local browser workflow and form code present; `api.py`, `web/`, `web/clinical_record.py`, `web/fitness_form.py`. Institutional deployment remains pending. |
+| Evidence provenance & verification | Retains case quotations, guideline PDF coordinates, fingerprints, immutable run bundles and audit events | SHA-256; typed JSON contracts; JSONL audit chain | Implemented in `provenance.py`, `pipeline/workflow.py`, `reporting/`; bundles saved under `outputs/runs/`; 30 fixed synthetic demonstration bundles are included. |
+| Retrieval research | Compares ten retrieval routes on frozen cases and corpus versions | Vector / BM25 / RRF; LightRAG; Microsoft GraphRAG; FlagEmbedding; Neo4j; PageIndex | Executed experimental routes and separate reports; `evaluation/`, root `tools/`, `configs/experiments/`. Some graph results remain qualified by index failures; see [scope88 study](docs/scope88_retrieval_optimization.md). |
+| Judgment evaluation | Tests whether retrieved evidence improves actual model judgments under a fixed evidence budget | Llama / Qwen; frozen requests and facts; repeated calls; patient-level paired audits | 990-condition case-allocation experiment completed; independent prospective evaluation remains pending. See [findings](docs/case_allocation_judgment_findings.md). |
+
+The two core modules support the following domain-specific facts and evidence requirements. Scope is defined by the [rulebook](configs/rules/austroads_commercial_v1.yaml) and [field contracts](schemas/team_field_contract.json).
+
+| Assessment domain | Core capability | Shared implementation |
+|---|---|---|
+| Hypertension / cardiovascular | Validate recorded blood-pressure facts and applicable cardiovascular rule requirements | Grounded extraction → typed fields → deterministic predicates → source-bound guideline evidence |
+| Vision | Preserve acuity, correction and missing measurements for rule and commercial-guideline review | Same pipeline with vision-specific fields, rules and scoped evidence |
+| Hearing | Preserve hearing measurements, aiding status and unresolved assessment requirements | Same pipeline with hearing-specific fields, rules and scoped evidence |
+| Blackout | Preserve episode facts, uncertainty and investigation status without assuming a cause | Same pipeline with blackout-specific fields, rules and scoped evidence |
+| Diabetes | Evaluate documented diabetes facts and missing rule inputs with linked guideline requirements | Same pipeline with diabetes-specific fields, rules and scoped evidence |
+
+## Measured progress
+
+These are **saved development-experiment results**, not a new benchmark run or clinical accuracy estimates. The reviewed-corpus study uses **88 originals, 33 previously observed cases and 77 module queries**; coverage is scored on **45 source-labeled scopes**. The other 32 queries have no invented recall scores. [Protocol and definitions](docs/scope88_retrieval_optimization.md).
+
+| Measurement / experiment | Quantified result | Meaning and verification source |
+|---|---:|---|
+| Original Hybrid RRF, reviewed corpus | **91.85% Top5 / 98.89% Top10** | Reference-original containment coverage; common-corpus baseline. [Scope88 study](docs/scope88_retrieval_optimization.md) |
+| Method 7 · criterion-prefix allocation | **95.56% Top5 / 100.00% Top10**; **42/45** fully covered Top5 scopes | Top5 coverage improves **3.71 percentage points** over RRF. The gain comes from scopes without verified module facts. [Scope88 study](docs/scope88_retrieval_optimization.md) |
+| Method 9 · native-frontier criterion allocation | **95.56% Top5 / 100.00% Top10**; exact-ID Top5 recall **48.89%** | Original-text coverage and exact-ID recall are different metrics. Reuses recorded native Neo4j candidate/Cypher results. [Scope88 study](docs/scope88_retrieval_optimization.md) |
+| Method 10 · selected RRF/tree variant | **87.04% Top5 / 97.78% Top10**, versus **60.74% / 60.74%** pure-tree control | Best observed development-selected ablation; native PageIndex indexing with first-party navigation. [Scope88 study](docs/scope88_retrieval_optimization.md) |
+| Actual case-packet coverage, original allocator | RRF **80.74%**; Method 7 **82.22%**; Method 9 **84.44%** | At most **5 whole originals / 9,000 evidence bytes** per patient; query-level coverage is separate from what reaches the model. [Allocation findings](docs/case_allocation_judgment_findings.md) |
+| Method 7 · revised case allocation | **86.67%** case-packet coverage | Higher evidence coverage did **not** demonstrate improved overall judgment. [Allocation findings](docs/case_allocation_judgment_findings.md) |
+| Completed paired judgment experiment | **990/990** conditions; **957** accepted responses; **33** failures | **33 cases × 5 arms × 2 models × 3 repeats**; failures are empty source-citation arrays and remain in agreement denominators. [Findings](docs/case_allocation_judgment_findings.md) |
+| RRF judgment baseline | Llama **45/99**; Qwen **46/99** reference-agreeing calls; both **15/33** majority-agreeing cases | Engineering-reference agreement on observed development cases; repeated calls are not independent patients. Neither revised allocation improves overall judgment. [Paired results](docs/case_allocation_judgment_findings.md) |
+| Demonstration delivery | **30** fixed synthetic report bundles | Saved HTML / Markdown / JSON and evidence links; [demo manifest](outputs/demo/manifest.json), [collection guide](outputs/demo/README.md). |
+| Prospective validation readiness | **12** new synthetic notes prepared; **0** completed independent reviews | Annotation, source verification, runner integration and live native-index checks remain pending. [Review status](docs/case_allocation_judgment_findings.md), [prospective protocol](docs/prospective_case_review.md) |
+
+The retained 88-source corpus still needs independent layout, applicability and clinical review. Microsoft GraphRAG's vision index has an unrecovered extraction failure, so its measurements remain provisional. OCR, institutional access control, electronic sign-off and production integration are tracked in [deployment boundaries](docs/deployment.md).
+
+## Research history and implementation notes
+
 The isolated [case-evidence allocation comparison](docs/case_evidence_allocation.md)
 tests whether seventh- and ninth-route retrieval gains survive the five-original
 patient budget and improve actual local-model judgments. It preserves the old
@@ -19,8 +75,6 @@ See the [aggregation encoding diagnostic](docs/ledger_encoding.md) for the compl
 The [source-bound reasoning diagnostic](docs/source_bound_reasoning.md) tests precise numeric support and final source binding against the unchanged baseline, and documents the separately versioned original-table context correction.
 
 The [shared-query retrieval execution](docs/shared_retrieval.md) records 308 completed rankings on the revised corpus for vector, BM25, RRF and local graph-assisted retrieval. External graph methods and downstream judgment comparisons remain separate pending stages.
-
-A traceable assessment platform for occupational health teams and commercial-driver reviews. Software **0.7.1**, rule-result schema **1.3.0**, RAG-input schema **1.2.0** with legacy 1.0/1.1 compatibility, indicator schema **1.0.0**, guideline baseline **AP-G56-22**.
 
 See [Evidence-linked reasoning and RAG comparison](docs/reasoning_and_rag_comparison.md) for the patient-fact-to-guideline audit, local-model reasoning test, five-method retrieval experiment, and prospective clinician-review pack.
 
@@ -48,7 +102,7 @@ For the full browser workspace, start the local API and open `http://127.0.0.1:8
 The compact TXT interface remains available at `http://127.0.0.1:8000/simple` and presents
 a concise conclusion with exact case and guideline quotations.
 
-The default configuration enables Llama extraction, semantic review and separate model commentary. See [Extraction semantic review](docs/semantic_review.md) for the review policy and its limitations. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
+The default configuration enables Qwen3 extraction, semantic review, evidence-mode selection and separate model commentary. See [Extraction semantic review](docs/semantic_review.md) for the review policy and its limitations. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
 
 ## Assessment workflow
 
@@ -56,7 +110,7 @@ The default configuration enables Llama extraction, semantic review and separate
 2. Extract and validate facts; retain source locations, conflicts and unknown values.
 3. Review extracted meaning against the original note; withhold flagged values for confirmation and map facts to the five modules.
 4. Execute deterministic rules and the Red Flag contract adapter using the established outcome-based routing. No additional model route judgment runs by default.
-5. Bind required source IDs. Non-fast cases rank every request using indicator-scoped hybrid retrieval, filtered by category, condition, commercial standard and version.
+5. Bind required source IDs. Fast cases use exact binding; other cases select exact binding or semantic RAG after deterministic routing. Semantic retrieval uses request-scoped facts and metadata filters for category, condition, commercial standard and version.
 6. Produce an English review report with case quotations, guideline pages, sections and coordinates.
 
 Reports remain **DRAFT / clinical review pending**. Rules retain `pending_clinical_review`; the system does not issue driving licences or employment decisions.
@@ -135,6 +189,6 @@ has an unrecovered extraction failure and its scores are explicitly provisional.
 The original 1,782 judgment conditions and the retrieval-v2 revision's 198
 conditions are complete. The [paired judgment audit](outputs/experiments/anchored_revision_judgment_audit_v1/index.html)
 shows that the retrieval-v2 coverage improvement did not improve overall
-engineering-reference agreement. The guarded seventh arm and three native routes
-still need their own judgment comparisons; retrieval coverage is not clinical
-accuracy. Production rules and workflow remain unchanged.
+engineering-reference agreement. The later [990-condition allocation comparison](docs/case_allocation_judgment_findings.md)
+adds judgments for the scope88 seventh and ninth routes; the remaining route-specific
+judgment comparisons are separate work. Retrieval coverage is not clinical accuracy. Production rules and workflow remain unchanged.

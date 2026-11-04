@@ -186,6 +186,12 @@ The browser workflow also supports the supplied **five-page AFTD Clinical Assess
 | `outputs/` | Current assessment records and verification results |
 | `scripts/`, `tests/` | Setup, generation, checks and regression tests |
 
+### Reference files and repository layout
+
+The guideline source is [`data/knowledge/raw/ap_g56_22.pdf`](data/knowledge/raw/ap_g56_22.pdf). The two root-level AFTD PDFs are clinical input/output form templates and are retained for the browser workflow. Build/Git configuration and third-party notices stay at root; schema-consolidation notes are organized under [docs/red_flag_contract.md](docs/red_flag_contract.md). Redundant RAG presentation exports have been removed from current main; method documentation and experiment evidence remain available.
+
+[File-by-file inventory and cleanup rationale](docs/root_file_inventory.md).
+
 ## Included demonstration reports
 
 The repository includes 30 fixed synthetic report bundles in `outputs/demo/`. After cloning or downloading the complete repository, open `outputs/index.html` in a browser; saved reports and evidence links work without Ollama. GitHub itself shows HTML source, so download the repository to use the interface. `outputs/demo/manifest.json` pins this collection; ordinary future runs in `outputs/runs/` remain ignored. See [the demonstration collection](outputs/demo/README.md).

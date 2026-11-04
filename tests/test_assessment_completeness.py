@@ -54,6 +54,19 @@ def test_hypoglycaemia_awareness_is_not_a_blackout_symptom(workflow):
         assert ("blackout" in modules) is expected
 
 
+def test_explicit_recent_severe_hypoglycaemia_triggers_diabetes_red_flag(workflow):
+    text = (
+        "Known diabetes mellitus. A severe hypoglycaemic event requiring assistance "
+        "occurred 2 weeks ago. This was the most recent severe hypoglycaemic event."
+    )
+    case, result, _, _ = workflow.from_text(text, "RECENT-HYPO", ["diabetes"])
+    assert case.facts["diabetes.present"].value is True
+    assert case.facts["diabetes.severe_hypoglycaemic_event.occurred"].value is True
+    assert case.facts["diabetes.severe_hypoglycaemic_event.weeks_since_last"].value == 2
+    assert result.has_red_flag is True
+    assert "DM-COM-SEVERE-HYPO-WAIT-001" in {item.rule_id for item in result.red_flags}
+
+
 def test_source_review_excludes_only_standalone_administrative_header():
     text = "Synthetic validation nurse note. No real patient data.\n\nNo diabetes."
     assert clinical_passages(text) == ["No diabetes."]

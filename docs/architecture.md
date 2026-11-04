@@ -4,20 +4,25 @@ Software 0.7.1 uses WorkflowRuleResult 1.3.0 and RAGInput 1.1.0 (also accepts le
 
 ```mermaid
 flowchart TD
-  A[Text or text-layer PDF] --> B[Local Llama 3 8B extraction]
+  A[Text or text-layer PDF] --> B[Local Qwen3 14.8B extraction]
   A --> C[Deterministic extraction and numeric fallback]
   B --> D[Quotation, context, type, range and conflict checks]
   C --> D
   D --> R[Local model semantic review against original notes]
   R --> E[Five-module facts with flagged values withheld]
   E --> F[Red Flag evaluator and deterministic rules]
-  F --> Q[RAGInput with request-scoped indicator facts]
+  F --> Q{Deterministic route}
+  Q -->|Fast path| XS
+  Q -->|Non-fast route| EM{Evidence mode}
+  EM -->|Clear, complete structured facts| XS[Exact source-ID binding]
+  EM -->|Descriptive, ambiguous or conflicting narrative| RI[RAGInput with request-scoped indicator facts]
   G[Versioned guideline PDF] --> H[Structured knowledge units and source coordinates]
   H --> I[Chroma or local retrieval]
-  Q --> J[Required source binding and metadata filters]
+  RI --> J[Required source binding and metadata filters]
   I --> J
-  F --> K[English draft and review checklist]
+  XS --> K
   J --> K
+  K[English draft and review checklist]
   K --> L[Clinician review and external sign-off]
 ```
 
@@ -25,7 +30,7 @@ flowchart TD
 
 | Component | Implementation | Output |
 |---|---|---|
-| Local extraction | Ollama and Llama 3 8B | Typed proposals with exact quotations |
+| Local extraction | Ollama and Qwen3 14.8B | Typed proposals with exact quotations |
 | Fact validation | `case_intake/model_intake.py`, `traceable.py` | Structured case and extraction audit |
 | Semantic review | `case_intake/semantic_review.py` | Source-bound concerns, quarantined facts and review audit |
 | Category mapping | Hypertension, vision, hearing, blackout, diabetes | Category-specific facts |
@@ -44,7 +49,9 @@ Case: input fingerprint → extracted text → quotation offsets, line numbers a
 
 Guideline: PDF fingerprint → source ID → section, printed/PDF pages, table row and bounding box → verified text → rule request → evidence pack → report.
 
-Fast paths bypass RAG. Risk, complex conditions, missing information and conflicts are adapted
+The deterministic route is resolved before the evidence mode. Fast paths and clear, complete structured facts
+bind the rule's authoritative source IDs directly without vector search, BM25 or RRF. Descriptive,
+ambiguous or conflicting narrative is adapted
 to the repository's original `AustroadsRAGPipeline`, which applies its configured route policy,
 metadata filters, vector search, BM25 and reciprocal-rank fusion. Retrieval cannot invent patient
 history. A rule that does not trigger is not itself proof of compliance.
@@ -55,7 +62,7 @@ gate/predicate evaluations are emitted as `missing_information_guidance`; with
 the relevant guideline requirements. RAG supplies guidance evidence only; it never changes
 patient facts or deterministic rule outcomes.
 
-Every request binds its required source IDs. Non-fast requests are adapted to the original
+Every request binds its required source IDs. Only semantic-RAG requests are adapted to the original
 `AustroadsRAGPipeline`; indicator-scoped symptom discovery from the current workflow runs
 alongside it when narrative context is available. Triggered rules retain
 `triggered_rule_evidence`; unresolved rules retain `missing_information_guidance`.

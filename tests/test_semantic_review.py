@@ -8,6 +8,7 @@ from occupational_fitness_rag.case_intake.semantic_review import (
     SourceReviewResponse,
     apply_review,
     compare_observations,
+    promote_grounded_omissions,
     review_payload,
     semantic_review,
 )
@@ -202,6 +203,49 @@ def test_omission_never_inserts_a_model_guessed_value(workflow):
     assert updated.facts["diabetes.present"].status == "requires_confirmation"
     assert updated.facts["diabetes.present"].value is None
     assert audit["manual_review_required"]
+
+
+def test_independent_review_promotes_only_deterministically_grounded_omission(workflow):
+    text = (
+        "The driver repeatedly asks dispatch to repeat radio instructions when the engine "
+        "is running and turns his left ear toward the nurse."
+    )
+    case = make_case(workflow, text, ["hearing"])
+    assert case.facts["hearing.clinical_assessment"].status == "present"
+
+    facts = {**case.facts, "hearing.clinical_assessment": Fact()}
+    omitted = ClinicalCase.model_validate({**case.model_dump(), "facts": facts})
+    observations = {
+        "observations": [
+            {
+                "field": "hearing.clinical_assessment",
+                "value": "possible_hearing_loss",
+                "status": "documented",
+                "quote": text,
+                "explanation": "Direct functional hearing difficulty is documented.",
+            }
+        ]
+    }
+    promoted, fields = promote_grounded_omissions(
+        omitted, observations, workflow.book.field_specs
+    )
+    assert fields == ["hearing.clinical_assessment"]
+    assert promoted.facts["hearing.clinical_assessment"].value == "possible_hearing_loss"
+
+    unsupported = {
+        "observations": [
+            {
+                **observations["observations"][0],
+                "field": "hearing.aided_standard_met",
+                "value": True,
+            }
+        ]
+    }
+    unchanged, fields = promote_grounded_omissions(
+        omitted, unsupported, workflow.book.field_specs
+    )
+    assert fields == []
+    assert unchanged.facts["hearing.aided_standard_met"].status == "unknown"
 
 
 def test_timeout_context_budget_and_disabled_are_explicit(workflow, monkeypatch):

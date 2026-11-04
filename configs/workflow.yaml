@@ -18,12 +18,16 @@ llm:
   enabled: true
   provider: ollama
   base_url: http://127.0.0.1:11434
-  model: llama3:8b
+  model: qwen3:14b
+  # Local Ollama manifest: Qwen3 14.8B, GGUF Q4_K_M.
+  model_digest: sha256:34f2ad9299a68690d6e7519d06a643457f48bb0da6728e8681224122ef617948
   timeout_seconds: 120
   extraction_enabled: true
   semantic_review_enabled: true
   # Deterministic rules select the route after grounded extraction and semantic review.
   route_classification_enabled: false
+  # Qwen selects exact source binding versus semantic RAG after deterministic routing.
+  evidence_classification_enabled: true
   narrative_enabled: true
   context_length: 8192
   max_output_tokens: 2048

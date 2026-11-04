@@ -57,6 +57,18 @@ def extract_supported_prose(collector):
         True,
     )
     record("diabetes.present", r"\b(?:confirmed|established) (?:type [12] )?diabetes\b", True)
+    record("diabetes.present", r"\bknown (?:type [12] )?diabetes(?: mellitus)?\b", True)
+    record(
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        r"\b(?:a )?severe hypoglycaemic event requiring assistance occurred\b",
+        True,
+    )
+    record(
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+        r"\b(?:a )?severe hypoglycaemic event requiring assistance occurred "
+        r"(\d+(?:\.\d+)?) weeks? ago\b",
+        lambda match: float(match[1]),
+    )
     record(
         "diabetes.treatment_category",
         r"\bdiabetes (?:is )?(?:managed|treated) with (?:oral (?:medication|tablets)|tablets)\b",
@@ -115,6 +127,14 @@ def extract_supported_prose(collector):
         "hearing.clinical_assessment",
         r"\b(?:he|she|the driver) (?:also )?reports "
         r"difficulty (?:hearing|understanding (?:dispatch|spoken|radio))\b",
+        "possible_hearing_loss",
+    )
+    record(
+        "hearing.clinical_assessment",
+        r"\b(?:he|she|the driver) [^.;\n]{0,80}"
+        r"(?:asks? (?:dispatch )?to repeat (?:radio )?(?:instructions|messages)|"
+        r"turns? (?:his|her|their) (?:left|right) ear toward|"
+        r"(?:alarm|speech|radio) (?:seems?|sounds?) (?:much )?quieter)\b",
         "possible_hearing_loss",
     )
     record(

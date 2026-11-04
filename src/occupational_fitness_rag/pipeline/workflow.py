@@ -28,12 +28,16 @@ from occupational_fitness_rag.reporting.builder import (
 )
 from occupational_fitness_rag.retrieval.engine import RetrievalEngine
 from occupational_fitness_rag.retrieval.indicators import IndicatorRetriever
-from occupational_fitness_rag.retrieval.workflow import WorkflowRetriever, catalogue_chunks
+from occupational_fitness_rag.retrieval.workflow import (
+    WorkflowRetriever,
+    catalogue_chunks,
+)
 from occupational_fitness_rag.rules.engine import RuleBook
 from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
     WorkflowEvidencePack,
+    WorkflowRoute,
 )
 from occupational_fitness_rag.settings import RetrievalSettings, load_settings
 
@@ -87,16 +91,28 @@ class OccupationalFitnessWorkflow:
         progress = progress or (lambda stage: None)
         progress("rules")
         result = self.evaluate_red_flag(case)
-        progress("retrieval")
-        evidence = self.retriever.run(result.rag_input())
+        evidence = self._evidence_after_routing(result, progress)
         note = build_review_note(case, result, evidence)
         return result, evidence, note
 
     def from_text(self, text, case_id, modules=None):
         case, result = self.red_flag_from_text(text, case_id, modules)
-        evidence = self.retriever.run(result.rag_input())
+        evidence = self._evidence_after_routing(result)
         note = build_review_note(case, result, evidence)
         return case, result, evidence, note
+
+    def _evidence_after_routing(self, result: WorkflowRuleResult, progress=None):
+        """Use the evidence mode chosen after deterministic clinical routing."""
+
+        progress = progress or (lambda stage: None)
+        if result.route == WorkflowRoute.FAST:
+            progress("exact_source_binding")
+            return self.retriever.bind_exact(result)
+        if result.internal_metadata.get("evidence_mode") == "semantic_rag":
+            progress("retrieval")
+            return self.retriever.run(result.rag_input())
+        progress("exact_source_binding")
+        return self.retriever.bind_exact(result)
 
     def red_flag_from_text(self, text, case_id, modules=None):
         """Build the canonical Red Flag result without invoking retrieval."""
@@ -136,7 +152,112 @@ class OccupationalFitnessWorkflow:
                     "error_type": type(exc).__name__,
                 }
             result = self.red_flag.apply_route_suggestion(result, suggestion)
+        if result.route == WorkflowRoute.FAST:
+            result = result.model_copy(
+                update={
+                    "internal_metadata": {
+                        **result.internal_metadata,
+                        "evidence_mode": "exact_source",
+                        "evidence_mode_decision": {
+                            "status": "deterministic",
+                            "mode": "exact_source",
+                            "reason": "Fast-path rules bind their authoritative PDF sources without semantic retrieval.",
+                            "model": None,
+                        },
+                    }
+                }
+            )
+        else:
+            result = self._select_evidence_mode(case, result)
         return result
+
+    def _select_evidence_mode(
+        self, case: ClinicalCase, result: WorkflowRuleResult
+    ) -> WorkflowRuleResult:
+        """Select exact binding or semantic RAG without changing clinical routing."""
+
+        fallback = self._fallback_evidence_mode(result)
+        decision = {
+            "status": "deterministic_fallback",
+            "mode": fallback,
+            "reason": "Evidence mode selected from validated fact provenance and ambiguity.",
+            "model": None,
+        }
+        if self.config.llm.enabled and self.config.llm.evidence_classification_enabled:
+            client = OllamaClient(self.config.llm)
+            try:
+                proposed = client.classify_evidence_mode(
+                    case.source_text,
+                    {
+                        "route": result.route,
+                        "assessment_outcome": result.assessment_outcome,
+                        "has_red_flag": result.has_red_flag,
+                        "missing_fields": sorted(
+                            {item.field for item in result.missing_information}
+                        ),
+                        "triggered_rules": [item.rule_id for item in result.triggered_rules],
+                        "structured_fact_fields": self._structured_fact_fields(result),
+                    },
+                )
+                if proposed.get("status") == "grounded":
+                    decision = proposed
+                else:
+                    decision = {**proposed, "mode": fallback, "fallback_mode": fallback}
+            except Exception as exc:
+                decision = {
+                    "status": "unavailable",
+                    "mode": fallback,
+                    "fallback_mode": fallback,
+                    "reason": "Local evidence-mode model unavailable; deterministic fallback used.",
+                    "model": self.config.llm.model,
+                    "error_type": type(exc).__name__,
+                }
+        return result.model_copy(
+            update={
+                "internal_metadata": {
+                    **result.internal_metadata,
+                    "evidence_mode": decision["mode"],
+                    "evidence_mode_decision": decision,
+                }
+            }
+        )
+
+    @staticmethod
+    def _structured_fact_fields(result: WorkflowRuleResult) -> list[str]:
+        fields = set()
+        for evaluation in result.rules_evaluated:
+            for name, fact in evaluation.observed_facts.items():
+                if fact.status == "present" and any(
+                    span.quote.lstrip().startswith(name + " =") for span in fact.evidence
+                ):
+                    fields.add(name)
+        return sorted(fields)
+
+    @classmethod
+    def _fallback_evidence_mode(cls, result: WorkflowRuleResult) -> str:
+        """Use exact sources for clear structured triggers; reserve RAG for narrative ambiguity."""
+
+        evaluations = {item.rule_id: item for item in result.rules_evaluated}
+        triggered = [request for request in result.rag_requests if request.request_type == "triggered_rule_evidence"]
+        for request in triggered:
+            evaluation = evaluations.get(request.rule_id)
+            substantive_ambiguity = set(request.ambiguity_reasons) - {"cross_chapter_condition"}
+            if substantive_ambiguity or evaluation is None or evaluation.missing_fields:
+                return "semantic_rag"
+            present = [
+                fact for fact in evaluation.observed_facts.values() if fact.status == "present"
+            ]
+            if not present or any(
+                not any(" = " in span.quote for span in fact.evidence) for fact in present
+            ):
+                return "semantic_rag"
+        if triggered:
+            return "exact_source"
+        return (
+            "semantic_rag"
+            if result.internal_metadata.get("narrative_context")
+            else "exact_source"
+        )
 
     def run_file(self, input_path, output_root=None, modules=None, progress=None):
         progress = progress or (lambda stage: None)
@@ -400,6 +521,31 @@ class OccupationalFitnessWorkflow:
             ):
                 raise ValueError("Saved route suggestion lacks source evidence")
             replayed = self.red_flag.apply_route_suggestion(replayed, suggestion)
+        evidence_decision = result.internal_metadata.get("evidence_mode_decision")
+        if evidence_decision is not None:
+            if result.internal_metadata.get("evidence_mode") not in {
+                "exact_source",
+                "semantic_rag",
+            }:
+                raise ValueError("Saved evidence mode is invalid")
+            quotes = evidence_decision.get("evidence_quotes", [])
+            if evidence_decision.get("status") == "grounded" and not (
+                quotes
+                and all(
+                    isinstance(quote, str) and quote.strip() and quote in case.source_text
+                    for quote in quotes
+                )
+            ):
+                raise ValueError("Saved evidence-mode decision lacks source evidence")
+            replayed = replayed.model_copy(
+                update={
+                    "internal_metadata": {
+                        **replayed.internal_metadata,
+                        "evidence_mode": result.internal_metadata["evidence_mode"],
+                        "evidence_mode_decision": evidence_decision,
+                    }
+                }
+            )
         if digest(replayed) != digest(result):
             raise ValueError("Rules do not replay to the saved result")
         if "rag_input.json" in manifest["files"]:

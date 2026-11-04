@@ -258,14 +258,17 @@ def test_request_identity_cannot_switch_source(workflow):
         workflow.retriever.run(corrupt)
 
 
-def test_fast_path_still_binds_sources_without_ranking(workflow):
+def test_fast_path_binds_guideline_sources_without_ranking(workflow):
     case = extract_traceable_file(
         ROOT / "data/cases/synthetic_expansion/SYN-EXT-001.txt", workflow.book.field_specs
     )
     result, evidence, note = workflow.assess(case)
     assert result.route == "fast_path"
     assert evidence.retrieval["ranking_calls"] == 0
+    assert evidence.retrieval["mode"] == "exact_source"
+    assert evidence.retrieval["invoked"] is False
     assert evidence.evidence_items
+    assert all(item.citations for item in evidence.evidence_items)
     assert note.status == "DRAFT" and note.signed_at is None
 
 

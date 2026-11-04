@@ -9,7 +9,6 @@ from occupational_fitness_rag.case_intake.traceable import extract_traceable_fil
 from occupational_fitness_rag.llm import OllamaClient
 from occupational_fitness_rag.pipeline.config import LLMConfig, load_workflow_config
 from occupational_fitness_rag.pipeline.workflow import OccupationalFitnessWorkflow
-from occupational_fitness_rag.schemas.workflow import WorkflowRoute
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -94,9 +93,10 @@ def test_review_precedes_rules_and_rag_without_extra_model_route(input_kind, tmp
                 "internal_metadata"
             ]
         )
-    # File verification replays deterministic rules once after rendering.
-    assert events[:5] == ["extraction", "semantic_review", "rules", "retrieval", "draft"]
-    assert events[5:] == (["rules"] if input_kind == "file" else [])
+    # The fast route reaches report construction without entering RAG. File
+    # verification replays deterministic rules once after rendering.
+    assert events[:4] == ["extraction", "semantic_review", "rules", "draft"]
+    assert events[4:] == (["rules"] if input_kind == "file" else [])
 
 
 def test_original_routing_snapshot_is_preserved():
@@ -116,8 +116,15 @@ def test_original_routing_snapshot_is_preserved():
         assert {
             request.rule_id: request.request_type for request in result.rag_requests
         } == expected["request_types"], case.case_id
-        expected_calls = 0 if result.route == WorkflowRoute.FAST else len(result.rag_requests)
+        expected_calls = (
+            len(result.rag_requests)
+            if result.internal_metadata.get("evidence_mode") == "semantic_rag"
+            else 0
+        )
         assert evidence.retrieval["ranking_calls"] == expected_calls, case.case_id
+        assert evidence.retrieval["invoked"] is (
+            result.internal_metadata.get("evidence_mode") == "semantic_rag"
+        )
         for item in evidence.evidence_items:
             assert {citation.source_id for citation in item.citations} == set(
                 item.requested_source_ids

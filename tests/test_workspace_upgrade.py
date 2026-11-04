@@ -35,7 +35,13 @@ def complete(app, client, response):
 
 def test_browser_text_submission_creates_verified_report(workspace):
     app, client = workspace
-    assert client.get("/").status_code == 200
+    home = client.get("/")
+    assert home.status_code == 200
+    assert "Upload the clinical record and nurse note" in home.text
+    assert "Developer page" in home.text
+    assert "Run deterministic Red Flag rules" not in home.text
+    assert "Run the Austroads RAG pipeline" not in home.text
+    assert 'value="hearing" checked' not in home.text
     assert client.get("/docs").status_code == 200
     assert client.get("/assets/workspace.js").status_code == 200
     result = complete(
@@ -47,15 +53,92 @@ def test_browser_text_submission_creates_verified_report(workspace):
         ),
     )
     assert result["status"] == "completed", result
+    assert result["artifact_urls"]["rule_result"].endswith("/rule_result.json")
+    assert result["artifact_urls"]["rag_input"].endswith("/rag_input.json")
+    assert result["artifact_urls"]["evidence_pack"].endswith("/evidence_pack.json")
+    assert result["decision_basis"]
+    assert all(item["guideline_sources"] for item in result["decision_basis"])
+    assert all(
+        source["url"].startswith("/guideline/ap_g56_22.pdf#page=")
+        for item in result["decision_basis"]
+        for source in item["guideline_sources"]
+    )
     report = client.get(result["report_url"])
     assert report.status_code == 200
     assert "/guideline/ap_g56_22.pdf#page=" in report.text
     assert "/#records" in report.text
     assert "DRAFT" in report.text
+    assert "Deterministic Red Flag classification" in report.text
     assert client.get("/assessments").json()[0]["case_id"] == "WEB-001"
     data = client.get(result["report_url"].replace("draft_report.html", "structured_case.json"))
     assert data.json()["modules_requested"] == ["diabetes"]
     assert "attachment" in data.headers["content-disposition"]
+
+
+def test_confirmed_form_submission_creates_completed_aftd_pdf(workspace):
+    app, client = workspace
+    payload = {
+        "case_id": "FORM-001",
+        "text": "No diabetes.",
+        "modules": ["diabetes"],
+        "surname": "Driver",
+        "given_names": "Alex",
+        "date_of_birth": "1980-01-02",
+        "licence_number": "123456",
+        "licence_state": "NSW",
+        "history_known": True,
+        "licence_sighted": True,
+        "report_type": "final",
+        "practitioner_surname": "Clinician",
+        "assessment_date": "2026-10-08",
+        "local_doctor_referral": True,
+        "management_details": "Refer to the local doctor for review and follow-up.",
+    }
+    result = complete(app, client, client.post("/assessments/form", json=payload))
+    assert result["completed_form_url"].endswith("completed_fitness_to_drive_report.pdf")
+    response = client.get(result["completed_form_url"])
+    assert response.status_code == 200
+    path = (
+        app.state.jobs.output_root
+        / "FORM-001"
+        / result["run_id"]
+        / "completed_fitness_to_drive_report.pdf"
+    )
+    with pymupdf.open(path) as document:
+        values = {
+            widget.field_name: widget.field_value
+            for page in document
+            for widget in (page.widgets() or [])
+        }
+    assert values["Surname"] == "Driver"
+    assert values["Given names"] == "Alex"
+    assert values["A final report of the drivers fitness to drive status"] in {"On", "Yes"}
+    assert values["Check Box8"] in {"On", "Yes"}
+    assert values["Check Box15"] in {"On", "Yes"}
+    assert values[
+        "I recommend andor have actioned the following Local doctor referral Specialist "
+        "referral Drug test Practical driver test Other please describe"
+    ] == "Refer to the local doctor for review and follow-up."
+
+
+def test_management_action_requires_written_details(workspace):
+    _, client = workspace
+    response = client.post(
+        "/assessments/form",
+        json={
+            "case_id": "FORM-MISSING-DETAIL",
+            "text": "No diabetes.",
+            "modules": ["diabetes"],
+            "surname": "Driver",
+            "given_names": "Alex",
+            "history_known": True,
+            "licence_sighted": True,
+            "report_type": "final",
+            "specialist_referral": True,
+        },
+    )
+    assert response.status_code == 422
+    assert "Recommended management details are required" in response.text
 
 
 @pytest.mark.parametrize("suffix", ["txt", "md", "pdf"])

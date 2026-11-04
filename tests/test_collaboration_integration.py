@@ -34,7 +34,10 @@ def test_projection_preserves_scoped_queries_without_full_decision(workflow):
     for request in payload.rag_requests:
         rule = workflow.book.rules_by_id[request.rule_id]
         assert set(payload.indicator_context[request.request_id]) <= set(rule["required_facts"])
-    queries = [item.semantic_query for item in evidence.evidence_items if item.semantic_query]
+    assert evidence.retrieval["mode"] == "exact_source"
+    assert all(item.semantic_query is None for item in evidence.evidence_items)
+    ranked = workflow.retriever.run(payload)
+    queries = [item.semantic_query for item in ranked.evidence_items if item.semantic_query]
     assert any("45" in query for query in queries)
     assert all("gardening" not in query for query in queries)
     assert evidence.rule_result_sha256 == digest(result)

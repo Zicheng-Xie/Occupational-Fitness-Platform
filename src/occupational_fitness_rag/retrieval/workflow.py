@@ -66,6 +66,70 @@ class WorkflowRetriever:
                 if source_id not in catalogue.units:
                     raise ValueError(f"Unresolved rule source ID: {source_id}")
 
+    def bind_exact(self, result) -> WorkflowEvidencePack:
+        """Bind authoritative rule sources without constructing a semantic RAG query."""
+
+        items = []
+        for request in result.rag_requests:
+            rule = self.rules.get(request.rule_id)
+            if not rule or any(
+                getattr(request, key) != rule[key]
+                for key in ("category", "subcondition", "rag_query_key", "source_ids")
+            ):
+                raise ValueError("Evidence request does not match the authoritative rule catalogue")
+            citations = [
+                citation
+                for source_id in request.source_ids
+                if (citation := self.catalogue.citation(source_id)) is not None
+            ]
+            resolved = {citation.source_id for citation in citations}
+            unresolved = [source_id for source_id in request.source_ids if source_id not in resolved]
+            items.append(
+                RequestEvidence(
+                    request_id=request.request_id,
+                    rule_id=request.rule_id,
+                    status=(
+                        "complete"
+                        if not unresolved
+                        else "partial"
+                        if citations
+                        else "no_evidence"
+                    ),
+                    requested_source_ids=request.source_ids,
+                    citations=citations,
+                    unresolved_source_ids=unresolved,
+                    metadata_filters={"binding": "source_id"},
+                )
+            )
+        payload = dict(
+            result_id=result.result_id,
+            case_id=result.case_id,
+            rule_result_sha256=digest(result),
+            index_sha256=self.catalogue.index_sha256,
+            retrieval={
+                "invoked": False,
+                "mode": "exact_source",
+                "backend": "source_catalogue",
+                "ranking_calls": 0,
+                "symptom_discovery_calls": 0,
+                "symptom_discovery": [],
+                "score_note": "Exact source-ID binding; vector search, BM25 and RRF were not invoked.",
+            },
+            evidence_items=items,
+            unresolved_requests=[item.request_id for item in items if item.status != "complete"],
+            integrity={
+                "all_request_ids_accounted_for": len(items) == len(result.rag_requests),
+                "all_citations_match_guideline_version": all(
+                    citation.guideline_version == result.ruleset.guideline_version
+                    for item in items
+                    for citation in item.citations
+                ),
+                "all_citations_verified_against_pdf": True,
+                "rule_result_fields_modified_by_rag": False,
+            },
+        )
+        return WorkflowEvidencePack(evidence_pack_id="EP-" + digest(payload)[:20], **payload)
+
     def run(self, result: RAGInput) -> WorkflowEvidencePack:
         if result.ruleset_sha256 != self.book.sha256:
             raise ValueError("Rule result belongs to a different ruleset version")
@@ -186,6 +250,8 @@ class WorkflowRetriever:
             rule_result_sha256=result.red_flag_result_sha256,
             index_sha256=self.catalogue.index_sha256,
             retrieval={
+                "invoked": True,
+                "mode": "semantic_rag",
                 "query_mode": "per_rule_indicator_facts_and_scoped_narrative"
                 if result.narrative_context
                 else "per_rule_indicator_facts_and_quotes",

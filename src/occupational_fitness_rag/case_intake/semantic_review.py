@@ -12,7 +12,7 @@ from typing import Literal
 
 from pydantic import field_validator
 
-from occupational_fitness_rag.case_intake.model_intake import same_value
+from occupational_fitness_rag.case_intake.model_intake import apply_model_proposals, same_value
 from occupational_fitness_rag.case_intake.traceable import valid_value
 from occupational_fitness_rag.llm import OllamaClient
 from occupational_fitness_rag.provenance import digest
@@ -177,6 +177,32 @@ def review_payload(case, specs):
     }
 
 
+def promote_grounded_omissions(case, observations, specs, page_ranges=()):
+    """Accept an independently found omission only when local parsing reproduces it."""
+    observations = SourceReviewResponse.model_validate(observations).observations
+    proposals = [
+        {
+            "field": item.field,
+            "value": item.value,
+            "quote": item.quote,
+            "certainty": "explicit",
+            "subject": "patient",
+        }
+        for item in observations
+        if item.status == "documented"
+        and case.facts.get(item.field, Fact()).status == "unknown"
+    ]
+    if not proposals:
+        return case, []
+    updated, audit = apply_model_proposals(
+        case,
+        {"model": "independent_source_review", "proposals": proposals},
+        specs,
+        page_ranges,
+    )
+    return updated, audit["accepted_fields"]
+
+
 def apply_review(case, response, payload, page_ranges=()):
     """Validate the whole answer before quarantining any facts, including derivations."""
     response = SemanticReviewResponse.model_validate(response)
@@ -296,8 +322,15 @@ def semantic_review(case, specs, config, page_ranges=()):
                 observations, batches = indexed_source_review(
                     client, case, payload, config.max_input_chars
                 )
-                answer = compare_observations(case, observations, payload)
-                updated, details = apply_review(case, answer, payload, page_ranges)
+                reviewed_case, promoted = promote_grounded_omissions(
+                    case, observations, specs, page_ranges
+                )
+                reviewed_payload = review_payload(reviewed_case, specs)
+                answer = compare_observations(reviewed_case, observations, reviewed_payload)
+                updated, details = apply_review(
+                    reviewed_case, answer, reviewed_payload, page_ranges
+                )
+                details["grounded_omissions_promoted"] = promoted
                 audit.update(details)
                 audit["batches"] = batches
                 audit["prompt_payload_sha256"] = digest(

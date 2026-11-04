@@ -57,18 +57,18 @@ def extract_supported_prose(collector):
         True,
     )
     record("diabetes.present", r"\b(?:confirmed|established) (?:type [12] )?diabetes\b", True)
-    # A current insulin prescription can supersede an explicitly historical
-    # diet-only description. Match the whole patient clause, not the bare word
-    # "insulin", so a family member's or old medication is not promoted.
-    current_insulin_transition = (
-        r"\b(?:the driver|the patient|he|she) (?:used to|previously) manage "
-        r"(?:type [12] )?diabetes\b[^.;\n]{0,120}\bbut\b[^.;\n]{0,100}"
-        r"\b(?:a |the )?(?:current|today's) prescription (?:list|record) "
-        r"(?:now )?(?:includes|lists|shows) (?:a |an )?"
-        r"(?:(?:nightly|daily|morning|evening) )?insulin\b"
+    record("diabetes.present", r"\bknown (?:type [12] )?diabetes(?: mellitus)?\b", True)
+    record(
+        "diabetes.severe_hypoglycaemic_event.occurred",
+        r"\b(?:a )?severe hypoglycaemic event requiring assistance occurred\b",
+        True,
     )
-    record("diabetes.present", current_insulin_transition, True)
-    record("diabetes.treatment_category", current_insulin_transition, "insulin")
+    record(
+        "diabetes.severe_hypoglycaemic_event.weeks_since_last",
+        r"\b(?:a )?severe hypoglycaemic event requiring assistance occurred "
+        r"(\d+(?:\.\d+)?) weeks? ago\b",
+        lambda match: float(match[1]),
+    )
     record(
         "diabetes.treatment_category",
         r"\bdiabetes (?:is )?(?:managed|treated) with (?:oral (?:medication|tablets)|tablets)\b",
@@ -127,6 +127,14 @@ def extract_supported_prose(collector):
         "hearing.clinical_assessment",
         r"\b(?:he|she|the driver) (?:also )?reports "
         r"difficulty (?:hearing|understanding (?:dispatch|spoken|radio))\b",
+        "possible_hearing_loss",
+    )
+    record(
+        "hearing.clinical_assessment",
+        r"\b(?:he|she|the driver) [^.;\n]{0,80}"
+        r"(?:asks? (?:dispatch )?to repeat (?:radio )?(?:instructions|messages)|"
+        r"turns? (?:his|her|their) (?:left|right) ear toward|"
+        r"(?:alarm|speech|radio) (?:seems?|sounds?) (?:much )?quieter)\b",
         "possible_hearing_loss",
     )
     record(

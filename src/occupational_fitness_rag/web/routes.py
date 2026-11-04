@@ -3,13 +3,15 @@
 import json
 import re
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from fastapi import HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from occupational_fitness_rag.reporting.presentation import local_link
 from occupational_fitness_rag.schemas.indicator import IndicatorRequest, Module
+from occupational_fitness_rag.web.clinical_record import extract_clinical_record, extract_note
 
 ASSETS = Path(__file__).parent / "static"
 LIMIT = 8 * 1024 * 1024
@@ -21,6 +23,94 @@ class TextSubmission(BaseModel):
     case_id: str = Field(pattern=CASE_PATTERN)
     text: str = Field(min_length=1, max_length=100000)
     modules: list[Module] = Field(min_length=1, max_length=5)
+
+
+class FormSubmission(TextSubmission):
+    surname: str = Field(min_length=1, max_length=100)
+    given_names: str = Field(min_length=1, max_length=150)
+    address: str = Field(default="", max_length=300)
+    date_of_birth: str = Field(default="", max_length=30)
+    phone: str = Field(default="", max_length=50)
+    licence_number: str = Field(default="", max_length=80)
+    licence_state: str = Field(default="", max_length=50)
+    employer: str = Field(default="", max_length=150)
+    employer_contact: str = Field(default="", max_length=150)
+    employer_address: str = Field(default="", max_length=300)
+    employer_phone: str = Field(default="", max_length=50)
+    employer_email: str = Field(default="", max_length=150)
+    driving_duties: str = Field(default="", max_length=500)
+    history_known: bool
+    licence_sighted: bool
+    report_type: str = Field(pattern=r"^(interim|final)$")
+    practitioner_surname: str = Field(default="", max_length=100)
+    practitioner_given_names: str = Field(default="", max_length=150)
+    practice_address: str = Field(default="", max_length=300)
+    practitioner_phone: str = Field(default="", max_length=50)
+    facsimile: str = Field(default="", max_length=50)
+    assessment_date: str = Field(default="", max_length=30)
+    other_comments: str = Field(default="", max_length=1000)
+    assessment_opinion: str = Field(
+        default="system",
+        pattern=r"^(system|unconditional|conditional|temporary|permanent|blank)$",
+    )
+    corrective_lenses: bool = False
+    hearing_aid: bool = False
+    other_aid: bool = False
+    local_doctor_referral: bool = False
+    specialist_referral: bool = False
+    drug_test: bool = False
+    practical_driver_test: bool = False
+    other_management: bool = False
+    management_details: str = Field(default="", max_length=1000)
+    review_plan: str = Field(default="schedule", pattern=r"^(schedule|frequent|not_selected)$")
+    review_interval: str = Field(default="", pattern=r"^(|1 month|3 months|6 months|1 year)$")
+
+    @model_validator(mode="after")
+    def require_management_details(self):
+        if any(
+            (
+                self.local_doctor_referral,
+                self.specialist_referral,
+                self.drug_test,
+                self.practical_driver_test,
+                self.other_management,
+            )
+        ) and not self.management_details.strip():
+            raise ValueError("Recommended management details are required for selected actions")
+        return self
+
+
+class FinalizeSubmission(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    assessment_opinion: str = Field(
+        pattern=r"^(unconditional|conditional|temporary|permanent|blank)$"
+    )
+    corrective_lenses: bool
+    hearing_aid: bool
+    other_aid: bool
+    local_doctor_referral: bool
+    specialist_referral: bool
+    drug_test: bool
+    practical_driver_test: bool
+    other_management: bool
+    management_details: str = Field(default="", max_length=1000)
+    review_plan: str = Field(pattern=r"^(schedule|frequent|not_selected)$")
+    review_interval: str = Field(pattern=r"^(|1 month|3 months|6 months|1 year)$")
+    other_comments: str = Field(max_length=1000)
+
+    @model_validator(mode="after")
+    def require_management_details(self):
+        if any(
+            (
+                self.local_doctor_referral,
+                self.specialist_referral,
+                self.drug_test,
+                self.practical_driver_test,
+                self.other_management,
+            )
+        ) and not self.management_details.strip():
+            raise ValueError("Recommended management details are required for selected actions")
+        return self
 
 
 def attach_routes(app):
@@ -80,7 +170,7 @@ def attach_routes(app):
     def asset(name: str):
         if name not in {"workspace.css", "workspace.js"}:
             raise HTTPException(404)
-        return FileResponse(ASSETS / name)
+        return FileResponse(ASSETS / name, headers={"Cache-Control": "no-store"})
 
     @app.get("/workspace/config")
     def workspace_config():
@@ -93,15 +183,68 @@ def attach_routes(app):
             "max_upload_bytes": LIMIT,
         }
 
+    async def bounded_upload(request: Request) -> bytes:
+        content = bytearray()
+        async for chunk in request.stream():
+            if len(content) + len(chunk) > LIMIT:
+                raise HTTPException(413, "File exceeds the 8 MB limit.")
+            content.extend(chunk)
+        if not content:
+            raise HTTPException(422, "The file is empty.")
+        return bytes(content)
+
+    @app.post("/clinical-record/extract")
+    async def clinical_record(request: Request):
+        content = await bounded_upload(request)
+        if not content.startswith(b"%PDF-"):
+            raise HTTPException(422, "Upload the AFTD Clinical Record as a PDF.")
+        try:
+            with TemporaryDirectory(prefix="clinical-record-") as folder:
+                path = Path(folder) / "clinical-record.pdf"
+                path.write_bytes(content)
+                return extract_clinical_record(path)
+        except (OSError, ValueError) as exc:
+            raise HTTPException(422, str(exc)) from exc
+
+    @app.post("/nurse-note/extract")
+    async def nurse_note(request: Request, filename: str):
+        suffix = Path(filename).suffix.lower()
+        if suffix not in {".txt", ".md", ".pdf"}:
+            raise HTTPException(415, "Supported nurse note formats: TXT, Markdown and PDF.")
+        content = await bounded_upload(request)
+        if suffix == ".pdf" and not content.startswith(b"%PDF-"):
+            raise HTTPException(422, "The nurse note is not a PDF document.")
+        try:
+            with TemporaryDirectory(prefix="nurse-note-") as folder:
+                path = Path(folder) / ("nurse-note" + suffix)
+                path.write_bytes(content)
+                text = extract_note(path)
+            if not text:
+                raise ValueError("The nurse note is empty.")
+            if len(text) > 90000:
+                raise ValueError("The nurse note exceeds the 90,000 character limit.")
+            return {"text": text, "characters": len(text)}
+        except (OSError, UnicodeError, ValueError) as exc:
+            raise HTTPException(422, str(exc)) from exc
+
     @app.post("/assessments/text", status_code=202)
     def submit_text(data: TextSubmission):
         if not data.text.strip() or len(set(data.modules)) != len(data.modules):
             raise HTTPException(422, "Enter a note and select each module only once.")
         return enqueue(data.text.encode("utf-8"), data.case_id, ".txt", data.modules)
 
-    def enqueue(content, case_id, suffix, modules):
+    @app.post("/assessments/form", status_code=202)
+    def submit_form(data: FormSubmission):
+        if not data.text.strip() or len(set(data.modules)) != len(data.modules):
+            raise HTTPException(422, "Enter clinical notes and select each module only once.")
+        form_data = data.model_dump(exclude={"case_id", "text", "modules"})
+        return enqueue(
+            data.text.encode("utf-8"), data.case_id, ".txt", data.modules, form_data
+        )
+
+    def enqueue(content, case_id, suffix, modules, form_data=None):
         try:
-            return app.state.jobs.submit(content, case_id, suffix, modules)
+            return app.state.jobs.submit(content, case_id, suffix, modules, form_data)
         except ValueError as exc:
             raise HTTPException(429, str(exc)) from exc
 
@@ -144,6 +287,28 @@ def attach_routes(app):
             raise HTTPException(404, "Job not found. Saved reports remain in Assessment records.")
         return record
 
+    @app.post("/assessments/jobs/{job_id}/completed-form")
+    def finalize_completed_form(job_id: str, decisions: FinalizeSubmission):
+        record = app.state.jobs.get(job_id)
+        if record is None or record.get("status") != "completed":
+            raise HTTPException(409, "The assessment must complete before the form is finalised.")
+        run = app.state.jobs.output_root / record["case_id"] / record["run_id"]
+        data_path = run / "fitness_to_drive_form.json"
+        if not data_path.is_file():
+            raise HTTPException(404, "The assessment form data was not found.")
+        data = json.loads(data_path.read_text(encoding="utf-8"))
+        data.update(decisions.model_dump())
+        filename = f"{record['case_id']}_Fitness_to_Drive_Report.pdf"
+        from occupational_fitness_rag.web.fitness_form import add_completed_form_to_run
+
+        with app.state.jobs.workflow_lock:
+            add_completed_form_to_run(
+                app.state.workflow.root, run, data, record["outcome"], filename
+            )
+        url = f"/reports/{record['case_id']}/{record['run_id']}/{filename}"
+        app.state.jobs._update(job_id, completed_form_url=url)
+        return {"completed_form_url": url, "filename": filename}
+
     @app.get("/assessments")
     def records():
         rows = []
@@ -152,6 +317,20 @@ def attach_routes(app):
                 manifest = json.loads(path.read_text(encoding="utf-8"))
                 result = json.loads((path.parent / "rule_result.json").read_text(encoding="utf-8"))
                 case_id, run_id = path.parent.parent.name, path.parent.name
+                final_forms = sorted(
+                    name
+                    for name in manifest["files"]
+                    if name.endswith("_Fitness_to_Drive_Report.pdf")
+                )
+                completed_form = (
+                    final_forms[-1]
+                    if final_forms
+                    else (
+                        "completed_fitness_to_drive_report.pdf"
+                        if "completed_fitness_to_drive_report.pdf" in manifest["files"]
+                        else None
+                    )
+                )
                 if not re.fullmatch(CASE_PATTERN, case_id):
                     continue
                 rows.append(
@@ -161,6 +340,11 @@ def attach_routes(app):
                         "created_at": manifest["created_at"],
                         "outcome": result["assessment_outcome"],
                         "report_url": f"/reports/{case_id}/{run_id}/draft_report.html",
+                        "completed_form_url": (
+                            f"/reports/{case_id}/{run_id}/{completed_form}"
+                            if completed_form
+                            else None
+                        ),
                     }
                 )
             except (OSError, ValueError, KeyError):

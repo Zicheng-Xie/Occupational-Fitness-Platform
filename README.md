@@ -2,15 +2,15 @@
 
 A traceable local assessment workspace for occupational-health teams and commercial-driver reviews. It combines **grounded case intake and deterministic Red Flag rules** with **guideline evidence retrieval and auditable draft reports** across five assessment domains.
 
-**Software 0.7.1** · **Austroads AP-G56-22** · **Local Ollama / Qwen3 14B** · **DRAFT / clinical review pending**
-
-[Quick start](#getting-started) · [Modules & technology](#modules-and-technology) · [Measured progress](#measured-progress) · [Runbook](docs/runbook.md) · [Assessment records](outputs/index.html)
-
 ## Engineering architecture
 
 ![Two-module architecture: grounded case intake and Red Flag rules feed exact guideline binding or hybrid RAG, then traceable draft reports and clinician review. Isolated research retains separate artifacts.](docs/assets/platform-architecture.svg)
 
-[Open the full-size architecture](docs/assets/platform-architecture.svg). The diagram follows the current GitHub workflow: fast cases bind exact sources; other cases select exact binding or semantic RAG after deterministic routing. Research routes run in separate experiment configurations.
+[Open the full-size architecture](docs/assets/platform-architecture.svg). Blue shows grounded case intake, semantic review and deterministic Red Flag rules. Green shows versioned guideline knowledge, exact-source / hybrid-RAG evidence paths, and auditable draft reports. Each stage names its technologies and implementation directories; arrows show the request contract and review handoff.
+
+**Software 0.7.1** · **Austroads AP-G56-22** · **Local Ollama / Qwen3 14B** · **DRAFT / clinical review pending**
+
+[Quick start](#getting-started) · [Modules & technology](#modules-and-technology) · [Measured progress](#measured-progress) · [Runbook](docs/runbook.md) · [Assessment records](outputs/index.html)
 
 ## Modules and technology
 

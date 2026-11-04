@@ -73,7 +73,21 @@ def test_zero_triggers_still_returns_ranked_symptom_evidence(workflow):
 def test_fast_path_keeps_discovery_disabled(workflow):
     _, result, evidence, _ = workflow.from_text("No diabetes.", "FAST", ["diabetes"])
     assert result.route == "fast_path"
+    assert evidence.retrieval["invoked"] is False
     assert evidence.retrieval["symptom_discovery"] == []
+
+
+def test_clear_structured_trigger_uses_exact_sources_without_semantic_rag(workflow):
+    text = (ROOT / "data/cases/synthetic_expansion/SYN-EXT-003.txt").read_text(
+        encoding="utf-8"
+    )
+    _, result, evidence, _ = workflow.from_text(text, "CLEAR-STRUCTURED")
+    assert result.route == "rag_review"
+    assert result.has_red_flag is True
+    assert result.internal_metadata["evidence_mode"] == "exact_source"
+    assert evidence.retrieval["mode"] == "exact_source"
+    assert evidence.retrieval["ranking_calls"] == 0
+    assert all(item.semantic_query is None for item in evidence.evidence_items)
 
 
 def test_indexed_review_reconstructs_source_without_exposing_old_values(workflow):

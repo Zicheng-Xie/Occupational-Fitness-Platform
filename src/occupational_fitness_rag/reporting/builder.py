@@ -40,6 +40,10 @@ def validate_report_inputs(case, result, evidence):
     ):
         raise ValueError("Workflow artifact identity mismatch")
     requests = {r.request_id: r for r in result.rag_requests}
+    if evidence.retrieval.get("mode") == "none":
+        if result.route != "fast_path" or evidence.evidence_items:
+            raise ValueError("Only a fast-path result may omit guideline evidence")
+        return
     if len(evidence.evidence_items) != len(requests) or {
         x.request_id for x in evidence.evidence_items
     } != set(requests):

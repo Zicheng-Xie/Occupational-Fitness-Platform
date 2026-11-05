@@ -128,7 +128,7 @@ See [Complex nurse-note validation](docs/complex_notes.md) for 12 long-form synt
 
 See [Complex-note RAG diagnostics](docs/rag_diagnostics.md) for the mixed-note investigation, source-bound symptom retrieval and ten additional positive/uncertain regression cases. Open [the diagnostic comparison](outputs/evaluation/rag_diagnostics/index.html) for saved live results.
 
-The platform uses local **Qwen 3 14B** to propose structured facts, validates their source quotations, types and meaning, performs a second-pass semantic review, runs deterministic rules, and links each assessment to guideline evidence through **Chroma, nomic-embed-text and BM25/RRF**.
+The default workflow uses deterministic source-grounded fact extraction and rules, retrieves guideline evidence through **Chroma and nomic-embed-text**, then uses one local **Qwen 3 14B** call to review the retrieved Top K evidence and propose an auditable conclusion for clinician confirmation.
 
 **[Open assessment records](outputs/index.html)** · [Runbook](docs/runbook.md) · [Data contracts](docs/contracts.md) · [Verification](docs/verification.md)
 
@@ -136,7 +136,24 @@ See [Collaboration integration](docs/collaboration_integration.md) for the merge
 
 ## Getting started
 
-Run `powershell -ExecutionPolicy Bypass -File scripts/bootstrap.ps1 -Chroma`, or install `python -m pip install -e ".[dev,api,chroma]"` in the project environment. Ollama must have `qwen3:14b` and `nomic-embed-text:latest` installed.
+On Windows, a fresh clone can be installed and started with:
+
+```powershell
+git clone https://github.com/Zicheng-Xie/Occupational-Fitness-Platform.git
+cd Occupational-Fitness-Platform
+ollama pull qwen3:14b
+ollama pull nomic-embed-text:latest
+powershell -ExecutionPolicy Bypass -File scripts/bootstrap.ps1 -Chroma
+powershell -ExecutionPolicy Bypass -File scripts/start_workspace.ps1
+```
+
+Keep Ollama running, then open `http://127.0.0.1:8000`. The bootstrap script creates
+`.venv`, installs the API, test and Chroma dependencies, verifies the knowledge catalogue
+and exports the schemas. To run without Ollama, use
+`powershell -ExecutionPolicy Bypass -File scripts/start_workspace.ps1 -Offline`.
+
+Alternatively, install `python -m pip install -e ".[dev,api,chroma]"` in an existing
+Python 3.11 or newer environment.
 
 ```powershell
 .\.venv\Scripts\fitness-rag.exe assess --input data/cases/nurse_notes/SYN-M2-009.txt
@@ -148,16 +165,16 @@ For the full browser workspace, start the local API and open `http://127.0.0.1:8
 The compact TXT interface remains available at `http://127.0.0.1:8000/simple` and presents
 a concise conclusion with exact case and guideline quotations.
 
-The default configuration enables Qwen3 extraction, semantic review, evidence-mode selection and separate model commentary. See [Extraction semantic review](docs/semantic_review.md) for the review policy and its limitations. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
+The default production configuration uses deterministic grounded intake, rules and evidence-mode selection, then makes one Qwen3 call to judge the retrieved Top K evidence and provide a reason. The separate extraction, semantic-review and narrative model calls remain available as configuration options but are disabled by default for latency. `workflow.offline.yaml` provides deterministic operation without model services; `workflow.chroma.yaml` isolates retrieval validation. Model traffic connects directly to loopback endpoints.
 
 ## Assessment workflow
 
 1. Read UTF-8 text, Markdown or a PDF with a text layer.
 2. Extract and validate facts; retain source locations, conflicts and unknown values.
-3. Review extracted meaning against the original note; withhold flagged values for confirmation and map facts to the five modules.
+3. Preserve source-grounded facts and map them to the five modules; optional model extraction and semantic review are disabled in the default low-latency path.
 4. Execute deterministic rules and the Red Flag contract adapter using the established outcome-based routing. No additional model route judgment runs by default.
-5. Bind required source IDs. Fast cases use exact binding; other cases select exact binding or semantic RAG after deterministic routing. Semantic retrieval uses request-scoped facts and metadata filters for category, condition, commercial standard and version.
-6. Produce an English review report with case quotations, guideline pages, sections and coordinates.
+5. Bind required source IDs and deterministically select exact binding or semantic RAG. Semantic retrieval uses request-scoped facts and metadata filters for category, condition, commercial standard and version.
+6. Make one local-model call over verified patient facts and the retrieved Top K passages to propose a judgment and reason, then produce an English review report with traceable sources.
 
 Reports remain **DRAFT / clinical review pending**. Rules retain `pending_clinical_review`; the system does not issue driving licences or employment decisions.
 

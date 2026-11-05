@@ -11,7 +11,7 @@ from occupational_fitness_rag.evaluation.workflow import evaluate_workflow
 from occupational_fitness_rag.pipeline.workflow import OccupationalFitnessWorkflow
 from occupational_fitness_rag.provenance import digest
 from occupational_fitness_rag.reporting.builder import build_review_note, render_reports
-from occupational_fitness_rag.schemas.workflow import ClinicalCase, Fact
+from occupational_fitness_rag.schemas.workflow import ClinicalCase, Fact, LocalModelJudgment
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -247,6 +247,66 @@ def test_rag_cannot_mutate_rules_and_covers_every_request(workflow):
     assert not evidence.unresolved_requests
     for item in evidence.evidence_items:
         assert {c.source_id for c in item.citations} == set(item.requested_source_ids)
+
+
+def test_model_judgment_rejects_sources_or_facts_outside_supplied_top_k(workflow):
+    payload = {
+        "verified_patient_facts": {"blackout.occurred": {"value": True}},
+        "guideline_evidence": [{"source_id": "AFTD2022-BLK-COM-001"}],
+    }
+    valid = LocalModelJudgment(
+        assessment_outcome="temporarily_unfit",
+        explanation="The supplied criterion establishes a temporary restriction.",
+        recommended_actions=["Review the documented blackout history with the clinician."],
+        source_ids=["AFTD2022-BLK-COM-001"],
+        fact_fields=["blackout.occurred"],
+        form_advice=[
+            {
+                "form_fields": ["specialist_referral", "management_details"],
+                "advice": "Review the blackout history and determine whether specialist assessment is required.",
+                "source_ids": ["AFTD2022-BLK-COM-001"],
+                "fact_fields": ["blackout.occurred"],
+            }
+        ],
+    )
+    validated = workflow._validate_model_judgment(valid, payload)
+    assert validated.assessment_outcome == valid.assessment_outcome
+    assert validated.form_advice == valid.form_advice
+    without_model_advice = valid.model_copy(update={"form_advice": [], "recommended_actions": []})
+    generated = workflow._validate_model_judgment(without_model_advice, payload)
+    assert generated.form_advice[0].form_fields == [
+        "assessment_opinion",
+        "specialist_referral",
+        "management_details",
+    ]
+    assert generated.form_advice[0].fact_fields == ["blackout.occurred"]
+    repeated = valid.model_copy(
+        update={
+            "form_advice": [
+                valid.form_advice[0].model_copy(
+                    update={"form_fields": ["specialist_referral", "specialist_referral"]}
+                )
+            ]
+        }
+    )
+    assert workflow._validate_model_judgment(repeated, payload).form_advice[0].form_fields == [
+        "specialist_referral"
+    ]
+    invalid = valid.model_copy(update={"source_ids": ["invented-source"]})
+    with pytest.raises(ValueError, match="unavailable evidence"):
+        workflow._validate_model_judgment(invalid, payload)
+    incomplete = {**payload, "required_missing_fields": ["blackout.mechanism_status"]}
+    with pytest.raises(ValueError, match="ignored required missing information"):
+        workflow._validate_model_judgment(valid, incomplete)
+    incomplete_judgment = valid.model_copy(
+        update={
+            "assessment_outcome": "insufficient_information",
+            "fact_fields": ["blackout.mechanism_status"],
+        }
+    )
+    validated_incomplete = workflow._validate_model_judgment(incomplete_judgment, incomplete)
+    assert validated_incomplete.assessment_outcome == "insufficient_information"
+    assert validated_incomplete.form_advice[0].source_ids == ["AFTD2022-BLK-COM-001"]
 
 
 def test_request_identity_cannot_switch_source(workflow):

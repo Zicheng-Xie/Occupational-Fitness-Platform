@@ -20,18 +20,20 @@ llm:
   base_url: http://127.0.0.1:11434
   model: qwen3:14b
   # Local Ollama manifest: Qwen3 14.8B, GGUF Q4_K_M.
-  model_digest: sha256:34f2ad9299a68690d6e7519d06a643457f48bb0da6728e8681224122ef617948
+  model_digest: bdbd181c33f2ed1b31c972991882db3cf4d192569092138a7d29e973cd9debe8
   timeout_seconds: 120
-  extraction_enabled: true
-  semantic_review_enabled: true
+  # Keep the production path to one Qwen call: the final Top-K judgment below.
+  # Intake and Red Flag evaluation remain deterministic and auditable.
+  extraction_enabled: false
+  semantic_review_enabled: false
   # Deterministic rules select the route after grounded extraction and semantic review.
   route_classification_enabled: false
-  # Qwen selects exact source binding versus semantic RAG after deterministic routing.
-  evidence_classification_enabled: true
-  narrative_enabled: true
+  # Evidence selection is deterministic; Qwen is reserved for the final judgment.
+  evidence_classification_enabled: false
+  narrative_enabled: false
   context_length: 8192
-  max_output_tokens: 2048
+  max_output_tokens: 768
   max_input_chars: 10000
   extraction_chunk_chars: 6000
   extraction_chunk_overlap: 400
-  think: null
+  think: false

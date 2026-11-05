@@ -36,6 +36,9 @@ from occupational_fitness_rag.rules.engine import RuleBook
 from occupational_fitness_rag.schemas.red_flag_result import RAGInput, WorkflowRuleResult
 from occupational_fitness_rag.schemas.workflow import (
     ClinicalCase,
+    ClinicianFormAdvice,
+    LocalModelJudgment,
+    Outcome,
     WorkflowEvidencePack,
     WorkflowRoute,
 )
@@ -113,6 +116,262 @@ class OccupationalFitnessWorkflow:
             return self.retriever.run(result.rag_input())
         progress("exact_source_binding")
         return self.retriever.bind_exact(result)
+
+    def _model_judgment_payload(
+        self,
+        case: ClinicalCase,
+        result: WorkflowRuleResult,
+        evidence: WorkflowEvidencePack,
+    ):
+        facts = {
+            name: {
+                "value": fact.value,
+                "patient_quotes": [span.quote for span in fact.evidence],
+            }
+            for name, fact in case.facts.items()
+            if fact.status == "present"
+            and any(
+                name.startswith("cardiovascular." if module == "hypertension" else module + ".")
+                for module in case.modules_requested
+            )
+        }
+        triggered = {rule.rule_id for rule in result.triggered_rules}
+        ordered_items = sorted(
+            evidence.evidence_items,
+            key=lambda item: (item.rule_id not in triggered, item.rule_id),
+        )
+        sources_by_module = {}
+        for item in ordered_items:
+            module = item.rule_id.split("-", 1)[0]
+            sources_by_module.setdefault(module, [])
+            for source_id in [citation.source_id for citation in item.citations] + [
+                candidate.get("source_id")
+                for candidate in item.ranked_candidates
+                if candidate.get("source_id")
+            ]:
+                if source_id not in sources_by_module[module]:
+                    sources_by_module[module].append(source_id)
+        item_sources = list(sources_by_module.values())
+        source_ids = []
+        max_candidates = max((len(sources) for sources in item_sources), default=0)
+        for rank in range(max_candidates):
+            for sources in item_sources:
+                if rank >= len(sources):
+                    continue
+                source_id = sources[rank]
+                if source_id and source_id not in source_ids and source_id in self.catalogue.units:
+                    source_ids.append(source_id)
+                    if len(source_ids) >= self.config.retrieval.top_k:
+                        break
+            if len(source_ids) >= self.config.retrieval.top_k:
+                break
+        if not source_ids:
+            source_ids = list(
+                dict.fromkeys(
+                    citation.source_id
+                    for item in evidence.evidence_items
+                    for citation in item.citations
+                )
+            )[: self.config.retrieval.top_k]
+        guideline_evidence = []
+        for source_id in source_ids:
+            citation = self.catalogue.citation(source_id)
+            if citation:
+                guideline_evidence.append(
+                    {
+                        "source_id": citation.source_id,
+                        "section": citation.section,
+                        "pdf_page": citation.pdf_page,
+                        "source_text": citation.evidence_text,
+                    }
+                )
+        return {
+            "case_id": case.case_id,
+            "modules": case.modules_requested,
+            "nurse_note": case.source_text[:4000],
+            "verified_patient_facts": facts,
+            "required_missing_fields": sorted({item.field for item in result.missing_information}),
+            "guideline_evidence": guideline_evidence,
+        }
+
+    @staticmethod
+    def _validate_model_judgment(judgment: LocalModelJudgment, payload: dict) -> LocalModelJudgment:
+        sources = {item["source_id"] for item in payload["guideline_evidence"]}
+        facts = set(payload["verified_patient_facts"]) | set(
+            payload.get("required_missing_fields", [])
+        )
+        if set(judgment.source_ids) - sources or set(judgment.fact_fields) - facts:
+            raise ValueError("Local-model judgment cites unavailable evidence or facts")
+        missing_by_module = {}
+        for field in payload.get("required_missing_fields", []):
+            missing_by_module.setdefault(field.split(".", 1)[0], []).append(field)
+        source_by_module = {
+            source["source_id"].split("-")[1]: source["source_id"]
+            for source in payload["guideline_evidence"]
+        }
+        advice_templates = {
+            "cardiovascular": (
+                "HTN",
+                ["local_doctor_referral", "specialist_referral", "management_details"],
+                "Confirm repeated or persistent blood-pressure findings and relevant treatment information before recording referral or management decisions.",
+                "Review the documented persistent blood-pressure findings and treatment against the cited commercial standard before confirming referral or management decisions.",
+            ),
+            "vision": (
+                "VIS",
+                ["corrective_lenses", "specialist_referral", "management_details"],
+                "Document the required visual acuity, visual-field, diplopia and monocular-vision findings before confirming corrective-lens or specialist-review requirements.",
+                "Review the documented visual acuity, visual-field, diplopia and monocular-vision findings against the cited commercial standard before confirming corrective-lens or specialist-review requirements.",
+            ),
+            "hearing": (
+                "HEAR",
+                ["hearing_aid", "specialist_referral", "management_details"],
+                "Confirm four-frequency audiometry and any ENT or audiologist information before deciding whether a hearing aid or specialist review is required.",
+                "Review the documented clinical hearing assessment and any audiometry against the cited commercial hearing criterion before confirming whether a hearing aid or specialist review is required.",
+            ),
+            "blackout": (
+                "BLK",
+                ["assessment_opinion", "specialist_referral", "management_details"],
+                "Confirm whether any blackout occurred and document its mechanism or investigation status before recording the assessment opinion; seek specialist review if it remains unexplained.",
+                "Review the documented blackout history, investigation status and event-free period against the cited commercial criterion before confirming the assessment opinion and any specialist review.",
+            ),
+            "diabetes": (
+                "DM",
+                ["local_doctor_referral", "specialist_referral", "management_details"],
+                "Confirm whether diabetes, including gestational diabetes, is present and document relevant treatment before deciding referral or management.",
+                "Review the documented diabetes history and treatment status against the cited commercial criterion before confirming referral or management decisions.",
+            ),
+        }
+        generated_advice = []
+        verified_by_module = {}
+        for field in payload["verified_patient_facts"]:
+            verified_by_module.setdefault(field.split(".", 1)[0], []).append(field)
+        for module in dict.fromkeys([*missing_by_module, *verified_by_module]):
+            if module not in advice_templates:
+                continue
+            missing_fields = missing_by_module.get(module, [])
+            fact_fields = missing_fields or verified_by_module.get(module, [])
+            source_module, form_fields, missing_text, verified_text = advice_templates[module]
+            source_id = source_by_module.get(source_module)
+            if source_id and fact_fields:
+                generated_advice.append(
+                    ClinicianFormAdvice(
+                        form_fields=form_fields,
+                        advice=missing_text if missing_fields else verified_text,
+                        source_ids=[source_id],
+                        fact_fields=fact_fields,
+                    )
+                )
+        form_advice = (
+            generated_advice
+            if missing_by_module or not judgment.form_advice
+            else judgment.form_advice
+        )
+        judgment = judgment.model_copy(update={"form_advice": form_advice})
+        if not judgment.form_advice:
+            raise ValueError("Local-model judgment did not bind advice to review fields")
+        judgment = judgment.model_copy(
+            update={
+                "form_advice": [
+                    advice.model_copy(
+                        update={"form_fields": list(dict.fromkeys(advice.form_fields))}
+                    )
+                    for advice in judgment.form_advice
+                ]
+            }
+        )
+        safe_advice = []
+        for advice in judgment.form_advice:
+            if set(advice.source_ids) - sources or set(advice.fact_fields) - facts:
+                continue
+            if not advice.fact_fields:
+                continue
+            module_codes = {
+                "cardiovascular": "HTN",
+                "vision": "VIS",
+                "hearing": "HEAR",
+                "blackout": "BLK",
+                "diabetes": "DM",
+            }
+            if any(field.split(".", 1)[0] not in module_codes for field in advice.fact_fields):
+                continue
+            fact_modules = {
+                module_codes[field.split(".", 1)[0]] for field in advice.fact_fields
+            }
+            source_modules = {source_id.split("-")[1] for source_id in advice.source_ids}
+            if not source_modules <= fact_modules:
+                continue
+            allowed_fields = set().union(
+                *(
+                    {
+                        "HTN": {
+                            "assessment_opinion",
+                            "local_doctor_referral",
+                            "specialist_referral",
+                            "other_management",
+                            "management_details",
+                            "review_plan",
+                            "other_comments",
+                        },
+                        "VIS": {
+                            "corrective_lenses",
+                            "other_aid",
+                            "specialist_referral",
+                            "practical_driver_test",
+                            "management_details",
+                            "review_plan",
+                            "other_comments",
+                        },
+                        "HEAR": {
+                            "hearing_aid",
+                            "other_aid",
+                            "specialist_referral",
+                            "management_details",
+                            "review_plan",
+                            "other_comments",
+                        },
+                        "BLK": {
+                            "assessment_opinion",
+                            "local_doctor_referral",
+                            "specialist_referral",
+                            "practical_driver_test",
+                            "other_management",
+                            "management_details",
+                            "review_plan",
+                            "review_interval",
+                            "other_comments",
+                        },
+                        "DM": {
+                            "local_doctor_referral",
+                            "specialist_referral",
+                            "drug_test",
+                            "other_management",
+                            "management_details",
+                            "review_plan",
+                            "other_comments",
+                        },
+                    }[module]
+                    for module in fact_modules
+                )
+            )
+            if not set(advice.form_fields) <= allowed_fields:
+                continue
+            safe_advice.append(advice)
+        if not safe_advice:
+            raise ValueError("Local-model advice was not grounded to matching fields and sources")
+        judgment = judgment.model_copy(
+            update={
+                "form_advice": safe_advice,
+                "recommended_actions": list(
+                    dict.fromkeys(item.advice for item in safe_advice)
+                )[:6],
+            }
+        )
+        if (
+            payload.get("required_missing_fields")
+            and judgment.assessment_outcome != Outcome.INSUFFICIENT
+        ):
+            raise ValueError("Local-model judgment ignored required missing information")
+        return judgment
 
     def red_flag_from_text(self, text, case_id, modules=None):
         """Build the canonical Red Flag result without invoking retrieval."""
@@ -238,7 +497,11 @@ class OccupationalFitnessWorkflow:
         """Use exact sources for clear structured triggers; reserve RAG for narrative ambiguity."""
 
         evaluations = {item.rule_id: item for item in result.rules_evaluated}
-        triggered = [request for request in result.rag_requests if request.request_type == "triggered_rule_evidence"]
+        triggered = [
+            request
+            for request in result.rag_requests
+            if request.request_type == "triggered_rule_evidence"
+        ]
         for request in triggered:
             evaluation = evaluations.get(request.rule_id)
             substantive_ambiguity = set(request.ambiguity_reasons) - {"cross_chapter_condition"}
@@ -254,9 +517,7 @@ class OccupationalFitnessWorkflow:
         if triggered:
             return "exact_source"
         return (
-            "semantic_rag"
-            if result.internal_metadata.get("narrative_context")
-            else "exact_source"
+            "semantic_rag" if result.internal_metadata.get("narrative_context") else "exact_source"
         )
 
     def run_file(self, input_path, output_root=None, modules=None, progress=None):
@@ -300,8 +561,43 @@ class OccupationalFitnessWorkflow:
         llm_status = intake["status"]
         write_json(output / "llm_extraction_audit.json", intake)
         write_json(output / "llm_semantic_review.json", review)
-        if self.config.llm.enabled and self.config.llm.narrative_enabled:
-            client = OllamaClient(self.config.llm)
+        client = OllamaClient(self.config.llm) if self.config.llm.enabled else None
+        judgment_status = "disabled"
+        if client:
+            try:
+                judgment_payload = self._model_judgment_payload(case, result, evidence)
+                if not judgment_payload["guideline_evidence"]:
+                    raise ValueError("No retrieved guideline evidence is available for judgment")
+                judgment = self._validate_model_judgment(
+                    client.judgment(judgment_payload), judgment_payload
+                )
+                note = note.model_copy(update={"llm_judgment": judgment})
+                write_json(output / "llm_judgment.json", judgment)
+                write_json(
+                    output / "llm_judgment_audit.json",
+                    {
+                        "status": "completed",
+                        "model": self.config.llm.model,
+                        "model_digest": client.resolved_digest,
+                        "input_source_ids": [
+                            item["source_id"] for item in judgment_payload["guideline_evidence"]
+                        ],
+                        "input_fact_fields": sorted(judgment_payload["verified_patient_facts"]),
+                        "authoritative_rule_result_modified": False,
+                    },
+                )
+                judgment_status = "completed"
+            except Exception as exc:
+                judgment_status = "unavailable_fallback_to_rules"
+                write_json(
+                    output / "llm_judgment_audit.json",
+                    {
+                        "status": judgment_status,
+                        "error_type": type(exc).__name__,
+                        "reason": str(exc)[:300],
+                    },
+                )
+        if client and self.config.llm.narrative_enabled:
             try:
                 commentary = client.narrative(
                     {
@@ -428,6 +724,7 @@ class OccupationalFitnessWorkflow:
                 "ruleset_sha256": self.book.sha256,
                 "index_sha256": self.catalogue.index_sha256,
                 "llm_status": llm_status,
+                "llm_judgment_status": judgment_status,
                 "semantic_review_status": review["status"],
                 "files": {
                     p.name: sha256_bytes(p.read_bytes())

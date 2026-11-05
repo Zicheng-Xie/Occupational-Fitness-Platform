@@ -51,11 +51,21 @@ TEXT_FIELDS = {
 }
 
 
-def create_completed_form(template: Path, output: Path, data: dict, outcome: str) -> None:
+def create_completed_form(
+    template: Path, output: Path, data: dict, outcome: str, judgment: dict | None = None
+) -> None:
     """Write an editable completed copy and include it in the verified run bundle."""
     selected_outcome = OPINION_OUTCOMES.get(data.get("assessment_opinion"))
     if data.get("assessment_opinion") == "system":
-        selected_outcome = outcome
+        selected_outcome = judgment.get("assessment_outcome") if judgment else outcome
+    values = dict(data)
+    if judgment:
+        model_comment = (
+            "AI proposal - clinician review required: " + judgment["explanation"].strip()
+        )
+        values["other_comments"] = "\n\n".join(
+            part for part in (data.get("other_comments", "").strip(), model_comment) if part
+        )
     checkbox_values = {
         "Check Box11": data.get("corrective_lenses", False),
         "Check Box12": data.get("hearing_aid", False),
@@ -72,9 +82,13 @@ def create_completed_form(template: Path, output: Path, data: dict, outcome: str
     with pymupdf.open(template) as document:
         for page in document:
             for widget in page.widgets() or ():
-                source = next((key for key, field in TEXT_FIELDS.items() if field == widget.field_name), None)
-                if source and data.get(source):
-                    widget.field_value = str(data[source])
+                source = next(
+                    (key for key, field in TEXT_FIELDS.items() if field == widget.field_name), None
+                )
+                if source and values.get(source):
+                    widget.field_value = str(values[source])
+                    if widget.field_name == "Text4":
+                        widget.text_fontsize = 8
                 elif widget.field_name == "Check Box70":
                     widget.field_value = bool(data.get("history_known"))
                 elif widget.field_name == "Check Box71":
@@ -98,15 +112,24 @@ def create_completed_form(template: Path, output: Path, data: dict, outcome: str
 
 
 def add_completed_form_to_run(
-    root: Path, run: Path, data: dict, outcome: str, filename="completed_fitness_to_drive_report.pdf"
+    root: Path,
+    run: Path,
+    data: dict,
+    outcome: str,
+    filename="completed_fitness_to_drive_report.pdf",
 ) -> str:
+    judgment_path = run / "llm_judgment.json"
+    judgment = (
+        json.loads(judgment_path.read_text(encoding="utf-8")) if judgment_path.is_file() else None
+    )
     data_name = "fitness_to_drive_form.json"
-    write_json(run / data_name, data)
+    write_json(run / data_name, {**data, "local_model_judgment": judgment})
     create_completed_form(
         root / "AFTD2022_Fitness_to_Drive_Report-December-2022.pdf",
         run / filename,
         data,
         outcome,
+        judgment,
     )
     manifest_path = run / "run_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

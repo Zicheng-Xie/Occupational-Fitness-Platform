@@ -377,6 +377,18 @@ def render_case_html(case, result, evidence, note, root: Path, output: Path):
         body.append(
             f"<section class='section'><div class='section-heading'><h2>Local-model commentary</h2><small>Unverified</small></div><p class='source-text'>{esc(note.llm_commentary)}</p></section>"
         )
+    if note.llm_judgment:
+        judgment = note.llm_judgment
+        body.append(
+            "<section class='section'><div class='section-heading'><h2>Local-model evidence judgment</h2>"
+            "<small>Unverified · clinician review required</small></div>"
+            f"<p>Proposed outcome: {badge(judgment.assessment_outcome)}</p>"
+            f"<p class='source-text'>{esc(judgment.explanation)}</p>"
+            "<h3>Advice for clinician review</h3><ul class='review-list'>"
+            + "".join(f"<li>{esc(action)}</li>" for action in judgment.recommended_actions)
+            + "</ul>"
+            f"<p class='muted'>Cited retrieved sources: {esc(', '.join(judgment.source_ids))}</p></section>"
+        )
     body.append(
         "<section class='section' id='files'><div class='section-heading'><h2><span class='section-no'>05</span>Files and audit</h2><small>Complete review record</small></div><div class='download-list'>"
     )

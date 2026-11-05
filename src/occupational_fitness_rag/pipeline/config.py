@@ -22,7 +22,7 @@ class LLMConfig(BaseModel):
     provider: Literal["ollama"] = "ollama"
     base_url: str = "http://127.0.0.1:11434"
     model: str = "llama3:8b"
-    timeout_seconds: int = Field(default=60, ge=1, le=120)
+    timeout_seconds: int = Field(default=60, ge=1, le=300)
     extraction_enabled: bool = True
     semantic_review_enabled: bool = True
     route_classification_enabled: bool = False

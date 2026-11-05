@@ -1,4 +1,5 @@
 import json
+from io import BytesIO
 from pathlib import Path
 
 import pymupdf
@@ -15,6 +16,7 @@ from occupational_fitness_rag.llm import OllamaClient
 from occupational_fitness_rag.provenance import digest
 from occupational_fitness_rag.retrieval.indicators import IndicatorRetriever, knowledge_chunks
 from occupational_fitness_rag.schemas.indicator import IndicatorRequest
+from occupational_fitness_rag.web.fitness_form import create_completed_form
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -43,7 +45,37 @@ def test_browser_text_submission_creates_verified_report(workspace):
     assert "Run the Austroads RAG pipeline" not in home.text
     assert 'value="hearing" checked' not in home.text
     assert client.get("/docs").status_code == 200
-    assert client.get("/assets/workspace.js").status_code == 200
+    workspace_js = client.get("/assets/workspace.js")
+    assert workspace_js.status_code == 200
+    assert "Local-model review of retrieved Top K evidence" in workspace_js.text
+    assert "deterministic rule fallback, not a model conclusion" in workspace_js.text
+    assert "Model advice" in workspace_js.text
+    assert "Evidence used" in workspace_js.text
+    assert "For clinician review only" in workspace_js.text
+    assert "Evidence-based suggestion for this field" in workspace_js.text
+    assert "yellow highlight" in workspace_js.text
+    workspace_css = client.get("/assets/workspace.css")
+    assert workspace_css.status_code == 200
+    assert ".model-review-context .guideline-source blockquote" in workspace_css.text
+    assert "overflow-wrap:anywhere" in workspace_css.text
+
+
+def test_guideline_highlight_view_preserves_original_and_adds_yellow_annotation(workspace):
+    _, client = workspace
+    response = client.get("/guideline/highlight/AFTD2022-HEAR-COM-002.pdf")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/pdf"
+    with pymupdf.open(stream=BytesIO(response.content), filetype="pdf") as document:
+        assert document.page_count == 1
+        annotations = list(document[0].annots() or [])
+        assert annotations
+        assert annotations[0].type[1] == "Square"
+        assert annotations[0].colors["stroke"] == pytest.approx([1.0, 0.72, 0.0])
+        assert annotations[0].colors["fill"] == pytest.approx([1.0, 0.92, 0.3])
+
+
+def test_browser_text_assessment_creates_verified_report(workspace):
+    app, client = workspace
     result = complete(
         app,
         client,
@@ -59,7 +91,7 @@ def test_browser_text_submission_creates_verified_report(workspace):
     assert result["decision_basis"]
     assert all(item["guideline_sources"] for item in result["decision_basis"])
     assert all(
-        source["url"].startswith("/guideline/ap_g56_22.pdf#page=")
+        source["url"].startswith("/guideline/highlight/")
         for item in result["decision_basis"]
         for source in item["guideline_sources"]
     )
@@ -115,10 +147,45 @@ def test_confirmed_form_submission_creates_completed_aftd_pdf(workspace):
     assert values["A final report of the drivers fitness to drive status"] in {"On", "Yes"}
     assert values["Check Box8"] in {"On", "Yes"}
     assert values["Check Box15"] in {"On", "Yes"}
-    assert values[
-        "I recommend andor have actioned the following Local doctor referral Specialist "
-        "referral Drug test Practical driver test Other please describe"
-    ] == "Refer to the local doctor for review and follow-up."
+    assert (
+        values[
+            "I recommend andor have actioned the following Local doctor referral Specialist "
+            "referral Drug test Practical driver test Other please describe"
+        ]
+        == "Refer to the local doctor for review and follow-up."
+    )
+
+
+def test_local_model_judgment_populates_system_pdf_opinion_and_reason(tmp_path):
+    output = tmp_path / "model-judgment.pdf"
+    create_completed_form(
+        ROOT / "AFTD2022_Fitness_to_Drive_Report-December-2022.pdf",
+        output,
+        {
+            "assessment_opinion": "system",
+            "surname": "Driver",
+            "given_names": "Alex",
+            "history_known": True,
+            "licence_sighted": True,
+            "report_type": "final",
+        },
+        "meets_unconditional_standard",
+        {
+            "assessment_outcome": "temporarily_unfit",
+            "explanation": "The retrieved criterion requires temporary driving cessation.",
+            "source_ids": ["AFTD2022-BLK-COM-001"],
+            "fact_fields": ["blackout.occurred"],
+        },
+    )
+    with pymupdf.open(output) as document:
+        values = {
+            widget.field_name: widget.field_value
+            for page in document
+            for widget in (page.widgets() or [])
+        }
+    assert values["Check Box10"] in {"On", "Yes"}
+    assert "retrieved criterion requires temporary driving cessation" in values["Text4"]
+    assert "clinician review required" in values["Text4"]
 
 
 def test_management_action_requires_written_details(workspace):

@@ -208,5 +208,18 @@ def render_reports(case, result, evidence, note, root: Path, output: Path) -> di
     ]
     if note.llm_commentary:
         md += ["## Unverified local-model commentary", "", note.llm_commentary, ""]
+    if note.llm_judgment:
+        md += [
+            "## Unverified local-model evidence judgment",
+            "",
+            f"- Proposed outcome: `{note.llm_judgment.assessment_outcome}`",
+            f"- Reason: {note.llm_judgment.explanation}",
+            "- Advice for clinician review:",
+            *[f"  - {action}" for action in note.llm_judgment.recommended_actions],
+            f"- Cited sources: {', '.join(note.llm_judgment.source_ids)}",
+            "",
+            "This proposal is populated into the system-selected PDF opinion and requires clinician review.",
+            "",
+        ]
     rendered = render_case_html(case, result, evidence, note, root, output)
     return {"draft_report.md": "\n".join(md), "draft_report.html": rendered}

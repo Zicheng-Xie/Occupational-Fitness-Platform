@@ -65,6 +65,37 @@ class AssessmentJobs:
                 )
             result = json.loads((run / "rule_result.json").read_text(encoding="utf-8"))
             evidence = json.loads((run / "evidence_pack.json").read_text(encoding="utf-8"))
+            structured_case = json.loads(
+                (run / "structured_case.json").read_text(encoding="utf-8")
+            )
+            judgment_path = run / "llm_judgment.json"
+            model_judgment = (
+                json.loads(judgment_path.read_text(encoding="utf-8"))
+                if judgment_path.is_file()
+                else None
+            )
+            judgment_audit_path = run / "llm_judgment_audit.json"
+            judgment_audit = (
+                json.loads(judgment_audit_path.read_text(encoding="utf-8"))
+                if judgment_audit_path.is_file()
+                else {"status": "not_recorded"}
+            )
+            model_evidence = []
+            if model_judgment:
+                for source_id in model_judgment.get("source_ids", []):
+                    citation = self.workflow.catalogue.citation(source_id)
+                    if citation:
+                        model_evidence.append(
+                            {
+                                "source_id": citation.source_id,
+                                "section": citation.section,
+                                "printed_page": citation.printed_page,
+                                "pdf_page": citation.pdf_page,
+                                "quote": citation.evidence_text,
+                                "url": f"/guideline/highlight/{citation.source_id}.pdf"
+                                "#page=1",
+                            }
+                        )
             evidence_by_rule = {
                 item["rule_id"]: item for item in evidence.get("evidence_items", [])
             }
@@ -82,10 +113,9 @@ class AssessmentJobs:
                             "printed_page": citation.get("printed_page"),
                             "pdf_page": pdf_page,
                             "table_row": citation.get("table_row"),
-                            "quote": citation.get("source_text")
-                            or citation.get("evidence_text"),
-                            "url": "/guideline/ap_g56_22.pdf"
-                            + (f"#page={pdf_page}" if pdf_page else ""),
+                            "quote": citation.get("source_text") or citation.get("evidence_text"),
+                            "url": f"/guideline/highlight/{citation.get('source_id')}.pdf"
+                            + "#page=1",
                         }
                     )
                 decision_basis.append(
@@ -108,9 +138,7 @@ class AssessmentJobs:
                 seen.add(key)
                 category = item.get("category", "clinical").title()
                 rule_evidence = evidence_by_rule.get(item.get("required_by_rule_id"), {})
-                group = unresolved.setdefault(
-                    category, {"fields": [], "guideline_sources": {}}
-                )
+                group = unresolved.setdefault(category, {"fields": [], "guideline_sources": {}})
                 group["fields"].append(item.get("field", "unknown field"))
                 for citation in rule_evidence.get("citations", []):
                     pdf_page = citation.get("pdf_page")
@@ -119,10 +147,9 @@ class AssessmentJobs:
                         "section": citation.get("section"),
                         "printed_page": citation.get("printed_page"),
                         "pdf_page": pdf_page,
-                        "quote": citation.get("source_text")
-                        or citation.get("evidence_text"),
-                        "url": "/guideline/ap_g56_22.pdf"
-                        + (f"#page={pdf_page}" if pdf_page else ""),
+                        "quote": citation.get("source_text") or citation.get("evidence_text"),
+                        "url": f"/guideline/highlight/{citation['source_id']}.pdf"
+                        + "#page=1",
                     }
             missing_summary = [
                 {
@@ -140,7 +167,10 @@ class AssessmentJobs:
                     self.workflow.root, run, form_data, result["assessment_outcome"]
                 )
             manifest = json.loads((run / "run_manifest.json").read_text(encoding="utf-8"))
-            outcome = result["assessment_outcome"]
+            deterministic_outcome = result["assessment_outcome"]
+            outcome = (
+                model_judgment["assessment_outcome"] if model_judgment else deterministic_outcome
+            )
             form_suggestions = {
                 "assessment_opinion": {
                     "meets_unconditional_standard": "unconditional",
@@ -166,12 +196,32 @@ class AssessmentJobs:
                     else ""
                 ),
             }
+            triggered_rule_ids = {
+                item.get("rule_id") for item in result.get("triggered_rules", [])
+            }
+            facts = structured_case.get("facts", {})
+            if (
+                "HEAR-COM-SCREEN-001" in triggered_rule_ids
+                and facts.get("hearing.clinical_assessment", {}).get("value")
+                == "no_hearing_loss"
+            ):
+                form_suggestions["hearing_aid"] = False
+            if (
+                "VIS-COM-SCREEN-001" in triggered_rule_ids
+                and facts.get("vision.uncorrected.better_eye", {}).get("status") == "present"
+            ):
+                form_suggestions["corrective_lenses"] = False
             self._update(
                 job_id,
                 status="completed",
                 stage="completed",
                 run_id=run.name,
                 outcome=outcome,
+                deterministic_outcome=deterministic_outcome,
+                model_judgment=model_judgment,
+                model_evidence=model_evidence,
+                model_judgment_status=judgment_audit.get("status", "not_recorded"),
+                model_judgment_error=judgment_audit.get("reason"),
                 route=result["route"],
                 form_suggestions=form_suggestions,
                 llm_status=manifest["llm_status"],

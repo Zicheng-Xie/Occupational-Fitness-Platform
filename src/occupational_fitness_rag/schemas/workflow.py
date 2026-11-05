@@ -216,6 +216,51 @@ class WorkflowEvidencePack(Contract):
     integrity: dict[str, bool]
 
 
+class ClinicianFormAdvice(Contract):
+    form_fields: list[
+        Literal[
+            "assessment_opinion",
+            "corrective_lenses",
+            "hearing_aid",
+            "other_aid",
+            "local_doctor_referral",
+            "specialist_referral",
+            "drug_test",
+            "practical_driver_test",
+            "other_management",
+            "management_details",
+            "review_plan",
+            "review_interval",
+            "other_comments",
+        ]
+    ] = Field(min_length=1, max_length=4)
+    advice: str = Field(min_length=1, max_length=350)
+    source_ids: list[str] = Field(min_length=1, max_length=5)
+    fact_fields: list[str] = Field(default_factory=list, max_length=10)
+
+
+class LocalModelJudgment(Contract):
+    assessment_outcome: Outcome
+    explanation: str = Field(min_length=1, max_length=700)
+    recommended_actions: list[str] = Field(default_factory=list, max_length=6)
+    source_ids: list[str] = Field(min_length=1, max_length=10)
+    fact_fields: list[str] = Field(default_factory=list, max_length=20)
+    form_advice: list[ClinicianFormAdvice] = Field(default_factory=list, max_length=6)
+
+    @model_validator(mode="before")
+    @classmethod
+    def read_legacy_judgments(cls, value):
+        if isinstance(value, dict):
+            updates = {}
+            if "recommended_actions" not in value:
+                updates["recommended_actions"] = []
+            if "form_advice" not in value:
+                updates["form_advice"] = []
+            if updates:
+                return {**value, **updates}
+        return value
+
+
 class ReviewNote(Contract):
     schema_version: Literal["1.2.0"] = "1.2.0"
     case_id: str
@@ -227,6 +272,7 @@ class ReviewNote(Contract):
     summary: str
     review_checklist: list[str]
     llm_commentary: str | None = None
+    llm_judgment: LocalModelJudgment | None = None
     clinician_name: None = None
     signed_at: None = None
     final_clinical_authorization_required: Literal[True] = True

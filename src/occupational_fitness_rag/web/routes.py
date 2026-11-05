@@ -5,8 +5,9 @@ import re
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+import pymupdf
 from fastapi import HTTPException, Request
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from occupational_fitness_rag.reporting.presentation import local_link
@@ -399,6 +400,40 @@ def attach_routes(app):
         return FileResponse(
             app.state.workflow.root / "data/knowledge/raw/ap_g56_22.pdf",
             media_type="application/pdf",
+        )
+
+    @app.get("/guideline/highlight/{source_id}.pdf")
+    def highlighted_guideline(source_id: str):
+        if not re.fullmatch(r"[A-Z0-9-]{1,80}", source_id):
+            raise HTTPException(404)
+        citation = app.state.workflow.catalogue.citation(source_id)
+        if not citation:
+            raise HTTPException(404)
+        path = app.state.workflow.root / "data/knowledge/raw/ap_g56_22.pdf"
+        with pymupdf.open(path) as document, pymupdf.open() as highlighted:
+            highlighted.insert_pdf(
+                document,
+                from_page=citation.pdf_page - 1,
+                to_page=citation.pdf_page - 1,
+            )
+            page = highlighted[0]
+            annotation = page.add_rect_annot(pymupdf.Rect(citation.bbox))
+            annotation.set_colors(stroke=(1, 0.72, 0), fill=(1, 0.92, 0.3))
+            annotation.set_border(width=1)
+            annotation.set_opacity(0.22)
+            annotation.set_info(
+                title="Occupational Fitness Platform",
+                content=f"Highlighted source: {source_id}",
+            )
+            annotation.update()
+            content = highlighted.tobytes(garbage=4, deflate=True)
+        return Response(
+            content,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": f'inline; filename="{source_id}-highlighted.pdf"',
+                "Cache-Control": "private, max-age=3600",
+            },
         )
 
     @app.post("/rag/indicators")

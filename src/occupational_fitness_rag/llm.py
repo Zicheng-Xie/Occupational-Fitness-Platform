@@ -11,6 +11,7 @@ from urllib.request import ProxyHandler, Request, build_opener
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from occupational_fitness_rag.pipeline.config import LLMConfig
+from occupational_fitness_rag.schemas.workflow import LocalModelJudgment
 
 
 def require_local_url(url: str) -> str:
@@ -216,6 +217,24 @@ class OllamaClient:
             LocalNarrative,
         ).commentary
 
+    def judgment(self, fixed_payload: dict) -> LocalModelJudgment:
+        return self.generate(
+            "Return exactly one JSON object with assessment_outcome, explanation, "
+            "source_ids and fact_fields. Judge only from "
+            "verified_patient_facts and the supplied ranked "
+            "guideline_evidence. The nurse note is context, not an additional verified fact. "
+            "Cite only supplied source_ids. fact_fields may contain keys from "
+            "verified_patient_facts or names from required_missing_fields. Missing information "
+            "must not be "
+            "assumed normal. If required_missing_fields is non-empty, assessment_outcome must "
+            "be insufficient_information and the explanation must identify the material gaps. "
+            "Explain concisely which verified facts meet or fail which supplied "
+            "criteria. This is an unverified local-model proposal requiring clinician review; "
+            "do not claim licensing approval.",
+            fixed_payload,
+            LocalModelJudgment,
+        )
+
     def classify_route(self, text: str, deterministic_result: dict) -> dict:
         if len(text) > self.config.max_input_chars:
             return {
@@ -272,9 +291,7 @@ class OllamaClient:
             {"note": text, "deterministic_result": deterministic_result},
             EvidenceModeSuggestion,
         )
-        grounded = all(
-            quote.strip() and quote in text for quote in suggestion.evidence_quotes
-        )
+        grounded = all(quote.strip() and quote in text for quote in suggestion.evidence_quotes)
         return {
             **suggestion.model_dump(),
             "status": "grounded" if grounded else "withheld",
